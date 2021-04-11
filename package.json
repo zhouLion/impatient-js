@@ -1,0 +1,17 @@
+{
+  "name": "impatient-js-cn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cheerio": "*",
+    "fs-extra": "^9.1.0",
+    "got": "^11.8.2"
+  }
+}
