@@ -1,0 +1,116 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_new-javascript-features">4 New JavaScript features</h2>
+<p><a id="index-entry-8" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>4.1 <a href="ch_new-javascript-features.html#new-in-es2021">New in ECMAScript 2021</a></li>
+<li>4.2 <a href="ch_new-javascript-features.html#new-in-es2020">New in ECMAScript 2020</a></li>
+<li>4.3 <a href="ch_new-javascript-features.html#new-in-es2019">New in ECMAScript 2019</a></li>
+<li>4.4 <a href="ch_new-javascript-features.html#new-in-es2018">New in ECMAScript 2018</a></li>
+<li>4.5 <a href="ch_new-javascript-features.html#new-in-es2017">New in ECMAScript 2017</a></li>
+<li>4.6 <a href="ch_new-javascript-features.html#new-in-es2016">New in ECMAScript 2016</a></li>
+<li>4.7 <a href="ch_new-javascript-features.html#source-of-this-chapter">Source of this chapter</a></li>
+</ul>
+</div>
+<hr>
+<p>ECMAScript 6 (ES2015) was a massive release with too many new features to list here. What’s new in later releases is described below, in reverse chronological order.</p>
+<h3 id="new-in-es2021">4.1 New in ECMAScript 2021</h3>
+<p>The feature set for ES2021 has not yet been finalized. These are the proposals that made it to stage 4 and that will almost certainly be included:</p>
+<ul>
+<li><a href="ch_regexps.html#replace-replaceAll"><code>String.prototype.replaceAll()</code></a></li>
+<li><a href="ch_promises.html#Promise.any"><code>Promise.any()</code></a></li>
+<li>WeakRefs (beyond the scope of this book, see <a href="https://github.com/tc39/proposal-weakrefs">proposal</a>)</li>
+<li><a href="ch_operators.html#logical-assignment-operators">Logical assignment operators</a></li>
+<li>Underscores (<code>_</code>) as separators in <a href="ch_numbers.html#numeric-separator-number-literals">number literals</a> and <a href="ch_bigints.html#numeric-separator-bigint-literals">bigint literals</a></li>
+</ul>
+<h3 id="new-in-es2020">4.2 New in ECMAScript 2020</h3>
+<p>The following features were added in ECMAScript 2020:</p>
+<ul>
+<li><a href="ch_regexps.html#String.prototype.matchAll"><code>String.prototype.matchAll()</code></a></li>
+<li><a href="ch_modules.html#dynamic-imports">Dynamic imports via <code>import()</code></a></li>
+<li><a href="ch_bigints.html">Bigints – arbitrary-precision integers</a></li>
+<li><a href="ch_promises.html#Promise.allSettled"><code>Promise.allSettled()</code></a></li>
+<li><a href="ch_variables-assignment.html#globalThis"><code>globalThis</code></a></li>
+<li><code>for-in</code> mechanics (beyond the scope of this book, see <a href="https://github.com/tc39/proposal-for-in-order">proposal</a>)</li>
+<li><a href="ch_single-objects.html#optional-chaining">Optional chaining for property accesses and method calls</a></li>
+<li><a href="ch_undefined-null.html#nullish-coalescing-operator">Nullish coalescing operator (<code>??</code>)</a></li>
+<li><a href="ch_modules.html#import.meta"><code>import.meta</code></a></li>
+<li><a href="ch_modules.html#module-exports">Namespace re-exporting</a>: <code>export * as ns from "mod";</code></li>
+</ul>
+<h3 id="new-in-es2019">4.3 New in ECMAScript 2019</h3>
+<p>The following features were added in ECMAScript 2019:</p>
+<ul>
+<li><a href="ch_exception-handling.html#omitting-catch-binding">Optional <code>catch</code> binding</a></li>
+<li><a href="ch_symbols.html#symbol-descriptions"><code>Symbol.prototype.description</code></a></li>
+<li><a href="ch_single-objects.html#Object.fromEntries"><code>Object.fromEntries()</code></a></li>
+<li>String methods: <a href="ch_strings.html#String.prototype.trimStart"><code>.trimStart()</code></a> and <a href="ch_strings.html#String.prototype.trimEnd"><code>.trimEnd()</code></a></li>
+<li>Array methods: <a href="ch_arrays.html#Array.prototype.flatMap"><code>.flatMap()</code></a> and <a href="ch_arrays.html#Array.prototype.flat"><code>.flat()</code></a></li>
+</ul>
+<p>These new ES2019 features are beyond the scope of this book:</p>
+<ul>
+<li>JSON superset (see <a href="https://2ality.com/2019/01/json-superset.html">2ality blog post</a>)</li>
+<li><code>Function.prototype.toString()</code> revision (see <a href="https://2ality.com/2016/08/function-prototype-tostring.html">2ality blog post</a>)</li>
+<li>Well-formed <code>JSON.stringify()</code> (see <a href="https://2ality.com/2019/01/well-formed-stringify.html">2ality blog post</a>)</li>
+</ul>
+<h3 id="new-in-es2018">4.4 New in ECMAScript 2018</h3>
+<p>The following features were added in ECMAScript 2018:</p>
+<ul>
+<li><a href="ch_template-literals.html#template-strings-cooked-vs-raw">Template literal revision</a></li>
+<li><a href="ch_regexps.html#regexp-dotAll-flag"><code>s</code> (<code>dotAll</code>) flag for regular expressions</a></li>
+<li><a href="ch_regexps.html#named-capture-groups"><code>RegExp</code> named capture groups</a></li>
+<li><a href="ch_destructuring.html#rest-properties">Rest properties (destructuring)</a>, <a href="ch_single-objects.html#spreading-into-object-literals">spreading into object literals</a></li>
+<li><a href="ch_regexps.html#regexp-lookbehind-assertions"><code>RegExp</code> lookbehind assertions</a></li>
+<li><a href="ch_regexps.html#unicode-property-escapes"><code>RegExp</code> Unicode property escapes</a></li>
+<li><a href="ch_promises.html#Promise.prototype.finally"><code>Promise.prototype.finally()</code></a></li>
+<li><a href="ch_async-iteration.html">Asynchronous iteration</a></li>
+</ul>
+<h3 id="new-in-es2017">4.5 New in ECMAScript 2017</h3>
+<p>The following features were added in ECMAScript 2017:</p>
+<ul>
+<li><a href="ch_single-objects.html#Object.values"><code>Object.values()</code></a>, <a href="ch_single-objects.html#Object.entries"><code>Object.entries()</code></a></li>
+<li>String padding: <a href="ch_strings.html#String.prototype.padStart"><code>.padStart()</code></a> and <a href="ch_strings.html#String.prototype.padEnd"><code>.padEnd()</code></a></li>
+<li><code>Object.getOwnPropertyDescriptors()</code> (beyond the scope of this book, see <a href="https://exploringjs.com/deep-js/ch_property-attributes-intro.html#Object.getOwnPropertyDescriptors">“Deep JavaScript”</a>)</li>
+<li><a href="ch_callables.html#trailing-commas-parameters">Trailing commas in function parameter lists and calls</a></li>
+<li><a href="ch_async-functions.html">Async functions</a></li>
+<li>Shared memory and atomics (beyond the scope of this book, see <a href="https://github.com/tc39/ecmascript_sharedmem">proposal</a>)</li>
+</ul>
+<h3 id="new-in-es2016">4.6 New in ECMAScript 2016</h3>
+<p>The following features were added in ECMAScript 2016:</p>
+<ul>
+<li><a href="ch_arrays.html#Array.prototype.includes"><code>Array.prototype.includes()</code></a></li>
+<li><a href="ch_numbers.html#binary-arithmetic-operators">Exponentiation operator (<code>**</code>)</a></li>
+</ul>
+<h3 id="source-of-this-chapter">4.7 Source of this chapter</h3>
+<p>ECMAScript feature lists were taken from <a href="https://github.com/tc39/proposals/blob/master/finished-proposals.md">the TC39 page on finished proposals</a>.</p>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/52">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_faq-language.html">5 FAQ: JavaScript</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

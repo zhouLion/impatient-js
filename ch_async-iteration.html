@@ -1,0 +1,408 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_async-iteration">42 Asynchronous iteration</h2>
+<p><a id="index-entry-472" class="index-entry"></a><a id="index-entry-473" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>42.1 <a href="ch_async-iteration.html#basic-asynchronous-iteration">Basic asynchronous iteration</a>
+<ul>
+<li>42.1.1 <a href="ch_async-iteration.html#protocol-async-iteration">Protocol: async iteration</a></li>
+<li>42.1.2 <a href="ch_async-iteration.html#using-async-iteration-directly">Using async iteration directly</a></li>
+<li>42.1.3 <a href="ch_async-iteration.html#for-await-of">Using async iteration via <code>for-await-of</code></a></li>
+</ul></li>
+<li>42.2 <a href="ch_async-iteration.html#async-generators">Asynchronous generators</a>
+<ul>
+<li>42.2.1 <a href="ch_async-iteration.html#example-creating-an-async-iterable-via-an-async-generator">Example: creating an async iterable via an async generator</a></li>
+<li>42.2.2 <a href="ch_async-iteration.html#example-converting-a-sync-iterable-to-an-async-iterable">Example: converting a sync iterable to an async iterable</a></li>
+<li>42.2.3 <a href="ch_async-iteration.html#asyncIterableToArray">Example: converting an async iterable to an Array</a></li>
+<li>42.2.4 <a href="ch_async-iteration.html#example-transforming-an-async-iterable">Example: transforming an async iterable</a></li>
+<li>42.2.5 <a href="ch_async-iteration.html#example-mapping-over-asynchronous-iterables">Example: mapping over asynchronous iterables</a></li>
+</ul></li>
+<li>42.3 <a href="ch_async-iteration.html#async-iteration-over-node.js-streams">Async iteration over Node.js streams</a>
+<ul>
+<li>42.3.1 <a href="ch_async-iteration.html#node.js-streams-async-via-callbacks-push">Node.js streams: async via callbacks (push)</a></li>
+<li>42.3.2 <a href="ch_async-iteration.html#node.js-streams-async-via-async-iteration-pull">Node.js streams: async via async iteration (pull)</a></li>
+<li>42.3.3 <a href="ch_async-iteration.html#example-from-chunks-to-lines">Example: from chunks to lines</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<div class="notebox">
+<p><img src="img-book/img/icons/eye-regular.svg" height="24">&nbsp; <strong>Required knowledge</strong></p>
+<p>For this chapter, you should be familiar with:</p>
+<ul>
+<li><a href="ch_promises.html">Promises</a></li>
+<li><a href="ch_async-functions.html">Async functions</a></li>
+</ul>
+</div>
+<h3 id="basic-asynchronous-iteration">42.1 Basic asynchronous iteration</h3>
+<h4 id="protocol-async-iteration">42.1.1 Protocol: async iteration</h4>
+<p><a id="index-entry-474" class="index-entry"></a><a id="index-entry-475" class="index-entry"></a> <a id="index-entry-476" class="index-entry"></a><a id="index-entry-477" class="index-entry"></a></p>
+<p>To understand how asynchronous iteration works, let’s first revisit <a href="ch_sync-iteration.html">synchronous iteration</a>. It comprises the following interfaces:</p>
+<div class="sourceCode" id="cb1238"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1238-1"><a href="ch_async-iteration.html#cb1238-1" aria-hidden="true" tabindex="-1"></a>interface Iterable<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb1238-2"><a href="ch_async-iteration.html#cb1238-2" aria-hidden="true" tabindex="-1"></a>  [Symbol<span class="op">.</span><span class="at">iterator</span>]() <span class="op">:</span> Iterator<span class="op">&lt;</span>T<span class="op">&gt;;</span></span>
+<span id="cb1238-3"><a href="ch_async-iteration.html#cb1238-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1238-4"><a href="ch_async-iteration.html#cb1238-4" aria-hidden="true" tabindex="-1"></a>interface Iterator<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb1238-5"><a href="ch_async-iteration.html#cb1238-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">next</span>() <span class="op">:</span> IteratorResult<span class="op">&lt;</span>T<span class="op">&gt;;</span></span>
+<span id="cb1238-6"><a href="ch_async-iteration.html#cb1238-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1238-7"><a href="ch_async-iteration.html#cb1238-7" aria-hidden="true" tabindex="-1"></a>interface IteratorResult<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb1238-8"><a href="ch_async-iteration.html#cb1238-8" aria-hidden="true" tabindex="-1"></a>  value<span class="op">:</span> T<span class="op">;</span></span>
+<span id="cb1238-9"><a href="ch_async-iteration.html#cb1238-9" aria-hidden="true" tabindex="-1"></a>  done<span class="op">:</span> <span class="dt">boolean</span><span class="op">;</span></span>
+<span id="cb1238-10"><a href="ch_async-iteration.html#cb1238-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<ul>
+<li>An <code>Iterable</code> is a data structure whose contents can be accessed via iteration. It is a factory for iterators.</li>
+<li>An <code>Iterator</code> is a factory for iteration results that we retrieve by calling the method <code>.next()</code>.</li>
+<li>Each <code>IterationResult</code> contains the iterated <code>.value</code> and a boolean <code>.done</code> that is <code>true</code> after the last element and <code>false</code> before.</li>
+</ul>
+<p>For the protocol for asynchronous iteration, we only want to change one thing: the values produced by <code>.next()</code> should be delivered asynchronously. There are two conceivable options:</p>
+<ul>
+<li>The <code>.value</code> could contain a <code>Promise&lt;T&gt;</code>.</li>
+<li><code>.next()</code> could return <code>Promise&lt;IteratorResult&lt;T&gt;&gt;</code>.</li>
+</ul>
+<p>In other words, the question is whether to wrap just values or whole iterator results in Promises.</p>
+<p>It has to be the latter because when <code>.next()</code> returns a result, it starts an asynchronous computation. Whether or not that computation produces a value or signals the end of the iteration can only be determined after it is finished. Therefore, both <code>.done</code> and <code>.value</code> need to be wrapped in a Promise.</p>
+<p>The interfaces for async iteration look as follows.</p>
+<div class="sourceCode" id="cb1239"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1239-1"><a href="ch_async-iteration.html#cb1239-1" aria-hidden="true" tabindex="-1"></a>interface AsyncIterable<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb1239-2"><a href="ch_async-iteration.html#cb1239-2" aria-hidden="true" tabindex="-1"></a>  [Symbol<span class="op">.</span><span class="at">asyncIterator</span>]() <span class="op">:</span> AsyncIterator<span class="op">&lt;</span>T<span class="op">&gt;;</span></span>
+<span id="cb1239-3"><a href="ch_async-iteration.html#cb1239-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1239-4"><a href="ch_async-iteration.html#cb1239-4" aria-hidden="true" tabindex="-1"></a>interface AsyncIterator<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb1239-5"><a href="ch_async-iteration.html#cb1239-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">next</span>() <span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>IteratorResult<span class="op">&lt;</span>T<span class="op">&gt;&gt;;</span> <span class="co">// (A)</span></span>
+<span id="cb1239-6"><a href="ch_async-iteration.html#cb1239-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1239-7"><a href="ch_async-iteration.html#cb1239-7" aria-hidden="true" tabindex="-1"></a>interface IteratorResult<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb1239-8"><a href="ch_async-iteration.html#cb1239-8" aria-hidden="true" tabindex="-1"></a>  value<span class="op">:</span> T<span class="op">;</span></span>
+<span id="cb1239-9"><a href="ch_async-iteration.html#cb1239-9" aria-hidden="true" tabindex="-1"></a>  done<span class="op">:</span> <span class="dt">boolean</span><span class="op">;</span></span>
+<span id="cb1239-10"><a href="ch_async-iteration.html#cb1239-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The only difference to the synchronous interfaces is the return type of <code>.next()</code> (line A).</p>
+<h4 id="using-async-iteration-directly">42.1.2 Using async iteration directly</h4>
+<p>The following code uses the asynchronous iteration protocol directly:</p>
+<div class="sourceCode" id="cb1240"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1240-1"><a href="ch_async-iteration.html#cb1240-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> asyncIterable <span class="op">=</span> <span class="fu">syncToAsyncIterable</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1240-2"><a href="ch_async-iteration.html#cb1240-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> asyncIterator <span class="op">=</span> asyncIterable[<span class="bu">Symbol</span><span class="op">.</span><span class="at">asyncIterator</span>]()<span class="op">;</span></span>
+<span id="cb1240-3"><a href="ch_async-iteration.html#cb1240-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1240-4"><a href="ch_async-iteration.html#cb1240-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Call .next() until .done is true:</span></span>
+<span id="cb1240-5"><a href="ch_async-iteration.html#cb1240-5" aria-hidden="true" tabindex="-1"></a>asyncIterator<span class="op">.</span><span class="fu">next</span>() <span class="co">// (B)</span></span>
+<span id="cb1240-6"><a href="ch_async-iteration.html#cb1240-6" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">then</span>(iteratorResult <span class="kw">=&gt;</span> {</span>
+<span id="cb1240-7"><a href="ch_async-iteration.html#cb1240-7" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1240-8"><a href="ch_async-iteration.html#cb1240-8" aria-hidden="true" tabindex="-1"></a>    iteratorResult<span class="op">,</span></span>
+<span id="cb1240-9"><a href="ch_async-iteration.html#cb1240-9" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">value</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span> })<span class="op">;</span></span>
+<span id="cb1240-10"><a href="ch_async-iteration.html#cb1240-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> asyncIterator<span class="op">.</span><span class="fu">next</span>()<span class="op">;</span> <span class="co">// (C)</span></span>
+<span id="cb1240-11"><a href="ch_async-iteration.html#cb1240-11" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1240-12"><a href="ch_async-iteration.html#cb1240-12" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">then</span>(iteratorResult <span class="kw">=&gt;</span> {</span>
+<span id="cb1240-13"><a href="ch_async-iteration.html#cb1240-13" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1240-14"><a href="ch_async-iteration.html#cb1240-14" aria-hidden="true" tabindex="-1"></a>    iteratorResult<span class="op">,</span></span>
+<span id="cb1240-15"><a href="ch_async-iteration.html#cb1240-15" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">value</span><span class="op">:</span> <span class="st">'b'</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span> })<span class="op">;</span></span>
+<span id="cb1240-16"><a href="ch_async-iteration.html#cb1240-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> asyncIterator<span class="op">.</span><span class="fu">next</span>()<span class="op">;</span> <span class="co">// (D)</span></span>
+<span id="cb1240-17"><a href="ch_async-iteration.html#cb1240-17" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1240-18"><a href="ch_async-iteration.html#cb1240-18" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">then</span>(iteratorResult <span class="kw">=&gt;</span> {</span>
+<span id="cb1240-19"><a href="ch_async-iteration.html#cb1240-19" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1240-20"><a href="ch_async-iteration.html#cb1240-20" aria-hidden="true" tabindex="-1"></a>    iteratorResult<span class="op">,</span></span>
+<span id="cb1240-21"><a href="ch_async-iteration.html#cb1240-21" aria-hidden="true" tabindex="-1"></a>     { <span class="dt">value</span><span class="op">:</span> <span class="kw">undefined</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">true</span> })<span class="op">;</span></span>
+<span id="cb1240-22"><a href="ch_async-iteration.html#cb1240-22" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1240-23"><a href="ch_async-iteration.html#cb1240-23" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span></code></pre></div>
+<p>In line A, we create an asynchronous iterable over the value <code>'a'</code> and <code>'b'</code>. We’ll see an implementation of <code>syncToAsyncIterable()</code> later.</p>
+<p>We call <code>.next()</code> in line B, line C and line D. Each time, we use <code>.next()</code> to unwrap the Promise and <code>assert.deepEqual()</code> to check the unwrapped value.</p>
+<p>We can simplify this code if we use an async function. Now we unwrap Promises via <code>await</code> and the code looks almost like we are doing synchronous iteration:</p>
+<div class="sourceCode" id="cb1241"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1241-1"><a href="ch_async-iteration.html#cb1241-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">f</span>() {</span>
+<span id="cb1241-2"><a href="ch_async-iteration.html#cb1241-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> asyncIterable <span class="op">=</span> <span class="fu">syncToAsyncIterable</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span>
+<span id="cb1241-3"><a href="ch_async-iteration.html#cb1241-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> asyncIterator <span class="op">=</span> asyncIterable[<span class="bu">Symbol</span><span class="op">.</span><span class="at">asyncIterator</span>]()<span class="op">;</span></span>
+<span id="cb1241-4"><a href="ch_async-iteration.html#cb1241-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1241-5"><a href="ch_async-iteration.html#cb1241-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Call .next() until .done is true:</span></span>
+<span id="cb1241-6"><a href="ch_async-iteration.html#cb1241-6" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1241-7"><a href="ch_async-iteration.html#cb1241-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> asyncIterator<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span></span>
+<span id="cb1241-8"><a href="ch_async-iteration.html#cb1241-8" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">value</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span> })<span class="op">;</span></span>
+<span id="cb1241-9"><a href="ch_async-iteration.html#cb1241-9" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1241-10"><a href="ch_async-iteration.html#cb1241-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> asyncIterator<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span></span>
+<span id="cb1241-11"><a href="ch_async-iteration.html#cb1241-11" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">value</span><span class="op">:</span> <span class="st">'b'</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span> })<span class="op">;</span></span>
+<span id="cb1241-12"><a href="ch_async-iteration.html#cb1241-12" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1241-13"><a href="ch_async-iteration.html#cb1241-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> asyncIterator<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span></span>
+<span id="cb1241-14"><a href="ch_async-iteration.html#cb1241-14" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">value</span><span class="op">:</span> <span class="kw">undefined</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">true</span> })<span class="op">;</span></span>
+<span id="cb1241-15"><a href="ch_async-iteration.html#cb1241-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="for-await-of">42.1.3 Using async iteration via <code>for-await-of</code></h4>
+<p><a id="index-entry-478" class="index-entry"></a></p>
+<p>The asynchronous iteration protocol is not meant to be used directly. One of the language constructs that supports it is the <code>for-await-of</code> loop, which is an asynchronous version of the <code>for-of</code> loop. It can be used in async functions and <em>async generators</em> (which are introduced later in this chapter). This is an example of <code>for-await-of</code> in use:</p>
+<div class="sourceCode" id="cb1242"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1242-1"><a href="ch_async-iteration.html#cb1242-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="cf">await</span> (<span class="kw">const</span> x <span class="kw">of</span> <span class="fu">syncToAsyncIterable</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])) {</span>
+<span id="cb1242-2"><a href="ch_async-iteration.html#cb1242-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb1242-3"><a href="ch_async-iteration.html#cb1242-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1242-4"><a href="ch_async-iteration.html#cb1242-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1242-5"><a href="ch_async-iteration.html#cb1242-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb1242-6"><a href="ch_async-iteration.html#cb1242-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div>
+<p><code>for-await-of</code> is relatively flexible. In addition to asynchronous iterables, it also supports synchronous iterables:</p>
+<div class="sourceCode" id="cb1243"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1243-1"><a href="ch_async-iteration.html#cb1243-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="cf">await</span> (<span class="kw">const</span> x <span class="kw">of</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]) {</span>
+<span id="cb1243-2"><a href="ch_async-iteration.html#cb1243-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb1243-3"><a href="ch_async-iteration.html#cb1243-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1243-4"><a href="ch_async-iteration.html#cb1243-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1243-5"><a href="ch_async-iteration.html#cb1243-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb1243-6"><a href="ch_async-iteration.html#cb1243-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div>
+<p>And it supports synchronous iterables over values that are wrapped in Promises:</p>
+<div class="sourceCode" id="cb1244"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1244-1"><a href="ch_async-iteration.html#cb1244-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'a'</span>)<span class="op">,</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'b'</span>)]<span class="op">;</span></span>
+<span id="cb1244-2"><a href="ch_async-iteration.html#cb1244-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="cf">await</span> (<span class="kw">const</span> x <span class="kw">of</span> arr) {</span>
+<span id="cb1244-3"><a href="ch_async-iteration.html#cb1244-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb1244-4"><a href="ch_async-iteration.html#cb1244-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1244-5"><a href="ch_async-iteration.html#cb1244-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1244-6"><a href="ch_async-iteration.html#cb1244-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb1244-7"><a href="ch_async-iteration.html#cb1244-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Convert an async iterable to an Array</strong></p>
+<p>Warning: We’ll soon see the solution for this exercise in this chapter.</p>
+<ul>
+<li><p><code>exercises/async-iteration/async_iterable_to_array_test.mjs</code></p></li>
+</ul>
+</div>
+<h3 id="async-generators">42.2 Asynchronous generators</h3>
+<p><a id="index-entry-479" class="index-entry"></a><a id="index-entry-480" class="index-entry"></a> <a id="index-entry-481" class="index-entry"></a></p>
+<p>An asynchronous generator is two things at the same time:</p>
+<ul>
+<li>An async function (input): We can use <code>await</code> and <code>for-await-of</code> to retrieve data.</li>
+<li>A generator that returns an asynchronous iterable (output): We can use <code>yield</code> and <code>yield*</code> to produce data.</li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/eye-regular.svg" height="24">&nbsp; <strong>Asynchronous generators are very similar to synchronous generators</strong></p>
+<p>Due to async generators and sync generators being so similar, I don’t explain how exactly <code>yield</code> and <code>yield*</code> work. Please consult <a href="ch_sync-generators.html">§38 “Synchronous generators”</a> if you have doubts.</p>
+</div>
+<p>Therefore, an asynchronous generator has:</p>
+<ul>
+<li>Input that can be:
+<ul>
+<li>synchronous (single values, sync iterables) or</li>
+<li>asynchronous (Promises, async iterables).</li>
+</ul></li>
+<li>Output that is an asynchronous iterable.</li>
+</ul>
+<p>This looks as follows:</p>
+<div class="sourceCode" id="cb1245"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1245-1"><a href="ch_async-iteration.html#cb1245-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span><span class="op">*</span> <span class="fu">asyncGen</span>() {</span>
+<span id="cb1245-2"><a href="ch_async-iteration.html#cb1245-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Input: Promises, async iterables</span></span>
+<span id="cb1245-3"><a href="ch_async-iteration.html#cb1245-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> x <span class="op">=</span> <span class="cf">await</span> somePromise<span class="op">;</span></span>
+<span id="cb1245-4"><a href="ch_async-iteration.html#cb1245-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="cf">await</span> (<span class="kw">const</span> y <span class="kw">of</span> someAsyncIterable) {</span>
+<span id="cb1245-5"><a href="ch_async-iteration.html#cb1245-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb1245-6"><a href="ch_async-iteration.html#cb1245-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1245-7"><a href="ch_async-iteration.html#cb1245-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1245-8"><a href="ch_async-iteration.html#cb1245-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Output</span></span>
+<span id="cb1245-9"><a href="ch_async-iteration.html#cb1245-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> someValue<span class="op">;</span></span>
+<span id="cb1245-10"><a href="ch_async-iteration.html#cb1245-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span><span class="op">*</span> <span class="fu">otherAsyncGen</span>()<span class="op">;</span></span>
+<span id="cb1245-11"><a href="ch_async-iteration.html#cb1245-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><a id="index-entry-482" class="index-entry"></a> <a id="index-entry-483" class="index-entry"></a> <a id="index-entry-484" class="index-entry"></a></p>
+<h4 id="example-creating-an-async-iterable-via-an-async-generator">42.2.1 Example: creating an async iterable via an async generator</h4>
+<p>Let’s look at an example. The following code creates an async iterable with three numbers:</p>
+<div class="sourceCode" id="cb1246"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1246-1"><a href="ch_async-iteration.html#cb1246-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span><span class="op">*</span> <span class="fu">yield123</span>() {</span>
+<span id="cb1246-2"><a href="ch_async-iteration.html#cb1246-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> i<span class="op">=</span><span class="dv">1</span><span class="op">;</span> i<span class="op">&lt;=</span><span class="dv">3</span><span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb1246-3"><a href="ch_async-iteration.html#cb1246-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> i<span class="op">;</span></span>
+<span id="cb1246-4"><a href="ch_async-iteration.html#cb1246-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1246-5"><a href="ch_async-iteration.html#cb1246-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Does the result of <code>yield123()</code> conform to the async iteration protocol?</p>
+<div class="sourceCode" id="cb1247"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1247-1"><a href="ch_async-iteration.html#cb1247-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb1247-2"><a href="ch_async-iteration.html#cb1247-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> asyncIterable <span class="op">=</span> <span class="fu">yield123</span>()<span class="op">;</span></span>
+<span id="cb1247-3"><a href="ch_async-iteration.html#cb1247-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> asyncIterator <span class="op">=</span> asyncIterable[<span class="bu">Symbol</span><span class="op">.</span><span class="at">asyncIterator</span>]()<span class="op">;</span></span>
+<span id="cb1247-4"><a href="ch_async-iteration.html#cb1247-4" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1247-5"><a href="ch_async-iteration.html#cb1247-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> asyncIterator<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span></span>
+<span id="cb1247-6"><a href="ch_async-iteration.html#cb1247-6" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span> })<span class="op">;</span></span>
+<span id="cb1247-7"><a href="ch_async-iteration.html#cb1247-7" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1247-8"><a href="ch_async-iteration.html#cb1247-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> asyncIterator<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span></span>
+<span id="cb1247-9"><a href="ch_async-iteration.html#cb1247-9" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">value</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span> })<span class="op">;</span></span>
+<span id="cb1247-10"><a href="ch_async-iteration.html#cb1247-10" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1247-11"><a href="ch_async-iteration.html#cb1247-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> asyncIterator<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span></span>
+<span id="cb1247-12"><a href="ch_async-iteration.html#cb1247-12" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">value</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span> })<span class="op">;</span></span>
+<span id="cb1247-13"><a href="ch_async-iteration.html#cb1247-13" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1247-14"><a href="ch_async-iteration.html#cb1247-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> asyncIterator<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span></span>
+<span id="cb1247-15"><a href="ch_async-iteration.html#cb1247-15" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">value</span><span class="op">:</span> <span class="kw">undefined</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">true</span> })<span class="op">;</span></span>
+<span id="cb1247-16"><a href="ch_async-iteration.html#cb1247-16" aria-hidden="true" tabindex="-1"></a>})()<span class="op">;</span></span></code></pre></div>
+<p>We wrapped the code in an <a href="ch_async-functions.html#immediately-invoked-async-arrow-functions">immediately invoked async arrow function</a>.</p>
+<h4 id="example-converting-a-sync-iterable-to-an-async-iterable">42.2.2 Example: converting a sync iterable to an async iterable</h4>
+<p>The following asynchronous generator converts a synchronous iterable to an asynchronous iterable. It implements the function <code>syncToAsyncIterable()</code> that we have used previously.</p>
+<div class="sourceCode" id="cb1248"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1248-1"><a href="ch_async-iteration.html#cb1248-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span><span class="op">*</span> <span class="fu">syncToAsyncIterable</span>(syncIterable) {</span>
+<span id="cb1248-2"><a href="ch_async-iteration.html#cb1248-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> elem <span class="kw">of</span> syncIterable) {</span>
+<span id="cb1248-3"><a href="ch_async-iteration.html#cb1248-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> elem<span class="op">;</span></span>
+<span id="cb1248-4"><a href="ch_async-iteration.html#cb1248-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1248-5"><a href="ch_async-iteration.html#cb1248-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Note: The input is synchronous in this case (no <code>await</code> is needed).</p>
+<h4 id="asyncIterableToArray">42.2.3 Example: converting an async iterable to an Array</h4>
+<p>The following function is a solution to a previous exercise. It converts an async iterable to an Array (think spreading, but for async iterables instead of sync iterables).</p>
+<div class="sourceCode" id="cb1249"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1249-1"><a href="ch_async-iteration.html#cb1249-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">asyncIterableToArray</span>(asyncIterable) {</span>
+<span id="cb1249-2"><a href="ch_async-iteration.html#cb1249-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb1249-3"><a href="ch_async-iteration.html#cb1249-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="cf">await</span> (<span class="kw">const</span> value <span class="kw">of</span> asyncIterable) {</span>
+<span id="cb1249-4"><a href="ch_async-iteration.html#cb1249-4" aria-hidden="true" tabindex="-1"></a>    result<span class="op">.</span><span class="fu">push</span>(value)<span class="op">;</span></span>
+<span id="cb1249-5"><a href="ch_async-iteration.html#cb1249-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1249-6"><a href="ch_async-iteration.html#cb1249-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb1249-7"><a href="ch_async-iteration.html#cb1249-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Note that we can’t use an async generator in this case: We get our input via <code>for-await-of</code> and return an Array wrapped in a Promise. The latter requirement rules out async generators.</p>
+<p>This is a test for <code>asyncIterableToArray()</code>:</p>
+<div class="sourceCode" id="cb1250"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1250-1"><a href="ch_async-iteration.html#cb1250-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span><span class="op">*</span> <span class="fu">createAsyncIterable</span>() {</span>
+<span id="cb1250-2"><a href="ch_async-iteration.html#cb1250-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'a'</span><span class="op">;</span></span>
+<span id="cb1250-3"><a href="ch_async-iteration.html#cb1250-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'b'</span><span class="op">;</span></span>
+<span id="cb1250-4"><a href="ch_async-iteration.html#cb1250-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1250-5"><a href="ch_async-iteration.html#cb1250-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> asyncIterable <span class="op">=</span> <span class="fu">createAsyncIterable</span>()<span class="op">;</span></span>
+<span id="cb1250-6"><a href="ch_async-iteration.html#cb1250-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1250-7"><a href="ch_async-iteration.html#cb1250-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="fu">asyncIterableToArray</span>(asyncIterable)<span class="op">,</span> <span class="co">// (A)</span></span>
+<span id="cb1250-8"><a href="ch_async-iteration.html#cb1250-8" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]</span>
+<span id="cb1250-9"><a href="ch_async-iteration.html#cb1250-9" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<p>Note the <code>await</code> in line A, which is needed to unwrap the Promise returned by <code>asyncIterableToArray()</code>. In order for <code>await</code> to work, this code fragment must be run inside an async function.</p>
+<h4 id="example-transforming-an-async-iterable">42.2.4 Example: transforming an async iterable</h4>
+<p>Let’s implement an async generator that produces a new async iterable by transforming an existing async iterable.</p>
+<div class="sourceCode" id="cb1251"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1251-1"><a href="ch_async-iteration.html#cb1251-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span><span class="op">*</span> <span class="fu">timesTwo</span>(asyncNumbers) {</span>
+<span id="cb1251-2"><a href="ch_async-iteration.html#cb1251-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="cf">await</span> (<span class="kw">const</span> x <span class="kw">of</span> asyncNumbers) {</span>
+<span id="cb1251-3"><a href="ch_async-iteration.html#cb1251-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> x <span class="op">*</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb1251-4"><a href="ch_async-iteration.html#cb1251-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1251-5"><a href="ch_async-iteration.html#cb1251-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>To test this function, we use <code>asyncIterableToArray()</code> from the previous section.</p>
+<div class="sourceCode" id="cb1252"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1252-1"><a href="ch_async-iteration.html#cb1252-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span><span class="op">*</span> <span class="fu">createAsyncIterable</span>() {</span>
+<span id="cb1252-2"><a href="ch_async-iteration.html#cb1252-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> i<span class="op">=</span><span class="dv">1</span><span class="op">;</span> i<span class="op">&lt;=</span><span class="dv">3</span><span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb1252-3"><a href="ch_async-iteration.html#cb1252-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> i<span class="op">;</span></span>
+<span id="cb1252-4"><a href="ch_async-iteration.html#cb1252-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1252-5"><a href="ch_async-iteration.html#cb1252-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1252-6"><a href="ch_async-iteration.html#cb1252-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1252-7"><a href="ch_async-iteration.html#cb1252-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="fu">asyncIterableToArray</span>(<span class="fu">timesTwo</span>(<span class="fu">createAsyncIterable</span>()))<span class="op">,</span></span>
+<span id="cb1252-8"><a href="ch_async-iteration.html#cb1252-8" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">2</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">6</span>]</span>
+<span id="cb1252-9"><a href="ch_async-iteration.html#cb1252-9" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Async generators</strong></p>
+<p>Warning: We’ll soon see the solution for this exercise in this chapter.</p>
+<ul>
+<li><p><code>exercises/async-iteration/number_lines_test.mjs</code></p></li>
+</ul>
+</div>
+<h4 id="example-mapping-over-asynchronous-iterables">42.2.5 Example: mapping over asynchronous iterables</h4>
+<p>As a reminder, this is how to map over synchronous iterables:</p>
+<div class="sourceCode" id="cb1253"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1253-1"><a href="ch_async-iteration.html#cb1253-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">mapSync</span>(iterable<span class="op">,</span> func) {</span>
+<span id="cb1253-2"><a href="ch_async-iteration.html#cb1253-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> index <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1253-3"><a href="ch_async-iteration.html#cb1253-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> iterable) {</span>
+<span id="cb1253-4"><a href="ch_async-iteration.html#cb1253-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> <span class="fu">func</span>(x<span class="op">,</span> index)<span class="op">;</span></span>
+<span id="cb1253-5"><a href="ch_async-iteration.html#cb1253-5" aria-hidden="true" tabindex="-1"></a>    index<span class="op">++;</span></span>
+<span id="cb1253-6"><a href="ch_async-iteration.html#cb1253-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1253-7"><a href="ch_async-iteration.html#cb1253-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1253-8"><a href="ch_async-iteration.html#cb1253-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> syncIterable <span class="op">=</span> <span class="fu">mapSync</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">,</span> s <span class="kw">=&gt;</span> s<span class="op">.</span><span class="fu">repeat</span>(<span class="dv">3</span>))<span class="op">;</span></span>
+<span id="cb1253-9"><a href="ch_async-iteration.html#cb1253-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1253-10"><a href="ch_async-iteration.html#cb1253-10" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>syncIterable]<span class="op">,</span></span>
+<span id="cb1253-11"><a href="ch_async-iteration.html#cb1253-11" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'aaa'</span><span class="op">,</span> <span class="st">'bbb'</span><span class="op">,</span> <span class="st">'ccc'</span>])<span class="op">;</span></span></code></pre></div>
+<p>The asynchronous version looks as follows:</p>
+<div class="sourceCode" id="cb1254"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1254-1"><a href="ch_async-iteration.html#cb1254-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span><span class="op">*</span> <span class="fu">mapAsync</span>(asyncIterable<span class="op">,</span> func) { <span class="co">// (A)</span></span>
+<span id="cb1254-2"><a href="ch_async-iteration.html#cb1254-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> index <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1254-3"><a href="ch_async-iteration.html#cb1254-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="cf">await</span> (<span class="kw">const</span> x <span class="kw">of</span> asyncIterable) { <span class="co">// (B)</span></span>
+<span id="cb1254-4"><a href="ch_async-iteration.html#cb1254-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> <span class="fu">func</span>(x<span class="op">,</span> index)<span class="op">;</span></span>
+<span id="cb1254-5"><a href="ch_async-iteration.html#cb1254-5" aria-hidden="true" tabindex="-1"></a>    index<span class="op">++;</span></span>
+<span id="cb1254-6"><a href="ch_async-iteration.html#cb1254-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1254-7"><a href="ch_async-iteration.html#cb1254-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Note how similar the sync implementation and the async implementation are. The only two differences are the <code>async</code> in line A and the <code>await</code> in line B. That is comparable to going from a synchronous function to an asynchronous function – we only need to add the keyword <code>async</code> and the occasional <code>await</code>.</p>
+<p>To test <code>mapAsync()</code>, we use the helper function <code>asyncIterableToArray()</code> <a href="ch_async-iteration.html#asyncIterableToArray" data-remove-prefix="shown ">(shown earlier in this chapter)</a>:</p>
+<div class="sourceCode" id="cb1255"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1255-1"><a href="ch_async-iteration.html#cb1255-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span><span class="op">*</span> <span class="fu">createAsyncIterable</span>() {</span>
+<span id="cb1255-2"><a href="ch_async-iteration.html#cb1255-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'a'</span><span class="op">;</span></span>
+<span id="cb1255-3"><a href="ch_async-iteration.html#cb1255-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'b'</span><span class="op">;</span></span>
+<span id="cb1255-4"><a href="ch_async-iteration.html#cb1255-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1255-5"><a href="ch_async-iteration.html#cb1255-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> mapped <span class="op">=</span> <span class="fu">mapAsync</span>(</span>
+<span id="cb1255-6"><a href="ch_async-iteration.html#cb1255-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createAsyncIterable</span>()<span class="op">,</span> s <span class="kw">=&gt;</span> s<span class="op">.</span><span class="fu">repeat</span>(<span class="dv">3</span>))<span class="op">;</span></span>
+<span id="cb1255-7"><a href="ch_async-iteration.html#cb1255-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1255-8"><a href="ch_async-iteration.html#cb1255-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="fu">asyncIterableToArray</span>(mapped)<span class="op">,</span> <span class="co">// (A)</span></span>
+<span id="cb1255-9"><a href="ch_async-iteration.html#cb1255-9" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'aaa'</span><span class="op">,</span> <span class="st">'bbb'</span>])<span class="op">;</span></span></code></pre></div>
+<p>Once again, we <code>await</code> to unwrap a Promise (line A) and this code fragment must run inside an async function.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: <code>filterAsyncIter()</code></strong></p>
+<p><code>exercises/async-iteration/filter_async_iter_test.mjs</code></p>
+</div>
+<h3 id="async-iteration-over-node.js-streams">42.3 Async iteration over Node.js streams</h3>
+<h4 id="node.js-streams-async-via-callbacks-push">42.3.1 Node.js streams: async via callbacks (push)</h4>
+<p>Traditionally, reading asynchronously from Node.js streams is done via callbacks:</p>
+<div class="sourceCode" id="cb1256"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1256-1"><a href="ch_async-iteration.html#cb1256-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">main</span>(inputFilePath) {</span>
+<span id="cb1256-2"><a href="ch_async-iteration.html#cb1256-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> readStream <span class="op">=</span> fs<span class="op">.</span><span class="fu">createReadStream</span>(inputFilePath<span class="op">,</span></span>
+<span id="cb1256-3"><a href="ch_async-iteration.html#cb1256-3" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">encoding</span><span class="op">:</span> <span class="st">'utf8'</span><span class="op">,</span> <span class="dt">highWaterMark</span><span class="op">:</span> <span class="dv">1024</span> })<span class="op">;</span></span>
+<span id="cb1256-4"><a href="ch_async-iteration.html#cb1256-4" aria-hidden="true" tabindex="-1"></a>  readStream<span class="op">.</span><span class="fu">on</span>(<span class="st">'data'</span><span class="op">,</span> (chunk) <span class="kw">=&gt;</span> {</span>
+<span id="cb1256-5"><a href="ch_async-iteration.html#cb1256-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'&gt;&gt;&gt; '</span><span class="op">+</span>chunk)<span class="op">;</span></span>
+<span id="cb1256-6"><a href="ch_async-iteration.html#cb1256-6" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1256-7"><a href="ch_async-iteration.html#cb1256-7" aria-hidden="true" tabindex="-1"></a>  readStream<span class="op">.</span><span class="fu">on</span>(<span class="st">'end'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb1256-8"><a href="ch_async-iteration.html#cb1256-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'### DONE ###'</span>)<span class="op">;</span></span>
+<span id="cb1256-9"><a href="ch_async-iteration.html#cb1256-9" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1256-10"><a href="ch_async-iteration.html#cb1256-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>That is, the stream is in control and pushes data to the reader.</p>
+<h4 id="node.js-streams-async-via-async-iteration-pull">42.3.2 Node.js streams: async via async iteration (pull)</h4>
+<p>Starting with Node.js 10, we can also use asynchronous iteration to read from streams:</p>
+<div class="sourceCode" id="cb1257"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1257-1"><a href="ch_async-iteration.html#cb1257-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">main</span>(inputFilePath) {</span>
+<span id="cb1257-2"><a href="ch_async-iteration.html#cb1257-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> readStream <span class="op">=</span> fs<span class="op">.</span><span class="fu">createReadStream</span>(inputFilePath<span class="op">,</span></span>
+<span id="cb1257-3"><a href="ch_async-iteration.html#cb1257-3" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">encoding</span><span class="op">:</span> <span class="st">'utf8'</span><span class="op">,</span> <span class="dt">highWaterMark</span><span class="op">:</span> <span class="dv">1024</span> })<span class="op">;</span></span>
+<span id="cb1257-4"><a href="ch_async-iteration.html#cb1257-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1257-5"><a href="ch_async-iteration.html#cb1257-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="cf">await</span> (<span class="kw">const</span> chunk <span class="kw">of</span> readStream) {</span>
+<span id="cb1257-6"><a href="ch_async-iteration.html#cb1257-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'&gt;&gt;&gt; '</span><span class="op">+</span>chunk)<span class="op">;</span></span>
+<span id="cb1257-7"><a href="ch_async-iteration.html#cb1257-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1257-8"><a href="ch_async-iteration.html#cb1257-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'### DONE ###'</span>)<span class="op">;</span></span>
+<span id="cb1257-9"><a href="ch_async-iteration.html#cb1257-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>This time, the reader is in control and pulls data from the stream.</p>
+<h4 id="example-from-chunks-to-lines">42.3.3 Example: from chunks to lines</h4>
+<p>Node.js streams iterate over <em>chunks</em> (arbitrarily long pieces) of data. The following asynchronous generator converts an async iterable over chunks to an async iterable over lines:</p>
+<div class="sourceCode" id="cb1258"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1258-1"><a href="ch_async-iteration.html#cb1258-1" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb1258-2"><a href="ch_async-iteration.html#cb1258-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Parameter: async iterable of chunks (strings)</span></span>
+<span id="cb1258-3"><a href="ch_async-iteration.html#cb1258-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * Result: async iterable of lines (incl. newlines)</span></span>
+<span id="cb1258-4"><a href="ch_async-iteration.html#cb1258-4" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb1258-5"><a href="ch_async-iteration.html#cb1258-5" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span><span class="op">*</span> <span class="fu">chunksToLines</span>(chunksAsync) {</span>
+<span id="cb1258-6"><a href="ch_async-iteration.html#cb1258-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> previous <span class="op">=</span> <span class="st">''</span><span class="op">;</span></span>
+<span id="cb1258-7"><a href="ch_async-iteration.html#cb1258-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="cf">await</span> (<span class="kw">const</span> chunk <span class="kw">of</span> chunksAsync) { <span class="co">// input</span></span>
+<span id="cb1258-8"><a href="ch_async-iteration.html#cb1258-8" aria-hidden="true" tabindex="-1"></a>    previous <span class="op">+=</span> chunk<span class="op">;</span></span>
+<span id="cb1258-9"><a href="ch_async-iteration.html#cb1258-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> eolIndex<span class="op">;</span></span>
+<span id="cb1258-10"><a href="ch_async-iteration.html#cb1258-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> ((eolIndex <span class="op">=</span> previous<span class="op">.</span><span class="fu">indexOf</span>(<span class="st">'</span><span class="sc">\n</span><span class="st">'</span>)) <span class="op">&gt;=</span> <span class="dv">0</span>) {</span>
+<span id="cb1258-11"><a href="ch_async-iteration.html#cb1258-11" aria-hidden="true" tabindex="-1"></a>      <span class="co">// line includes the EOL (Windows '\r\n' or Unix '\n')</span></span>
+<span id="cb1258-12"><a href="ch_async-iteration.html#cb1258-12" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> line <span class="op">=</span> previous<span class="op">.</span><span class="fu">slice</span>(<span class="dv">0</span><span class="op">,</span> eolIndex<span class="op">+</span><span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb1258-13"><a href="ch_async-iteration.html#cb1258-13" aria-hidden="true" tabindex="-1"></a>      <span class="kw">yield</span> line<span class="op">;</span> <span class="co">// output</span></span>
+<span id="cb1258-14"><a href="ch_async-iteration.html#cb1258-14" aria-hidden="true" tabindex="-1"></a>      previous <span class="op">=</span> previous<span class="op">.</span><span class="fu">slice</span>(eolIndex<span class="op">+</span><span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb1258-15"><a href="ch_async-iteration.html#cb1258-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1258-16"><a href="ch_async-iteration.html#cb1258-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1258-17"><a href="ch_async-iteration.html#cb1258-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (previous<span class="op">.</span><span class="at">length</span> <span class="op">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb1258-18"><a href="ch_async-iteration.html#cb1258-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> previous<span class="op">;</span></span>
+<span id="cb1258-19"><a href="ch_async-iteration.html#cb1258-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1258-20"><a href="ch_async-iteration.html#cb1258-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Let’s apply <code>chunksToLines()</code> to an async iterable over chunks (as produced by <code>chunkIterable()</code>):</p>
+<div class="sourceCode" id="cb1259"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1259-1"><a href="ch_async-iteration.html#cb1259-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span><span class="op">*</span> <span class="fu">chunkIterable</span>() {</span>
+<span id="cb1259-2"><a href="ch_async-iteration.html#cb1259-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'First</span><span class="sc">\n</span><span class="st">Sec'</span><span class="op">;</span></span>
+<span id="cb1259-3"><a href="ch_async-iteration.html#cb1259-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'ond</span><span class="sc">\n</span><span class="st">Third</span><span class="sc">\n</span><span class="st">F'</span><span class="op">;</span></span>
+<span id="cb1259-4"><a href="ch_async-iteration.html#cb1259-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'ourth'</span><span class="op">;</span></span>
+<span id="cb1259-5"><a href="ch_async-iteration.html#cb1259-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1259-6"><a href="ch_async-iteration.html#cb1259-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> linesIterable <span class="op">=</span> <span class="fu">chunksToLines</span>(<span class="fu">chunkIterable</span>())<span class="op">;</span></span>
+<span id="cb1259-7"><a href="ch_async-iteration.html#cb1259-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1259-8"><a href="ch_async-iteration.html#cb1259-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="fu">asyncIterableToArray</span>(linesIterable)<span class="op">,</span></span>
+<span id="cb1259-9"><a href="ch_async-iteration.html#cb1259-9" aria-hidden="true" tabindex="-1"></a>  [</span>
+<span id="cb1259-10"><a href="ch_async-iteration.html#cb1259-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'First</span><span class="sc">\n</span><span class="st">'</span><span class="op">,</span></span>
+<span id="cb1259-11"><a href="ch_async-iteration.html#cb1259-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Second</span><span class="sc">\n</span><span class="st">'</span><span class="op">,</span></span>
+<span id="cb1259-12"><a href="ch_async-iteration.html#cb1259-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Third</span><span class="sc">\n</span><span class="st">'</span><span class="op">,</span></span>
+<span id="cb1259-13"><a href="ch_async-iteration.html#cb1259-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Fourth'</span><span class="op">,</span></span>
+<span id="cb1259-14"><a href="ch_async-iteration.html#cb1259-14" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">;</span></span></code></pre></div>
+<p>Now that we have an asynchronous iterable over lines, we can use the solution of a previous exercise, <code>numberLines()</code>, to number those lines:</p>
+<div class="sourceCode" id="cb1260"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1260-1"><a href="ch_async-iteration.html#cb1260-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span><span class="op">*</span> <span class="fu">numberLines</span>(linesAsync) {</span>
+<span id="cb1260-2"><a href="ch_async-iteration.html#cb1260-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> lineNumber <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1260-3"><a href="ch_async-iteration.html#cb1260-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="cf">await</span> (<span class="kw">const</span> line <span class="kw">of</span> linesAsync) {</span>
+<span id="cb1260-4"><a href="ch_async-iteration.html#cb1260-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> lineNumber <span class="op">+</span> <span class="st">': '</span> <span class="op">+</span> line<span class="op">;</span></span>
+<span id="cb1260-5"><a href="ch_async-iteration.html#cb1260-5" aria-hidden="true" tabindex="-1"></a>    lineNumber<span class="op">++;</span></span>
+<span id="cb1260-6"><a href="ch_async-iteration.html#cb1260-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1260-7"><a href="ch_async-iteration.html#cb1260-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1260-8"><a href="ch_async-iteration.html#cb1260-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> numberedLines <span class="op">=</span> <span class="fu">numberLines</span>(<span class="fu">chunksToLines</span>(<span class="fu">chunkIterable</span>()))<span class="op">;</span></span>
+<span id="cb1260-9"><a href="ch_async-iteration.html#cb1260-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1260-10"><a href="ch_async-iteration.html#cb1260-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="fu">asyncIterableToArray</span>(numberedLines)<span class="op">,</span></span>
+<span id="cb1260-11"><a href="ch_async-iteration.html#cb1260-11" aria-hidden="true" tabindex="-1"></a>  [</span>
+<span id="cb1260-12"><a href="ch_async-iteration.html#cb1260-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'1: First</span><span class="sc">\n</span><span class="st">'</span><span class="op">,</span></span>
+<span id="cb1260-13"><a href="ch_async-iteration.html#cb1260-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'2: Second</span><span class="sc">\n</span><span class="st">'</span><span class="op">,</span></span>
+<span id="cb1260-14"><a href="ch_async-iteration.html#cb1260-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'3: Third</span><span class="sc">\n</span><span class="st">'</span><span class="op">,</span></span>
+<span id="cb1260-15"><a href="ch_async-iteration.html#cb1260-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'4: Fourth'</span><span class="op">,</span></span>
+<span id="cb1260-16"><a href="ch_async-iteration.html#cb1260-16" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">;</span></span></code></pre></div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/44">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="pt_more-standard-library.html">IX More standard library</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

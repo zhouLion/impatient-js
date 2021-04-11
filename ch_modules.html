@@ -1,0 +1,834 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_modules">27 Modules</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>27.1 <a href="ch_modules.html#overview-syntax-of-ecmascript-modules">Overview: syntax of ECMAScript modules</a>
+<ul>
+<li>27.1.1 <a href="ch_modules.html#module-exports">Exporting</a></li>
+<li>27.1.2 <a href="ch_modules.html#importing">Importing</a></li>
+</ul></li>
+<li>27.2 <a href="ch_modules.html#javascript-source-code-formats">JavaScript source code formats</a>
+<ul>
+<li>27.2.1 <a href="ch_modules.html#code-before-built-in-modules-was-written-in-ecmascript-5">Code before built-in modules was written in ECMAScript 5</a></li>
+</ul></li>
+<li>27.3 <a href="ch_modules.html#scripts">Before we had modules, we had scripts</a></li>
+<li>27.4 <a href="ch_modules.html#module-systems-created-prior-to-es6">Module systems created prior to ES6</a>
+<ul>
+<li>27.4.1 <a href="ch_modules.html#server-side-commonjs-modules">Server side: CommonJS modules</a></li>
+<li>27.4.2 <a href="ch_modules.html#client-side-amd-asynchronous-module-definition-modules">Client side: AMD (Asynchronous Module Definition) modules</a></li>
+<li>27.4.3 <a href="ch_modules.html#characteristics-of-javascript-modules">Characteristics of JavaScript modules</a></li>
+</ul></li>
+<li>27.5 <a href="ch_modules.html#ecmascript-modules">ECMAScript modules</a>
+<ul>
+<li>27.5.1 <a href="ch_modules.html#es-modules-syntax-semantics-loader-api">ES modules: syntax, semantics, loader API</a></li>
+</ul></li>
+<li>27.6 <a href="ch_modules.html#named-exports-and-imports">Named exports and imports</a>
+<ul>
+<li>27.6.1 <a href="ch_modules.html#named-exports">Named exports</a></li>
+<li>27.6.2 <a href="ch_modules.html#named-imports">Named imports</a></li>
+<li>27.6.3 <a href="ch_modules.html#namespace-imports">Namespace imports</a></li>
+<li>27.6.4 <a href="ch_modules.html#named-exporting-styles-inline-versus-clause-advanced">Named exporting styles: inline versus clause (advanced)</a></li>
+</ul></li>
+<li>27.7 <a href="ch_modules.html#default-exports-and-imports">Default exports and imports</a>
+<ul>
+<li>27.7.1 <a href="ch_modules.html#the-two-styles-of-default-exporting">The two styles of default-exporting</a></li>
+<li>27.7.2 <a href="ch_modules.html#the-default-export-as-a-named-export-advanced">The default export as a named export (advanced)</a></li>
+</ul></li>
+<li>27.8 <a href="ch_modules.html#more-details-on-exporting-and-importing">More details on exporting and importing</a>
+<ul>
+<li>27.8.1 <a href="ch_modules.html#imports-are-read-only-views-on-exports">Imports are read-only views on exports</a></li>
+<li>27.8.2 <a href="ch_modules.html#esms-transparent-support-for-cyclic-imports-advanced">ESM’s transparent support for cyclic imports (advanced)</a></li>
+</ul></li>
+<li>27.9 <a href="ch_modules.html#npm-packages">npm packages</a>
+<ul>
+<li>27.9.1 <a href="ch_modules.html#packages-are-installed-inside-a-directory-node_modules">Packages are installed inside a directory <code>node_modules/</code></a></li>
+<li>27.9.2 <a href="ch_modules.html#why-can-npm-be-used-to-install-frontend-libraries">Why can npm be used to install frontend libraries?</a></li>
+</ul></li>
+<li>27.10 <a href="ch_modules.html#naming-modules">Naming modules</a></li>
+<li>27.11 <a href="ch_modules.html#module-specifiers">Module specifiers</a>
+<ul>
+<li>27.11.1 <a href="ch_modules.html#categories-of-module-specifiers">Categories of module specifiers</a></li>
+<li>27.11.2 <a href="ch_modules.html#es-module-specifiers-in-browsers">ES module specifiers in browsers</a></li>
+<li>27.11.3 <a href="ch_modules.html#es-module-specifiers-on-node.js">ES module specifiers on Node.js</a></li>
+</ul></li>
+<li>27.12 <a href="ch_modules.html#dynamic-imports">Loading modules dynamically via <code>import()</code> [ES2020]</a>
+<ul>
+<li>27.12.1 <a href="ch_modules.html#example-loading-a-module-dynamically">Example: loading a module dynamically</a></li>
+<li>27.12.2 <a href="ch_modules.html#use-cases-for-import">Use cases for <code>import()</code></a></li>
+</ul></li>
+<li>27.13 <a href="ch_modules.html#import.meta"><code>import.meta</code> – metadata for the current module [ES2020]</a>
+<ul>
+<li>27.13.1 <a href="ch_modules.html#import.meta.url"><code>import.meta.url</code></a></li>
+<li>27.13.2 <a href="ch_modules.html#import.meta.url-and-class-url"><code>import.meta.url</code> and class <code>URL</code></a></li>
+<li>27.13.3 <a href="ch_modules.html#import.meta.url-on-node.js"><code>import.meta.url</code> on Node.js</a></li>
+</ul></li>
+<li>27.14 <a href="ch_modules.html#polyfills">Polyfills: emulating native web platform features (advanced)</a>
+<ul>
+<li>27.14.1 <a href="ch_modules.html#sources-of-this-section">Sources of this section</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<h3 id="overview-syntax-of-ecmascript-modules">27.1 Overview: syntax of ECMAScript modules</h3>
+<h4 id="module-exports">27.1.1 Exporting</h4>
+<div class="sourceCode" id="cb601"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb601-1"><a href="ch_modules.html#cb601-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Named exports</span></span>
+<span id="cb601-2"><a href="ch_modules.html#cb601-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">f</span>() {}</span>
+<span id="cb601-3"><a href="ch_modules.html#cb601-3" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> one <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb601-4"><a href="ch_modules.html#cb601-4" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> {foo<span class="op">,</span> b <span class="im">as</span> bar}<span class="op">;</span></span>
+<span id="cb601-5"><a href="ch_modules.html#cb601-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb601-6"><a href="ch_modules.html#cb601-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Default exports</span></span>
+<span id="cb601-7"><a href="ch_modules.html#cb601-7" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> <span class="fu">f</span>() {} <span class="co">// declaration with optional name</span></span>
+<span id="cb601-8"><a href="ch_modules.html#cb601-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Replacement for `const` (there must be exactly one value)</span></span>
+<span id="cb601-9"><a href="ch_modules.html#cb601-9" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb601-10"><a href="ch_modules.html#cb601-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb601-11"><a href="ch_modules.html#cb601-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Re-exporting from another module</span></span>
+<span id="cb601-12"><a href="ch_modules.html#cb601-12" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> {foo<span class="op">,</span> b <span class="im">as</span> bar} <span class="im">from</span> <span class="st">'./some-module.mjs'</span><span class="op">;</span></span>
+<span id="cb601-13"><a href="ch_modules.html#cb601-13" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="op">*</span> <span class="im">from</span> <span class="st">'./some-module.mjs'</span><span class="op">;</span></span>
+<span id="cb601-14"><a href="ch_modules.html#cb601-14" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="op">*</span> <span class="im">as</span> ns <span class="im">from</span> <span class="st">'./some-module.mjs'</span><span class="op">;</span> <span class="co">// ES2020</span></span></code></pre></div>
+<h4 id="importing">27.1.2 Importing</h4>
+<p><a id="index-entry-260" class="index-entry"></a><a id="index-entry-261" class="index-entry"></a></p>
+<div class="sourceCode" id="cb602"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb602-1"><a href="ch_modules.html#cb602-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Named imports</span></span>
+<span id="cb602-2"><a href="ch_modules.html#cb602-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {foo<span class="op">,</span> bar <span class="im">as</span> b} <span class="im">from</span> <span class="st">'./some-module.mjs'</span><span class="op">;</span></span>
+<span id="cb602-3"><a href="ch_modules.html#cb602-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Namespace import</span></span>
+<span id="cb602-4"><a href="ch_modules.html#cb602-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> someModule <span class="im">from</span> <span class="st">'./some-module.mjs'</span><span class="op">;</span></span>
+<span id="cb602-5"><a href="ch_modules.html#cb602-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Default import</span></span>
+<span id="cb602-6"><a href="ch_modules.html#cb602-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> someModule <span class="im">from</span> <span class="st">'./some-module.mjs'</span><span class="op">;</span></span>
+<span id="cb602-7"><a href="ch_modules.html#cb602-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb602-8"><a href="ch_modules.html#cb602-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Combinations:</span></span>
+<span id="cb602-9"><a href="ch_modules.html#cb602-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> someModule<span class="op">,</span> <span class="op">*</span> <span class="im">as</span> someModule <span class="im">from</span> <span class="st">'./some-module.mjs'</span><span class="op">;</span></span>
+<span id="cb602-10"><a href="ch_modules.html#cb602-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> someModule<span class="op">,</span> {foo<span class="op">,</span> bar <span class="im">as</span> b} <span class="im">from</span> <span class="st">'./some-module.mjs'</span><span class="op">;</span></span>
+<span id="cb602-11"><a href="ch_modules.html#cb602-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb602-12"><a href="ch_modules.html#cb602-12" aria-hidden="true" tabindex="-1"></a><span class="co">// Empty import (for modules with side effects)</span></span>
+<span id="cb602-13"><a href="ch_modules.html#cb602-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">'./some-module.mjs'</span><span class="op">;</span></span></code></pre></div>
+<h3 id="javascript-source-code-formats">27.2 JavaScript source code formats</h3>
+<p>The current landscape of JavaScript modules is quite diverse: ES6 brought built-in modules, but the source code formats that came before them, are still around, too. Understanding the latter helps understand the former, so let’s investigate. The next sections describe the following ways of delivering JavaScript source code:</p>
+<ul>
+<li><em>Scripts</em> are code fragments that browsers run in global scope. They are precursors of modules.</li>
+<li><em>CommonJS modules</em> are a module format that is mainly used on servers (e.g., via Node.js).</li>
+<li><em>AMD modules</em> are a module format that is mainly used in browsers.</li>
+<li><em>ECMAScript modules</em> are JavaScript’s built-in module format. It supersedes all previous formats.</li>
+</ul>
+<p>Tbl.&nbsp;<a href="#tbl:source-code-formats">18</a> gives an overview of these code formats. Note that for CommonJS modules and ECMAScript modules, two filename extensions are commonly used. Which one is appropriate depends on how you want to use a file. Details are given later in this chapter.</p>
+<div id="tbl:source-code-formats">
+<table>
+<caption>Table 18: Ways of delivering JavaScript source code.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Runs on</th>
+<th style="text-align: left;">Loaded</th>
+<th style="text-align: left;">Filename ext.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Script</td>
+<td style="text-align: left;">browsers</td>
+<td style="text-align: left;">async</td>
+<td style="text-align: left;"><code>.js</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CommonJS module</td>
+<td style="text-align: left;">servers</td>
+<td style="text-align: left;">sync</td>
+<td style="text-align: left;"><code>.js .cjs</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AMD module</td>
+<td style="text-align: left;">browsers</td>
+<td style="text-align: left;">async</td>
+<td style="text-align: left;"><code>.js</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ECMAScript module</td>
+<td style="text-align: left;">browsers and servers</td>
+<td style="text-align: left;">async</td>
+<td style="text-align: left;"><code>.js .mjs</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="code-before-built-in-modules-was-written-in-ecmascript-5">27.2.1 Code before built-in modules was written in ECMAScript 5</h4>
+<p>Before we get to built-in modules (which were introduced with ES6), all code that you’ll see, will be written in ES5. Among other things:</p>
+<ul>
+<li>ES5 did not have <code>const</code> and <code>let</code>, only <code>var</code>.</li>
+<li>ES5 did not have arrow functions, only function expressions.</li>
+</ul>
+<h3 id="scripts">27.3 Before we had modules, we had scripts</h3>
+<p><a id="index-entry-262" class="index-entry"></a></p>
+<p>Initially, browsers only had <em>scripts</em> – pieces of code that were executed in global scope. As an example, consider an HTML file that loads script files via the following HTML:</p>
+<div class="sourceCode" id="cb603"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb603-1"><a href="ch_modules.html#cb603-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">"other-module1.js"</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb603-2"><a href="ch_modules.html#cb603-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">"other-module2.js"</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb603-3"><a href="ch_modules.html#cb603-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">"my-module.js"</span><span class="kw">&gt;&lt;/script&gt;</span></span></code></pre></div>
+<p>The main file is <code>my-module.js</code>, where we simulate a module:</p>
+<div class="sourceCode" id="cb604"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb604-1"><a href="ch_modules.html#cb604-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> myModule <span class="op">=</span> (<span class="kw">function</span> () { <span class="co">// Open IIFE</span></span>
+<span id="cb604-2"><a href="ch_modules.html#cb604-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Imports (via global variables)</span></span>
+<span id="cb604-3"><a href="ch_modules.html#cb604-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> importedFunc1 <span class="op">=</span> otherModule1<span class="op">.</span><span class="at">importedFunc1</span><span class="op">;</span></span>
+<span id="cb604-4"><a href="ch_modules.html#cb604-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> importedFunc2 <span class="op">=</span> otherModule2<span class="op">.</span><span class="at">importedFunc2</span><span class="op">;</span></span>
+<span id="cb604-5"><a href="ch_modules.html#cb604-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb604-6"><a href="ch_modules.html#cb604-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Body</span></span>
+<span id="cb604-7"><a href="ch_modules.html#cb604-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">internalFunc</span>() {</span>
+<span id="cb604-8"><a href="ch_modules.html#cb604-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb604-9"><a href="ch_modules.html#cb604-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb604-10"><a href="ch_modules.html#cb604-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">exportedFunc</span>() {</span>
+<span id="cb604-11"><a href="ch_modules.html#cb604-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">importedFunc1</span>()<span class="op">;</span></span>
+<span id="cb604-12"><a href="ch_modules.html#cb604-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">importedFunc2</span>()<span class="op">;</span></span>
+<span id="cb604-13"><a href="ch_modules.html#cb604-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">internalFunc</span>()<span class="op">;</span></span>
+<span id="cb604-14"><a href="ch_modules.html#cb604-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb604-15"><a href="ch_modules.html#cb604-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb604-16"><a href="ch_modules.html#cb604-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Exports (assigned to global variable `myModule`)</span></span>
+<span id="cb604-17"><a href="ch_modules.html#cb604-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {</span>
+<span id="cb604-18"><a href="ch_modules.html#cb604-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">exportedFunc</span><span class="op">:</span> exportedFunc<span class="op">,</span></span>
+<span id="cb604-19"><a href="ch_modules.html#cb604-19" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb604-20"><a href="ch_modules.html#cb604-20" aria-hidden="true" tabindex="-1"></a>})()<span class="op">;</span> <span class="co">// Close IIFE</span></span></code></pre></div>
+<p><a id="index-entry-263" class="index-entry"></a> <a id="index-entry-264" class="index-entry"></a> <a id="index-entry-265" class="index-entry"></a></p>
+<p><code>myModule</code> is a global variable that is assigned the result of immediately invoking a function expression. The function expression starts in the first line. It is invoked in the last line.</p>
+<p>This way of wrapping a code fragment is called <em>immediately invoked function expression</em> (IIFE, coined by Ben Alman). What do we gain from an IIFE? <code>var</code> is not block-scoped (like <code>const</code> and <code>let</code>), it is function-scoped: the only way to create new scopes for <code>var</code>-declared variables is via functions or methods (with <code>const</code> and <code>let</code>, you can use either functions, methods, or blocks <code>{}</code>). Therefore, the IIFE in the example hides all of the following variables from global scope and minimizes name clashes: <code>importedFunc1</code>, <code>importedFunc2</code>, <code>internalFunc</code>, <code>exportedFunc</code>.</p>
+<p>Note that we are using an IIFE in a particular manner: at the end, we pick what we want to export and return it via an object literal. That is called the <em>revealing module pattern</em> (coined by Christian Heilmann).</p>
+<p>This way of simulating modules, has several issues:</p>
+<ul>
+<li>Libraries in script files export and import functionality via global variables, which risks name clashes.</li>
+<li>Dependencies are not stated explicitly, and there is no built-in way for a script to load the scripts it depends on. Therefore, the web page has to load not just the scripts that are needed by the page but also the dependencies of those scripts, the dependencies’ dependencies, etc. And it has to do so in the right order!</li>
+</ul>
+<h3 id="module-systems-created-prior-to-es6">27.4 Module systems created prior to ES6</h3>
+<p>Prior to ECMAScript 6, JavaScript did not have built-in modules. Therefore, the flexible syntax of the language was used to implement custom module systems <em>within</em> the language. Two popular ones are:</p>
+<ul>
+<li>CommonJS (targeting the server side)</li>
+<li>AMD (Asynchronous Module Definition, targeting the client side)</li>
+</ul>
+<h4 id="server-side-commonjs-modules">27.4.1 Server side: CommonJS modules</h4>
+<p><a id="index-entry-266" class="index-entry"></a><a id="index-entry-267" class="index-entry"></a></p>
+<p>The original CommonJS standard for modules was created for server and desktop platforms. It was the foundation of the original Node.js module system, where it achieved enormous popularity. Contributing to that popularity were the npm package manager for Node and tools that enabled using Node modules on the client side (browserify, webpack, and others).</p>
+<p>From now on, <em>CommonJS module</em> means the Node.js version of this standard (which has a few additional features). This is an example of a CommonJS module:</p>
+<div class="sourceCode" id="cb605"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb605-1"><a href="ch_modules.html#cb605-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Imports</span></span>
+<span id="cb605-2"><a href="ch_modules.html#cb605-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> importedFunc1 <span class="op">=</span> <span class="pp">require</span>(<span class="st">'./other-module1.js'</span>)<span class="op">.</span><span class="at">importedFunc1</span><span class="op">;</span></span>
+<span id="cb605-3"><a href="ch_modules.html#cb605-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> importedFunc2 <span class="op">=</span> <span class="pp">require</span>(<span class="st">'./other-module2.js'</span>)<span class="op">.</span><span class="at">importedFunc2</span><span class="op">;</span></span>
+<span id="cb605-4"><a href="ch_modules.html#cb605-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb605-5"><a href="ch_modules.html#cb605-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Body</span></span>
+<span id="cb605-6"><a href="ch_modules.html#cb605-6" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">internalFunc</span>() {</span>
+<span id="cb605-7"><a href="ch_modules.html#cb605-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb605-8"><a href="ch_modules.html#cb605-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb605-9"><a href="ch_modules.html#cb605-9" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">exportedFunc</span>() {</span>
+<span id="cb605-10"><a href="ch_modules.html#cb605-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">importedFunc1</span>()<span class="op">;</span></span>
+<span id="cb605-11"><a href="ch_modules.html#cb605-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">importedFunc2</span>()<span class="op">;</span></span>
+<span id="cb605-12"><a href="ch_modules.html#cb605-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">internalFunc</span>()<span class="op">;</span></span>
+<span id="cb605-13"><a href="ch_modules.html#cb605-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb605-14"><a href="ch_modules.html#cb605-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb605-15"><a href="ch_modules.html#cb605-15" aria-hidden="true" tabindex="-1"></a><span class="co">// Exports</span></span>
+<span id="cb605-16"><a href="ch_modules.html#cb605-16" aria-hidden="true" tabindex="-1"></a>module<span class="op">.</span><span class="at">exports</span> <span class="op">=</span> {</span>
+<span id="cb605-17"><a href="ch_modules.html#cb605-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">exportedFunc</span><span class="op">:</span> exportedFunc<span class="op">,</span></span>
+<span id="cb605-18"><a href="ch_modules.html#cb605-18" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>CommonJS can be characterized as follows:</p>
+<ul>
+<li>Designed for servers.</li>
+<li>Modules are meant to be loaded <em>synchronously</em> (the importer waits while the imported module is loaded and executed).</li>
+<li>Compact syntax.</li>
+</ul>
+<h4 id="client-side-amd-asynchronous-module-definition-modules">27.4.2 Client side: AMD (Asynchronous Module Definition) modules</h4>
+<p><a id="index-entry-268" class="index-entry"></a><a id="index-entry-269" class="index-entry"></a> <a id="index-entry-270" class="index-entry"></a></p>
+<p>The AMD module format was created to be easier to use in browsers than the CommonJS format. Its most popular implementation is <a href="https://requirejs.org">RequireJS</a>. The following is an example of an AMD module.</p>
+<div class="sourceCode" id="cb606"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb606-1"><a href="ch_modules.html#cb606-1" aria-hidden="true" tabindex="-1"></a><span class="fu">define</span>([<span class="st">'./other-module1.js'</span><span class="op">,</span> <span class="st">'./other-module2.js'</span>]<span class="op">,</span></span>
+<span id="cb606-2"><a href="ch_modules.html#cb606-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> (otherModule1<span class="op">,</span> otherModule2) {</span>
+<span id="cb606-3"><a href="ch_modules.html#cb606-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> importedFunc1 <span class="op">=</span> otherModule1<span class="op">.</span><span class="at">importedFunc1</span><span class="op">;</span></span>
+<span id="cb606-4"><a href="ch_modules.html#cb606-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> importedFunc2 <span class="op">=</span> otherModule2<span class="op">.</span><span class="at">importedFunc2</span><span class="op">;</span></span>
+<span id="cb606-5"><a href="ch_modules.html#cb606-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb606-6"><a href="ch_modules.html#cb606-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="fu">internalFunc</span>() {</span>
+<span id="cb606-7"><a href="ch_modules.html#cb606-7" aria-hidden="true" tabindex="-1"></a>      <span class="co">// ···</span></span>
+<span id="cb606-8"><a href="ch_modules.html#cb606-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb606-9"><a href="ch_modules.html#cb606-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="fu">exportedFunc</span>() {</span>
+<span id="cb606-10"><a href="ch_modules.html#cb606-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">importedFunc1</span>()<span class="op">;</span></span>
+<span id="cb606-11"><a href="ch_modules.html#cb606-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">importedFunc2</span>()<span class="op">;</span></span>
+<span id="cb606-12"><a href="ch_modules.html#cb606-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">internalFunc</span>()<span class="op">;</span></span>
+<span id="cb606-13"><a href="ch_modules.html#cb606-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb606-14"><a href="ch_modules.html#cb606-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb606-15"><a href="ch_modules.html#cb606-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb606-16"><a href="ch_modules.html#cb606-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">exportedFunc</span><span class="op">:</span> exportedFunc<span class="op">,</span></span>
+<span id="cb606-17"><a href="ch_modules.html#cb606-17" aria-hidden="true" tabindex="-1"></a>    }<span class="op">;</span></span>
+<span id="cb606-18"><a href="ch_modules.html#cb606-18" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>AMD can be characterized as follows:</p>
+<ul>
+<li>Designed for browsers.</li>
+<li>Modules are meant to be loaded <em>asynchronously</em>. That’s a crucial requirement for browsers, where code can’t wait until a module has finished downloading. It has to be notified once the module is available.</li>
+<li>The syntax is slightly more complicated.</li>
+</ul>
+<p>On the plus side, AMD modules can be executed directly. In contrast, CommonJS modules must either be compiled before deployment or custom source code must be generated and evaluated dynamically <a href="ch_dynamic-code-evaluation.html#eval">(think <code>eval()</code>)</a>. That isn’t always permitted on the web.</p>
+<h4 id="characteristics-of-javascript-modules">27.4.3 Characteristics of JavaScript modules</h4>
+<p>Looking at CommonJS and AMD, similarities between JavaScript module systems emerge:</p>
+<ul>
+<li>There is one module per file.</li>
+<li>Such a file is basically a piece of code that is executed:
+<ul>
+<li>Local scope: The code is executed in a local “module scope”. Therefore, by default, all of the variables, functions, and classes declared in it are internal and not global.</li>
+<li>Exports: If you want any declared entity to be exported, you must explicitly mark it as an export.</li>
+<li>Imports: Each module can import exported entities from other modules. Those other modules are identified via <em>module specifiers</em> (usually paths, occasionally full URLs).</li>
+</ul></li>
+<li>Modules are <em>singletons</em>: Even if a module is imported multiple times, only a single “instance” of it exists.</li>
+<li>No global variables are used. Instead, module specifiers serve as global IDs.</li>
+</ul>
+<h3 id="ecmascript-modules">27.5 ECMAScript modules</h3>
+<p><a id="index-entry-271" class="index-entry"></a><a id="index-entry-272" class="index-entry"></a></p>
+<p><em>ECMAScript modules</em> (<em>ES modules</em> or <em>ESM</em>) were introduced with ES6. They continue the tradition of JavaScript modules and have all of their aforementioned characteristics. Additionally:</p>
+<ul>
+<li>With CommonJS, ES modules share the compact syntax and support for cyclic dependencies.</li>
+<li>With AMD, ES modules share being designed for asynchronous loading.</li>
+</ul>
+<p>ES modules also have new benefits:</p>
+<ul>
+<li>The syntax is even more compact than CommonJS’s.</li>
+<li>Modules have <em>static</em> structures (which can’t be changed at runtime). That helps with static checking, optimized access of imports, dead code elimination, and more.</li>
+<li>Support for cyclic imports is completely transparent.</li>
+</ul>
+<p>This is an example of ES module syntax:</p>
+<div class="sourceCode" id="cb607"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb607-1"><a href="ch_modules.html#cb607-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {importedFunc1} <span class="im">from</span> <span class="st">'./other-module1.mjs'</span><span class="op">;</span></span>
+<span id="cb607-2"><a href="ch_modules.html#cb607-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {importedFunc2} <span class="im">from</span> <span class="st">'./other-module2.mjs'</span><span class="op">;</span></span>
+<span id="cb607-3"><a href="ch_modules.html#cb607-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb607-4"><a href="ch_modules.html#cb607-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">internalFunc</span>() {</span>
+<span id="cb607-5"><a href="ch_modules.html#cb607-5" aria-hidden="true" tabindex="-1"></a>  ···</span>
+<span id="cb607-6"><a href="ch_modules.html#cb607-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb607-7"><a href="ch_modules.html#cb607-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb607-8"><a href="ch_modules.html#cb607-8" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">exportedFunc</span>() {</span>
+<span id="cb607-9"><a href="ch_modules.html#cb607-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">importedFunc1</span>()<span class="op">;</span></span>
+<span id="cb607-10"><a href="ch_modules.html#cb607-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">importedFunc2</span>()<span class="op">;</span></span>
+<span id="cb607-11"><a href="ch_modules.html#cb607-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">internalFunc</span>()<span class="op">;</span></span>
+<span id="cb607-12"><a href="ch_modules.html#cb607-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>From now on, “module” means “ECMAScript module”.</p>
+<h4 id="es-modules-syntax-semantics-loader-api">27.5.1 ES modules: syntax, semantics, loader API</h4>
+<p>The full standard of ES modules comprises the following parts:</p>
+<ol type="1">
+<li>Syntax (how code is written): What is a module? How are imports and exports declared? Etc.</li>
+<li>Semantics (how code is executed): How are variable bindings exported? How are imports connected with exports? Etc.</li>
+<li>A programmatic loader API for configuring module loading.</li>
+</ol>
+<p>Parts 1 and 2 were introduced with ES6. Work on part 3 is ongoing.</p>
+<h3 id="named-exports-and-imports">27.6 Named exports and imports</h3>
+<h4 id="named-exports">27.6.1 Named exports</h4>
+<p><a id="index-entry-273" class="index-entry"></a><a id="index-entry-274" class="index-entry"></a><a id="index-entry-275" class="index-entry"></a></p>
+<p>Each module can have zero or more <em>named exports</em>.</p>
+<p>As an example, consider the following two files:</p>
+<pre class="text"><code>lib/my-math.mjs
+main.mjs</code></pre>
+<p>Module <code>my-math.mjs</code> has two named exports: <code>square</code> and <code>LIGHTSPEED</code>.</p>
+<div class="sourceCode" id="cb609"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb609-1"><a href="ch_modules.html#cb609-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Not exported, private to module</span></span>
+<span id="cb609-2"><a href="ch_modules.html#cb609-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">times</span>(a<span class="op">,</span> b) {</span>
+<span id="cb609-3"><a href="ch_modules.html#cb609-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> a <span class="op">*</span> b<span class="op">;</span></span>
+<span id="cb609-4"><a href="ch_modules.html#cb609-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb609-5"><a href="ch_modules.html#cb609-5" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">square</span>(x) {</span>
+<span id="cb609-6"><a href="ch_modules.html#cb609-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">times</span>(x<span class="op">,</span> x)<span class="op">;</span></span>
+<span id="cb609-7"><a href="ch_modules.html#cb609-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb609-8"><a href="ch_modules.html#cb609-8" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> LIGHTSPEED <span class="op">=</span> <span class="dv">299792458</span><span class="op">;</span></span></code></pre></div>
+<p>To export something, we put the keyword <code>export</code> in front of a declaration. Entities that are not exported are private to a module and can’t be accessed from outside.</p>
+<h4 id="named-imports">27.6.2 Named imports</h4>
+<p><a id="index-entry-276" class="index-entry"></a><a id="index-entry-277" class="index-entry"></a><a id="index-entry-278" class="index-entry"></a></p>
+<p>Module <code>main.mjs</code> has a single named import, <code>square</code>:</p>
+<div class="sourceCode" id="cb610"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb610-1"><a href="ch_modules.html#cb610-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {square} <span class="im">from</span> <span class="st">'./lib/my-math.mjs'</span><span class="op">;</span></span>
+<span id="cb610-2"><a href="ch_modules.html#cb610-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">square</span>(<span class="dv">3</span>)<span class="op">,</span> <span class="dv">9</span>)<span class="op">;</span></span></code></pre></div>
+<p>It can also rename its import:</p>
+<div class="sourceCode" id="cb611"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb611-1"><a href="ch_modules.html#cb611-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {square <span class="im">as</span> sq} <span class="im">from</span> <span class="st">'./lib/my-math.mjs'</span><span class="op">;</span></span>
+<span id="cb611-2"><a href="ch_modules.html#cb611-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">sq</span>(<span class="dv">3</span>)<span class="op">,</span> <span class="dv">9</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="syntactic-pitfall-named-importing-is-not-destructuring">27.6.2.1 Syntactic pitfall: named importing is not destructuring</h5>
+<p>Both named importing and destructuring look similar:</p>
+<div class="sourceCode" id="cb612"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb612-1"><a href="ch_modules.html#cb612-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {foo} <span class="im">from</span> <span class="st">'./bar.mjs'</span><span class="op">;</span> <span class="co">// import</span></span>
+<span id="cb612-2"><a href="ch_modules.html#cb612-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {foo} <span class="op">=</span> <span class="pp">require</span>(<span class="st">'./bar.mjs'</span>)<span class="op">;</span> <span class="co">// destructuring</span></span></code></pre></div>
+<p>But they are quite different:</p>
+<ul>
+<li><p>Imports remain connected with their exports.</p></li>
+<li><p>You can destructure again inside a destructuring pattern, but the <code>{}</code> in an import statement can’t be nested.</p></li>
+<li><p>The syntax for renaming is different:</p>
+<div class="sourceCode" id="cb613"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb613-1"><a href="ch_modules.html#cb613-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {foo <span class="im">as</span> f} <span class="im">from</span> <span class="st">'./bar.mjs'</span><span class="op">;</span> <span class="co">// importing</span></span>
+<span id="cb613-2"><a href="ch_modules.html#cb613-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {<span class="dt">foo</span><span class="op">:</span> f} <span class="op">=</span> <span class="pp">require</span>(<span class="st">'./bar.mjs'</span>)<span class="op">;</span> <span class="co">// destructuring</span></span></code></pre></div>
+<p>Rationale: Destructuring is reminiscent of an object literal (including nesting), while importing evokes the idea of renaming.</p></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Named exports</strong></p>
+<p><code>exercises/modules/export_named_test.mjs</code></p>
+</div>
+<h4 id="namespace-imports">27.6.3 Namespace imports</h4>
+<p><a id="index-entry-279" class="index-entry"></a><a id="index-entry-280" class="index-entry"></a></p>
+<p><em>Namespace imports</em> are an alternative to named imports. If we namespace-import a module, it becomes an object whose properties are the named exports. This is what <code>main.mjs</code> looks like if we use a namespace import:</p>
+<div class="sourceCode" id="cb614"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb614-1"><a href="ch_modules.html#cb614-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> myMath <span class="im">from</span> <span class="st">'./lib/my-math.mjs'</span><span class="op">;</span></span>
+<span id="cb614-2"><a href="ch_modules.html#cb614-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(myMath<span class="op">.</span><span class="fu">square</span>(<span class="dv">3</span>)<span class="op">,</span> <span class="dv">9</span>)<span class="op">;</span></span>
+<span id="cb614-3"><a href="ch_modules.html#cb614-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb614-4"><a href="ch_modules.html#cb614-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb614-5"><a href="ch_modules.html#cb614-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(myMath)<span class="op">,</span> [<span class="st">'LIGHTSPEED'</span><span class="op">,</span> <span class="st">'square'</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="named-exporting-styles-inline-versus-clause-advanced">27.6.4 Named exporting styles: inline versus clause (advanced)</h4>
+<p>The named export style we have seen so far was <em>inline</em>: We exported entities by prefixing them with the keyword <code>export</code>.</p>
+<p>But we can also use separate <em>export clauses</em>. For example, this is what <code>lib/my-math.mjs</code> looks like with an export clause:</p>
+<div class="sourceCode" id="cb615"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb615-1"><a href="ch_modules.html#cb615-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">times</span>(a<span class="op">,</span> b) {</span>
+<span id="cb615-2"><a href="ch_modules.html#cb615-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> a <span class="op">*</span> b<span class="op">;</span></span>
+<span id="cb615-3"><a href="ch_modules.html#cb615-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb615-4"><a href="ch_modules.html#cb615-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">square</span>(x) {</span>
+<span id="cb615-5"><a href="ch_modules.html#cb615-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">times</span>(x<span class="op">,</span> x)<span class="op">;</span></span>
+<span id="cb615-6"><a href="ch_modules.html#cb615-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb615-7"><a href="ch_modules.html#cb615-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> LIGHTSPEED <span class="op">=</span> <span class="dv">299792458</span><span class="op">;</span></span>
+<span id="cb615-8"><a href="ch_modules.html#cb615-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb615-9"><a href="ch_modules.html#cb615-9" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> { square<span class="op">,</span> LIGHTSPEED }<span class="op">;</span> <span class="co">// semicolon!</span></span></code></pre></div>
+<p>With an export clause, we can rename before exporting and use different names internally:</p>
+<div class="sourceCode" id="cb616"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb616-1"><a href="ch_modules.html#cb616-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">times</span>(a<span class="op">,</span> b) {</span>
+<span id="cb616-2"><a href="ch_modules.html#cb616-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> a <span class="op">*</span> b<span class="op">;</span></span>
+<span id="cb616-3"><a href="ch_modules.html#cb616-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb616-4"><a href="ch_modules.html#cb616-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sq</span>(x) {</span>
+<span id="cb616-5"><a href="ch_modules.html#cb616-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">times</span>(x<span class="op">,</span> x)<span class="op">;</span></span>
+<span id="cb616-6"><a href="ch_modules.html#cb616-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb616-7"><a href="ch_modules.html#cb616-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> LS <span class="op">=</span> <span class="dv">299792458</span><span class="op">;</span></span>
+<span id="cb616-8"><a href="ch_modules.html#cb616-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb616-9"><a href="ch_modules.html#cb616-9" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> {</span>
+<span id="cb616-10"><a href="ch_modules.html#cb616-10" aria-hidden="true" tabindex="-1"></a>  sq <span class="im">as</span> square<span class="op">,</span></span>
+<span id="cb616-11"><a href="ch_modules.html#cb616-11" aria-hidden="true" tabindex="-1"></a>  LS <span class="im">as</span> LIGHTSPEED<span class="op">,</span> <span class="co">// trailing comma is optional</span></span>
+<span id="cb616-12"><a href="ch_modules.html#cb616-12" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<h3 id="default-exports-and-imports">27.7 Default exports and imports</h3>
+<p><a id="index-entry-281" class="index-entry"></a><a id="index-entry-282" class="index-entry"></a><a id="index-entry-283" class="index-entry"></a></p>
+<p>Each module can have at most one <em>default export</em>. The idea is that the module <em>is</em> the default-exported value.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/lightbulb-regular.svg" height="24">&nbsp; <strong>Avoid mixing named exports and default exports</strong></p>
+<p>A module can have both named exports and a default export, but it’s usually better to stick to one export style per module.</p>
+</div>
+<p>As an example for default exports, consider the following two files:</p>
+<pre class="text"><code>my-func.mjs
+main.mjs</code></pre>
+<p>Module <code>my-func.mjs</code> has a default export:</p>
+<div class="sourceCode" id="cb618"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb618-1"><a href="ch_modules.html#cb618-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> GREETING <span class="op">=</span> <span class="st">'Hello!'</span><span class="op">;</span></span>
+<span id="cb618-2"><a href="ch_modules.html#cb618-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> () {</span>
+<span id="cb618-3"><a href="ch_modules.html#cb618-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> GREETING<span class="op">;</span></span>
+<span id="cb618-4"><a href="ch_modules.html#cb618-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Module <code>main.mjs</code> default-imports the exported function:</p>
+<div class="sourceCode" id="cb619"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb619-1"><a href="ch_modules.html#cb619-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> myFunc <span class="im">from</span> <span class="st">'./my-func.mjs'</span><span class="op">;</span></span>
+<span id="cb619-2"><a href="ch_modules.html#cb619-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">myFunc</span>()<span class="op">,</span> <span class="st">'Hello!'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Note the syntactic difference: the curly braces around named imports indicate that we are reaching <em>into</em> the module, while a default import <em>is</em> the module.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/question-circle-regular.svg" height="24">&nbsp; <strong>What are use cases for default exports?</strong></p>
+<p>The most common use case for a default export is a module that contains a single function or a single class.</p>
+</div>
+<h4 id="the-two-styles-of-default-exporting">27.7.1 The two styles of default-exporting</h4>
+<p>There are two styles of doing default exports.</p>
+<p>First, you can label existing declarations with <code>export default</code>:</p>
+<div class="sourceCode" id="cb620"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb620-1"><a href="ch_modules.html#cb620-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> <span class="fu">foo</span>() {} <span class="co">// no semicolon!</span></span>
+<span id="cb620-2"><a href="ch_modules.html#cb620-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">class</span> Bar {} <span class="co">// no semicolon!</span></span></code></pre></div>
+<p>Second, you can directly default-export values. In that style, <code>export default</code> is itself much like a declaration.</p>
+<div class="sourceCode" id="cb621"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb621-1"><a href="ch_modules.html#cb621-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb621-2"><a href="ch_modules.html#cb621-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="fu">foo</span>()<span class="op">;</span></span>
+<span id="cb621-3"><a href="ch_modules.html#cb621-3" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="ss">/</span><span class="sc">^</span><span class="ss">xyz</span><span class="sc">$</span><span class="ss">/</span><span class="op">;</span></span>
+<span id="cb621-4"><a href="ch_modules.html#cb621-4" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="dv">5</span> <span class="op">*</span> <span class="dv">7</span><span class="op">;</span></span>
+<span id="cb621-5"><a href="ch_modules.html#cb621-5" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> { <span class="dt">no</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span> <span class="dt">yes</span><span class="op">:</span> <span class="kw">true</span> }<span class="op">;</span></span></code></pre></div>
+<h5 id="why-are-there-two-default-export-styles">27.7.1.1 Why are there two default export styles?</h5>
+<p>The reason is that <code>export default</code> can’t be used to label <code>const</code>: <code>const</code> may define multiple values, but <code>export default</code> needs exactly one value. Consider the following hypothetical code:</p>
+<div class="sourceCode" id="cb622"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb622-1"><a href="ch_modules.html#cb622-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Not legal JavaScript!</span></span>
+<span id="cb622-2"><a href="ch_modules.html#cb622-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">const</span> foo <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> bar <span class="op">=</span> <span class="dv">2</span><span class="op">,</span> baz <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span></code></pre></div>
+<p>With this code, you don’t know which one of the three values is the default export.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Default exports</strong></p>
+<p><code>exercises/modules/export_default_test.mjs</code></p>
+</div>
+<h4 id="the-default-export-as-a-named-export-advanced">27.7.2 The default export as a named export (advanced)</h4>
+<p>Internally, a default export is simply a named export whose name is <code>default</code>. As an example, consider the previous module <code>my-func.mjs</code> with a default export:</p>
+<div class="sourceCode" id="cb623"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb623-1"><a href="ch_modules.html#cb623-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> GREETING <span class="op">=</span> <span class="st">'Hello!'</span><span class="op">;</span></span>
+<span id="cb623-2"><a href="ch_modules.html#cb623-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> () {</span>
+<span id="cb623-3"><a href="ch_modules.html#cb623-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> GREETING<span class="op">;</span></span>
+<span id="cb623-4"><a href="ch_modules.html#cb623-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The following module <code>my-func2.mjs</code> is equivalent to that module:</p>
+<div class="sourceCode" id="cb624"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb624-1"><a href="ch_modules.html#cb624-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> GREETING <span class="op">=</span> <span class="st">'Hello!'</span><span class="op">;</span></span>
+<span id="cb624-2"><a href="ch_modules.html#cb624-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">greet</span>() {</span>
+<span id="cb624-3"><a href="ch_modules.html#cb624-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> GREETING<span class="op">;</span></span>
+<span id="cb624-4"><a href="ch_modules.html#cb624-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb624-5"><a href="ch_modules.html#cb624-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb624-6"><a href="ch_modules.html#cb624-6" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> {</span>
+<span id="cb624-7"><a href="ch_modules.html#cb624-7" aria-hidden="true" tabindex="-1"></a>  greet <span class="im">as</span> <span class="im">default</span><span class="op">,</span></span>
+<span id="cb624-8"><a href="ch_modules.html#cb624-8" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>For importing, we can use a normal default import:</p>
+<div class="sourceCode" id="cb625"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb625-1"><a href="ch_modules.html#cb625-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> myFunc <span class="im">from</span> <span class="st">'./my-func2.mjs'</span><span class="op">;</span></span>
+<span id="cb625-2"><a href="ch_modules.html#cb625-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">myFunc</span>()<span class="op">,</span> <span class="st">'Hello!'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Or we can use a named import:</p>
+<div class="sourceCode" id="cb626"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb626-1"><a href="ch_modules.html#cb626-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {<span class="im">default</span> <span class="im">as</span> myFunc} <span class="im">from</span> <span class="st">'./my-func2.mjs'</span><span class="op">;</span></span>
+<span id="cb626-2"><a href="ch_modules.html#cb626-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">myFunc</span>()<span class="op">,</span> <span class="st">'Hello!'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The default export is also available via property <code>.default</code> of namespace imports:</p>
+<div class="sourceCode" id="cb627"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb627-1"><a href="ch_modules.html#cb627-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> mf <span class="im">from</span> <span class="st">'./my-func2.mjs'</span><span class="op">;</span></span>
+<span id="cb627-2"><a href="ch_modules.html#cb627-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(mf<span class="op">.</span><span class="fu">default</span>()<span class="op">,</span> <span class="st">'Hello!'</span>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/question-circle-regular.svg" height="24">&nbsp; <strong>Isn’t <code>default</code> illegal as a variable name?</strong></p>
+<p><code>default</code> can’t be a variable name, but it can be an export name and it can be a property name:</p>
+<div class="sourceCode" id="cb628"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb628-1"><a href="ch_modules.html#cb628-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb628-2"><a href="ch_modules.html#cb628-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">default</span><span class="op">:</span> <span class="dv">123</span><span class="op">,</span></span>
+<span id="cb628-3"><a href="ch_modules.html#cb628-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb628-4"><a href="ch_modules.html#cb628-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">default</span><span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span></code></pre></div>
+</div>
+<h3 id="more-details-on-exporting-and-importing">27.8 More details on exporting and importing</h3>
+<h4 id="imports-are-read-only-views-on-exports">27.8.1 Imports are read-only views on exports</h4>
+<p>So far, we have used imports and exports intuitively, and everything seems to have worked as expected. But now it is time to take a closer look at how imports and exports are really related.</p>
+<p>Consider the following two modules:</p>
+<pre class="text"><code>counter.mjs
+main.mjs</code></pre>
+<p><code>counter.mjs</code> exports a (mutable!) variable and a function:</p>
+<div class="sourceCode" id="cb630"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb630-1"><a href="ch_modules.html#cb630-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">let</span> counter <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb630-2"><a href="ch_modules.html#cb630-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">incCounter</span>() {</span>
+<span id="cb630-3"><a href="ch_modules.html#cb630-3" aria-hidden="true" tabindex="-1"></a>  counter<span class="op">++;</span></span>
+<span id="cb630-4"><a href="ch_modules.html#cb630-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>main.mjs</code> name-imports both exports. When we use <code>incCounter()</code>, we discover that the connection to <code>counter</code> is live – we can always access the live state of that variable:</p>
+<div class="sourceCode" id="cb631"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb631-1"><a href="ch_modules.html#cb631-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { counter<span class="op">,</span> incCounter } <span class="im">from</span> <span class="st">'./counter.mjs'</span><span class="op">;</span></span>
+<span id="cb631-2"><a href="ch_modules.html#cb631-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb631-3"><a href="ch_modules.html#cb631-3" aria-hidden="true" tabindex="-1"></a><span class="co">// The imported value `counter` is live</span></span>
+<span id="cb631-4"><a href="ch_modules.html#cb631-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(counter<span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span>
+<span id="cb631-5"><a href="ch_modules.html#cb631-5" aria-hidden="true" tabindex="-1"></a><span class="fu">incCounter</span>()<span class="op">;</span></span>
+<span id="cb631-6"><a href="ch_modules.html#cb631-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(counter<span class="op">,</span> <span class="dv">4</span>)<span class="op">;</span></span></code></pre></div>
+<p>Note that while the connection is live and we can read <code>counter</code>, we cannot change this variable (e.g., via <code>counter++</code>).</p>
+<p>There are two benefits to handling imports this way:</p>
+<ul>
+<li>It is easier to split modules because previously shared variables can become exports.</li>
+<li>This behavior is crucial for supporting transparent cyclic imports. Read on for more information.</li>
+</ul>
+<h4 id="esms-transparent-support-for-cyclic-imports-advanced">27.8.2 ESM’s transparent support for cyclic imports (advanced)</h4>
+<p>ESM supports cyclic imports transparently. To understand how that is achieved, consider the following example: fig.&nbsp;<a href="#fig:module-imports">7</a> shows a directed graph of modules importing other modules. P importing M is the cycle in this case.</p>
+<figure>
+<img src="img-book/ac2a6c966087141ba9f77be190a2a8a63c8fc15f.svg" id="fig:module-imports" data-factor="0.4" width="145" height="118" alt="Figure 7: A directed graph of modules importing modules: M imports N and O, N imports P and Q, etc."><figcaption aria-hidden="true">Figure 7: A directed graph of modules importing modules: M imports N and O, N imports P and Q, etc.</figcaption>
+</figure>
+<p>After parsing, these modules are set up in two phases:</p>
+<ul>
+<li>Instantiation: Every module is visited and its imports are connected to its exports. Before a parent can be instantiated, all of its children must be instantiated.</li>
+<li>Evaluation: The bodies of the modules are executed. Once again, children are evaluated before parents.</li>
+</ul>
+<p>This approach handles cyclic imports correctly, due to two features of ES modules:</p>
+<ul>
+<li><p>Due to the static structure of ES modules, the exports are already known after parsing. That makes it possible to instantiate P before its child M: P can already look up M’s exports.</p></li>
+<li><p>When P is evaluated, M hasn’t been evaluated, yet. However, entities in P can already mention imports from M. They just can’t use them, yet, because the imported values are filled in later. For example, a function in P can access an import from M. The only limitation is that we must wait until after the evaluation of M, before calling that function.</p>
+<p>Imports being filled in later is enabled by them being “live immutable views” on exports.</p></li>
+</ul>
+<h3 id="npm-packages">27.9 npm packages</h3>
+<p><a id="index-entry-284" class="index-entry"></a> <a id="index-entry-285" class="index-entry"></a><a id="index-entry-286" class="index-entry"></a> <a id="index-entry-287" class="index-entry"></a></p>
+<p>The <em>npm software registry</em> is the dominant way of distributing JavaScript libraries and apps for Node.js and web browsers. It is managed via the <em>npm package manager</em> (short: <em>npm</em>). Software is distributed as so-called <em>packages</em>. A package is a directory containing arbitrary files and a file <code>package.json</code> at the top level that describes the package. For example, when npm creates an empty package inside a directory <code>my-package/</code>, you get this <code>package.json</code>:</p>
+<div class="sourceCode" id="cb632"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb632-1"><a href="ch_modules.html#cb632-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb632-2"><a href="ch_modules.html#cb632-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"my-package"</span><span class="fu">,</span></span>
+<span id="cb632-3"><a href="ch_modules.html#cb632-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"version"</span><span class="fu">:</span> <span class="st">"1.0.0"</span><span class="fu">,</span></span>
+<span id="cb632-4"><a href="ch_modules.html#cb632-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">""</span><span class="fu">,</span></span>
+<span id="cb632-5"><a href="ch_modules.html#cb632-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
+<span id="cb632-6"><a href="ch_modules.html#cb632-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb632-7"><a href="ch_modules.html#cb632-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"echo </span><span class="ch">\"</span><span class="st">Error: no test specified</span><span class="ch">\"</span><span class="st"> &amp;&amp; exit 1"</span></span>
+<span id="cb632-8"><a href="ch_modules.html#cb632-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb632-9"><a href="ch_modules.html#cb632-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"keywords"</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb632-10"><a href="ch_modules.html#cb632-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"author"</span><span class="fu">:</span> <span class="st">""</span><span class="fu">,</span></span>
+<span id="cb632-11"><a href="ch_modules.html#cb632-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"license"</span><span class="fu">:</span> <span class="st">"ISC"</span></span>
+<span id="cb632-12"><a href="ch_modules.html#cb632-12" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Some of these properties contain simple metadata:</p>
+<ul>
+<li><code>name</code> specifies the name of this package. Once it is uploaded to the npm registry, it can be installed via <code>npm install my-package</code>.</li>
+<li><code>version</code> is used for version management and follows <a href="https://semver.org">semantic versioning</a>, with three numbers:
+<ul>
+<li>Major version: is incremented when incompatible API changes are made.</li>
+<li>Minor version: is incremented when functionality is added in a backward compatible manner.</li>
+<li>Patch version: is incremented when backward compatible changes are made.</li>
+</ul></li>
+<li><code>description</code>, <code>keywords</code>, <code>author</code> make it easier to find packages.</li>
+<li><code>license</code> clarifies how you can use this package.</li>
+</ul>
+<p>Other properties enable advanced configuration:</p>
+<ul>
+<li><code>main</code>: specifies the module that “is” the package (explained later in this chapter).</li>
+<li><code>scripts</code>: are commands that you can execute via <code>npm run</code>. For example, the script <code>test</code> can be executed via <code>npm run test</code>.</li>
+</ul>
+<p>For more information on <code>package.json</code>, consult <a href="https://docs.npmjs.com/files/package.json">the npm documentation</a>.</p>
+<h4 id="packages-are-installed-inside-a-directory-node_modules">27.9.1 Packages are installed inside a directory <code>node_modules/</code></h4>
+<p><a id="index-entry-288" class="index-entry"></a></p>
+<p>npm always installs packages inside a directory <code>node_modules</code>. There are usually many of these directories. Which one npm uses, depends on the directory where one currently is. For example, if we are inside a directory <code>/tmp/a/b/</code>, npm tries to find a <code>node_modules</code> in the current directory, its parent directory, the parent directory of the parent, etc. In other words, it searches the following <em>chain</em> of locations:</p>
+<ul>
+<li><code>/tmp/a/b/node_modules</code></li>
+<li><code>/tmp/a/node_modules</code></li>
+<li><code>/tmp/node_modules</code></li>
+</ul>
+<p>When installing a package <code>some-pkg</code>, npm uses the closest <code>node_modules</code>. If, for example, we are inside <code>/tmp/a/b/</code> and there is a <code>node_modules</code> in that directory, then npm puts the package inside the directory:</p>
+<pre class="text"><code>/tmp/a/b/node_modules/some-pkg/</code></pre>
+<p>When importing a module, we can use a special module specifier to tell Node.js that we want to import it from an installed package. How exactly that works, is explained later. For now, consider the following example:</p>
+<div class="sourceCode" id="cb634"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb634-1"><a href="ch_modules.html#cb634-1" aria-hidden="true" tabindex="-1"></a><span class="co">// /home/jane/proj/main.mjs</span></span>
+<span id="cb634-2"><a href="ch_modules.html#cb634-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> theModule <span class="im">from</span> <span class="st">'the-package/the-module.mjs'</span><span class="op">;</span></span></code></pre></div>
+<p>To find <code>the-module.mjs</code> (Node.js prefers the filename extension <code>.mjs</code> for ES modules), Node.js walks up the <code>node_module</code> chain and searches the following locations:</p>
+<ul>
+<li><code>/home/jane/proj/node_modules/the-package/the-module.mjs</code></li>
+<li><code>/home/jane/node_modules/the-package/the-module.mjs</code></li>
+<li><code>/home/node_modules/the-package/the-module.mjs</code></li>
+</ul>
+<h4 id="why-can-npm-be-used-to-install-frontend-libraries">27.9.2 Why can npm be used to install frontend libraries?</h4>
+<p>Finding installed modules in <code>node_modules</code> directories is only supported on Node.js. So why can we also use npm to install libraries for browsers?</p>
+<p>That is enabled via <a href="ch_remaining-chapters-site.html">bundling tools</a>, such as webpack, that compile and optimize code before it is deployed online. During this compilation process, the code in npm packages is adapted so that it works in browsers.</p>
+<h3 id="naming-modules">27.10 Naming modules</h3>
+<p>There are no established best practices for naming module files and the variables they are imported into.</p>
+<p>In this chapter, I’m using the following naming style:</p>
+<ul>
+<li><p>The names of module files are dash-cased and start with lowercase letters:</p>
+<pre class="text"><code>./my-module.mjs
+./some-func.mjs</code></pre></li>
+<li><p>The names of namespace imports are lowercased and camel-cased:</p>
+<div class="sourceCode" id="cb636"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb636-1"><a href="ch_modules.html#cb636-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> myModule <span class="im">from</span> <span class="st">'./my-module.mjs'</span><span class="op">;</span></span></code></pre></div></li>
+<li><p>The names of default imports are lowercased and camel-cased:</p>
+<div class="sourceCode" id="cb637"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb637-1"><a href="ch_modules.html#cb637-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> someFunc <span class="im">from</span> <span class="st">'./some-func.mjs'</span><span class="op">;</span></span></code></pre></div></li>
+</ul>
+<p>What are the rationales behind this style?</p>
+<ul>
+<li><p>npm doesn’t allow uppercase letters in package names (<a href="https://docs.npmjs.com/files/package.json#name">source</a>). Thus, we avoid camel case, so that “local” files have names that are consistent with those of npm packages. Using only lowercase letters also minimizes conflicts between file systems that are case-sensitive and file systems that aren’t: the former distinguish files whose names have the same letters, but with different cases; the latter don’t.</p></li>
+<li><p>There are clear rules for translating dash-cased file names to camel-cased JavaScript variable names. Due to how we name namespace imports, these rules work for both namespace imports and default imports.</p></li>
+</ul>
+<p>I also like underscore-cased module file names because you can directly use these names for namespace imports (without any translation):</p>
+<div class="sourceCode" id="cb638"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb638-1"><a href="ch_modules.html#cb638-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> my_module <span class="im">from</span> <span class="st">'./my_module.mjs'</span><span class="op">;</span></span></code></pre></div>
+<p>But that style does not work for default imports: I like underscore-casing for namespace objects, but it is not a good choice for functions, etc.</p>
+<h3 id="module-specifiers">27.11 Module specifiers</h3>
+<p><a id="index-entry-289" class="index-entry"></a><a id="index-entry-290" class="index-entry"></a></p>
+<p><em>Module specifiers</em> are the strings that identify modules. They work slightly differently in browsers and Node.js. Before we can look at the differences, we need to learn about the different categories of module specifiers.</p>
+<h4 id="categories-of-module-specifiers">27.11.1 Categories of module specifiers</h4>
+<p>In ES modules, we distinguish the following categories of specifiers. These categories originated with CommonJS modules.</p>
+<ul>
+<li><p>Relative path: starts with a dot. Examples:</p>
+<pre class="text"><code>'./some/other/module.mjs'
+'../../lib/counter.mjs'</code></pre></li>
+<li><p>Absolute path: starts with a slash. Example:</p>
+<pre class="text"><code>'/home/jane/file-tools.mjs'</code></pre></li>
+<li><p>URL: includes a protocol (technically, paths are URLs, too). Examples:</p>
+<pre class="text"><code>'https://example.com/some-module.mjs'
+'file:///home/john/tmp/main.mjs'</code></pre></li>
+<li><p>Bare path: does not start with a dot, a slash or a protocol, and consists of a single filename without an extension. Examples:</p>
+<pre class="text"><code>'lodash'
+'the-package'</code></pre></li>
+<li><p>Deep import path: starts with a bare path and has at least one slash. Example:</p>
+<pre class="text"><code>'the-package/dist/the-module.mjs'</code></pre></li>
+</ul>
+<h4 id="es-module-specifiers-in-browsers">27.11.2 ES module specifiers in browsers</h4>
+<p>Browsers handle module specifiers as follows:</p>
+<ul>
+<li>Relative paths, absolute paths, and URLs work as expected. They all must point to real files (in contrast to CommonJS, which lets you omit filename extensions and more).</li>
+<li>The file name extensions of modules don’t matter, as long as they are served with the content type <code>text/javascript</code>.</li>
+<li>How bare paths will end up being handled is not yet clear. You will probably eventually be able to map them to other specifiers via lookup tables.</li>
+</ul>
+<p>Note that <a href="ch_remaining-chapters-site.html">bundling tools</a> such as webpack, which combine modules into fewer files, are often less strict with specifiers than browsers. That’s because they operate at build/compile time (not at runtime) and can search for files by traversing the file system.</p>
+<h4 id="es-module-specifiers-on-node.js">27.11.3 ES module specifiers on Node.js</h4>
+<p>Node.js handles module specifiers as follows:</p>
+<ul>
+<li><p>Relative paths are resolved as they are in web browsers – relative to the path of the current module.</p></li>
+<li><p>Absolute paths are currently not supported. As a workaround, you can use URLs that start with <code>file:///</code>. You can create such URLs via <a href="ch_modules.html#converting-urls-paths"><code>url.pathToFileURL()</code></a>.</p></li>
+<li><p>Only <code>file:</code> is supported as a protocol for URL specifiers.</p></li>
+<li><p>A bare path is interpreted as a package name and resolved relative to the closest <code>node_modules</code> directory. What module should be loaded, is determined by looking at property <code>"main"</code> of the package’s <code>package.json</code> (similarly to CommonJS).</p></li>
+<li><p>Deep import paths are also resolved relatively to the closest <code>node_modules</code> directory. They contain file names, so it is always clear which module is meant.</p></li>
+</ul>
+<p>All specifiers, except bare paths, must refer to actual files. That is, ESM does not support the following CommonJS features:</p>
+<ul>
+<li><p>CommonJS automatically adds missing filename extensions.</p></li>
+<li><p>CommonJS can import a directory <code>dir</code> if there is a <code>dir/package.json</code> with a <code>"main"</code> property.</p></li>
+<li><p>CommonJS can import a directory <code>dir</code> if there is a module <code>dir/index.js</code>.</p></li>
+</ul>
+<p>All built-in Node.js modules are available via bare paths and have named ESM exports – for example:</p>
+<div class="sourceCode" id="cb644"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb644-1"><a href="ch_modules.html#cb644-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> assert <span class="im">from</span> <span class="st">'assert/strict'</span><span class="op">;</span></span>
+<span id="cb644-2"><a href="ch_modules.html#cb644-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> path <span class="im">from</span> <span class="st">'path'</span><span class="op">;</span></span>
+<span id="cb644-3"><a href="ch_modules.html#cb644-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb644-4"><a href="ch_modules.html#cb644-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb644-5"><a href="ch_modules.html#cb644-5" aria-hidden="true" tabindex="-1"></a>  path<span class="op">.</span><span class="fu">join</span>(<span class="st">'a/b/c'</span><span class="op">,</span> <span class="st">'../d'</span>)<span class="op">,</span> <span class="st">'a/b/d'</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="filename-extensions-on-node.js">27.11.3.1 Filename extensions on Node.js</h5>
+<p>Node.js supports the following default filename extensions:</p>
+<ul>
+<li><code>.mjs</code> for ES modules</li>
+<li><code>.cjs</code> for CommonJS modules</li>
+</ul>
+<p>The filename extension <code>.js</code> stands for either ESM or CommonJS. Which one it is is configured via the “closest” <code>package.json</code> (in the current directory, the parent directory, etc.). Using <code>package.json</code> in this manner is independent of packages.</p>
+<p>In that <code>package.json</code>, there is a property <code>"type"</code>, which has two settings:</p>
+<ul>
+<li><p><code>"commonjs"</code> (the default): files with the extension <code>.js</code> or without an extension are interpreted as CommonJS modules.</p></li>
+<li><p><code>"module"</code>: files with the extension <code>.js</code> or without an extension are interpreted as ESM modules.</p></li>
+</ul>
+<h5 id="interpreting-non-file-source-code-as-either-commonjs-or-esm">27.11.3.2 Interpreting non-file source code as either CommonJS or ESM</h5>
+<p>Not all source code executed by Node.js comes from files. You can also send it code via stdin, <code>--eval</code>, and <code>--print</code>. The command line option <code>--input-type</code> lets you specify how such code is interpreted:</p>
+<ul>
+<li>As CommonJS (the default): <code>--input-type=commonjs</code></li>
+<li>As ESM: <code>--input-type=module</code></li>
+</ul>
+<h3 id="dynamic-imports">27.12 Loading modules dynamically via <code>import()</code> [ES2020]</h3>
+<p><a id="index-entry-291" class="index-entry"></a> <a id="index-entry-292" class="index-entry"></a><a id="index-entry-293" class="index-entry"></a></p>
+<p>So far, the only way to import a module has been via an <code>import</code> statement. That statement has several limitations:</p>
+<ul>
+<li>You must use it at the top level of a module. That is, you can’t, for example, import something when you are inside a block.</li>
+<li>The module specifier is always fixed. That is, you can’t change what you import depending on a condition. And you can’t assemble a specifier dynamically.</li>
+</ul>
+<p>The <code>import()</code> operator changes that. Let’s look at an example of it being used.</p>
+<h4 id="example-loading-a-module-dynamically">27.12.1 Example: loading a module dynamically</h4>
+<p>Consider the following files:</p>
+<pre class="text"><code>lib/my-math.mjs
+main1.mjs
+main2.mjs</code></pre>
+<p>We have already seen module <code>my-math.mjs</code>:</p>
+<div class="sourceCode" id="cb646"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb646-1"><a href="ch_modules.html#cb646-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Not exported, private to module</span></span>
+<span id="cb646-2"><a href="ch_modules.html#cb646-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">times</span>(a<span class="op">,</span> b) {</span>
+<span id="cb646-3"><a href="ch_modules.html#cb646-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> a <span class="op">*</span> b<span class="op">;</span></span>
+<span id="cb646-4"><a href="ch_modules.html#cb646-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb646-5"><a href="ch_modules.html#cb646-5" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">square</span>(x) {</span>
+<span id="cb646-6"><a href="ch_modules.html#cb646-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">times</span>(x<span class="op">,</span> x)<span class="op">;</span></span>
+<span id="cb646-7"><a href="ch_modules.html#cb646-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb646-8"><a href="ch_modules.html#cb646-8" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> LIGHTSPEED <span class="op">=</span> <span class="dv">299792458</span><span class="op">;</span></span></code></pre></div>
+<p>This is what using <code>import()</code> looks like in <code>main1.mjs</code>:</p>
+<div class="sourceCode" id="cb647"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb647-1"><a href="ch_modules.html#cb647-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> dir <span class="op">=</span> <span class="st">'./lib/'</span><span class="op">;</span></span>
+<span id="cb647-2"><a href="ch_modules.html#cb647-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> moduleSpecifier <span class="op">=</span> dir <span class="op">+</span> <span class="st">'my-math.mjs'</span><span class="op">;</span></span>
+<span id="cb647-3"><a href="ch_modules.html#cb647-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb647-4"><a href="ch_modules.html#cb647-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">loadConstant</span>() {</span>
+<span id="cb647-5"><a href="ch_modules.html#cb647-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="im">import</span>(moduleSpecifier)</span>
+<span id="cb647-6"><a href="ch_modules.html#cb647-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(myMath <span class="kw">=&gt;</span> {</span>
+<span id="cb647-7"><a href="ch_modules.html#cb647-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> result <span class="op">=</span> myMath<span class="op">.</span><span class="at">LIGHTSPEED</span><span class="op">;</span></span>
+<span id="cb647-8"><a href="ch_modules.html#cb647-8" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(result<span class="op">,</span> <span class="dv">299792458</span>)<span class="op">;</span></span>
+<span id="cb647-9"><a href="ch_modules.html#cb647-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb647-10"><a href="ch_modules.html#cb647-10" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb647-11"><a href="ch_modules.html#cb647-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Method <code>.then()</code> is part of <em>Promises</em>, a mechanism for handling asynchronous results, which is covered <a href="ch_promises.html">later in this book</a>.</p>
+<p>Two things in this code weren’t possible before:</p>
+<ul>
+<li>We are importing inside a function (not at the top level).</li>
+<li>The module specifier comes from a variable.</li>
+</ul>
+<p>Next, we’ll implement the exact same functionality in <code>main2.mjs</code> but via a so-called <em>async function</em>, which provides nicer syntax for Promises.</p>
+<div class="sourceCode" id="cb648"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb648-1"><a href="ch_modules.html#cb648-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> dir <span class="op">=</span> <span class="st">'./lib/'</span><span class="op">;</span></span>
+<span id="cb648-2"><a href="ch_modules.html#cb648-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> moduleSpecifier <span class="op">=</span> dir <span class="op">+</span> <span class="st">'my-math.mjs'</span><span class="op">;</span></span>
+<span id="cb648-3"><a href="ch_modules.html#cb648-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb648-4"><a href="ch_modules.html#cb648-4" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">loadConstant</span>() {</span>
+<span id="cb648-5"><a href="ch_modules.html#cb648-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> myMath <span class="op">=</span> <span class="cf">await</span> <span class="im">import</span>(moduleSpecifier)<span class="op">;</span></span>
+<span id="cb648-6"><a href="ch_modules.html#cb648-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result <span class="op">=</span> myMath<span class="op">.</span><span class="at">LIGHTSPEED</span><span class="op">;</span></span>
+<span id="cb648-7"><a href="ch_modules.html#cb648-7" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(result<span class="op">,</span> <span class="dv">299792458</span>)<span class="op">;</span></span>
+<span id="cb648-8"><a href="ch_modules.html#cb648-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb648-9"><a href="ch_modules.html#cb648-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/question-circle-regular.svg" height="24">&nbsp; <strong>Why is <code>import()</code> an operator and not a function?</strong></p>
+<p>Even though it works much like a function, <code>import()</code> is an operator: in order to resolve module specifiers relatively to the current module, it needs to know from which module it is invoked. A normal function cannot receive this information as implicitly as an operator can. It would need, for example, a parameter.</p>
+</div>
+<h4 id="use-cases-for-import">27.12.2 Use cases for <code>import()</code></h4>
+<h5 id="loading-code-on-demand">27.12.2.1 Loading code on demand</h5>
+<p>Some functionality of web apps doesn’t have to be present when they start, it can be loaded on demand. Then <code>import()</code> helps because you can put such functionality into modules – for example:</p>
+<div class="sourceCode" id="cb649"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb649-1"><a href="ch_modules.html#cb649-1" aria-hidden="true" tabindex="-1"></a>button<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">'click'</span><span class="op">,</span> <span class="bu">event</span> <span class="kw">=&gt;</span> {</span>
+<span id="cb649-2"><a href="ch_modules.html#cb649-2" aria-hidden="true" tabindex="-1"></a>  <span class="im">import</span>(<span class="st">'./dialogBox.mjs'</span>)</span>
+<span id="cb649-3"><a href="ch_modules.html#cb649-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(dialogBox <span class="kw">=&gt;</span> {</span>
+<span id="cb649-4"><a href="ch_modules.html#cb649-4" aria-hidden="true" tabindex="-1"></a>      dialogBox<span class="op">.</span><span class="fu">open</span>()<span class="op">;</span></span>
+<span id="cb649-5"><a href="ch_modules.html#cb649-5" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb649-6"><a href="ch_modules.html#cb649-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">catch</span>(error <span class="kw">=&gt;</span> {</span>
+<span id="cb649-7"><a href="ch_modules.html#cb649-7" aria-hidden="true" tabindex="-1"></a>      <span class="co">/* Error handling */</span></span>
+<span id="cb649-8"><a href="ch_modules.html#cb649-8" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb649-9"><a href="ch_modules.html#cb649-9" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<h5 id="conditional-loading-of-modules">27.12.2.2 Conditional loading of modules</h5>
+<p>We may want to load a module depending on whether a condition is true. For example, a module with <a href="ch_modules.html#polyfills">a polyfill</a> that makes a new feature available on legacy platforms:</p>
+<div class="sourceCode" id="cb650"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb650-1"><a href="ch_modules.html#cb650-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">isLegacyPlatform</span>()) {</span>
+<span id="cb650-2"><a href="ch_modules.html#cb650-2" aria-hidden="true" tabindex="-1"></a>  <span class="im">import</span>(<span class="st">'./my-polyfill.mjs'</span>)</span>
+<span id="cb650-3"><a href="ch_modules.html#cb650-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(···)<span class="op">;</span></span>
+<span id="cb650-4"><a href="ch_modules.html#cb650-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h5 id="computed-module-specifiers">27.12.2.3 Computed module specifiers</h5>
+<p>For applications such as internationalization, it helps if you can dynamically compute module specifiers:</p>
+<div class="sourceCode" id="cb651"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb651-1"><a href="ch_modules.html#cb651-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span>(<span class="vs">`messages_</span><span class="sc">${</span><span class="fu">getLocale</span>()<span class="sc">}</span><span class="vs">.mjs`</span>)</span>
+<span id="cb651-2"><a href="ch_modules.html#cb651-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(···)<span class="op">;</span></span></code></pre></div>
+<h3 id="import.meta">27.13 <code>import.meta</code> – metadata for the current module [ES2020]</h3>
+<p><a id="index-entry-294" class="index-entry"></a></p>
+<p>The object <code>import.meta</code> holds metadata for the current module.</p>
+<h4 id="import.meta.url">27.13.1 <code>import.meta.url</code></h4>
+<p><a id="index-entry-295" class="index-entry"></a></p>
+<p>The most important property of <code>import.meta</code> is <code>.url</code> which contains a string with the URL of the current module file – for example:</p>
+<pre class="text"><code>'https://example.com/code/main.mjs'</code></pre>
+<h4 id="import.meta.url-and-class-url">27.13.2 <code>import.meta.url</code> and class <code>URL</code></h4>
+<p>Class <code>URL</code> is available via a global variable in browsers and on Node.js. You can look up its full functionality in <a href="https://nodejs.org/api/url.html#url_class_url">the Node.js documentation</a>. When working with <code>import.meta.url</code>, its constructor is especially useful:</p>
+<div class="sourceCode" id="cb653"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb653-1"><a href="ch_modules.html#cb653-1" aria-hidden="true" tabindex="-1"></a><span class="kw">new</span> <span class="fu">URL</span>(input<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> base<span class="op">?:</span> <span class="dt">string</span><span class="op">|</span>URL)</span></code></pre></div>
+<p>Parameter <code>input</code> contains the URL to be parsed. It can be relative if the second parameter, <code>base</code>, is provided.</p>
+<p>In other words, this constructor lets us resolve a relative path against a base URL:</p>
+<div class="sourceCode" id="cb654"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb654-1"><a href="ch_modules.html#cb654-1" aria-hidden="true" tabindex="-1"></a>&gt; new URL('other.mjs', 'https://example.com/code/main.mjs').href</span>
+<span id="cb654-2"><a href="ch_modules.html#cb654-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'https://example.com/code/other.mjs'</span></span>
+<span id="cb654-3"><a href="ch_modules.html#cb654-3" aria-hidden="true" tabindex="-1"></a>&gt; new URL('../other.mjs', 'https://example.com/code/main.mjs').href</span>
+<span id="cb654-4"><a href="ch_modules.html#cb654-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'https://example.com/other.mjs'</span></span></code></pre></div>
+<p>This is how we get a <code>URL</code> instance that points to a file <code>data.txt</code> that sits next to the current module:</p>
+<div class="sourceCode" id="cb655"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb655-1"><a href="ch_modules.html#cb655-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> urlOfData <span class="op">=</span> <span class="kw">new</span> <span class="fu">URL</span>(<span class="st">'data.txt'</span><span class="op">,</span> <span class="im">import</span><span class="op">.</span><span class="at">meta</span><span class="op">.</span><span class="at">url</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="import.meta.url-on-node.js">27.13.3 <code>import.meta.url</code> on Node.js</h4>
+<p>On Node.js, <code>import.meta.url</code> is always a string with a <code>file:</code> URL – for example:</p>
+<pre class="text"><code>'file:///Users/rauschma/my-module.mjs'</code></pre>
+<h5 id="example-reading-a-sibling-file-of-a-module">27.13.3.1 Example: reading a sibling file of a module</h5>
+<p>Many Node.js file system operations accept either strings with paths or instances of <code>URL</code>. That enables us to read a sibling file <code>data.txt</code> of the current module:</p>
+<div class="sourceCode" id="cb657"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb657-1"><a href="ch_modules.html#cb657-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> fs <span class="im">from</span> <span class="st">'fs'</span><span class="op">;</span></span>
+<span id="cb657-2"><a href="ch_modules.html#cb657-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">readData</span>() {</span>
+<span id="cb657-3"><a href="ch_modules.html#cb657-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// data.txt sits next to current module</span></span>
+<span id="cb657-4"><a href="ch_modules.html#cb657-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> urlOfData <span class="op">=</span> <span class="kw">new</span> <span class="fu">URL</span>(<span class="st">'data.txt'</span><span class="op">,</span> <span class="im">import</span><span class="op">.</span><span class="at">meta</span><span class="op">.</span><span class="at">url</span>)<span class="op">;</span></span>
+<span id="cb657-5"><a href="ch_modules.html#cb657-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> fs<span class="op">.</span><span class="fu">readFileSync</span>(urlOfData<span class="op">,</span> {<span class="dt">encoding</span><span class="op">:</span> <span class="st">'UTF-8'</span>})<span class="op">;</span></span>
+<span id="cb657-6"><a href="ch_modules.html#cb657-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h5 id="module-fs-and-urls">27.13.3.2 Module <code>fs</code> and URLs</h5>
+<p>For most functions of the module <code>fs</code>, we can refer to files via:</p>
+<ul>
+<li>Paths – in strings or instances of <code>Buffer</code>.</li>
+<li>URLs – in instances of <code>URL</code> (with the protocol <code>file:</code>)</li>
+</ul>
+<p>For more information on this topic, see <a href="https://nodejs.org/api/fs.html#fs_file_paths">the Node.js API documentation</a>.</p>
+<h5 id="converting-urls-paths">27.13.3.3 Converting between <code>file:</code> URLs and paths</h5>
+<p><a href="https://nodejs.org/api/url.html">The Node.js module <code>url</code></a> has two functions for converting between <code>file:</code> URLs and paths:</p>
+<ul>
+<li><code>fileURLToPath(url: URL|string): string</code><br>
+Converts a <code>file:</code> URL to a path.</li>
+<li><code>pathToFileURL(path: string): URL</code><br>
+Converts a path to a <code>file:</code> URL.</li>
+</ul>
+<p>If you need a path that can be used in the local file system, then property <code>.pathname</code> of <code>URL</code> instances does not always work:</p>
+<div class="sourceCode" id="cb658"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb658-1"><a href="ch_modules.html#cb658-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb658-2"><a href="ch_modules.html#cb658-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="fu">URL</span>(<span class="st">'file:///tmp/with%20space.txt'</span>)<span class="op">.</span><span class="at">pathname</span><span class="op">,</span></span>
+<span id="cb658-3"><a href="ch_modules.html#cb658-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'/tmp/with%20space.txt'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Therefore, it is better to use <code>fileURLToPath()</code>:</p>
+<div class="sourceCode" id="cb659"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb659-1"><a href="ch_modules.html#cb659-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> url <span class="im">from</span> <span class="st">'url'</span><span class="op">;</span></span>
+<span id="cb659-2"><a href="ch_modules.html#cb659-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb659-3"><a href="ch_modules.html#cb659-3" aria-hidden="true" tabindex="-1"></a>  url<span class="op">.</span><span class="fu">fileURLToPath</span>(<span class="st">'file:///tmp/with%20space.txt'</span>)<span class="op">,</span></span>
+<span id="cb659-4"><a href="ch_modules.html#cb659-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">'/tmp/with space.txt'</span>)<span class="op">;</span> <span class="co">// result on Unix</span></span></code></pre></div>
+<p>Similarly, <code>pathToFileURL()</code> does more than just prepend <code>'file://'</code> to an absolute path.</p>
+<h3 id="polyfills">27.14 Polyfills: emulating native web platform features (advanced)</h3>
+<p><a id="index-entry-296" class="index-entry"></a> <a id="index-entry-297" class="index-entry"></a><a id="index-entry-298" class="index-entry"></a><a id="index-entry-299" class="index-entry"></a> <a id="index-entry-300" class="index-entry"></a> <a id="index-entry-301" class="index-entry"></a><a id="index-entry-302" class="index-entry"></a></p>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>Backends have polyfills, too</strong></p>
+<p>This section is about frontend development and web browsers, but similar ideas apply to backend development.</p>
+</div>
+<p><em>Polyfills</em> help with a conflict that we are facing when developing a web application in JavaScript:</p>
+<ul>
+<li>On one hand, we want to use modern web platform features that make the app better and/or development easier.</li>
+<li>On the other hand, the app should run on as many browsers as possible.</li>
+</ul>
+<p>Given a web platform feature X:</p>
+<ul>
+<li>A <em>polyfill</em> for X is a piece of code. If it is executed on a platform that already has built-in support for X, it does nothing. Otherwise, it makes the feature available on the platform. In the latter case, the polyfilled feature is (mostly) indistinguishable from a native implementation. In order to achieve that, the polyfill usually makes global changes. For example, it may modify global data or configure a global module loader. Polyfills are often packaged as modules.
+<ul>
+<li>The term <a href="https://remysharp.com/2010/10/08/what-is-a-polyfill"><em>polyfill</em></a> was coined by Remy Sharp.</li>
+</ul></li>
+<li>A <em>speculative polyfill</em> is a polyfill for a proposed web platform feature (that is not standardized, yet).
+<ul>
+<li>Alternative term: <em>prollyfill</em></li>
+</ul></li>
+<li>A <em>replica</em> of X is a library that reproduces the API and functionality of X locally. Such a library exists independently of a native (and global) implementation of X.
+<ul>
+<li><em>Replica</em> is a new term introduced in this section. Alternative term: <em>ponyfill</em></li>
+</ul></li>
+<li>There is also the term <em>shim</em>, but it doesn’t have a universally agreed upon definition. It often means roughly the same as <em>polyfill</em>.</li>
+</ul>
+<p>Every time our web applications starts, it must first execute all polyfills for features that may not be available everywhere. Afterwards, we can be sure that those features are available natively.</p>
+<h4 id="sources-of-this-section">27.14.1 Sources of this section</h4>
+<ul>
+<li><a href="https://remysharp.com/2010/10/08/what-is-a-polyfill">“What is a Polyfill?”</a> by Remy Sharp</li>
+<li>Inspiration for the term <em>replica</em>: <a href="https://en.wikipedia.org/wiki/Paris_Las_Vegas">The Eiffel Tower in Las Vegas</a></li>
+<li>Useful clarification of “polyfill” and related terms: <a href="https://www.w3.org/2001/tag/doc/polyfills/">“Polyfills and the evolution of the Web”</a>. Edited by Andrew Betts.</li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/20">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_single-objects.html">28 Single objects</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

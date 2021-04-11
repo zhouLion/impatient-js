@@ -1,0 +1,233 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_unicode">19 Unicode – a brief introduction (advanced)</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>19.1 <a href="ch_unicode.html#code-points-vs.-code-units">Code points vs.&nbsp;code units</a>
+<ul>
+<li>19.1.1 <a href="ch_unicode.html#code-points">Code points</a></li>
+<li>19.1.2 <a href="ch_unicode.html#encoding-unicode-code-points-utf-32-utf-16-utf-8">Encoding Unicode code points: UTF-32, UTF-16, UTF-8</a></li>
+</ul></li>
+<li>19.2 <a href="ch_unicode.html#encodings-used-in-web-development-utf-16-and-utf-8">Encodings used in web development: UTF-16 and UTF-8</a>
+<ul>
+<li>19.2.1 <a href="ch_unicode.html#source-code-internally-utf-16">Source code internally: UTF-16</a></li>
+<li>19.2.2 <a href="ch_unicode.html#strings-utf-16">Strings: UTF-16</a></li>
+<li>19.2.3 <a href="ch_unicode.html#source-code-in-files-utf-8">Source code in files: UTF-8</a></li>
+</ul></li>
+<li>19.3 <a href="ch_unicode.html#grapheme-clusters-the-real-characters">Grapheme clusters – the real characters</a></li>
+</ul>
+</div>
+<hr>
+<p><a id="index-entry-188" class="index-entry"></a></p>
+<p>Unicode is a standard for representing and managing text in most of the world’s writing systems. Virtually all modern software that works with text, supports Unicode. The standard is maintained by the Unicode Consortium. A new version of the standard is published every year (with new emojis, etc.). Unicode version 1.0.0 was published in October 1991.</p>
+<h3 id="code-points-vs.-code-units">19.1 Code points vs.&nbsp;code units</h3>
+<p><a id="index-entry-189" class="index-entry"></a><a id="index-entry-190" class="index-entry"></a></p>
+<p>Two concepts are crucial for understanding Unicode:</p>
+<ul>
+<li><em>Code points</em> are numbers that represent Unicode characters.</li>
+<li><em>Code units</em> are numbers that encode code points, to store or transmit Unicode text. One or more code units encode a single code point. Each code unit has the same size, which depends on the <em>encoding format</em> that is used. The most popular format, UTF-8, has 8-bit code units.</li>
+</ul>
+<h4 id="code-points">19.1.1 Code points</h4>
+<p>The first version of Unicode had 16-bit code points. Since then, the number of characters has grown considerably and the size of code points was extended to 21 bits. These 21 bits are partitioned in 17 planes, with 16 bits each:</p>
+<ul>
+<li>Plane 0: <strong>Basic Multilingual Plane (BMP)</strong>, 0x0000–0xFFFF
+<ul>
+<li>Contains characters for almost all modern languages (Latin characters, Asian characters, etc.) and many symbols.</li>
+</ul></li>
+<li>Plane 1: Supplementary Multilingual Plane (SMP), 0x10000–0x1FFFF
+<ul>
+<li>Supports historic writing systems (e.g., Egyptian hieroglyphs and cuneiform) and additional modern writing systems.</li>
+<li>Supports emojis and many other symbols.</li>
+</ul></li>
+<li>Plane 2: Supplementary Ideographic Plane (SIP), 0x20000–0x2FFFF
+<ul>
+<li>Contains additional CJK (Chinese, Japanese, Korean) ideographs.</li>
+</ul></li>
+<li>Plane 3–13: Unassigned</li>
+<li>Plane 14: Supplementary Special-Purpose Plane (SSP), 0xE0000–0xEFFFF
+<ul>
+<li>Contains non-graphical characters such as tag characters and glyph variation selectors.</li>
+</ul></li>
+<li>Plane 15–16: Supplementary Private Use Area (S PUA A/B), 0x0F0000–0x10FFFF
+<ul>
+<li>Available for character assignment by parties outside the ISO and the Unicode Consortium. Not standardized.</li>
+</ul></li>
+</ul>
+<p>Planes 1-16 are called supplementary planes or <strong>astral planes</strong>.</p>
+<p>Let’s check the code points of a few characters:</p>
+<div class="sourceCode" id="cb373"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb373-1"><a href="ch_unicode.html#cb373-1" aria-hidden="true" tabindex="-1"></a>&gt; 'A'.codePointAt(0).toString(16)</span>
+<span id="cb373-2"><a href="ch_unicode.html#cb373-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'41'</span></span>
+<span id="cb373-3"><a href="ch_unicode.html#cb373-3" aria-hidden="true" tabindex="-1"></a>&gt; 'ü'.codePointAt(0).toString(16)</span>
+<span id="cb373-4"><a href="ch_unicode.html#cb373-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'fc'</span></span>
+<span id="cb373-5"><a href="ch_unicode.html#cb373-5" aria-hidden="true" tabindex="-1"></a>&gt; 'π'.codePointAt(0).toString(16)</span>
+<span id="cb373-6"><a href="ch_unicode.html#cb373-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'3c0'</span></span>
+<span id="cb373-7"><a href="ch_unicode.html#cb373-7" aria-hidden="true" tabindex="-1"></a>&gt; '🙂'.codePointAt(0).toString(16)</span>
+<span id="cb373-8"><a href="ch_unicode.html#cb373-8" aria-hidden="true" tabindex="-1"></a><span class="kw">'1f642'</span></span></code></pre></div>
+<p>The hexadecimal numbers of the code points tell us that the first three characters reside in plane 0 (within 16 bits), while the emoji resides in plane 1.</p>
+<h4 id="encoding-unicode-code-points-utf-32-utf-16-utf-8">19.1.2 Encoding Unicode code points: UTF-32, UTF-16, UTF-8</h4>
+<p><a id="index-entry-191" class="index-entry"></a><a id="index-entry-192" class="index-entry"></a></p>
+<p>The main ways of encoding code points are three <em>Unicode Transformation Formats</em> (UTFs): UTF-32, UTF-16, UTF-8. The number at the end of each format indicates the size (in bits) of its code units.</p>
+<h5 id="utf-32-unicode-transformation-format-32">19.1.2.1 UTF-32 (Unicode Transformation Format 32)</h5>
+<p><a id="index-entry-193" class="index-entry"></a></p>
+<p>UTF-32 uses 32 bits to store code units, resulting in one code unit per code point. This format is the only one with <em>fixed-length encoding</em>; all others use a varying number of code units to encode a single code point.</p>
+<h5 id="utf-16-unicode-transformation-format-16">19.1.2.2 UTF-16 (Unicode Transformation Format 16)</h5>
+<p><a id="index-entry-194" class="index-entry"></a></p>
+<p>UTF-16 uses 16-bit code units. It encodes code points as follows:</p>
+<ul>
+<li><p>The BMP (first 16 bits of Unicode) is stored in single code units.</p></li>
+<li><p>Astral planes: The BMP comprises 0x10_000 code points. Given that Unicode has a total of 0x110_000 code points, we still need to encode the remaining 0x100_000 code points (20 bits). The BMP has two ranges of unassigned code points that provide the necessary storage:</p>
+<ul>
+<li>Most significant 10 bits (<em>leading surrogate</em>): 0xD800-0xDBFF</li>
+<li>Least significant 10 bits (<em>trailing surrogate</em>): 0xDC00-0xDFFF</li>
+</ul></li>
+</ul>
+<p>In other words, the two hexadecimal digits at the end contribute 8 bits. But we can only use those 8 bits if a BMP starts with one of the following 2-digit pairs:</p>
+<ul>
+<li>D8, D9, DA, DB</li>
+<li>DC, DD, DE, DF</li>
+</ul>
+<p>Per surrogate, we have a choice between 4 pairs, which is where the remaining 2 bits come from.</p>
+<p>As a consequence, each UTF-16 code unit is always either a leading surrogate, a trailing surrogate, or encodes a BMP code point.</p>
+<p>These are two examples of UTF-16-encoded code points:</p>
+<ul>
+<li>Code point 0x03C0 (π) is in the BMP and can therefore be represented by a single UTF-16 code unit: 0x03C0.</li>
+<li>Code point 0x1F642 (<code>🙂</code>) is in an astral plane and represented by two code units: 0xD83D and 0xDE42.</li>
+</ul>
+<h5 id="utf-8-unicode-transformation-format-8">19.1.2.3 UTF-8 (Unicode Transformation Format 8)</h5>
+<p><a id="index-entry-195" class="index-entry"></a></p>
+<p>UTF-8 has 8-bit code units. It uses 1–4 code units to encode a code point:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Code points</th>
+<th>Code units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0000–007F</td>
+<td>0bbbbbbb (7 bits)</td>
+</tr>
+<tr class="even">
+<td>0080–07FF</td>
+<td>110bbbbb, 10bbbbbb (5+6 bits)</td>
+</tr>
+<tr class="odd">
+<td>0800–FFFF</td>
+<td>1110bbbb, 10bbbbbb, 10bbbbbb (4+6+6 bits)</td>
+</tr>
+<tr class="even">
+<td>10000–1FFFFF</td>
+<td>11110bbb, 10bbbbbb, 10bbbbbb, 10bbbbbb (3+6+6+6 bits)</td>
+</tr>
+</tbody>
+</table>
+<p>Notes:</p>
+<ul>
+<li>The bit prefix of each code unit tells us:
+<ul>
+<li>Is it first in a series of code units? If yes, how many code units will follow?</li>
+<li>Is it second or later in a series of code units?</li>
+</ul></li>
+<li>The character mappings in the 0000–007F range are the same as ASCII, which leads to a degree of backward compatibility with older software.</li>
+</ul>
+<p>Three examples:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Character</th>
+<th>Code point</th>
+<th>Code units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>0x0041</td>
+<td>01000001</td>
+</tr>
+<tr class="even">
+<td>π</td>
+<td>0x03C0</td>
+<td>11001111, 10000000</td>
+</tr>
+<tr class="odd">
+<td><code>🙂</code></td>
+<td>0x1F642</td>
+<td>11110000, 10011111, 10011001, 10000010</td>
+</tr>
+</tbody>
+</table>
+<h3 id="encodings-used-in-web-development-utf-16-and-utf-8">19.2 Encodings used in web development: UTF-16 and UTF-8</h3>
+<p>The Unicode encoding formats that are used in web development are: UTF-16 and UTF-8.</p>
+<h4 id="source-code-internally-utf-16">19.2.1 Source code internally: UTF-16</h4>
+<p>The ECMAScript specification internally represents source code as UTF-16.</p>
+<h4 id="strings-utf-16">19.2.2 Strings: UTF-16</h4>
+<p>The characters in JavaScript strings are based on UTF-16 code units:</p>
+<div class="sourceCode" id="cb374"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb374-1"><a href="ch_unicode.html#cb374-1" aria-hidden="true" tabindex="-1"></a>&gt; const smiley = '🙂';</span>
+<span id="cb374-2"><a href="ch_unicode.html#cb374-2" aria-hidden="true" tabindex="-1"></a>&gt; smiley.length</span>
+<span id="cb374-3"><a href="ch_unicode.html#cb374-3" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span>
+<span id="cb374-4"><a href="ch_unicode.html#cb374-4" aria-hidden="true" tabindex="-1"></a>&gt; smiley === '\uD83D\uDE42' // code units</span>
+<span id="cb374-5"><a href="ch_unicode.html#cb374-5" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>For more information on Unicode and strings, consult <a href="ch_strings.html#atoms-of-text">§20.6 “Atoms of text: Unicode characters, JavaScript characters, grapheme clusters”</a>.</p>
+<h4 id="source-code-in-files-utf-8">19.2.3 Source code in files: UTF-8</h4>
+<p>HTML and JavaScript are almost always encoded as UTF-8 these days.</p>
+<p>For example, this is how HTML files usually start now:</p>
+<div class="sourceCode" id="cb375"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb375-1"><a href="ch_unicode.html#cb375-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!doctype </span>html<span class="dt">&gt;</span></span>
+<span id="cb375-2"><a href="ch_unicode.html#cb375-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
+<span id="cb375-3"><a href="ch_unicode.html#cb375-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;head&gt;</span></span>
+<span id="cb375-4"><a href="ch_unicode.html#cb375-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;meta</span><span class="ot"> charset=</span><span class="st">"UTF-8"</span><span class="kw">&gt;</span></span>
+<span id="cb375-5"><a href="ch_unicode.html#cb375-5" aria-hidden="true" tabindex="-1"></a>···</span></code></pre></div>
+<p>For HTML modules loaded in web browsers, the <a href="https://html.spec.whatwg.org/multipage/webappapis.html#fetch-a-single-module-script">standard encoding</a> is also UTF-8.</p>
+<h3 id="grapheme-clusters-the-real-characters">19.3 Grapheme clusters – the real characters</h3>
+<p><a id="index-entry-196" class="index-entry"></a></p>
+<p>The concept of a character becomes remarkably complex once you consider many of the world’s writing systems.</p>
+<p>On one hand, there are Unicode characters, as represented by code points.</p>
+<p>On the other hand, there are <em>grapheme clusters</em>. A grapheme cluster corresponds most closely to a symbol displayed on screen or paper. It is defined as “a horizontally segmentable unit of text”. Therefore, <a href="https://unicode.org/reports/tr29/#Grapheme_Cluster_Boundaries">official Unicode documents</a> also call it a <em>user-perceived character</em>. One or more code point characters are needed to encode a grapheme cluster.</p>
+<p>For example, the Devanagari <em>kshi</em> is encoded by 4 code points. We use spreading (<code>...</code>) to split a string into an Array with code point characters (for details, consult <a href="ch_strings.html#working-with-code-points">§20.6.1 “Working with code points”</a>):</p>
+<blockquote>
+<p><img src="img-book/64d2ae15433dbda2d2c2d7437fd5630b41444551.png" alt="Splitting the grapheme cluster for the Devanagari _kshi_ into code point characters." width="154" height="28"></p>
+</blockquote>
+<p>Flag emojis are also grapheme clusters and composed of two code point characters – for example, the flag of Japan:</p>
+<blockquote>
+<p><img src="img-book/6dd11eed1d4d5466929eb6e2bfe752216f8ead81.png" alt="Splitting a flag emoji into code point characters." width="84" height="28"></p>
+</blockquote>
+<div class="notebox">
+<p><img src="img-book/img/icons/external-link-regular.svg" height="24">&nbsp; <strong>More information on grapheme clusters</strong></p>
+<p>For more information, consult <a href="https://manishearth.github.io/blog/2017/01/14/stop-ascribing-meaning-to-unicode-code-points/">“Let’s Stop Ascribing Meaning to Code Points”</a> by Manish Goregaokar.</p>
+</div>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/41">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_strings.html">20 Strings</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

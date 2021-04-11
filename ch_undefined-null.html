@@ -1,0 +1,247 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_undefined-null">14 The non-values <code>undefined</code> and <code>null</code></h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>14.1 <a href="ch_undefined-null.html#undefined-vs.-null"><code>undefined</code> vs.&nbsp;<code>null</code></a></li>
+<li>14.2 <a href="ch_undefined-null.html#occurrences-of-undefined-and-null">Occurrences of <code>undefined</code> and <code>null</code></a>
+<ul>
+<li>14.2.1 <a href="ch_undefined-null.html#occurrences-of-undefined">Occurrences of <code>undefined</code></a></li>
+<li>14.2.2 <a href="ch_undefined-null.html#occurrences-of-null">Occurrences of <code>null</code></a></li>
+</ul></li>
+<li>14.3 <a href="ch_undefined-null.html#checking-for-undefined-or-null">Checking for <code>undefined</code> or <code>null</code></a></li>
+<li>14.4 <a href="ch_undefined-null.html#nullish-coalescing-operator">The nullish coalescing operator (<code>??</code>) for default values [ES2020]</a>
+<ul>
+<li>14.4.1 <a href="ch_undefined-null.html#example-counting-matches">Example: counting matches</a></li>
+<li>14.4.2 <a href="ch_undefined-null.html#example-specifying-a-default-value-for-a-property">Example: specifying a default value for a property</a></li>
+<li>14.4.3 <a href="ch_undefined-null.html#using-destructuring-for-default-values">Using destructuring for default values</a></li>
+<li>14.4.4 <a href="ch_undefined-null.html#legacy-approach-using-logical-or-for-default-values">Legacy approach: using logical Or (<code>||</code>) for default values</a></li>
+<li>14.4.5 <a href="ch_undefined-null.html#nullish-coalescing-assignment-operator">The nullish coalescing assignment operator (<code>??=</code>)</a></li>
+</ul></li>
+<li>14.5 <a href="ch_undefined-null.html#undefined-and-null-dont-have-properties"><code>undefined</code> and <code>null</code> don’t have properties</a></li>
+<li>14.6 <a href="ch_undefined-null.html#the-history-of-undefined-and-null">The history of <code>undefined</code> and <code>null</code></a></li>
+</ul>
+</div>
+<hr>
+<p><a id="index-entry-102" class="index-entry"></a><a id="index-entry-103" class="index-entry"></a></p>
+<p>Many programming languages have one “non-value” called <code>null</code>. It indicates that a variable does not currently point to an object – for example, when it hasn’t been initialized yet.</p>
+<p>In contrast, JavaScript has two of them: <code>undefined</code> and <code>null</code>.</p>
+<h3 id="undefined-vs.-null">14.1 <code>undefined</code> vs.&nbsp;<code>null</code></h3>
+<p>Both values are very similar and often used interchangeably. How they differ is therefore subtle. The language itself makes the following distinction:</p>
+<ul>
+<li><code>undefined</code> means “not initialized” (e.g., a variable) or “not existing” (e.g., a property of an object).</li>
+<li><code>null</code> means “the intentional absence of any object value” (a quote from <a href="https://tc39.github.io/ecma262/#sec-null-value">the language specification</a>).</li>
+</ul>
+<p>Programmers may make the following distinction:</p>
+<ul>
+<li><code>undefined</code> is the non-value used by the language (when something is uninitialized, etc.).</li>
+<li><code>null</code> means “explicitly switched off”. That is, it helps implement a type that comprises both meaningful values and a meta-value that stands for “no meaningful value”. Such a type is called <a href="https://en.wikipedia.org/wiki/Option_type"><em>option type</em> or <em>maybe type</em></a> in functional programming.</li>
+</ul>
+<h3 id="occurrences-of-undefined-and-null">14.2 Occurrences of <code>undefined</code> and <code>null</code></h3>
+<p>The following subsections describe where <code>undefined</code> and <code>null</code> appear in the language. We’ll encounter several mechanisms that are explained in more detail later in this book.</p>
+<h4 id="occurrences-of-undefined">14.2.1 Occurrences of <code>undefined</code></h4>
+<p>Uninitialized variable <code>myVar</code>:</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb191-1"><a href="ch_undefined-null.html#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> myVar<span class="op">;</span></span>
+<span id="cb191-2"><a href="ch_undefined-null.html#cb191-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(myVar<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div>
+<p>Parameter <code>x</code> is not provided:</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb192-1"><a href="ch_undefined-null.html#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>(x) {</span>
+<span id="cb192-2"><a href="ch_undefined-null.html#cb192-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x<span class="op">;</span></span>
+<span id="cb192-3"><a href="ch_undefined-null.html#cb192-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb192-4"><a href="ch_undefined-null.html#cb192-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">func</span>()<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div>
+<p>Property <code>.unknownProp</code> is missing:</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb193-1"><a href="ch_undefined-null.html#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb193-2"><a href="ch_undefined-null.html#cb193-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">unknownProp</span><span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div>
+<p>If we don’t explicitly specify the result of a function via a <code>return</code> statement, JavaScript returns <code>undefined</code> for us:</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb194-1"><a href="ch_undefined-null.html#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>() {}</span>
+<span id="cb194-2"><a href="ch_undefined-null.html#cb194-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">func</span>()<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="occurrences-of-null">14.2.2 Occurrences of <code>null</code></h4>
+<p>The prototype of an object is either an object or, at the end of a chain of prototypes, <code>null</code>. <code>Object.prototype</code> does not have a prototype:</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb195-1"><a href="ch_undefined-null.html#cb195-1" aria-hidden="true" tabindex="-1"></a>&gt; Object.getPrototypeOf(Object.prototype)</span>
+<span id="cb195-2"><a href="ch_undefined-null.html#cb195-2" aria-hidden="true" tabindex="-1"></a><span class="kw">null</span></span></code></pre></div>
+<p>If we match a regular expression (such as <code>/a/</code>) against a string (such as <code>'x'</code>), we either get an object with matching data (if matching was successful) or <code>null</code> (if matching failed):</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb196-1"><a href="ch_undefined-null.html#cb196-1" aria-hidden="true" tabindex="-1"></a>&gt; /a/.exec('x')</span>
+<span id="cb196-2"><a href="ch_undefined-null.html#cb196-2" aria-hidden="true" tabindex="-1"></a><span class="kw">null</span></span></code></pre></div>
+<p>The <a href="ch_json.html">JSON data format</a> does not support <code>undefined</code>, only <code>null</code>:</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb197-1"><a href="ch_undefined-null.html#cb197-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify({a: undefined, b: null})</span>
+<span id="cb197-2"><a href="ch_undefined-null.html#cb197-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'{"b":null}'</span></span></code></pre></div>
+<h3 id="checking-for-undefined-or-null">14.3 Checking for <code>undefined</code> or <code>null</code></h3>
+<p>Checking for either:</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb198-1"><a href="ch_undefined-null.html#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">===</span> <span class="kw">null</span>) ···</span>
+<span id="cb198-2"><a href="ch_undefined-null.html#cb198-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">===</span> <span class="kw">undefined</span>) ···</span></code></pre></div>
+<p>Does <code>x</code> have a value?</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb199-1"><a href="ch_undefined-null.html#cb199-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">!==</span> <span class="kw">undefined</span> <span class="op">&amp;&amp;</span> x <span class="op">!==</span> <span class="kw">null</span>) {</span>
+<span id="cb199-2"><a href="ch_undefined-null.html#cb199-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb199-3"><a href="ch_undefined-null.html#cb199-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb199-4"><a href="ch_undefined-null.html#cb199-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x) { <span class="co">// truthy?</span></span>
+<span id="cb199-5"><a href="ch_undefined-null.html#cb199-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// x is neither: undefined, null, false, 0, NaN, ''</span></span>
+<span id="cb199-6"><a href="ch_undefined-null.html#cb199-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Is <code>x</code> either <code>undefined</code> or <code>null</code>?</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb200-1"><a href="ch_undefined-null.html#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">===</span> <span class="kw">undefined</span> <span class="op">||</span> x <span class="op">===</span> <span class="kw">null</span>) {</span>
+<span id="cb200-2"><a href="ch_undefined-null.html#cb200-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb200-3"><a href="ch_undefined-null.html#cb200-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb200-4"><a href="ch_undefined-null.html#cb200-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="op">!</span>x) { <span class="co">// falsy?</span></span>
+<span id="cb200-5"><a href="ch_undefined-null.html#cb200-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// x is: undefined, null, false, 0, NaN, ''</span></span>
+<span id="cb200-6"><a href="ch_undefined-null.html#cb200-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><em>Truthy</em> means “is <code>true</code> if coerced to boolean”. <em>Falsy</em> means “is <code>false</code> if coerced to boolean”. Both concepts are explained properly in <a href="ch_booleans.html#falsiness-truthiness">§15.2 “Falsy and truthy values”</a>.</p>
+<h3 id="nullish-coalescing-operator">14.4 The nullish coalescing operator (<code>??</code>) for default values [ES2020]</h3>
+<p><a id="index-entry-104" class="index-entry"></a> <a id="index-entry-105" class="index-entry"></a> <a id="index-entry-106" class="index-entry"></a> <a id="index-entry-107" class="index-entry"></a> <a id="index-entry-108" class="index-entry"></a></p>
+<p>Sometimes we receive a value and only want to use it if it isn’t either <code>null</code> or <code>undefined</code>. Otherwise, we’d like to use a default value, as a fallback. We can do that via the <em>nullish coalescing operator</em> (<code>??</code>):</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb201-1"><a href="ch_undefined-null.html#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> valueToUse <span class="op">=</span> receivedValue <span class="op">??</span> defaultValue<span class="op">;</span></span></code></pre></div>
+<p>The following two expressions are equivalent:</p>
+<div class="sourceCode" id="cb202"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb202-1"><a href="ch_undefined-null.html#cb202-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">??</span> b</span>
+<span id="cb202-2"><a href="ch_undefined-null.html#cb202-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">!==</span> <span class="kw">undefined</span> <span class="op">&amp;&amp;</span> a <span class="op">!==</span> <span class="kw">null</span> <span class="op">?</span> a <span class="op">:</span> b</span></code></pre></div>
+<h4 id="example-counting-matches">14.4.1 Example: counting matches</h4>
+<p>The following code shows a real-world example:</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb203-1"><a href="ch_undefined-null.html#cb203-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">countMatches</span>(regex<span class="op">,</span> str) {</span>
+<span id="cb203-2"><a href="ch_undefined-null.html#cb203-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> matchResult <span class="op">=</span> str<span class="op">.</span><span class="fu">match</span>(regex)<span class="op">;</span> <span class="co">// null or Array</span></span>
+<span id="cb203-3"><a href="ch_undefined-null.html#cb203-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (matchResult <span class="op">??</span> [])<span class="op">.</span><span class="at">length</span><span class="op">;</span></span>
+<span id="cb203-4"><a href="ch_undefined-null.html#cb203-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb203-5"><a href="ch_undefined-null.html#cb203-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb203-6"><a href="ch_undefined-null.html#cb203-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb203-7"><a href="ch_undefined-null.html#cb203-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">countMatches</span>(<span class="ss">/a/g</span><span class="op">,</span> <span class="st">'ababa'</span>)<span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span>
+<span id="cb203-8"><a href="ch_undefined-null.html#cb203-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb203-9"><a href="ch_undefined-null.html#cb203-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">countMatches</span>(<span class="ss">/b/g</span><span class="op">,</span> <span class="st">'ababa'</span>)<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb203-10"><a href="ch_undefined-null.html#cb203-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb203-11"><a href="ch_undefined-null.html#cb203-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">countMatches</span>(<span class="ss">/x/g</span><span class="op">,</span> <span class="st">'ababa'</span>)<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span></code></pre></div>
+<p>If there are one or more matches for <code>regex</code> inside <code>str</code>, then <code>.match()</code> returns an Array. If there are no matches, it unfortunately returns <code>null</code> (and not the empty Array). We fix that via the <code>??</code> operator.</p>
+<p>We also could have used <a href="ch_single-objects.html#optional-chaining">optional chaining</a>:</p>
+<div class="sourceCode" id="cb204"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb204-1"><a href="ch_undefined-null.html#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> matchResult<span class="op">?.</span><span class="at">length</span> <span class="op">??</span> <span class="dv">0</span><span class="op">;</span></span></code></pre></div>
+<h4 id="example-specifying-a-default-value-for-a-property">14.4.2 Example: specifying a default value for a property</h4>
+<div class="sourceCode" id="cb205"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb205-1"><a href="ch_undefined-null.html#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getTitle</span>(fileDesc) {</span>
+<span id="cb205-2"><a href="ch_undefined-null.html#cb205-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> fileDesc<span class="op">.</span><span class="at">title</span> <span class="op">??</span> <span class="st">'(Untitled)'</span><span class="op">;</span></span>
+<span id="cb205-3"><a href="ch_undefined-null.html#cb205-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb205-4"><a href="ch_undefined-null.html#cb205-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb205-5"><a href="ch_undefined-null.html#cb205-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> files <span class="op">=</span> [</span>
+<span id="cb205-6"><a href="ch_undefined-null.html#cb205-6" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">path</span><span class="op">:</span> <span class="st">'index.html'</span><span class="op">,</span> <span class="dt">title</span><span class="op">:</span> <span class="st">'Home'</span>}<span class="op">,</span></span>
+<span id="cb205-7"><a href="ch_undefined-null.html#cb205-7" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">path</span><span class="op">:</span> <span class="st">'tmp.html'</span>}<span class="op">,</span></span>
+<span id="cb205-8"><a href="ch_undefined-null.html#cb205-8" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb205-9"><a href="ch_undefined-null.html#cb205-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb205-10"><a href="ch_undefined-null.html#cb205-10" aria-hidden="true" tabindex="-1"></a>  files<span class="op">.</span><span class="fu">map</span>(f <span class="kw">=&gt;</span> <span class="fu">getTitle</span>(f))<span class="op">,</span></span>
+<span id="cb205-11"><a href="ch_undefined-null.html#cb205-11" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'Home'</span><span class="op">,</span> <span class="st">'(Untitled)'</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="using-destructuring-for-default-values">14.4.3 Using destructuring for default values</h4>
+<p>In some cases, destructuring can also be used for default values – for example:</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb206-1"><a href="ch_undefined-null.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getTitle</span>(fileDesc) {</span>
+<span id="cb206-2"><a href="ch_undefined-null.html#cb206-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> {title <span class="op">=</span> <span class="st">'(Untitled)'</span>} <span class="op">=</span> fileDesc<span class="op">;</span></span>
+<span id="cb206-3"><a href="ch_undefined-null.html#cb206-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> title<span class="op">;</span></span>
+<span id="cb206-4"><a href="ch_undefined-null.html#cb206-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="legacy-approach-using-logical-or-for-default-values">14.4.4 Legacy approach: using logical Or (<code>||</code>) for default values</h4>
+<p>Before ECMAScript 2020 and the nullish coalescing operator, logical Or was used for default values. That has a downside.</p>
+<p><code>||</code> works as expected for <code>undefined</code> and <code>null</code>:</p>
+<div class="sourceCode" id="cb207"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb207-1"><a href="ch_undefined-null.html#cb207-1" aria-hidden="true" tabindex="-1"></a>&gt; undefined || 'default'</span>
+<span id="cb207-2"><a href="ch_undefined-null.html#cb207-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'default'</span></span>
+<span id="cb207-3"><a href="ch_undefined-null.html#cb207-3" aria-hidden="true" tabindex="-1"></a>&gt; null || 'default'</span>
+<span id="cb207-4"><a href="ch_undefined-null.html#cb207-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'default'</span></span></code></pre></div>
+<p>But it also returns the default for all other falsy values – for example:</p>
+<div class="sourceCode" id="cb208"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb208-1"><a href="ch_undefined-null.html#cb208-1" aria-hidden="true" tabindex="-1"></a>&gt; false || 'default'</span>
+<span id="cb208-2"><a href="ch_undefined-null.html#cb208-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'default'</span></span>
+<span id="cb208-3"><a href="ch_undefined-null.html#cb208-3" aria-hidden="true" tabindex="-1"></a>&gt; 0 || 'default'</span>
+<span id="cb208-4"><a href="ch_undefined-null.html#cb208-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'default'</span></span>
+<span id="cb208-5"><a href="ch_undefined-null.html#cb208-5" aria-hidden="true" tabindex="-1"></a>&gt; 0n || 'default'</span>
+<span id="cb208-6"><a href="ch_undefined-null.html#cb208-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'default'</span></span>
+<span id="cb208-7"><a href="ch_undefined-null.html#cb208-7" aria-hidden="true" tabindex="-1"></a>&gt; '' || 'default'</span>
+<span id="cb208-8"><a href="ch_undefined-null.html#cb208-8" aria-hidden="true" tabindex="-1"></a><span class="kw">'default'</span></span></code></pre></div>
+<p>Compare that to how <code>??</code> works:</p>
+<div class="sourceCode" id="cb209"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb209-1"><a href="ch_undefined-null.html#cb209-1" aria-hidden="true" tabindex="-1"></a>&gt; undefined ?? 'default'</span>
+<span id="cb209-2"><a href="ch_undefined-null.html#cb209-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'default'</span></span>
+<span id="cb209-3"><a href="ch_undefined-null.html#cb209-3" aria-hidden="true" tabindex="-1"></a>&gt; null ?? 'default'</span>
+<span id="cb209-4"><a href="ch_undefined-null.html#cb209-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'default'</span></span>
+<span id="cb209-5"><a href="ch_undefined-null.html#cb209-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb209-6"><a href="ch_undefined-null.html#cb209-6" aria-hidden="true" tabindex="-1"></a>&gt; false ?? 'default'</span>
+<span id="cb209-7"><a href="ch_undefined-null.html#cb209-7" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb209-8"><a href="ch_undefined-null.html#cb209-8" aria-hidden="true" tabindex="-1"></a>&gt; 0 ?? 'default'</span>
+<span id="cb209-9"><a href="ch_undefined-null.html#cb209-9" aria-hidden="true" tabindex="-1"></a><span class="kw">0</span></span>
+<span id="cb209-10"><a href="ch_undefined-null.html#cb209-10" aria-hidden="true" tabindex="-1"></a>&gt; 0n ?? 'default'</span>
+<span id="cb209-11"><a href="ch_undefined-null.html#cb209-11" aria-hidden="true" tabindex="-1"></a><span class="kw">0n</span></span>
+<span id="cb209-12"><a href="ch_undefined-null.html#cb209-12" aria-hidden="true" tabindex="-1"></a>&gt; '' ?? 'default'</span>
+<span id="cb209-13"><a href="ch_undefined-null.html#cb209-13" aria-hidden="true" tabindex="-1"></a><span class="kw">''</span></span></code></pre></div>
+<h4 id="nullish-coalescing-assignment-operator">14.4.5 The nullish coalescing assignment operator (<code>??=</code>)</h4>
+<p><a id="index-entry-109" class="index-entry"></a><a id="index-entry-110" class="index-entry"></a> <a id="index-entry-111" class="index-entry"></a></p>
+<p><code>??=</code> is a <a href="ch_operators.html#logical-assignment-operators">logical assignment operator</a>. The following two expressions are roughly equivalent:</p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb210-1"><a href="ch_undefined-null.html#cb210-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">??=</span> b</span>
+<span id="cb210-2"><a href="ch_undefined-null.html#cb210-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">??</span> (a <span class="op">=</span> b)</span></code></pre></div>
+<p>That means that <code>??=</code> is <a href="ch_booleans.html#short-circuiting">short-circuiting</a>: The assignment is only made if <code>a</code> is <code>undefined</code> or <code>null</code>.</p>
+<h5 id="example-using-to-add-missing-properties">14.4.5.1 Example: using <code>??=</code> to add missing properties</h5>
+<div class="sourceCode" id="cb211"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb211-1"><a href="ch_undefined-null.html#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> books <span class="op">=</span> [</span>
+<span id="cb211-2"><a href="ch_undefined-null.html#cb211-2" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb211-3"><a href="ch_undefined-null.html#cb211-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">isbn</span><span class="op">:</span> <span class="st">'123'</span><span class="op">,</span></span>
+<span id="cb211-4"><a href="ch_undefined-null.html#cb211-4" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb211-5"><a href="ch_undefined-null.html#cb211-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb211-6"><a href="ch_undefined-null.html#cb211-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">title</span><span class="op">:</span> <span class="st">'ECMAScript Language Specification'</span><span class="op">,</span></span>
+<span id="cb211-7"><a href="ch_undefined-null.html#cb211-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">isbn</span><span class="op">:</span> <span class="st">'456'</span><span class="op">,</span></span>
+<span id="cb211-8"><a href="ch_undefined-null.html#cb211-8" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb211-9"><a href="ch_undefined-null.html#cb211-9" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb211-10"><a href="ch_undefined-null.html#cb211-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb211-11"><a href="ch_undefined-null.html#cb211-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Add property .title where it’s missing</span></span>
+<span id="cb211-12"><a href="ch_undefined-null.html#cb211-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> book <span class="kw">of</span> books) {</span>
+<span id="cb211-13"><a href="ch_undefined-null.html#cb211-13" aria-hidden="true" tabindex="-1"></a>  book<span class="op">.</span><span class="at">title</span> <span class="op">??=</span> <span class="st">'(Untitled)'</span><span class="op">;</span></span>
+<span id="cb211-14"><a href="ch_undefined-null.html#cb211-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb211-15"><a href="ch_undefined-null.html#cb211-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb211-16"><a href="ch_undefined-null.html#cb211-16" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb211-17"><a href="ch_undefined-null.html#cb211-17" aria-hidden="true" tabindex="-1"></a>  books<span class="op">,</span></span>
+<span id="cb211-18"><a href="ch_undefined-null.html#cb211-18" aria-hidden="true" tabindex="-1"></a>  [</span>
+<span id="cb211-19"><a href="ch_undefined-null.html#cb211-19" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb211-20"><a href="ch_undefined-null.html#cb211-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">isbn</span><span class="op">:</span> <span class="st">'123'</span><span class="op">,</span></span>
+<span id="cb211-21"><a href="ch_undefined-null.html#cb211-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span><span class="op">:</span> <span class="st">'(Untitled)'</span><span class="op">,</span></span>
+<span id="cb211-22"><a href="ch_undefined-null.html#cb211-22" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb211-23"><a href="ch_undefined-null.html#cb211-23" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb211-24"><a href="ch_undefined-null.html#cb211-24" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span><span class="op">:</span> <span class="st">'ECMAScript Language Specification'</span><span class="op">,</span></span>
+<span id="cb211-25"><a href="ch_undefined-null.html#cb211-25" aria-hidden="true" tabindex="-1"></a>      <span class="dt">isbn</span><span class="op">:</span> <span class="st">'456'</span><span class="op">,</span></span>
+<span id="cb211-26"><a href="ch_undefined-null.html#cb211-26" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb211-27"><a href="ch_undefined-null.html#cb211-27" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">;</span></span></code></pre></div>
+<h3 id="undefined-and-null-dont-have-properties">14.5 <code>undefined</code> and <code>null</code> don’t have properties</h3>
+<p><code>undefined</code> and <code>null</code> are the only two JavaScript values where we get an exception if we try to read a property. To explore this phenomenon, let’s use the following function, which reads (“gets”) property <code>.foo</code> and returns the result.</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb212-1"><a href="ch_undefined-null.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getFoo</span>(x) {</span>
+<span id="cb212-2"><a href="ch_undefined-null.html#cb212-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x<span class="op">.</span><span class="at">foo</span><span class="op">;</span></span>
+<span id="cb212-3"><a href="ch_undefined-null.html#cb212-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>If we apply <code>getFoo()</code> to various values, we can see that it only fails for <code>undefined</code> and <code>null</code>:</p>
+<div class="sourceCode" id="cb213"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb213-1"><a href="ch_undefined-null.html#cb213-1" aria-hidden="true" tabindex="-1"></a>&gt; getFoo(undefined)</span>
+<span id="cb213-2"><a href="ch_undefined-null.html#cb213-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Cannot read property 'foo' of undefined</span></span>
+<span id="cb213-3"><a href="ch_undefined-null.html#cb213-3" aria-hidden="true" tabindex="-1"></a>&gt; getFoo(null)</span>
+<span id="cb213-4"><a href="ch_undefined-null.html#cb213-4" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Cannot read property 'foo' of null</span></span>
+<span id="cb213-5"><a href="ch_undefined-null.html#cb213-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb213-6"><a href="ch_undefined-null.html#cb213-6" aria-hidden="true" tabindex="-1"></a>&gt; getFoo(true)</span>
+<span id="cb213-7"><a href="ch_undefined-null.html#cb213-7" aria-hidden="true" tabindex="-1"></a><span class="kw">undefined</span></span>
+<span id="cb213-8"><a href="ch_undefined-null.html#cb213-8" aria-hidden="true" tabindex="-1"></a>&gt; getFoo({})</span>
+<span id="cb213-9"><a href="ch_undefined-null.html#cb213-9" aria-hidden="true" tabindex="-1"></a><span class="kw">undefined</span></span></code></pre></div>
+<h3 id="the-history-of-undefined-and-null">14.6 The history of <code>undefined</code> and <code>null</code></h3>
+<p>In Java (which inspired many aspects of JavaScript), initialization values depend on the static type of a variable:</p>
+<ul>
+<li>Variables with object types are initialized with <code>null</code>.</li>
+<li>Each primitive type has its own initialization value. For example, <code>int</code> variables are initialized with <code>0</code>.</li>
+</ul>
+<p>In JavaScript, each variable can hold both object values and primitive values. Therefore, if <code>null</code> means “not an object”, JavaScript also needs an initialization value that means “neither an object nor a primitive value”. That initialization value is <code>undefined</code>.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/9">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_booleans.html">15 Booleans</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

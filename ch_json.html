@@ -1,0 +1,351 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_json">45 Creating and parsing JSON (<code>JSON</code>)</h2>
+<p><a id="index-entry-499" class="index-entry"></a> <a id="index-entry-500" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>45.1 <a href="ch_json.html#the-discovery-and-standardization-of-json">The discovery and standardization of JSON</a>
+<ul>
+<li>45.1.1 <a href="ch_json.html#jsons-grammar-is-frozen">JSON’s grammar is frozen</a></li>
+</ul></li>
+<li>45.2 <a href="ch_json.html#json-syntax">JSON syntax</a></li>
+<li>45.3 <a href="ch_json.html#using-the-json-api">Using the <code>JSON</code> API</a>
+<ul>
+<li>45.3.1 <a href="ch_json.html#JSON.stringify"><code>JSON.stringify(data, replacer?, space?)</code></a></li>
+<li>45.3.2 <a href="ch_json.html#json.parsetext-reviver"><code>JSON.parse(text, reviver?)</code></a></li>
+<li>45.3.3 <a href="ch_json.html#example-converting-to-and-from-json">Example: converting to and from JSON</a></li>
+</ul></li>
+<li>45.4 <a href="ch_json.html#json-replacers-revivers">Customizing stringification and parsing (advanced)</a>
+<ul>
+<li>45.4.1 <a href="ch_json.html#stringfy-specifying-which-properties-of-objects-to-stringify"><code>.stringfy()</code>: specifying which properties of objects to stringify</a></li>
+<li>45.4.2 <a href="ch_json.html#json-value-visitors"><code>.stringify()</code> and <code>.parse()</code>: value visitors</a></li>
+<li>45.4.3 <a href="ch_json.html#example-visiting-values">Example: visiting values</a></li>
+<li>45.4.4 <a href="ch_json.html#example-stringifying-unsupported-values">Example: stringifying unsupported values</a></li>
+<li>45.4.5 <a href="ch_json.html#example-parsing-unsupported-values">Example: parsing unsupported values</a></li>
+</ul></li>
+<li>45.5 <a href="ch_json.html#faq">FAQ</a>
+<ul>
+<li>45.5.1 <a href="ch_json.html#why-doesnt-json-support-comments">Why doesn’t JSON support comments?</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>JSON (“JavaScript Object Notation”) is a storage format that uses text to encode data. Its syntax is a subset of JavaScript expressions. As an example, consider the following text, stored in a file <code>jane.json</code>:</p>
+<div class="sourceCode" id="cb1381"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1381-1"><a href="ch_json.html#cb1381-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1381-2"><a href="ch_json.html#cb1381-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"first"</span><span class="op">:</span> <span class="st">"Jane"</span><span class="op">,</span></span>
+<span id="cb1381-3"><a href="ch_json.html#cb1381-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"last"</span><span class="op">:</span> <span class="st">"Porter"</span><span class="op">,</span></span>
+<span id="cb1381-4"><a href="ch_json.html#cb1381-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"married"</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb1381-5"><a href="ch_json.html#cb1381-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"born"</span><span class="op">:</span> <span class="dv">1890</span><span class="op">,</span></span>
+<span id="cb1381-6"><a href="ch_json.html#cb1381-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"friends"</span><span class="op">:</span> [ <span class="st">"Tarzan"</span><span class="op">,</span> <span class="st">"Cheeta"</span> ]</span>
+<span id="cb1381-7"><a href="ch_json.html#cb1381-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>JavaScript has the global namespace object <code>JSON</code> that provides methods for creating and parsing JSON.</p>
+<h3 id="the-discovery-and-standardization-of-json">45.1 The discovery and standardization of JSON</h3>
+<p>A specification for JSON was published by Douglas Crockford in 2001, at <a href="http://json.org/"><code>json.org</code></a>. He explains:</p>
+<blockquote>
+<p>I discovered JSON. I do not claim to have invented JSON because it already existed in nature. What I did was I found it, I named it, I described how it was useful. I don’t claim to be the first person to have discovered it; I know that there are other people who discovered it at least a year before I did. The earliest occurrence I’ve found was, there was someone at Netscape who was using JavaScript array literals for doing data communication as early as 1996, which was at least five years before I stumbled onto the idea.</p>
+</blockquote>
+<p>Later, JSON was standardized as <a href="https://www.ecma-international.org/publications/standards/Ecma-404.htm">ECMA-404</a>:</p>
+<ul>
+<li>1st edition: October 2013</li>
+<li>2nd edition: December 2017</li>
+</ul>
+<h4 id="jsons-grammar-is-frozen">45.1.1 JSON’s grammar is frozen</h4>
+<p>Quoting the ECMA-404 standard:</p>
+<blockquote>
+<p>Because it is so simple, it is not expected that the JSON grammar will ever change. This gives JSON, as a foundational notation, tremendous stability.</p>
+</blockquote>
+<p>Therefore, JSON will never get improvements such as optional trailing commas, comments, or unquoted keys – independently of whether or not they are considered desirable. However, that still leaves room for creating supersets of JSON that compile to plain JSON.</p>
+<h3 id="json-syntax">45.2 JSON syntax</h3>
+<p><a id="index-entry-501" class="index-entry"></a></p>
+<p>JSON consists of the following parts of JavaScript:</p>
+<ul>
+<li>Compound:
+<ul>
+<li>Object literals:
+<ul>
+<li>Property keys are double-quoted strings.</li>
+<li>Property values are JSON values.</li>
+<li>No trailing commas are allowed.</li>
+</ul></li>
+<li>Array literals:
+<ul>
+<li>Elements are JSON values.</li>
+<li>No holes or trailing commas are allowed.</li>
+</ul></li>
+</ul></li>
+<li>Atomic:
+<ul>
+<li><code>null</code> (but not <code>undefined</code>)</li>
+<li>Booleans</li>
+<li>Numbers (excluding <code>NaN</code>, <code>+Infinity</code>, <code>-Infinity</code>)</li>
+<li>Strings (must be double-quoted)</li>
+</ul></li>
+</ul>
+<p>As a consequence, you can’t (directly) represent cyclic structures in JSON.</p>
+<h3 id="using-the-json-api">45.3 Using the <code>JSON</code> API</h3>
+<p>The global namespace object <code>JSON</code> contains methods for working with JSON data.</p>
+<h4 id="JSON.stringify">45.3.1 <code>JSON.stringify(data, replacer?, space?)</code></h4>
+<p><code>.stringify()</code> converts JavaScript <code>data</code> to a JSON string. In this section, we are ignoring the parameter <code>replacer</code>; it is explained in <a href="ch_json.html#json-replacers-revivers">§45.4 “Customizing stringification and parsing”</a>.</p>
+<h5 id="result-a-single-line-of-text">45.3.1.1 Result: a single line of text</h5>
+<p>If you only provide the first argument, <code>.stringify()</code> returns a single line of text:</p>
+<div class="sourceCode" id="cb1382"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1382-1"><a href="ch_json.html#cb1382-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1382-2"><a href="ch_json.html#cb1382-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({<span class="dt">foo</span><span class="op">:</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]})<span class="op">,</span></span>
+<span id="cb1382-3"><a href="ch_json.html#cb1382-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'{"foo":["a","b"]}'</span> )<span class="op">;</span></span></code></pre></div>
+<h5 id="result-a-tree-of-indented-lines">45.3.1.2 Result: a tree of indented lines</h5>
+<p>If you provide a non-negative integer for <code>space</code>, then <code>.stringify()</code> returns one or more lines and indents by <code>space</code> spaces per level of nesting:</p>
+<div class="sourceCode" id="cb1383"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1383-1"><a href="ch_json.html#cb1383-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1383-2"><a href="ch_json.html#cb1383-2" aria-hidden="true" tabindex="-1"></a><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({<span class="dt">foo</span><span class="op">:</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]}<span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">,</span></span>
+<span id="cb1383-3"><a href="ch_json.html#cb1383-3" aria-hidden="true" tabindex="-1"></a><span class="vs">`{</span></span>
+<span id="cb1383-4"><a href="ch_json.html#cb1383-4" aria-hidden="true" tabindex="-1"></a><span class="vs">  "foo": [</span></span>
+<span id="cb1383-5"><a href="ch_json.html#cb1383-5" aria-hidden="true" tabindex="-1"></a><span class="vs">    "a",</span></span>
+<span id="cb1383-6"><a href="ch_json.html#cb1383-6" aria-hidden="true" tabindex="-1"></a><span class="vs">    "b"</span></span>
+<span id="cb1383-7"><a href="ch_json.html#cb1383-7" aria-hidden="true" tabindex="-1"></a><span class="vs">  ]</span></span>
+<span id="cb1383-8"><a href="ch_json.html#cb1383-8" aria-hidden="true" tabindex="-1"></a><span class="vs">}`</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="stringification-details">45.3.1.3 Details on how JavaScript data is stringified</h5>
+<p><strong>Primitive values:</strong></p>
+<ul>
+<li><p>Supported primitive values are stringified as expected:</p>
+<div class="sourceCode" id="cb1384"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1384-1"><a href="ch_json.html#cb1384-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify('abc')</span>
+<span id="cb1384-2"><a href="ch_json.html#cb1384-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'"abc"'</span></span>
+<span id="cb1384-3"><a href="ch_json.html#cb1384-3" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(123)</span>
+<span id="cb1384-4"><a href="ch_json.html#cb1384-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'123'</span></span>
+<span id="cb1384-5"><a href="ch_json.html#cb1384-5" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(null)</span>
+<span id="cb1384-6"><a href="ch_json.html#cb1384-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'null'</span></span></code></pre></div></li>
+<li><p>Unsupported numbers: <code>'null'</code></p>
+<div class="sourceCode" id="cb1385"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1385-1"><a href="ch_json.html#cb1385-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(NaN)</span>
+<span id="cb1385-2"><a href="ch_json.html#cb1385-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'null'</span></span>
+<span id="cb1385-3"><a href="ch_json.html#cb1385-3" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(Infinity)</span>
+<span id="cb1385-4"><a href="ch_json.html#cb1385-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'null'</span></span></code></pre></div></li>
+<li><p>Bigints: <code>TypeError</code></p>
+<div class="sourceCode" id="cb1386"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1386-1"><a href="ch_json.html#cb1386-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(123n)</span>
+<span id="cb1386-2"><a href="ch_json.html#cb1386-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Do not know how to serialize a BigInt</span></span></code></pre></div></li>
+<li><p>Other unsupported primitive values are not stringified; they produce the result <code>undefined</code>:</p>
+<div class="sourceCode" id="cb1387"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1387-1"><a href="ch_json.html#cb1387-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(undefined)</span>
+<span id="cb1387-2"><a href="ch_json.html#cb1387-2" aria-hidden="true" tabindex="-1"></a><span class="kw">undefined</span></span>
+<span id="cb1387-3"><a href="ch_json.html#cb1387-3" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(Symbol())</span>
+<span id="cb1387-4"><a href="ch_json.html#cb1387-4" aria-hidden="true" tabindex="-1"></a><span class="kw">undefined</span></span></code></pre></div></li>
+</ul>
+<p><strong>Objects:</strong></p>
+<ul>
+<li><p>If an object has a method <code>.toJSON()</code>, then the result of that method is stringified:</p>
+<div class="sourceCode" id="cb1388"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1388-1"><a href="ch_json.html#cb1388-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify({toJSON() {return true}})</span>
+<span id="cb1388-2"><a href="ch_json.html#cb1388-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'true'</span></span></code></pre></div>
+<p>Dates have a method <code>.toJSON()</code> that returns a string:</p>
+<div class="sourceCode" id="cb1389"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1389-1"><a href="ch_json.html#cb1389-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(new Date(2999, 11, 31))</span>
+<span id="cb1389-2"><a href="ch_json.html#cb1389-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'"2999-12-30T23:00:00.000Z"'</span></span></code></pre></div></li>
+<li><p>Wrapped primitive values are unwrapped and stringified:</p>
+<div class="sourceCode" id="cb1390"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1390-1"><a href="ch_json.html#cb1390-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(new Boolean(true))</span>
+<span id="cb1390-2"><a href="ch_json.html#cb1390-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'true'</span></span>
+<span id="cb1390-3"><a href="ch_json.html#cb1390-3" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(new Number(123))</span>
+<span id="cb1390-4"><a href="ch_json.html#cb1390-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'123'</span></span></code></pre></div></li>
+<li><p>Arrays are stringified as Array literals. Unsupported Array elements are stringified as if they were <code>null</code>:</p>
+<div class="sourceCode" id="cb1391"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1391-1"><a href="ch_json.html#cb1391-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify([undefined, 123, Symbol()])</span>
+<span id="cb1391-2"><a href="ch_json.html#cb1391-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'[null,123,null]'</span></span></code></pre></div></li>
+<li><p>All other objects – except for functions – are stringified as object literals. Properties with unsupported values are omitted:</p>
+<div class="sourceCode" id="cb1392"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1392-1"><a href="ch_json.html#cb1392-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify({a: Symbol(), b: true})</span>
+<span id="cb1392-2"><a href="ch_json.html#cb1392-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'{"b":true}'</span></span></code></pre></div></li>
+<li><p>Functions are not stringified:</p>
+<div class="sourceCode" id="cb1393"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1393-1"><a href="ch_json.html#cb1393-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(() =&gt; {})</span>
+<span id="cb1393-2"><a href="ch_json.html#cb1393-2" aria-hidden="true" tabindex="-1"></a><span class="kw">undefined</span></span></code></pre></div></li>
+</ul>
+<h4 id="json.parsetext-reviver">45.3.2 <code>JSON.parse(text, reviver?)</code></h4>
+<p><code>.parse()</code> converts a JSON <code>text</code> to a JavaScript value. In this section, we are ignoring the parameter <code>reviver</code>; it is explained <a href="ch_json.html#json-replacers-revivers">§45.4 “Customizing stringification and parsing”</a>.</p>
+<p>This is an example of using <code>.parse()</code>:</p>
+<div class="sourceCode" id="cb1394"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1394-1"><a href="ch_json.html#cb1394-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.parse('{"foo":["a","b"]}')</span>
+<span id="cb1394-2"><a href="ch_json.html#cb1394-2" aria-hidden="true" tabindex="-1"></a><span class="kw">{ foo: [ 'a', 'b' ] }</span></span></code></pre></div>
+<h4 id="example-converting-to-and-from-json">45.3.3 Example: converting to and from JSON</h4>
+<p>The following class implements conversions from (line A) and to (line B) JSON.</p>
+<div class="sourceCode" id="cb1395"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1395-1"><a href="ch_json.html#cb1395-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="bu">Point</span> {</span>
+<span id="cb1395-2"><a href="ch_json.html#cb1395-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">static</span> <span class="fu">fromJson</span>(jsonObj) { <span class="co">// (A)</span></span>
+<span id="cb1395-3"><a href="ch_json.html#cb1395-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Point</span>(jsonObj<span class="op">.</span><span class="at">x</span><span class="op">,</span> jsonObj<span class="op">.</span><span class="at">y</span>)<span class="op">;</span></span>
+<span id="cb1395-4"><a href="ch_json.html#cb1395-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1395-5"><a href="ch_json.html#cb1395-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1395-6"><a href="ch_json.html#cb1395-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(x<span class="op">,</span> y) {</span>
+<span id="cb1395-7"><a href="ch_json.html#cb1395-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">x</span> <span class="op">=</span> x<span class="op">;</span></span>
+<span id="cb1395-8"><a href="ch_json.html#cb1395-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">y</span> <span class="op">=</span> y<span class="op">;</span></span>
+<span id="cb1395-9"><a href="ch_json.html#cb1395-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1395-10"><a href="ch_json.html#cb1395-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1395-11"><a href="ch_json.html#cb1395-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">toJSON</span>() { <span class="co">// (B)</span></span>
+<span id="cb1395-12"><a href="ch_json.html#cb1395-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="dt">x</span><span class="op">:</span> <span class="kw">this</span><span class="op">.</span><span class="at">x</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="kw">this</span><span class="op">.</span><span class="at">y</span>}<span class="op">;</span></span>
+<span id="cb1395-13"><a href="ch_json.html#cb1395-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1395-14"><a href="ch_json.html#cb1395-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<ul>
+<li><p>Converting JSON to a point: We use the static method <code>Point.fromJson()</code> to parse JSON and create an instance of <code>Point</code>.</p>
+<div class="sourceCode" id="cb1396"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1396-1"><a href="ch_json.html#cb1396-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1396-2"><a href="ch_json.html#cb1396-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Point</span><span class="op">.</span><span class="fu">fromJson</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(<span class="st">'{"x":3,"y":5}'</span>))<span class="op">,</span></span>
+<span id="cb1396-3"><a href="ch_json.html#cb1396-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="bu">Point</span>(<span class="dv">3</span><span class="op">,</span> <span class="dv">5</span>) )<span class="op">;</span></span></code></pre></div></li>
+<li><p>Converting a point to JSON: <code>JSON.stringify()</code> internally calls <a href="ch_json.html#stringification-details">the previously mentioned method <code>.toJSON()</code></a>.</p>
+<div class="sourceCode" id="cb1397"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1397-1"><a href="ch_json.html#cb1397-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1397-2"><a href="ch_json.html#cb1397-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(<span class="kw">new</span> <span class="bu">Point</span>(<span class="dv">3</span><span class="op">,</span> <span class="dv">5</span>))<span class="op">,</span></span>
+<span id="cb1397-3"><a href="ch_json.html#cb1397-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'{"x":3,"y":5}'</span> )<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Converting an object to and from JSON</strong></p>
+<p><code>exercises/json/to_from_json_test.mjs</code></p>
+</div>
+<h3 id="json-replacers-revivers">45.4 Customizing stringification and parsing (advanced)</h3>
+<p>Stringification and parsing can be customized as follows:</p>
+<ul>
+<li><p><code>JSON.stringify(data, replacer?, space?)</code></p>
+<p>The optional parameter <code>replacer</code> contains either:</p>
+<ul>
+<li>An Array with names of properties. If a value in <code>data</code> is stringified as an object literal, then only the mentioned properties are considered. All other properties are ignored.</li>
+<li>A <em>value visitor</em>, a function that can transform JavaScript data before it is stringified.</li>
+</ul></li>
+<li><p><code>JSON.parse(text, reviver?)</code></p>
+<p>The optional parameter <code>reviver</code> contains a value visitor that can transform the parsed JSON data before it is returned.</p></li>
+</ul>
+<h4 id="stringfy-specifying-which-properties-of-objects-to-stringify">45.4.1 <code>.stringfy()</code>: specifying which properties of objects to stringify</h4>
+<p>If the second parameter of <code>.stringify()</code> is an Array, then only object properties, whose names are mentioned there, are included in the result:</p>
+<div class="sourceCode" id="cb1398"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1398-1"><a href="ch_json.html#cb1398-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb1398-2"><a href="ch_json.html#cb1398-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">a</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb1398-3"><a href="ch_json.html#cb1398-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">b</span><span class="op">:</span> {</span>
+<span id="cb1398-4"><a href="ch_json.html#cb1398-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">c</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span></span>
+<span id="cb1398-5"><a href="ch_json.html#cb1398-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">d</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span></span>
+<span id="cb1398-6"><a href="ch_json.html#cb1398-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1398-7"><a href="ch_json.html#cb1398-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb1398-8"><a href="ch_json.html#cb1398-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1398-9"><a href="ch_json.html#cb1398-9" aria-hidden="true" tabindex="-1"></a>  <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(obj<span class="op">,</span> [<span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>])<span class="op">,</span></span>
+<span id="cb1398-10"><a href="ch_json.html#cb1398-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">'{"b":{"c":2}}'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="json-value-visitors">45.4.2 <code>.stringify()</code> and <code>.parse()</code>: value visitors</h4>
+<p>What I call a <em>value visitor</em> is a function that transforms JavaScript data:</p>
+<ul>
+<li><code>JSON.stringify()</code> lets the value visitor in its parameter <code>replacer</code> transform JavaScript data before it is stringified.</li>
+<li><code>JSON.parse()</code> lets the value visitor in its parameter <code>reviver</code> transform parsed JavaScript data before it is returned.</li>
+</ul>
+<p>In this section, JavaScript data is considered to be a tree of values. If the data is atomic, it is a tree that only has a root. All values in the tree are fed to the value visitor, one at a time. Depending on what the visitor returns, the current value is omitted, changed, or preserved.</p>
+<p>A value visitor has the following type signature:</p>
+<div class="sourceCode" id="cb1399"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1399-1"><a href="ch_json.html#cb1399-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> ValueVisitor <span class="op">=</span> (key<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> value<span class="op">:</span> <span class="dt">any</span>) <span class="kw">=&gt;</span> <span class="dt">any</span><span class="op">;</span></span></code></pre></div>
+<p>The parameters are:</p>
+<ul>
+<li><code>value</code>: The current value.</li>
+<li><code>this</code>: Parent of current value. The parent of the root value <code>r</code> is <code>{'': r}</code>.
+<ul>
+<li>Note: <code>this</code> is an implicit parameter and only available if the value visitor is an ordinary function.</li>
+</ul></li>
+<li><code>key</code>: Key or index of the current value inside its parent. The key of the root value is <code>''</code>.</li>
+</ul>
+<p>The value visitor can return:</p>
+<ul>
+<li><code>value</code>: means there won’t be any change.</li>
+<li>A different value <code>x</code>: leads to <code>value</code> being replaced with <code>x</code> in the output tree.</li>
+<li><code>undefined</code>: leads to <code>value</code> being omitted in the output tree.</li>
+</ul>
+<h4 id="example-visiting-values">45.4.3 Example: visiting values</h4>
+<p>The following code shows in which order a value visitor sees values:</p>
+<div class="sourceCode" id="cb1400"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1400-1"><a href="ch_json.html#cb1400-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> log <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb1400-2"><a href="ch_json.html#cb1400-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">valueVisitor</span>(key<span class="op">,</span> value) {</span>
+<span id="cb1400-3"><a href="ch_json.html#cb1400-3" aria-hidden="true" tabindex="-1"></a>  log<span class="op">.</span><span class="fu">push</span>({<span class="kw">this</span><span class="op">:</span> <span class="kw">this</span><span class="op">,</span> key<span class="op">,</span> value})<span class="op">;</span></span>
+<span id="cb1400-4"><a href="ch_json.html#cb1400-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> value<span class="op">;</span> <span class="co">// no change</span></span>
+<span id="cb1400-5"><a href="ch_json.html#cb1400-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1400-6"><a href="ch_json.html#cb1400-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1400-7"><a href="ch_json.html#cb1400-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> <span class="bu">root</span> <span class="op">=</span> {</span>
+<span id="cb1400-8"><a href="ch_json.html#cb1400-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">a</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb1400-9"><a href="ch_json.html#cb1400-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">b</span><span class="op">:</span> {</span>
+<span id="cb1400-10"><a href="ch_json.html#cb1400-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">c</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span></span>
+<span id="cb1400-11"><a href="ch_json.html#cb1400-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">d</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span></span>
+<span id="cb1400-12"><a href="ch_json.html#cb1400-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1400-13"><a href="ch_json.html#cb1400-13" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb1400-14"><a href="ch_json.html#cb1400-14" aria-hidden="true" tabindex="-1"></a><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(<span class="bu">root</span><span class="op">,</span> valueVisitor)<span class="op">;</span></span>
+<span id="cb1400-15"><a href="ch_json.html#cb1400-15" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(log<span class="op">,</span> [</span>
+<span id="cb1400-16"><a href="ch_json.html#cb1400-16" aria-hidden="true" tabindex="-1"></a>  { <span class="kw">this</span><span class="op">:</span> { <span class="st">''</span><span class="op">:</span> <span class="bu">root</span> }<span class="op">,</span> <span class="dt">key</span><span class="op">:</span> <span class="st">''</span><span class="op">,</span>  <span class="dt">value</span><span class="op">:</span> <span class="bu">root</span>   }<span class="op">,</span></span>
+<span id="cb1400-17"><a href="ch_json.html#cb1400-17" aria-hidden="true" tabindex="-1"></a>  { <span class="kw">this</span><span class="op">:</span> <span class="bu">root</span>        <span class="op">,</span> <span class="dt">key</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">1</span>      }<span class="op">,</span></span>
+<span id="cb1400-18"><a href="ch_json.html#cb1400-18" aria-hidden="true" tabindex="-1"></a>  { <span class="kw">this</span><span class="op">:</span> <span class="bu">root</span>        <span class="op">,</span> <span class="dt">key</span><span class="op">:</span> <span class="st">'b'</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="bu">root</span><span class="op">.</span><span class="at">b</span> }<span class="op">,</span></span>
+<span id="cb1400-19"><a href="ch_json.html#cb1400-19" aria-hidden="true" tabindex="-1"></a>  { <span class="kw">this</span><span class="op">:</span> <span class="bu">root</span><span class="op">.</span><span class="at">b</span>      <span class="op">,</span> <span class="dt">key</span><span class="op">:</span> <span class="st">'c'</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">2</span>      }<span class="op">,</span></span>
+<span id="cb1400-20"><a href="ch_json.html#cb1400-20" aria-hidden="true" tabindex="-1"></a>  { <span class="kw">this</span><span class="op">:</span> <span class="bu">root</span><span class="op">.</span><span class="at">b</span>      <span class="op">,</span> <span class="dt">key</span><span class="op">:</span> <span class="st">'d'</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">3</span>      }<span class="op">,</span></span>
+<span id="cb1400-21"><a href="ch_json.html#cb1400-21" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span></code></pre></div>
+<p>As we can see, the replacer of <code>JSON.stringify()</code> visits values top-down (root first, leaves last). The rationale for going in that direction is that we are converting JavaScript values to JSON values. And a single JavaScript object may be expanded into a tree of JSON-compatible values.</p>
+<p>In contrast, the reviver of <code>JSON.parse()</code> visits values bottom-up (leaves first, root last). The rationale for going in that direction is that we are assembling JSON values into JavaScript values. Therefore, we need to convert the parts before we can convert the whole.</p>
+<h4 id="example-stringifying-unsupported-values">45.4.4 Example: stringifying unsupported values</h4>
+<p><code>JSON.stringify()</code> has no special support for regular expression objects – it stringifies them as if they were plain objects:</p>
+<div class="sourceCode" id="cb1401"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1401-1"><a href="ch_json.html#cb1401-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb1401-2"><a href="ch_json.html#cb1401-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">'abc'</span><span class="op">,</span></span>
+<span id="cb1401-3"><a href="ch_json.html#cb1401-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">regex</span><span class="op">:</span> <span class="ss">/abc/ui</span><span class="op">,</span></span>
+<span id="cb1401-4"><a href="ch_json.html#cb1401-4" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb1401-5"><a href="ch_json.html#cb1401-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1401-6"><a href="ch_json.html#cb1401-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(obj)<span class="op">,</span></span>
+<span id="cb1401-7"><a href="ch_json.html#cb1401-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">'{"name":"abc","regex":{}}'</span>)<span class="op">;</span></span></code></pre></div>
+<p>We can fix that via a replacer:</p>
+<div class="sourceCode" id="cb1402"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1402-1"><a href="ch_json.html#cb1402-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">replacer</span>(key<span class="op">,</span> value) {</span>
+<span id="cb1402-2"><a href="ch_json.html#cb1402-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (value <span class="kw">instanceof</span> <span class="bu">RegExp</span>) {</span>
+<span id="cb1402-3"><a href="ch_json.html#cb1402-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb1402-4"><a href="ch_json.html#cb1402-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">__type__</span><span class="op">:</span> <span class="st">'RegExp'</span><span class="op">,</span></span>
+<span id="cb1402-5"><a href="ch_json.html#cb1402-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">source</span><span class="op">:</span> value<span class="op">.</span><span class="at">source</span><span class="op">,</span></span>
+<span id="cb1402-6"><a href="ch_json.html#cb1402-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">flags</span><span class="op">:</span> value<span class="op">.</span><span class="at">flags</span><span class="op">,</span></span>
+<span id="cb1402-7"><a href="ch_json.html#cb1402-7" aria-hidden="true" tabindex="-1"></a>    }<span class="op">;</span></span>
+<span id="cb1402-8"><a href="ch_json.html#cb1402-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb1402-9"><a href="ch_json.html#cb1402-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> value<span class="op">;</span> <span class="co">// no change</span></span>
+<span id="cb1402-10"><a href="ch_json.html#cb1402-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1402-11"><a href="ch_json.html#cb1402-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1402-12"><a href="ch_json.html#cb1402-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1402-13"><a href="ch_json.html#cb1402-13" aria-hidden="true" tabindex="-1"></a><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(obj<span class="op">,</span> replacer<span class="op">,</span> <span class="dv">2</span>)<span class="op">,</span></span>
+<span id="cb1402-14"><a href="ch_json.html#cb1402-14" aria-hidden="true" tabindex="-1"></a><span class="vs">`{</span></span>
+<span id="cb1402-15"><a href="ch_json.html#cb1402-15" aria-hidden="true" tabindex="-1"></a><span class="vs">  "name": "abc",</span></span>
+<span id="cb1402-16"><a href="ch_json.html#cb1402-16" aria-hidden="true" tabindex="-1"></a><span class="vs">  "regex": {</span></span>
+<span id="cb1402-17"><a href="ch_json.html#cb1402-17" aria-hidden="true" tabindex="-1"></a><span class="vs">    "__type__": "RegExp",</span></span>
+<span id="cb1402-18"><a href="ch_json.html#cb1402-18" aria-hidden="true" tabindex="-1"></a><span class="vs">    "source": "abc",</span></span>
+<span id="cb1402-19"><a href="ch_json.html#cb1402-19" aria-hidden="true" tabindex="-1"></a><span class="vs">    "flags": "iu"</span></span>
+<span id="cb1402-20"><a href="ch_json.html#cb1402-20" aria-hidden="true" tabindex="-1"></a><span class="vs">  }</span></span>
+<span id="cb1402-21"><a href="ch_json.html#cb1402-21" aria-hidden="true" tabindex="-1"></a><span class="vs">}`</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="example-parsing-unsupported-values">45.4.5 Example: parsing unsupported values</h4>
+<p>To <code>JSON.parse()</code> the result from the previous section, we need a reviver:</p>
+<div class="sourceCode" id="cb1403"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1403-1"><a href="ch_json.html#cb1403-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">reviver</span>(key<span class="op">,</span> value) {</span>
+<span id="cb1403-2"><a href="ch_json.html#cb1403-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Very simple check</span></span>
+<span id="cb1403-3"><a href="ch_json.html#cb1403-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (value <span class="op">&amp;&amp;</span> value<span class="op">.</span><span class="at">__type__</span> <span class="op">===</span> <span class="st">'RegExp'</span>) {</span>
+<span id="cb1403-4"><a href="ch_json.html#cb1403-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">new</span> <span class="bu">RegExp</span>(value<span class="op">.</span><span class="at">source</span><span class="op">,</span> value<span class="op">.</span><span class="at">flags</span>)<span class="op">;</span></span>
+<span id="cb1403-5"><a href="ch_json.html#cb1403-5" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb1403-6"><a href="ch_json.html#cb1403-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> value<span class="op">;</span></span>
+<span id="cb1403-7"><a href="ch_json.html#cb1403-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1403-8"><a href="ch_json.html#cb1403-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1403-9"><a href="ch_json.html#cb1403-9" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> str <span class="op">=</span> <span class="vs">`{</span></span>
+<span id="cb1403-10"><a href="ch_json.html#cb1403-10" aria-hidden="true" tabindex="-1"></a><span class="vs">  "name": "abc",</span></span>
+<span id="cb1403-11"><a href="ch_json.html#cb1403-11" aria-hidden="true" tabindex="-1"></a><span class="vs">  "regex": {</span></span>
+<span id="cb1403-12"><a href="ch_json.html#cb1403-12" aria-hidden="true" tabindex="-1"></a><span class="vs">    "__type__": "RegExp",</span></span>
+<span id="cb1403-13"><a href="ch_json.html#cb1403-13" aria-hidden="true" tabindex="-1"></a><span class="vs">    "source": "abc",</span></span>
+<span id="cb1403-14"><a href="ch_json.html#cb1403-14" aria-hidden="true" tabindex="-1"></a><span class="vs">    "flags": "iu"</span></span>
+<span id="cb1403-15"><a href="ch_json.html#cb1403-15" aria-hidden="true" tabindex="-1"></a><span class="vs">  }</span></span>
+<span id="cb1403-16"><a href="ch_json.html#cb1403-16" aria-hidden="true" tabindex="-1"></a><span class="vs">}`</span><span class="op">;</span></span>
+<span id="cb1403-17"><a href="ch_json.html#cb1403-17" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1403-18"><a href="ch_json.html#cb1403-18" aria-hidden="true" tabindex="-1"></a>  <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(str<span class="op">,</span> reviver)<span class="op">,</span></span>
+<span id="cb1403-19"><a href="ch_json.html#cb1403-19" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb1403-20"><a href="ch_json.html#cb1403-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">'abc'</span><span class="op">,</span></span>
+<span id="cb1403-21"><a href="ch_json.html#cb1403-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">regex</span><span class="op">:</span> <span class="ss">/abc/ui</span><span class="op">,</span></span>
+<span id="cb1403-22"><a href="ch_json.html#cb1403-22" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h3 id="faq">45.5 FAQ</h3>
+<h4 id="why-doesnt-json-support-comments">45.5.1 Why doesn’t JSON support comments?</h4>
+<p>Douglas Crockford explains why in <a href="https://web.archive.org/web/20190308024153/https://plus.google.com/+DouglasCrockfordEsq/posts/RK8qyGVaGSr">a Google+ post from 1 May 2012</a>:</p>
+<blockquote>
+<p>I removed comments from JSON because I saw people were using them to hold parsing directives, a practice which would have destroyed interoperability. I know that the lack of comments makes some people sad, but it shouldn’t.</p>
+<p>Suppose you are using JSON to keep configuration files, which you would like to annotate. Go ahead and insert all the comments you like. Then pipe it through JSMin [a minifier for JavaScript] before handing it to your JSON parser.</p>
+</blockquote>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/39">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_remaining-chapters-site.html">46 Where are the remaining chapters?</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

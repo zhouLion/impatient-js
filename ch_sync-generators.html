@@ -1,0 +1,368 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_sync-generators">38 Synchronous generators (advanced)</h2>
+<p><a id="index-entry-438" class="index-entry"></a><a id="index-entry-439" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>38.1 <a href="ch_sync-generators.html#what-are-synchronous-generators">What are synchronous generators?</a>
+<ul>
+<li>38.1.1 <a href="ch_sync-generators.html#generator-functions-return-iterables-and-fill-them-via-yield">Generator functions return iterables and fill them via <code>yield</code></a></li>
+<li>38.1.2 <a href="ch_sync-generators.html#yield-pauses-a-generator-function"><code>yield</code> pauses a generator function</a></li>
+<li>38.1.3 <a href="ch_sync-generators.html#why-does-yield-pause-execution">Why does <code>yield</code> pause execution?</a></li>
+<li>38.1.4 <a href="ch_sync-generators.html#example-mapping-over-iterables">Example: Mapping over iterables</a></li>
+</ul></li>
+<li>38.2 <a href="ch_sync-generators.html#calling-generators-from-generators-advanced">Calling generators from generators (advanced)</a>
+<ul>
+<li>38.2.1 <a href="ch_sync-generators.html#calling-generators-via-yield">Calling generators via <code>yield*</code></a></li>
+<li>38.2.2 <a href="ch_sync-generators.html#example-iterating-over-a-tree">Example: Iterating over a tree</a></li>
+</ul></li>
+<li>38.3 <a href="ch_sync-generators.html#external-iteration-internal-iteration">Background: external iteration vs.&nbsp;internal iteration</a></li>
+<li>38.4 <a href="ch_sync-generators.html#reusing-traversals">Use case for generators: reusing traversals</a>
+<ul>
+<li>38.4.1 <a href="ch_sync-generators.html#the-traversal-to-reuse">The traversal to reuse</a></li>
+<li>38.4.2 <a href="ch_sync-generators.html#internal-iteration-example">Internal iteration (push)</a></li>
+<li>38.4.3 <a href="ch_sync-generators.html#external-iteration-example">External iteration (pull)</a></li>
+</ul></li>
+<li>38.5 <a href="ch_sync-generators.html#advanced-features-of-generators">Advanced features of generators</a></li>
+</ul>
+</div>
+<hr>
+<h3 id="what-are-synchronous-generators">38.1 What are synchronous generators?</h3>
+<p><a id="index-entry-440" class="index-entry"></a></p>
+<p>Synchronous generators are special versions of function definitions and method definitions that always return synchronous iterables:</p>
+<div class="sourceCode" id="cb1086"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1086-1"><a href="ch_sync-generators.html#cb1086-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generator function declaration</span></span>
+<span id="cb1086-2"><a href="ch_sync-generators.html#cb1086-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">genFunc1</span>() { <span class="co">/*···*/</span> }</span>
+<span id="cb1086-3"><a href="ch_sync-generators.html#cb1086-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1086-4"><a href="ch_sync-generators.html#cb1086-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Generator function expression</span></span>
+<span id="cb1086-5"><a href="ch_sync-generators.html#cb1086-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> genFunc2 <span class="op">=</span> <span class="kw">function</span><span class="op">*</span> () { <span class="co">/*···*/</span> }<span class="op">;</span></span>
+<span id="cb1086-6"><a href="ch_sync-generators.html#cb1086-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1086-7"><a href="ch_sync-generators.html#cb1086-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Generator method definition in an object literal</span></span>
+<span id="cb1086-8"><a href="ch_sync-generators.html#cb1086-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb1086-9"><a href="ch_sync-generators.html#cb1086-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span> <span class="fu">generatorMethod</span>() {</span>
+<span id="cb1086-10"><a href="ch_sync-generators.html#cb1086-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb1086-11"><a href="ch_sync-generators.html#cb1086-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1086-12"><a href="ch_sync-generators.html#cb1086-12" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb1086-13"><a href="ch_sync-generators.html#cb1086-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1086-14"><a href="ch_sync-generators.html#cb1086-14" aria-hidden="true" tabindex="-1"></a><span class="co">// Generator method definition in a class definition</span></span>
+<span id="cb1086-15"><a href="ch_sync-generators.html#cb1086-15" aria-hidden="true" tabindex="-1"></a><span class="co">// (class declaration or class expression)</span></span>
+<span id="cb1086-16"><a href="ch_sync-generators.html#cb1086-16" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MyClass {</span>
+<span id="cb1086-17"><a href="ch_sync-generators.html#cb1086-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span> <span class="fu">generatorMethod</span>() {</span>
+<span id="cb1086-18"><a href="ch_sync-generators.html#cb1086-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb1086-19"><a href="ch_sync-generators.html#cb1086-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1086-20"><a href="ch_sync-generators.html#cb1086-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Asterisks (<code>*</code>) mark functions and methods as generators:</p>
+<ul>
+<li>Functions: The pseudo-keyword <code>function*</code> is a combination of the keyword <code>function</code> and an asterisk.</li>
+<li>Methods: The <code>*</code> is a modifier (similar to <code>static</code> and <code>get</code>).</li>
+</ul>
+<h4 id="generator-functions-return-iterables-and-fill-them-via-yield">38.1.1 Generator functions return iterables and fill them via <code>yield</code></h4>
+<p><a id="index-entry-441" class="index-entry"></a></p>
+<p>If you call a generator function, it returns an iterable (actually, an iterator that is also iterable). The generator fills that iterable via the <code>yield</code> operator:</p>
+<div class="sourceCode" id="cb1087"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1087-1"><a href="ch_sync-generators.html#cb1087-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">genFunc1</span>() {</span>
+<span id="cb1087-2"><a href="ch_sync-generators.html#cb1087-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'a'</span><span class="op">;</span></span>
+<span id="cb1087-3"><a href="ch_sync-generators.html#cb1087-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'b'</span><span class="op">;</span></span>
+<span id="cb1087-4"><a href="ch_sync-generators.html#cb1087-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1087-5"><a href="ch_sync-generators.html#cb1087-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1087-6"><a href="ch_sync-generators.html#cb1087-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> iterable <span class="op">=</span> <span class="fu">genFunc1</span>()<span class="op">;</span></span>
+<span id="cb1087-7"><a href="ch_sync-generators.html#cb1087-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Convert the iterable to an Array, to check what’s inside:</span></span>
+<span id="cb1087-8"><a href="ch_sync-generators.html#cb1087-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span>iterable]<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span>
+<span id="cb1087-9"><a href="ch_sync-generators.html#cb1087-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1087-10"><a href="ch_sync-generators.html#cb1087-10" aria-hidden="true" tabindex="-1"></a><span class="co">// You can also use a for-of loop</span></span>
+<span id="cb1087-11"><a href="ch_sync-generators.html#cb1087-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> <span class="fu">genFunc1</span>()) {</span>
+<span id="cb1087-12"><a href="ch_sync-generators.html#cb1087-12" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb1087-13"><a href="ch_sync-generators.html#cb1087-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1087-14"><a href="ch_sync-generators.html#cb1087-14" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1087-15"><a href="ch_sync-generators.html#cb1087-15" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb1087-16"><a href="ch_sync-generators.html#cb1087-16" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div>
+<h4 id="yield-pauses-a-generator-function">38.1.2 <code>yield</code> pauses a generator function</h4>
+<p>Using a generator function involves the following steps:</p>
+<ul>
+<li>Function-calling it returns an iterator <code>iter</code> (that is also an iterable).</li>
+<li>Iterating over <code>iter</code> repeatedly invokes <code>iter.next()</code>. Each time, we jump into the body of the generator function until there is a <code>yield</code> that returns a value.</li>
+</ul>
+<p>Therefore, <code>yield</code> does more than just add values to iterables – it also pauses and exits the generator function:</p>
+<ul>
+<li>Like <code>return</code>, a <code>yield</code> exits the body of the function and returns a value (via <code>.next()</code>).</li>
+<li>Unlike <code>return</code>, if you repeat the invocation (of <code>.next()</code>), execution resumes directly after the <code>yield</code>.</li>
+</ul>
+<p>Let’s examine what that means via the following generator function.</p>
+<div class="sourceCode" id="cb1088"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1088-1"><a href="ch_sync-generators.html#cb1088-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> location <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1088-2"><a href="ch_sync-generators.html#cb1088-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">genFunc2</span>() {</span>
+<span id="cb1088-3"><a href="ch_sync-generators.html#cb1088-3" aria-hidden="true" tabindex="-1"></a>  location <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="kw">yield</span> <span class="st">'a'</span><span class="op">;</span></span>
+<span id="cb1088-4"><a href="ch_sync-generators.html#cb1088-4" aria-hidden="true" tabindex="-1"></a>  location <span class="op">=</span> <span class="dv">2</span><span class="op">;</span> <span class="kw">yield</span> <span class="st">'b'</span><span class="op">;</span></span>
+<span id="cb1088-5"><a href="ch_sync-generators.html#cb1088-5" aria-hidden="true" tabindex="-1"></a>  location <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb1088-6"><a href="ch_sync-generators.html#cb1088-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>In order to use <code>genFunc2()</code>, we must first create the iterator/iterable <code>iter</code>. <code>genFunc2()</code> is now paused “before” its body.</p>
+<div class="sourceCode" id="cb1089"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1089-1"><a href="ch_sync-generators.html#cb1089-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> iter <span class="op">=</span> <span class="fu">genFunc2</span>()<span class="op">;</span></span>
+<span id="cb1089-2"><a href="ch_sync-generators.html#cb1089-2" aria-hidden="true" tabindex="-1"></a><span class="co">// genFunc2() is now paused “before” its body:</span></span>
+<span id="cb1089-3"><a href="ch_sync-generators.html#cb1089-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(location<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>iter</code> implements <a href="ch_sync-iteration.html">the iteration protocol</a>. Therefore, we control the execution of <code>genFunc2()</code> via <code>iter.next()</code>. Calling that method resumes the paused <code>genFunc2()</code> and executes it until there is a <code>yield</code>. Then execution pauses and <code>.next()</code> returns the operand of the <code>yield</code>:</p>
+<div class="sourceCode" id="cb1090"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1090-1"><a href="ch_sync-generators.html#cb1090-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1090-2"><a href="ch_sync-generators.html#cb1090-2" aria-hidden="true" tabindex="-1"></a>  iter<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span>})<span class="op">;</span></span>
+<span id="cb1090-3"><a href="ch_sync-generators.html#cb1090-3" aria-hidden="true" tabindex="-1"></a><span class="co">// genFunc2() is now paused directly after the first `yield`:</span></span>
+<span id="cb1090-4"><a href="ch_sync-generators.html#cb1090-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(location<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
+<p>Note that the yielded value <code>'a'</code> is wrapped in an object, which is how iterators always deliver their values.</p>
+<p>We call <code>iter.next()</code> again and execution continues where we previously paused. Once we encounter the second <code>yield</code>, <code>genFunc2()</code> is paused and <code>.next()</code> returns the yielded value <code>'b'</code>.</p>
+<div class="sourceCode" id="cb1091"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1091-1"><a href="ch_sync-generators.html#cb1091-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1091-2"><a href="ch_sync-generators.html#cb1091-2" aria-hidden="true" tabindex="-1"></a>  iter<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="st">'b'</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span>})<span class="op">;</span></span>
+<span id="cb1091-3"><a href="ch_sync-generators.html#cb1091-3" aria-hidden="true" tabindex="-1"></a><span class="co">// genFunc2() is now paused directly after the second `yield`:</span></span>
+<span id="cb1091-4"><a href="ch_sync-generators.html#cb1091-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(location<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span></code></pre></div>
+<p>We call <code>iter.next()</code> one more time and execution continues until it leaves the body of <code>genFunc2()</code>:</p>
+<div class="sourceCode" id="cb1092"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1092-1"><a href="ch_sync-generators.html#cb1092-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1092-2"><a href="ch_sync-generators.html#cb1092-2" aria-hidden="true" tabindex="-1"></a>  iter<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="kw">undefined</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">true</span>})<span class="op">;</span></span>
+<span id="cb1092-3"><a href="ch_sync-generators.html#cb1092-3" aria-hidden="true" tabindex="-1"></a><span class="co">// We have reached the end of genFunc2():</span></span>
+<span id="cb1092-4"><a href="ch_sync-generators.html#cb1092-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(location<span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span></code></pre></div>
+<p>This time, property <code>.done</code> of the result of <code>.next()</code> is <code>true</code>, which means that the iterator is finished.</p>
+<h4 id="why-does-yield-pause-execution">38.1.3 Why does <code>yield</code> pause execution?</h4>
+<p>What are the benefits of <code>yield</code> pausing execution? Why doesn’t it simply work like the Array method <code>.push()</code> and fill the iterable with values without pausing?</p>
+<p>Due to pausing, generators provide many of the features of <em>coroutines</em> (think processes that are multitasked cooperatively). For example, when you ask for the next value of an iterable, that value is computed <em>lazily</em> (on demand). The following two generator functions demonstrate what that means.</p>
+<div class="sourceCode" id="cb1093"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1093-1"><a href="ch_sync-generators.html#cb1093-1" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb1093-2"><a href="ch_sync-generators.html#cb1093-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Returns an iterable over lines</span></span>
+<span id="cb1093-3"><a href="ch_sync-generators.html#cb1093-3" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb1093-4"><a href="ch_sync-generators.html#cb1093-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">genLines</span>() {</span>
+<span id="cb1093-5"><a href="ch_sync-generators.html#cb1093-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'A line'</span><span class="op">;</span></span>
+<span id="cb1093-6"><a href="ch_sync-generators.html#cb1093-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'Another line'</span><span class="op">;</span></span>
+<span id="cb1093-7"><a href="ch_sync-generators.html#cb1093-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'Last line'</span><span class="op">;</span></span>
+<span id="cb1093-8"><a href="ch_sync-generators.html#cb1093-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1093-9"><a href="ch_sync-generators.html#cb1093-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1093-10"><a href="ch_sync-generators.html#cb1093-10" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb1093-11"><a href="ch_sync-generators.html#cb1093-11" aria-hidden="true" tabindex="-1"></a><span class="co"> * Input: iterable over lines</span></span>
+<span id="cb1093-12"><a href="ch_sync-generators.html#cb1093-12" aria-hidden="true" tabindex="-1"></a><span class="co"> * Output: iterable over numbered lines</span></span>
+<span id="cb1093-13"><a href="ch_sync-generators.html#cb1093-13" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb1093-14"><a href="ch_sync-generators.html#cb1093-14" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">numberLines</span>(lineIterable) {</span>
+<span id="cb1093-15"><a href="ch_sync-generators.html#cb1093-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> lineNumber <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1093-16"><a href="ch_sync-generators.html#cb1093-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> line <span class="kw">of</span> lineIterable) { <span class="co">// input</span></span>
+<span id="cb1093-17"><a href="ch_sync-generators.html#cb1093-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> lineNumber <span class="op">+</span> <span class="st">': '</span> <span class="op">+</span> line<span class="op">;</span> <span class="co">// output</span></span>
+<span id="cb1093-18"><a href="ch_sync-generators.html#cb1093-18" aria-hidden="true" tabindex="-1"></a>    lineNumber<span class="op">++;</span></span>
+<span id="cb1093-19"><a href="ch_sync-generators.html#cb1093-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1093-20"><a href="ch_sync-generators.html#cb1093-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Note that the <code>yield</code> in <code>numberLines()</code> appears inside a <code>for-of</code> loop. <code>yield</code> can be used inside loops, but not inside callbacks (more on that later).</p>
+<p>Let’s combine both generators to produce the iterable <code>numberedLines</code>:</p>
+<div class="sourceCode" id="cb1094"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1094-1"><a href="ch_sync-generators.html#cb1094-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> numberedLines <span class="op">=</span> <span class="fu">numberLines</span>(<span class="fu">genLines</span>())<span class="op">;</span></span>
+<span id="cb1094-2"><a href="ch_sync-generators.html#cb1094-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1094-3"><a href="ch_sync-generators.html#cb1094-3" aria-hidden="true" tabindex="-1"></a>  numberedLines<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="st">'1: A line'</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span>})<span class="op">;</span></span>
+<span id="cb1094-4"><a href="ch_sync-generators.html#cb1094-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1094-5"><a href="ch_sync-generators.html#cb1094-5" aria-hidden="true" tabindex="-1"></a>  numberedLines<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="st">'2: Another line'</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span>})<span class="op">;</span></span></code></pre></div>
+<p>The key benefit of using generators here is that everything works incrementally: via <code>numberedLines.next()</code>, we ask <code>numberLines()</code> for only a single numbered line. In turn, it asks <code>genLines()</code> for only a single unnumbered line.</p>
+<p>This incrementalism continues to work if, for example, <code>genLines()</code> reads its lines from a large text file: If we ask <code>numberLines()</code> for a numbered line, we get one as soon as <code>genLines()</code> has read its first line from the text file.</p>
+<p>Without generators, <code>genLines()</code> would first read all lines and return them. Then <code>numberLines()</code> would number all lines and return them. We therefore have to wait much longer until we get the first numbered line.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Turning a normal function into a generator</strong></p>
+<p><code>exercises/sync-generators/fib_seq_test.mjs</code></p>
+</div>
+<h4 id="example-mapping-over-iterables">38.1.4 Example: Mapping over iterables</h4>
+<p>The following function <code>mapIter()</code> is similar to the Array method <code>.map()</code>, but it returns an iterable, not an Array, and produces its results on demand.</p>
+<div class="sourceCode" id="cb1095"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1095-1"><a href="ch_sync-generators.html#cb1095-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">mapIter</span>(iterable<span class="op">,</span> func) {</span>
+<span id="cb1095-2"><a href="ch_sync-generators.html#cb1095-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> index <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1095-3"><a href="ch_sync-generators.html#cb1095-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> iterable) {</span>
+<span id="cb1095-4"><a href="ch_sync-generators.html#cb1095-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> <span class="fu">func</span>(x<span class="op">,</span> index)<span class="op">;</span></span>
+<span id="cb1095-5"><a href="ch_sync-generators.html#cb1095-5" aria-hidden="true" tabindex="-1"></a>    index<span class="op">++;</span></span>
+<span id="cb1095-6"><a href="ch_sync-generators.html#cb1095-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1095-7"><a href="ch_sync-generators.html#cb1095-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1095-8"><a href="ch_sync-generators.html#cb1095-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1095-9"><a href="ch_sync-generators.html#cb1095-9" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> iterable <span class="op">=</span> <span class="fu">mapIter</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">,</span> x <span class="kw">=&gt;</span> x <span class="op">+</span> x)<span class="op">;</span></span>
+<span id="cb1095-10"><a href="ch_sync-generators.html#cb1095-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span>iterable]<span class="op">,</span> [<span class="st">'aa'</span><span class="op">,</span> <span class="st">'bb'</span>])<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Filtering iterables</strong></p>
+<p><code>exercises/sync-generators/filter_iter_gen_test.mjs</code></p>
+</div>
+<h3 id="calling-generators-from-generators-advanced">38.2 Calling generators from generators (advanced)</h3>
+<h4 id="calling-generators-via-yield">38.2.1 Calling generators via <code>yield*</code></h4>
+<p><a id="index-entry-442" class="index-entry"></a></p>
+<p><code>yield</code> only works directly inside generators – so far we haven’t seen a way of delegating yielding to another function or method.</p>
+<p>Let’s first examine what does <em>not</em> work: in the following example, we’d like <code>foo()</code> to call <code>bar()</code>, so that the latter yields two values for the former. Alas, a naive approach fails:</p>
+<div class="sourceCode" id="cb1096"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1096-1"><a href="ch_sync-generators.html#cb1096-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">bar</span>() {</span>
+<span id="cb1096-2"><a href="ch_sync-generators.html#cb1096-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'a'</span><span class="op">;</span></span>
+<span id="cb1096-3"><a href="ch_sync-generators.html#cb1096-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'b'</span><span class="op">;</span></span>
+<span id="cb1096-4"><a href="ch_sync-generators.html#cb1096-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1096-5"><a href="ch_sync-generators.html#cb1096-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">foo</span>() {</span>
+<span id="cb1096-6"><a href="ch_sync-generators.html#cb1096-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Nothing happens if we call `bar()`:</span></span>
+<span id="cb1096-7"><a href="ch_sync-generators.html#cb1096-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bar</span>()<span class="op">;</span></span>
+<span id="cb1096-8"><a href="ch_sync-generators.html#cb1096-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1096-9"><a href="ch_sync-generators.html#cb1096-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1096-10"><a href="ch_sync-generators.html#cb1096-10" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span><span class="fu">foo</span>()]<span class="op">,</span> [])<span class="op">;</span></span></code></pre></div>
+<p>Why doesn’t this work? The function call <code>bar()</code> returns an iterable, which we ignore.</p>
+<p>What we want is for <code>foo()</code> to yield everything that is yielded by <code>bar()</code>. That’s what the <code>yield*</code> operator does:</p>
+<div class="sourceCode" id="cb1097"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1097-1"><a href="ch_sync-generators.html#cb1097-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">bar</span>() {</span>
+<span id="cb1097-2"><a href="ch_sync-generators.html#cb1097-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'a'</span><span class="op">;</span></span>
+<span id="cb1097-3"><a href="ch_sync-generators.html#cb1097-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> <span class="st">'b'</span><span class="op">;</span></span>
+<span id="cb1097-4"><a href="ch_sync-generators.html#cb1097-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1097-5"><a href="ch_sync-generators.html#cb1097-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">foo</span>() {</span>
+<span id="cb1097-6"><a href="ch_sync-generators.html#cb1097-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span><span class="op">*</span> <span class="fu">bar</span>()<span class="op">;</span></span>
+<span id="cb1097-7"><a href="ch_sync-generators.html#cb1097-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1097-8"><a href="ch_sync-generators.html#cb1097-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1097-9"><a href="ch_sync-generators.html#cb1097-9" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span><span class="fu">foo</span>()]<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span></code></pre></div>
+<p>In other words, the previous <code>foo()</code> is roughly equivalent to:</p>
+<div class="sourceCode" id="cb1098"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1098-1"><a href="ch_sync-generators.html#cb1098-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">foo</span>() {</span>
+<span id="cb1098-2"><a href="ch_sync-generators.html#cb1098-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> <span class="fu">bar</span>()) {</span>
+<span id="cb1098-3"><a href="ch_sync-generators.html#cb1098-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> x<span class="op">;</span></span>
+<span id="cb1098-4"><a href="ch_sync-generators.html#cb1098-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1098-5"><a href="ch_sync-generators.html#cb1098-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Note that <code>yield*</code> works with any iterable:</p>
+<div class="sourceCode" id="cb1099"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1099-1"><a href="ch_sync-generators.html#cb1099-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">gen</span>() {</span>
+<span id="cb1099-2"><a href="ch_sync-generators.html#cb1099-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span><span class="op">*</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">;</span></span>
+<span id="cb1099-3"><a href="ch_sync-generators.html#cb1099-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1099-4"><a href="ch_sync-generators.html#cb1099-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1099-5"><a href="ch_sync-generators.html#cb1099-5" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span><span class="fu">gen</span>()]<span class="op">,</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="example-iterating-over-a-tree">38.2.2 Example: Iterating over a tree</h4>
+<p><code>yield*</code> lets us make recursive calls in generators, which is useful when iterating over recursive data structures such as trees. Take, for example, the following data structure for binary trees.</p>
+<div class="sourceCode" id="cb1100"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1100-1"><a href="ch_sync-generators.html#cb1100-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BinaryTree {</span>
+<span id="cb1100-2"><a href="ch_sync-generators.html#cb1100-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(value<span class="op">,</span> left<span class="op">=</span><span class="kw">null</span><span class="op">,</span> right<span class="op">=</span><span class="kw">null</span>) {</span>
+<span id="cb1100-3"><a href="ch_sync-generators.html#cb1100-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">value</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb1100-4"><a href="ch_sync-generators.html#cb1100-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">left</span> <span class="op">=</span> left<span class="op">;</span></span>
+<span id="cb1100-5"><a href="ch_sync-generators.html#cb1100-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">right</span> <span class="op">=</span> right<span class="op">;</span></span>
+<span id="cb1100-6"><a href="ch_sync-generators.html#cb1100-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1100-7"><a href="ch_sync-generators.html#cb1100-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1100-8"><a href="ch_sync-generators.html#cb1100-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** Prefix iteration: parent before children */</span></span>
+<span id="cb1100-9"><a href="ch_sync-generators.html#cb1100-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span> [<span class="bu">Symbol</span><span class="op">.</span><span class="at">iterator</span>]() {</span>
+<span id="cb1100-10"><a href="ch_sync-generators.html#cb1100-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> <span class="kw">this</span><span class="op">.</span><span class="at">value</span><span class="op">;</span></span>
+<span id="cb1100-11"><a href="ch_sync-generators.html#cb1100-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">this</span><span class="op">.</span><span class="at">left</span>) {</span>
+<span id="cb1100-12"><a href="ch_sync-generators.html#cb1100-12" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Same as yield* this.left[Symbol.iterator]()</span></span>
+<span id="cb1100-13"><a href="ch_sync-generators.html#cb1100-13" aria-hidden="true" tabindex="-1"></a>      <span class="kw">yield</span><span class="op">*</span> <span class="kw">this</span><span class="op">.</span><span class="at">left</span><span class="op">;</span></span>
+<span id="cb1100-14"><a href="ch_sync-generators.html#cb1100-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1100-15"><a href="ch_sync-generators.html#cb1100-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">this</span><span class="op">.</span><span class="at">right</span>) {</span>
+<span id="cb1100-16"><a href="ch_sync-generators.html#cb1100-16" aria-hidden="true" tabindex="-1"></a>      <span class="kw">yield</span><span class="op">*</span> <span class="kw">this</span><span class="op">.</span><span class="at">right</span><span class="op">;</span></span>
+<span id="cb1100-17"><a href="ch_sync-generators.html#cb1100-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1100-18"><a href="ch_sync-generators.html#cb1100-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1100-19"><a href="ch_sync-generators.html#cb1100-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Method <code>[Symbol.iterator]()</code> adds support for the iteration protocol, which means that we can use a <code>for-of</code> loop to iterate over an instance of <code>BinaryTree</code>:</p>
+<div class="sourceCode" id="cb1101"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1101-1"><a href="ch_sync-generators.html#cb1101-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> tree <span class="op">=</span> <span class="kw">new</span> <span class="fu">BinaryTree</span>(<span class="st">'a'</span><span class="op">,</span></span>
+<span id="cb1101-2"><a href="ch_sync-generators.html#cb1101-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="fu">BinaryTree</span>(<span class="st">'b'</span><span class="op">,</span></span>
+<span id="cb1101-3"><a href="ch_sync-generators.html#cb1101-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">new</span> <span class="fu">BinaryTree</span>(<span class="st">'c'</span>)<span class="op">,</span></span>
+<span id="cb1101-4"><a href="ch_sync-generators.html#cb1101-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">new</span> <span class="fu">BinaryTree</span>(<span class="st">'d'</span>))<span class="op">,</span></span>
+<span id="cb1101-5"><a href="ch_sync-generators.html#cb1101-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="fu">BinaryTree</span>(<span class="st">'e'</span>))<span class="op">;</span></span>
+<span id="cb1101-6"><a href="ch_sync-generators.html#cb1101-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1101-7"><a href="ch_sync-generators.html#cb1101-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> tree) {</span>
+<span id="cb1101-8"><a href="ch_sync-generators.html#cb1101-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb1101-9"><a href="ch_sync-generators.html#cb1101-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1101-10"><a href="ch_sync-generators.html#cb1101-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1101-11"><a href="ch_sync-generators.html#cb1101-11" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb1101-12"><a href="ch_sync-generators.html#cb1101-12" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span>
+<span id="cb1101-13"><a href="ch_sync-generators.html#cb1101-13" aria-hidden="true" tabindex="-1"></a><span class="co">// 'c'</span></span>
+<span id="cb1101-14"><a href="ch_sync-generators.html#cb1101-14" aria-hidden="true" tabindex="-1"></a><span class="co">// 'd'</span></span>
+<span id="cb1101-15"><a href="ch_sync-generators.html#cb1101-15" aria-hidden="true" tabindex="-1"></a><span class="co">// 'e'</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Iterating over a nested Array</strong></p>
+<p><code>exercises/sync-generators/iter_nested_arrays_test.mjs</code></p>
+</div>
+<h3 id="external-iteration-internal-iteration">38.3 Background: external iteration vs.&nbsp;internal iteration</h3>
+<p><a id="index-entry-443" class="index-entry"></a><a id="index-entry-444" class="index-entry"></a> <a id="index-entry-445" class="index-entry"></a><a id="index-entry-446" class="index-entry"></a></p>
+<p>In preparation for <span data-refcheck="#reusing-traversals">the next section</span>, we need to learn about two different styles of iterating over the values “inside” an object:</p>
+<ul>
+<li><p>External iteration (pull): Your code asks the object for the values via an iteration protocol. For example, the <code>for-of</code> loop is based on JavaScript’s iteration protocol:</p>
+<div class="sourceCode" id="cb1102"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1102-1"><a href="ch_sync-generators.html#cb1102-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]) {</span>
+<span id="cb1102-2"><a href="ch_sync-generators.html#cb1102-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb1102-3"><a href="ch_sync-generators.html#cb1102-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1102-4"><a href="ch_sync-generators.html#cb1102-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1102-5"><a href="ch_sync-generators.html#cb1102-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb1102-6"><a href="ch_sync-generators.html#cb1102-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div></li>
+<li><p>Internal iteration (push): You pass a callback function to a method of the object and the method feeds the values to the callback. For example, Arrays have the method <code>.forEach()</code>:</p>
+<div class="sourceCode" id="cb1103"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1103-1"><a href="ch_sync-generators.html#cb1103-1" aria-hidden="true" tabindex="-1"></a>[<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">.</span><span class="fu">forEach</span>((x) <span class="kw">=&gt;</span> {</span>
+<span id="cb1103-2"><a href="ch_sync-generators.html#cb1103-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb1103-3"><a href="ch_sync-generators.html#cb1103-3" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb1103-4"><a href="ch_sync-generators.html#cb1103-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1103-5"><a href="ch_sync-generators.html#cb1103-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb1103-6"><a href="ch_sync-generators.html#cb1103-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div></li>
+</ul>
+<p><span data-refcheck="#reusing-traversals">The next section</span> has examples for both styles of iteration.</p>
+<h3 id="reusing-traversals">38.4 Use case for generators: reusing traversals</h3>
+<p>One important use case for generators is extracting and reusing traversals.</p>
+<h4 id="the-traversal-to-reuse">38.4.1 The traversal to reuse</h4>
+<p>As an example, consider the following function that traverses a tree of files and logs their paths (it uses <a href="https://nodejs.org/en/docs/">the Node.js API</a> for doing so):</p>
+<div class="sourceCode" id="cb1104"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1104-1"><a href="ch_sync-generators.html#cb1104-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">logPaths</span>(dir) {</span>
+<span id="cb1104-2"><a href="ch_sync-generators.html#cb1104-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> fileName <span class="kw">of</span> fs<span class="op">.</span><span class="fu">readdirSync</span>(dir)) {</span>
+<span id="cb1104-3"><a href="ch_sync-generators.html#cb1104-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> filePath <span class="op">=</span> path<span class="op">.</span><span class="fu">resolve</span>(dir<span class="op">,</span> fileName)<span class="op">;</span></span>
+<span id="cb1104-4"><a href="ch_sync-generators.html#cb1104-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(filePath)<span class="op">;</span></span>
+<span id="cb1104-5"><a href="ch_sync-generators.html#cb1104-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> stats <span class="op">=</span> fs<span class="op">.</span><span class="fu">statSync</span>(filePath)<span class="op">;</span></span>
+<span id="cb1104-6"><a href="ch_sync-generators.html#cb1104-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (stats<span class="op">.</span><span class="fu">isDirectory</span>()) {</span>
+<span id="cb1104-7"><a href="ch_sync-generators.html#cb1104-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">logPaths</span>(filePath)<span class="op">;</span> <span class="co">// recursive call</span></span>
+<span id="cb1104-8"><a href="ch_sync-generators.html#cb1104-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1104-9"><a href="ch_sync-generators.html#cb1104-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1104-10"><a href="ch_sync-generators.html#cb1104-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Consider the following directory:</p>
+<pre class="text"><code>mydir/
+    a.txt
+    b.txt
+    subdir/
+        c.txt</code></pre>
+<p>Let’s log the paths inside <code>mydir/</code>:</p>
+<div class="sourceCode" id="cb1106"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1106-1"><a href="ch_sync-generators.html#cb1106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">logPaths</span>(<span class="st">'mydir'</span>)<span class="op">;</span></span>
+<span id="cb1106-2"><a href="ch_sync-generators.html#cb1106-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1106-3"><a href="ch_sync-generators.html#cb1106-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1106-4"><a href="ch_sync-generators.html#cb1106-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 'mydir/a.txt'</span></span>
+<span id="cb1106-5"><a href="ch_sync-generators.html#cb1106-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 'mydir/b.txt'</span></span>
+<span id="cb1106-6"><a href="ch_sync-generators.html#cb1106-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'mydir/subdir'</span></span>
+<span id="cb1106-7"><a href="ch_sync-generators.html#cb1106-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'mydir/subdir/c.txt'</span></span></code></pre></div>
+<p>How can we reuse this traversal and do something other than logging the paths?</p>
+<h4 id="internal-iteration-example">38.4.2 Internal iteration (push)</h4>
+<p>One way of reusing traversal code is via <em>internal iteration</em>: Each traversed value is passsed to a callback (line A).</p>
+<div class="sourceCode" id="cb1107"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1107-1"><a href="ch_sync-generators.html#cb1107-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">visitPaths</span>(dir<span class="op">,</span> callback) {</span>
+<span id="cb1107-2"><a href="ch_sync-generators.html#cb1107-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> fileName <span class="kw">of</span> fs<span class="op">.</span><span class="fu">readdirSync</span>(dir)) {</span>
+<span id="cb1107-3"><a href="ch_sync-generators.html#cb1107-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> filePath <span class="op">=</span> path<span class="op">.</span><span class="fu">resolve</span>(dir<span class="op">,</span> fileName)<span class="op">;</span></span>
+<span id="cb1107-4"><a href="ch_sync-generators.html#cb1107-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">callback</span>(filePath)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1107-5"><a href="ch_sync-generators.html#cb1107-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> stats <span class="op">=</span> fs<span class="op">.</span><span class="fu">statSync</span>(filePath)<span class="op">;</span></span>
+<span id="cb1107-6"><a href="ch_sync-generators.html#cb1107-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (stats<span class="op">.</span><span class="fu">isDirectory</span>()) {</span>
+<span id="cb1107-7"><a href="ch_sync-generators.html#cb1107-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">visitPaths</span>(filePath<span class="op">,</span> callback)<span class="op">;</span></span>
+<span id="cb1107-8"><a href="ch_sync-generators.html#cb1107-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1107-9"><a href="ch_sync-generators.html#cb1107-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1107-10"><a href="ch_sync-generators.html#cb1107-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1107-11"><a href="ch_sync-generators.html#cb1107-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> paths <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb1107-12"><a href="ch_sync-generators.html#cb1107-12" aria-hidden="true" tabindex="-1"></a><span class="fu">visitPaths</span>(<span class="st">'mydir'</span><span class="op">,</span> p <span class="kw">=&gt;</span> paths<span class="op">.</span><span class="fu">push</span>(p))<span class="op">;</span></span>
+<span id="cb1107-13"><a href="ch_sync-generators.html#cb1107-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1107-14"><a href="ch_sync-generators.html#cb1107-14" aria-hidden="true" tabindex="-1"></a>  paths<span class="op">,</span></span>
+<span id="cb1107-15"><a href="ch_sync-generators.html#cb1107-15" aria-hidden="true" tabindex="-1"></a>  [</span>
+<span id="cb1107-16"><a href="ch_sync-generators.html#cb1107-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mydir/a.txt'</span><span class="op">,</span></span>
+<span id="cb1107-17"><a href="ch_sync-generators.html#cb1107-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mydir/b.txt'</span><span class="op">,</span></span>
+<span id="cb1107-18"><a href="ch_sync-generators.html#cb1107-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mydir/subdir'</span><span class="op">,</span></span>
+<span id="cb1107-19"><a href="ch_sync-generators.html#cb1107-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mydir/subdir/c.txt'</span><span class="op">,</span></span>
+<span id="cb1107-20"><a href="ch_sync-generators.html#cb1107-20" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">;</span></span></code></pre></div>
+<h4 id="external-iteration-example">38.4.3 External iteration (pull)</h4>
+<p>Another way of reusing traversal code is via <em>external iteration</em>: We can write a generator that yields all traversed values (line A).</p>
+<div class="sourceCode" id="cb1108"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1108-1"><a href="ch_sync-generators.html#cb1108-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">iterPaths</span>(dir) {</span>
+<span id="cb1108-2"><a href="ch_sync-generators.html#cb1108-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> fileName <span class="kw">of</span> fs<span class="op">.</span><span class="fu">readdirSync</span>(dir)) {</span>
+<span id="cb1108-3"><a href="ch_sync-generators.html#cb1108-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> filePath <span class="op">=</span> path<span class="op">.</span><span class="fu">resolve</span>(dir<span class="op">,</span> fileName)<span class="op">;</span></span>
+<span id="cb1108-4"><a href="ch_sync-generators.html#cb1108-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> filePath<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1108-5"><a href="ch_sync-generators.html#cb1108-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> stats <span class="op">=</span> fs<span class="op">.</span><span class="fu">statSync</span>(filePath)<span class="op">;</span></span>
+<span id="cb1108-6"><a href="ch_sync-generators.html#cb1108-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (stats<span class="op">.</span><span class="fu">isDirectory</span>()) {</span>
+<span id="cb1108-7"><a href="ch_sync-generators.html#cb1108-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">yield</span><span class="op">*</span> <span class="fu">iterPaths</span>(filePath)<span class="op">;</span></span>
+<span id="cb1108-8"><a href="ch_sync-generators.html#cb1108-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1108-9"><a href="ch_sync-generators.html#cb1108-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1108-10"><a href="ch_sync-generators.html#cb1108-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1108-11"><a href="ch_sync-generators.html#cb1108-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> paths <span class="op">=</span> [<span class="op">...</span><span class="fu">iterPaths</span>(<span class="st">'mydir'</span>)]<span class="op">;</span></span></code></pre></div>
+<h3 id="advanced-features-of-generators">38.5 Advanced features of generators</h3>
+<p><a href="https://exploringjs.com/es6/ch_generators.html">The chapter on generators</a> in <em>Exploring ES6</em> covers two features that are beyond the scope of this book:</p>
+<ul>
+<li><code>yield</code> can also <em>receive</em> data, via an argument of <code>.next()</code>.</li>
+<li>Generators can also <code>return</code> values (not just <code>yield</code> them). Such values do not become iteration values, but can be retrieved via <code>yield*</code>.</li>
+</ul>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/43">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="pt_async.html">VIII Asynchronicity</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

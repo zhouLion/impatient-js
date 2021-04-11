@@ -1,0 +1,139 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_history">3 History and evolution of JavaScript</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>3.1 <a href="ch_history.html#how-javascript-was-created">How JavaScript was created</a></li>
+<li>3.2 <a href="ch_history.html#standardizing-javascript">Standardizing JavaScript</a></li>
+<li>3.3 <a href="ch_history.html#timeline-of-ecmascript-versions">Timeline of ECMAScript versions</a></li>
+<li>3.4 <a href="ch_history.html#tc39">Ecma Technical Committee&nbsp;39 (TC39)</a></li>
+<li>3.5 <a href="ch_history.html#tc39-process">The TC39 process</a>
+<ul>
+<li>3.5.1 <a href="ch_history.html#tip-think-in-individual-features-and-stages-not-ecmascript-versions">Tip: Think in individual features and stages, not ECMAScript versions</a></li>
+</ul></li>
+<li>3.6 <a href="ch_history.html#tc39-process-faq">FAQ: TC39 process</a>
+<ul>
+<li>3.6.1 <a href="ch_history.html#how-is-my-favorite-proposed-feature-doing">How is [my favorite proposed feature] doing?</a></li>
+<li>3.6.2 <a href="ch_history.html#is-there-an-official-list-of-ecmascript-features">Is there an official list of ECMAScript features?</a></li>
+</ul></li>
+<li>3.7 <a href="ch_history.html#backward-compatibility">Evolving JavaScript: Don’t break the web</a></li>
+</ul>
+</div>
+<hr>
+<h3 id="how-javascript-was-created">3.1 How JavaScript was created</h3>
+<p>JavaScript was created in May 1995 in 10 days, by Brendan Eich. Eich worked at Netscape and implemented JavaScript for their web browser, <em>Netscape Navigator</em>. <a id="index-entry-1" class="index-entry"></a></p>
+<p>The idea was that major interactive parts of the client-side web were to be implemented in Java. JavaScript was supposed to be a glue language for those parts and to also make HTML slightly more interactive. Given its role of assisting Java, JavaScript had to look like Java. That ruled out existing solutions such as Perl, Python, TCL, and others.</p>
+<p>Initially, JavaScript’s name changed several times:</p>
+<ul>
+<li>Its code name was <em>Mocha</em>.</li>
+<li>In the Netscape Navigator 2.0 betas (September 1995), it was called <em>LiveScript</em>.</li>
+<li>In Netscape Navigator 2.0 beta 3 (December 1995), it got its final name, <em>JavaScript</em>.</li>
+</ul>
+<h3 id="standardizing-javascript">3.2 Standardizing JavaScript</h3>
+<p>There are two standards for JavaScript:</p>
+<ul>
+<li>ECMA-262 is hosted by Ecma International. It is the primary standard. <a id="index-entry-2" class="index-entry"></a></li>
+<li>ISO/IEC 16262 is hosted by the International Organization for Standardization (ISO) and the International Electrotechnical Commission (IEC). This is a secondary standard.</li>
+</ul>
+<p>The language described by these standards is called <em>ECMAScript</em>, not <em>JavaScript</em>. A different name was chosen because Sun (now Oracle) had a trademark for the latter name. The “ECMA” in “ECMAScript” comes from the organization that hosts the primary standard. <a id="index-entry-3" class="index-entry"></a></p>
+<p>The original name of that organization was <em>ECMA</em>, an acronym for <em>European Computer Manufacturers Association</em>. It was later changed to <em>Ecma International</em> (with “Ecma” being a proper name, not an acronym) because the organization’s activities had expanded beyond Europe. The initial all-caps acronym explains the spelling of ECMAScript. <a id="index-entry-4" class="index-entry"></a></p>
+<p>In principle, JavaScript and ECMAScript mean the same thing. Sometimes the following distinction is made:</p>
+<ul>
+<li>The term <em>JavaScript</em> refers to the language and its implementations.</li>
+<li>The term <em>ECMAScript</em> refers to the language standard and language versions.</li>
+</ul>
+<p>Therefore, <em>ECMAScript 6</em> is a version of the language (its 6th edition).</p>
+<h3 id="timeline-of-ecmascript-versions">3.3 Timeline of ECMAScript versions</h3>
+<p>This is a brief timeline of ECMAScript versions:</p>
+<ul>
+<li>ECMAScript 1 (June 1997): First version of the standard.</li>
+<li>ECMAScript 2 (June 1998): Small update to keep ECMA-262 in sync with the ISO standard.</li>
+<li>ECMAScript 3 (December 1999): Adds many core features – “[…] regular expressions, better string handling, new control statements [do-while, switch], try/catch exception handling, […]”</li>
+<li>ECMAScript 4 (abandoned in July 2008): Would have been a massive upgrade (with static typing, modules, namespaces, and more), but ended up being too ambitious and dividing the language’s stewards.</li>
+<li>ECMAScript 5 (December 2009): Brought minor improvements – a few standard library features and <a href="ch_syntax.html#strict-mode"><em>strict mode</em></a>.</li>
+<li>ECMAScript 5.1 (June 2011): Another small update to keep Ecma and ISO standards in sync.</li>
+<li>ECMAScript 6 (June 2015): A large update that fulfilled many of the promises of ECMAScript 4. This version is the first one whose official name – <em>ECMAScript 2015</em> – is based on the year of publication.</li>
+<li>ECMAScript 2016 (June 2016): First yearly release. The shorter release life cycle resulted in fewer new features compared to the large ES6.</li>
+<li>ECMAScript 2017 (June 2017). Second yearly release.</li>
+<li>Subsequent ECMAScript versions (ES2018, etc.) are always ratified in June.</li>
+</ul>
+<h3 id="tc39">3.4 Ecma Technical Committee&nbsp;39 (TC39)</h3>
+<p><a id="index-entry-5" class="index-entry"></a><a id="index-entry-6" class="index-entry"></a></p>
+<p>TC39 is the committee that evolves JavaScript. Its member are, strictly speaking, companies: Adobe, Apple, Facebook, Google, Microsoft, Mozilla, Opera, Twitter, and others. That is, companies that are usually fierce competitors are working together for the good of the language.</p>
+<p>Every two months, TC39 has meetings that member-appointed delegates and invited experts attend. The minutes of those meetings are public in <a href="https://github.com/tc39/tc39-notes/">a GitHub repository</a>.</p>
+<h3 id="tc39-process">3.5 The TC39 process</h3>
+<p><a id="index-entry-7" class="index-entry"></a></p>
+<p>With ECMAScript 6, two issues with the release process used at that time became obvious:</p>
+<ul>
+<li><p>If too much time passes between releases then features that are ready early, have to wait a long time until they can be released. And features that are ready late, risk being rushed to make the deadline.</p></li>
+<li><p>Features were often designed long before they were implemented and used. Design deficiencies related to implementation and use were therefore discovered too late.</p></li>
+</ul>
+<p>In response to these issues, TC39 instituted the new <em>TC39 process</em>:</p>
+<ul>
+<li>ECMAScript features are designed independently and go through stages, starting at 0 (“strawman”), ending at 4 (“finished”).</li>
+<li>Especially the later stages require prototype implementations and real-world testing, leading to feedback loops between designs and implementations.</li>
+<li>ECMAScript versions are released once per year and include all features that have reached stage 4 prior to a release deadline.</li>
+</ul>
+<p>The result: smaller, incremental releases, whose features have already been field-tested. Fig.&nbsp;<a href="#fig:tc39-process-stages">1</a> illustrates the TC39 process.</p>
+<figure>
+<img src="img-book/1d6e4fb9580450805758275fbd9d9607c7777bc5.svg" id="fig:tc39-process-stages" data-factor="0.35" width="432" height="319" alt="Figure 1: Each ECMAScript feature proposal goes through stages that are numbered from 0 to 4. Champions are TC39 members that support the authors of a feature. Test 262 is a suite of tests that checks JavaScript engines for compliance with the language specification."><figcaption aria-hidden="true">Figure 1: Each ECMAScript feature proposal goes through stages that are numbered from 0 to 4. <em>Champions</em> are TC39 members that support the authors of a feature. Test 262 is a suite of tests that checks JavaScript engines for compliance with the language specification.</figcaption>
+</figure>
+<p>ES2016 was the first ECMAScript version that was designed according to the TC39 process.</p>
+<h4 id="tip-think-in-individual-features-and-stages-not-ecmascript-versions">3.5.1 Tip: Think in individual features and stages, not ECMAScript versions</h4>
+<p>Up to and including ES6, it was most common to think about JavaScript in terms of ECMAScript versions – for example, “Does this browser support ES6 yet?”</p>
+<p>Starting with ES2016, it’s better to think in individual features: once a feature reaches stage 4, you can safely use it (if it’s supported by the JavaScript engines you are targeting). You don’t have to wait until the next ECMAScript release.</p>
+<h3 id="tc39-process-faq">3.6 FAQ: TC39 process</h3>
+<h4 id="how-is-my-favorite-proposed-feature-doing">3.6.1 How is [my favorite proposed feature] doing?</h4>
+<p>If you are wondering what stages various proposed features are in, consult <a href="https://github.com/tc39/proposals">the GitHub repository <code>proposals</code></a>.</p>
+<h4 id="is-there-an-official-list-of-ecmascript-features">3.6.2 Is there an official list of ECMAScript features?</h4>
+<p>Yes, the TC39 repo lists <a href="https://github.com/tc39/proposals/blob/master/finished-proposals.md">finished proposals</a> and mentions in which ECMAScript versions they were introduced.</p>
+<h3 id="backward-compatibility">3.7 Evolving JavaScript: Don’t break the web</h3>
+<p>One idea that occasionally comes up is to clean up JavaScript by removing old features and quirks. While the appeal of that idea is obvious, it has significant downsides.</p>
+<p>Let’s assume we create a new version of JavaScript that is not backward compatible and fix all of its flaws. As a result, we’d encounter the following problems:</p>
+<ul>
+<li>JavaScript engines become bloated: they need to support both the old and the new version. The same is true for tools such as IDEs and build tools.</li>
+<li>Programmers need to know, and be continually conscious of, the differences between the versions.</li>
+<li>You can either migrate all of an existing code base to the new version (which can be a lot of work). Or you can mix versions and refactoring becomes harder because you can’t move code between versions without changing it.</li>
+<li>You somehow have to specify per piece of code – be it a file or code embedded in a web page – what version it is written in. Every conceivable solution has pros and cons. For example, <a href="ch_syntax.html#strict-mode"><em>strict mode</em></a> is a slightly cleaner version of ES5. One of the reasons why it wasn’t as popular as it should have been: it was a hassle to opt in via a directive at the beginning of a file or a function.</li>
+</ul>
+<p>So what is the solution? Can we have our cake and eat it? The approach that was chosen for ES6 is called “One JavaScript”:</p>
+<ul>
+<li>New versions are always completely backward compatible (but there may occasionally be minor, hardly noticeable clean-ups).</li>
+<li>Old features aren’t removed or fixed. Instead, better versions of them are introduced. One example is declaring variables via <code>let</code> – which is an improved version of <code>var</code>.</li>
+<li>If aspects of the language are changed, it is done inside new syntactic constructs. That is, you opt in implicitly. For example, <code>yield</code> is only a keyword inside generators (which were introduced in ES6). And all code inside modules and classes (both introduced in ES6) is implicitly in strict mode.</li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/23">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_new-javascript-features.html">4 New JavaScript features</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

@@ -1,0 +1,656 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_proto-chains-classes">29 Prototype chains and classes</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>29.1 <a href="ch_proto-chains-classes.html#prototype-chains">Prototype chains</a>
+<ul>
+<li>29.1.1 <a href="ch_proto-chains-classes.html#javascripts-operations-all-properties-vs.-own-properties">JavaScript’s operations: all properties vs.&nbsp;own properties</a></li>
+<li>29.1.2 <a href="ch_proto-chains-classes.html#pitfall-only-the-first-member-of-a-prototype-chain-is-mutated">Pitfall: only the first member of a prototype chain is mutated</a></li>
+<li>29.1.3 <a href="ch_proto-chains-classes.html#tips-for-working-with-prototypes-advanced">Tips for working with prototypes (advanced)</a></li>
+<li>29.1.4 <a href="ch_proto-chains-classes.html#sharing-data-via-prototypes">Sharing data via prototypes</a></li>
+</ul></li>
+<li>29.2 <a href="ch_proto-chains-classes.html#classes">Classes</a>
+<ul>
+<li>29.2.1 <a href="ch_proto-chains-classes.html#a-class-for-persons">A class for persons</a></li>
+<li>29.2.2 <a href="ch_proto-chains-classes.html#classes-under-the-hood">Classes under the hood</a></li>
+<li>29.2.3 <a href="ch_proto-chains-classes.html#class-definitions-prototype-properties">Class definitions: prototype properties</a></li>
+<li>29.2.4 <a href="ch_proto-chains-classes.html#class-definitions-static-properties">Class definitions: static properties</a></li>
+<li>29.2.5 <a href="ch_proto-chains-classes.html#the-instanceof-operator">The <code>instanceof</code> operator</a></li>
+<li>29.2.6 <a href="ch_proto-chains-classes.html#why-i-recommend-classes">Why I recommend classes</a></li>
+</ul></li>
+<li>29.3 <a href="ch_proto-chains-classes.html#private-data-for-classes">Private data for classes</a>
+<ul>
+<li>29.3.1 <a href="ch_proto-chains-classes.html#private-data-naming-convention">Private data: naming convention</a></li>
+<li>29.3.2 <a href="ch_proto-chains-classes.html#private-data-weakmaps">Private data: WeakMaps</a></li>
+<li>29.3.3 <a href="ch_proto-chains-classes.html#more-techniques-for-private-data">More techniques for private data</a></li>
+</ul></li>
+<li>29.4 <a href="ch_proto-chains-classes.html#subclassing">Subclassing</a>
+<ul>
+<li>29.4.1 <a href="ch_proto-chains-classes.html#subclasses-under-the-hood-advanced">Subclasses under the hood (advanced)</a></li>
+<li>29.4.2 <a href="ch_proto-chains-classes.html#instanceof-operator"><code>instanceof</code> in more detail (advanced)</a></li>
+<li>29.4.3 <a href="ch_proto-chains-classes.html#prototype-chains-of-built-in-objects-advanced">Prototype chains of built-in objects (advanced)</a></li>
+<li>29.4.4 <a href="ch_proto-chains-classes.html#dispatched-vs.-direct-method-calls-advanced">Dispatched vs.&nbsp;direct method calls (advanced)</a></li>
+<li>29.4.5 <a href="ch_proto-chains-classes.html#mixin-classes-advanced">Mixin classes (advanced)</a></li>
+</ul></li>
+<li>29.5 <a href="ch_proto-chains-classes.html#faq-objects">FAQ: objects</a>
+<ul>
+<li>29.5.1 <a href="ch_proto-chains-classes.html#why-do-objects-preserve-the-insertion-order-of-properties">Why do objects preserve the insertion order of properties?</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>In this book, JavaScript’s style of object-oriented programming (OOP) is introduced in four steps. This chapter covers steps 2–4, <a href="ch_single-objects.html">the previous chapter</a> covers step 1. The steps are (fig.&nbsp;<a href="#fig:oop_steps2">9</a>):</p>
+<ol type="1">
+<li><strong>Single objects (previous chapter):</strong> How do <em>objects</em>, JavaScript’s basic OOP building blocks, work in isolation?</li>
+<li><strong>Prototype chains (this chapter):</strong> Each object has a chain of zero or more <em>prototype objects</em>. Prototypes are JavaScript’s core inheritance mechanism.</li>
+<li><strong>Classes (this chapter):</strong> JavaScript’s <em>classes</em> are factories for objects. The relationship between a class and its instances is based on prototypal inheritance.</li>
+<li><strong>Subclassing (this chapter):</strong> The relationship between a <em>subclass</em> and its <em>superclass</em> is also based on prototypal inheritance.</li>
+</ol>
+<figure>
+<img src="img-book/61838ddd8244a11d32162fc6ac2d6045aa51b0e0.svg" id="fig:oop_steps2" data-factor="0.4" width="359" height="154" alt="Figure 9: This book introduces object-oriented programming in JavaScript in four steps."><figcaption aria-hidden="true">Figure 9: This book introduces object-oriented programming in JavaScript in four steps.</figcaption>
+</figure>
+<h3 id="prototype-chains">29.1 Prototype chains</h3>
+<p><a id="index-entry-350" class="index-entry"></a><a id="index-entry-351" class="index-entry"></a><a id="index-entry-352" class="index-entry"></a></p>
+<p>Prototypes are JavaScript’s only inheritance mechanism: each object has a prototype that is either <code>null</code> or an object. In the latter case, the object inherits all of the prototype’s properties.</p>
+<p>In an object literal, you can set the prototype via the special property <code>__proto__</code>:</p>
+<div class="sourceCode" id="cb745"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb745-1"><a href="ch_proto-chains-classes.html#cb745-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> proto <span class="op">=</span> {</span>
+<span id="cb745-2"><a href="ch_proto-chains-classes.html#cb745-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">protoProp</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span></span>
+<span id="cb745-3"><a href="ch_proto-chains-classes.html#cb745-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb745-4"><a href="ch_proto-chains-classes.html#cb745-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb745-5"><a href="ch_proto-chains-classes.html#cb745-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">__proto__</span><span class="op">:</span> proto<span class="op">,</span></span>
+<span id="cb745-6"><a href="ch_proto-chains-classes.html#cb745-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">objProp</span><span class="op">:</span> <span class="st">'b'</span><span class="op">,</span></span>
+<span id="cb745-7"><a href="ch_proto-chains-classes.html#cb745-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb745-8"><a href="ch_proto-chains-classes.html#cb745-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb745-9"><a href="ch_proto-chains-classes.html#cb745-9" aria-hidden="true" tabindex="-1"></a><span class="co">// obj inherits .protoProp:</span></span>
+<span id="cb745-10"><a href="ch_proto-chains-classes.html#cb745-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">protoProp</span><span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb745-11"><a href="ch_proto-chains-classes.html#cb745-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="st">'protoProp'</span> <span class="kw">in</span> obj<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div>
+<p>Given that a prototype object can have a prototype itself, we get a chain of objects – the so-called <em>prototype chain</em>. That means that inheritance gives us the impression that we are dealing with single objects, but we are actually dealing with chains of objects.</p>
+<p>Fig.&nbsp;<a href="#fig:oo_proto_chain">10</a> shows what the prototype chain of <code>obj</code> looks like.</p>
+<figure>
+<img src="img-book/801d9c61c17c4bfc489ce98e15dbb7495fb8479f.svg" id="fig:oo_proto_chain" width="119" height="198" alt="Figure 10: obj starts a chain of objects that continues with proto and other objects."><figcaption aria-hidden="true">Figure 10: <code>obj</code> starts a chain of objects that continues with <code>proto</code> and other objects.</figcaption>
+</figure>
+<p>Non-inherited properties are called <em>own properties</em>. <code>obj</code> has one own property, <code>.objProp</code>.</p>
+<h4 id="javascripts-operations-all-properties-vs.-own-properties">29.1.1 JavaScript’s operations: all properties vs.&nbsp;own properties</h4>
+<p>Some operations consider all properties (own and inherited) – for example, getting properties:</p>
+<div class="sourceCode" id="cb746"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb746-1"><a href="ch_proto-chains-classes.html#cb746-1" aria-hidden="true" tabindex="-1"></a>&gt; const obj = { foo: 1 };</span>
+<span id="cb746-2"><a href="ch_proto-chains-classes.html#cb746-2" aria-hidden="true" tabindex="-1"></a>&gt; typeof obj.foo // own</span>
+<span id="cb746-3"><a href="ch_proto-chains-classes.html#cb746-3" aria-hidden="true" tabindex="-1"></a><span class="kw">'number'</span></span>
+<span id="cb746-4"><a href="ch_proto-chains-classes.html#cb746-4" aria-hidden="true" tabindex="-1"></a>&gt; typeof obj.toString // inherited</span>
+<span id="cb746-5"><a href="ch_proto-chains-classes.html#cb746-5" aria-hidden="true" tabindex="-1"></a><span class="kw">'function'</span></span></code></pre></div>
+<p>Other operations only consider own properties – for example, <code>Object.keys()</code>:</p>
+<div class="sourceCode" id="cb747"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb747-1"><a href="ch_proto-chains-classes.html#cb747-1" aria-hidden="true" tabindex="-1"></a>&gt; Object.keys(obj)</span>
+<span id="cb747-2"><a href="ch_proto-chains-classes.html#cb747-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'foo' ]</span></span></code></pre></div>
+<p>Read on for another operation that also only considers own properties: setting properties.</p>
+<h4 id="pitfall-only-the-first-member-of-a-prototype-chain-is-mutated">29.1.2 Pitfall: only the first member of a prototype chain is mutated</h4>
+<p>One aspect of prototype chains that may be counter-intuitive is that setting <em>any</em> property via an object – even an inherited one – only changes that very object – never one of the prototypes.</p>
+<p>Consider the following object <code>obj</code>:</p>
+<div class="sourceCode" id="cb748"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb748-1"><a href="ch_proto-chains-classes.html#cb748-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> proto <span class="op">=</span> {</span>
+<span id="cb748-2"><a href="ch_proto-chains-classes.html#cb748-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">protoProp</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span></span>
+<span id="cb748-3"><a href="ch_proto-chains-classes.html#cb748-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb748-4"><a href="ch_proto-chains-classes.html#cb748-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb748-5"><a href="ch_proto-chains-classes.html#cb748-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">__proto__</span><span class="op">:</span> proto<span class="op">,</span></span>
+<span id="cb748-6"><a href="ch_proto-chains-classes.html#cb748-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">objProp</span><span class="op">:</span> <span class="st">'b'</span><span class="op">,</span></span>
+<span id="cb748-7"><a href="ch_proto-chains-classes.html#cb748-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p><a id="index-entry-353" class="index-entry"></a></p>
+<p>In the next code snippet, we set the inherited property <code>obj.protoProp</code> (line A). That “changes” it by creating an own property: When reading <code>obj.protoProp</code>, the own property is found first and its value <em>overrides</em> the value of the inherited property.</p>
+<div class="sourceCode" id="cb749"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb749-1"><a href="ch_proto-chains-classes.html#cb749-1" aria-hidden="true" tabindex="-1"></a><span class="co">// In the beginning, obj has one own property</span></span>
+<span id="cb749-2"><a href="ch_proto-chains-classes.html#cb749-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(obj)<span class="op">,</span> [<span class="st">'objProp'</span>])<span class="op">;</span></span>
+<span id="cb749-3"><a href="ch_proto-chains-classes.html#cb749-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb749-4"><a href="ch_proto-chains-classes.html#cb749-4" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="at">protoProp</span> <span class="op">=</span> <span class="st">'x'</span><span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb749-5"><a href="ch_proto-chains-classes.html#cb749-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb749-6"><a href="ch_proto-chains-classes.html#cb749-6" aria-hidden="true" tabindex="-1"></a><span class="co">// We created a new own property:</span></span>
+<span id="cb749-7"><a href="ch_proto-chains-classes.html#cb749-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(obj)<span class="op">,</span> [<span class="st">'objProp'</span><span class="op">,</span> <span class="st">'protoProp'</span>])<span class="op">;</span></span>
+<span id="cb749-8"><a href="ch_proto-chains-classes.html#cb749-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb749-9"><a href="ch_proto-chains-classes.html#cb749-9" aria-hidden="true" tabindex="-1"></a><span class="co">// The inherited property itself is unchanged:</span></span>
+<span id="cb749-10"><a href="ch_proto-chains-classes.html#cb749-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(proto<span class="op">.</span><span class="at">protoProp</span><span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb749-11"><a href="ch_proto-chains-classes.html#cb749-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb749-12"><a href="ch_proto-chains-classes.html#cb749-12" aria-hidden="true" tabindex="-1"></a><span class="co">// The own property overrides the inherited property:</span></span>
+<span id="cb749-13"><a href="ch_proto-chains-classes.html#cb749-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">protoProp</span><span class="op">,</span> <span class="st">'x'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The prototype chain of <code>obj</code> is depicted in fig.&nbsp;<a href="#fig:oo_overriding">11</a>.</p>
+<figure>
+<img src="img-book/3e658ec0b4c85ee734eb8fce32c26fe19b234cf7.svg" id="fig:oo_overriding" width="119" height="221" alt="Figure 11: The own property .protoProp of obj overrides the property inherited from proto."><figcaption aria-hidden="true">Figure 11: The own property <code>.protoProp</code> of <code>obj</code> overrides the property inherited from <code>proto</code>.</figcaption>
+</figure>
+<h4 id="tips-for-working-with-prototypes-advanced">29.1.3 Tips for working with prototypes (advanced)</h4>
+<h5 id="best-practice-avoid-__proto__-except-in-object-literals">29.1.3.1 Best practice: avoid <code>__proto__</code>, except in object literals</h5>
+<p>I recommend to avoid the pseudo-property <code>__proto__</code>: As we will see <a href="ch_proto-chains-classes.html#proto">later</a>, not all objects have it.</p>
+<p>However, <code>__proto__</code> in object literals is different. There, it is a built-in feature and always available.</p>
+<p>The recommended ways of getting and setting prototypes are:</p>
+<ul>
+<li><p>The best way to get a prototype is via the following method:</p>
+<div class="sourceCode" id="cb750"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb750-1"><a href="ch_proto-chains-classes.html#cb750-1" aria-hidden="true" tabindex="-1"></a>Object<span class="op">.</span><span class="fu">getPrototypeOf</span>(obj<span class="op">:</span> Object) <span class="op">:</span> Object</span></code></pre></div></li>
+<li><p>The best way to set a prototype is when creating an object – via <code>__proto__</code> in an object literal or via:</p>
+<div class="sourceCode" id="cb751"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb751-1"><a href="ch_proto-chains-classes.html#cb751-1" aria-hidden="true" tabindex="-1"></a>Object<span class="op">.</span><span class="fu">create</span>(proto<span class="op">:</span> Object) <span class="op">:</span> Object</span></code></pre></div>
+<p>If you have to, you can use <code>Object.setPrototypeOf()</code> to change the prototype of an existing object. But that may affect performance negatively.</p></li>
+</ul>
+<p>This is how these features are used:</p>
+<div class="sourceCode" id="cb752"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb752-1"><a href="ch_proto-chains-classes.html#cb752-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> proto1 <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb752-2"><a href="ch_proto-chains-classes.html#cb752-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> proto2 <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb752-3"><a href="ch_proto-chains-classes.html#cb752-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb752-4"><a href="ch_proto-chains-classes.html#cb752-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">create</span>(proto1)<span class="op">;</span></span>
+<span id="cb752-5"><a href="ch_proto-chains-classes.html#cb752-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">getPrototypeOf</span>(obj)<span class="op">,</span> proto1)<span class="op">;</span></span>
+<span id="cb752-6"><a href="ch_proto-chains-classes.html#cb752-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb752-7"><a href="ch_proto-chains-classes.html#cb752-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Object</span><span class="op">.</span><span class="fu">setPrototypeOf</span>(obj<span class="op">,</span> proto2)<span class="op">;</span></span>
+<span id="cb752-8"><a href="ch_proto-chains-classes.html#cb752-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">getPrototypeOf</span>(obj)<span class="op">,</span> proto2)<span class="op">;</span></span></code></pre></div>
+<h5 id="check-is-an-object-a-prototype-of-another-one">29.1.3.2 Check: is an object a prototype of another one?</h5>
+<p>So far, “<code>p</code> is a prototype of <code>o</code>” always meant “<code>p</code> is a <em>direct</em> prototype of <code>o</code>”. But it can also be used more loosely and mean that <code>p</code> is in the prototype chain of <code>o</code>. That looser relationship can be checked via:</p>
+<div class="sourceCode" id="cb753"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb753-1"><a href="ch_proto-chains-classes.html#cb753-1" aria-hidden="true" tabindex="-1"></a>p<span class="op">.</span><span class="fu">isPrototypeOf</span>(o)</span></code></pre></div>
+<p>For example:</p>
+<div class="sourceCode" id="cb754"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb754-1"><a href="ch_proto-chains-classes.html#cb754-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> a <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb754-2"><a href="ch_proto-chains-classes.html#cb754-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> b <span class="op">=</span> {<span class="dt">__proto__</span><span class="op">:</span> a}<span class="op">;</span></span>
+<span id="cb754-3"><a href="ch_proto-chains-classes.html#cb754-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> c <span class="op">=</span> {<span class="dt">__proto__</span><span class="op">:</span> b}<span class="op">;</span></span>
+<span id="cb754-4"><a href="ch_proto-chains-classes.html#cb754-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb754-5"><a href="ch_proto-chains-classes.html#cb754-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(a<span class="op">.</span><span class="fu">isPrototypeOf</span>(b)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb754-6"><a href="ch_proto-chains-classes.html#cb754-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(a<span class="op">.</span><span class="fu">isPrototypeOf</span>(c)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb754-7"><a href="ch_proto-chains-classes.html#cb754-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb754-8"><a href="ch_proto-chains-classes.html#cb754-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(a<span class="op">.</span><span class="fu">isPrototypeOf</span>(a)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span>
+<span id="cb754-9"><a href="ch_proto-chains-classes.html#cb754-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(c<span class="op">.</span><span class="fu">isPrototypeOf</span>(a)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="sharing-data-via-prototypes">29.1.4 Sharing data via prototypes</h4>
+<p>Consider the following code:</p>
+<div class="sourceCode" id="cb755"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb755-1"><a href="ch_proto-chains-classes.html#cb755-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb755-2"><a href="ch_proto-chains-classes.html#cb755-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb755-3"><a href="ch_proto-chains-classes.html#cb755-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>() {</span>
+<span id="cb755-4"><a href="ch_proto-chains-classes.html#cb755-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'Person named '</span><span class="op">+</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="op">;</span></span>
+<span id="cb755-5"><a href="ch_proto-chains-classes.html#cb755-5" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb755-6"><a href="ch_proto-chains-classes.html#cb755-6" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb755-7"><a href="ch_proto-chains-classes.html#cb755-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> tarzan <span class="op">=</span> {</span>
+<span id="cb755-8"><a href="ch_proto-chains-classes.html#cb755-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">'Tarzan'</span><span class="op">,</span></span>
+<span id="cb755-9"><a href="ch_proto-chains-classes.html#cb755-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>() {</span>
+<span id="cb755-10"><a href="ch_proto-chains-classes.html#cb755-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'Person named '</span><span class="op">+</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="op">;</span></span>
+<span id="cb755-11"><a href="ch_proto-chains-classes.html#cb755-11" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb755-12"><a href="ch_proto-chains-classes.html#cb755-12" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb755-13"><a href="ch_proto-chains-classes.html#cb755-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb755-14"><a href="ch_proto-chains-classes.html#cb755-14" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(jane<span class="op">.</span><span class="fu">describe</span>()<span class="op">,</span> <span class="st">'Person named Jane'</span>)<span class="op">;</span></span>
+<span id="cb755-15"><a href="ch_proto-chains-classes.html#cb755-15" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(tarzan<span class="op">.</span><span class="fu">describe</span>()<span class="op">,</span> <span class="st">'Person named Tarzan'</span>)<span class="op">;</span></span></code></pre></div>
+<p>We have two objects that are very similar. Both have two properties whose names are <code>.name</code> and <code>.describe</code>. Additionally, method <code>.describe()</code> is the same. How can we avoid duplicating that method?</p>
+<p>We can move it to an object <code>PersonProto</code> and make that object a prototype of both <code>jane</code> and <code>tarzan</code>:</p>
+<div class="sourceCode" id="cb756"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb756-1"><a href="ch_proto-chains-classes.html#cb756-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> PersonProto <span class="op">=</span> {</span>
+<span id="cb756-2"><a href="ch_proto-chains-classes.html#cb756-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>() {</span>
+<span id="cb756-3"><a href="ch_proto-chains-classes.html#cb756-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'Person named '</span> <span class="op">+</span> <span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="op">;</span></span>
+<span id="cb756-4"><a href="ch_proto-chains-classes.html#cb756-4" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb756-5"><a href="ch_proto-chains-classes.html#cb756-5" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb756-6"><a href="ch_proto-chains-classes.html#cb756-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb756-7"><a href="ch_proto-chains-classes.html#cb756-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">__proto__</span><span class="op">:</span> PersonProto<span class="op">,</span></span>
+<span id="cb756-8"><a href="ch_proto-chains-classes.html#cb756-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb756-9"><a href="ch_proto-chains-classes.html#cb756-9" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb756-10"><a href="ch_proto-chains-classes.html#cb756-10" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> tarzan <span class="op">=</span> {</span>
+<span id="cb756-11"><a href="ch_proto-chains-classes.html#cb756-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">__proto__</span><span class="op">:</span> PersonProto<span class="op">,</span></span>
+<span id="cb756-12"><a href="ch_proto-chains-classes.html#cb756-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">'Tarzan'</span><span class="op">,</span></span>
+<span id="cb756-13"><a href="ch_proto-chains-classes.html#cb756-13" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>The name of the prototype reflects that both <code>jane</code> and <code>tarzan</code> are persons.</p>
+<figure>
+<img src="img-book/c58c226961223c1004c8bacd1764c0b5990b33d4.svg" id="fig:oo_person_shared" width="328" height="139" alt="Figure 12: Objects jane and tarzan share method .describe(), via their common prototype PersonProto."><figcaption aria-hidden="true">Figure 12: Objects <code>jane</code> and <code>tarzan</code> share method <code>.describe()</code>, via their common prototype <code>PersonProto</code>.</figcaption>
+</figure>
+<p>Fig.&nbsp;<a href="#fig:oo_person_shared">12</a> illustrates how the three objects are connected: The objects at the bottom now contain the properties that are specific to <code>jane</code> and <code>tarzan</code>. The object at the top contains the properties that are shared between them.</p>
+<p>When you make the method call <code>jane.describe()</code>, <code>this</code> points to the receiver of that method call, <code>jane</code> (in the bottom-left corner of the diagram). That’s why the method still works. <code>tarzan.describe()</code> works similarly.</p>
+<div class="sourceCode" id="cb757"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb757-1"><a href="ch_proto-chains-classes.html#cb757-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(jane<span class="op">.</span><span class="fu">describe</span>()<span class="op">,</span> <span class="st">'Person named Jane'</span>)<span class="op">;</span></span>
+<span id="cb757-2"><a href="ch_proto-chains-classes.html#cb757-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(tarzan<span class="op">.</span><span class="fu">describe</span>()<span class="op">,</span> <span class="st">'Person named Tarzan'</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="classes">29.2 Classes</h3>
+<p><a id="index-entry-354" class="index-entry"></a></p>
+<p>We are now ready to take on classes, which are basically a compact syntax for setting up prototype chains. Under the hood, JavaScript’s classes are unconventional. But that is something you rarely see when working with them. They should normally feel familiar to people who have used other object-oriented programming languages.</p>
+<h4 id="a-class-for-persons">29.2.1 A class for persons</h4>
+<p><a id="index-entry-355" class="index-entry"></a></p>
+<p>We have previously worked with <code>jane</code> and <code>tarzan</code>, single objects representing persons. Let’s use a <em>class declaration</em> to implement a factory for person objects:</p>
+<div class="sourceCode" id="cb758"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb758-1"><a href="ch_proto-chains-classes.html#cb758-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Person {</span>
+<span id="cb758-2"><a href="ch_proto-chains-classes.html#cb758-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(name) {</span>
+<span id="cb758-3"><a href="ch_proto-chains-classes.html#cb758-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">name</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb758-4"><a href="ch_proto-chains-classes.html#cb758-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb758-5"><a href="ch_proto-chains-classes.html#cb758-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>() {</span>
+<span id="cb758-6"><a href="ch_proto-chains-classes.html#cb758-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'Person named '</span><span class="op">+</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="op">;</span></span>
+<span id="cb758-7"><a href="ch_proto-chains-classes.html#cb758-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb758-8"><a href="ch_proto-chains-classes.html#cb758-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>jane</code> and <code>tarzan</code> can now be created via <code>new Person()</code>:</p>
+<div class="sourceCode" id="cb759"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb759-1"><a href="ch_proto-chains-classes.html#cb759-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">'Jane'</span>)<span class="op">;</span></span>
+<span id="cb759-2"><a href="ch_proto-chains-classes.html#cb759-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(jane<span class="op">.</span><span class="at">name</span><span class="op">,</span> <span class="st">'Jane'</span>)<span class="op">;</span></span>
+<span id="cb759-3"><a href="ch_proto-chains-classes.html#cb759-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(jane<span class="op">.</span><span class="fu">describe</span>()<span class="op">,</span> <span class="st">'Person named Jane'</span>)<span class="op">;</span></span>
+<span id="cb759-4"><a href="ch_proto-chains-classes.html#cb759-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb759-5"><a href="ch_proto-chains-classes.html#cb759-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> tarzan <span class="op">=</span> <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">'Tarzan'</span>)<span class="op">;</span></span>
+<span id="cb759-6"><a href="ch_proto-chains-classes.html#cb759-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(tarzan<span class="op">.</span><span class="at">name</span><span class="op">,</span> <span class="st">'Tarzan'</span>)<span class="op">;</span></span>
+<span id="cb759-7"><a href="ch_proto-chains-classes.html#cb759-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(tarzan<span class="op">.</span><span class="fu">describe</span>()<span class="op">,</span> <span class="st">'Person named Tarzan'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Class <code>Person</code> has two methods:</p>
+<ul>
+<li>The normal method <code>.describe()</code></li>
+<li>The special method <code>.constructor()</code> which is called directly after a new instance has been created and initializes that instance. It receives the arguments that are passed to the <code>new</code> operator (after the class name). If you don’t need any arguments to set up a new instance, you can omit the constructor.</li>
+</ul>
+<h5 id="class-expressions">29.2.1.1 Class expressions</h5>
+<p><a id="index-entry-356" class="index-entry"></a><a id="index-entry-357" class="index-entry"></a><a id="index-entry-358" class="index-entry"></a></p>
+<p>There are two kinds of <em>class definitions</em> (ways of defining classes):</p>
+<ul>
+<li><em>Class declarations</em>, which we have seen in the previous section.</li>
+<li><em>Class expressions</em>, which we’ll see next.</li>
+</ul>
+<p>Class expressions can be anonymous and named:</p>
+<div class="sourceCode" id="cb760"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb760-1"><a href="ch_proto-chains-classes.html#cb760-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Anonymous class expression</span></span>
+<span id="cb760-2"><a href="ch_proto-chains-classes.html#cb760-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> Person <span class="op">=</span> <span class="kw">class</span> { ··· }<span class="op">;</span></span>
+<span id="cb760-3"><a href="ch_proto-chains-classes.html#cb760-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb760-4"><a href="ch_proto-chains-classes.html#cb760-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Named class expression</span></span>
+<span id="cb760-5"><a href="ch_proto-chains-classes.html#cb760-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> Person <span class="op">=</span> <span class="kw">class</span> MyClass { ··· }<span class="op">;</span></span></code></pre></div>
+<p>The name of a named class expression works similarly to <a href="ch_callables.html#named-function-expressions">the name of a named function expression</a>.</p>
+<p>This was a first look at classes. We’ll explore more features soon, but first we need to learn the internals of classes.</p>
+<h4 id="classes-under-the-hood">29.2.2 Classes under the hood</h4>
+<p>There is a lot going on under the hood of classes. Let’s look at the diagram for <code>jane</code> (fig.&nbsp;<a href="#fig:oo_person_class">13</a>).</p>
+<figure>
+<img src="img-book/9e58a0eff1bb377a79c6c288675ac37ece33af23.svg" id="fig:oo_person_class" width="385" height="217" alt="Figure 13: The class Person has the property .prototype that points to an object that is the prototype of all instances of Person. jane is one such instance."><figcaption aria-hidden="true">Figure 13: The class <code>Person</code> has the property <code>.prototype</code> that points to an object that is the prototype of all instances of <code>Person</code>. <code>jane</code> is one such instance.</figcaption>
+</figure>
+<p>The main purpose of class <code>Person</code> is to set up the prototype chain on the right (<code>jane</code>, followed by <code>Person.prototype</code>). It is interesting to note that both constructs inside class <code>Person</code> (<code>.constructor</code> and <code>.describe()</code>) created properties for <code>Person.prototype</code>, not for <code>Person</code>.</p>
+<p>The reason for this slightly odd approach is backward compatibility: prior to classes, <em>constructor functions</em> (<a href="ch_callables.html#roles-of-ordinary-functions">ordinary functions</a>, invoked via the <code>new</code> operator) were often used as factories for objects. Classes are mostly better syntax for constructor functions and therefore remain compatible with old code. That explains why classes are functions:</p>
+<div class="sourceCode" id="cb761"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb761-1"><a href="ch_proto-chains-classes.html#cb761-1" aria-hidden="true" tabindex="-1"></a>&gt; typeof Person</span>
+<span id="cb761-2"><a href="ch_proto-chains-classes.html#cb761-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'function'</span></span></code></pre></div>
+<p>In this book, I use the terms <em>constructor (function)</em> and <em>class</em> interchangeably.</p>
+<p>It is easy to confuse <code>.__proto__</code> and <code>.prototype</code>. Hopefully, fig.&nbsp;<a href="#fig:oo_person_class">13</a> makes it clear how they differ:</p>
+<ul>
+<li><code>.__proto__</code> is a pseudo-property for accessing the prototype of an object.</li>
+<li><code>.prototype</code> is a normal property that is only special due to how the <code>new</code> operator uses it. The name is not ideal: <code>Person.prototype</code> does not point to the prototype of <code>Person</code>, it points to the prototype of all instances of <code>Person</code>.</li>
+</ul>
+<h5 id="person.prototype.constructor-advanced">29.2.2.1 <code>Person.prototype.constructor</code> (advanced)</h5>
+<p>There is one detail in fig.&nbsp;<a href="#fig:oo_person_class">13</a> that we haven’t looked at, yet: <code>Person.prototype.constructor</code> points back to <code>Person</code>:</p>
+<div class="sourceCode" id="cb762"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb762-1"><a href="ch_proto-chains-classes.html#cb762-1" aria-hidden="true" tabindex="-1"></a>&gt; Person.prototype.constructor === Person</span>
+<span id="cb762-2"><a href="ch_proto-chains-classes.html#cb762-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>This setup also exists due to backward compatibility. But it has two additional benefits.</p>
+<p>First, each instance of a class inherits property <code>.constructor</code>. Therefore, given an instance, you can make “similar” objects using it:</p>
+<div class="sourceCode" id="cb763"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb763-1"><a href="ch_proto-chains-classes.html#cb763-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">'Jane'</span>)<span class="op">;</span></span>
+<span id="cb763-2"><a href="ch_proto-chains-classes.html#cb763-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb763-3"><a href="ch_proto-chains-classes.html#cb763-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> cheeta <span class="op">=</span> <span class="kw">new</span> jane<span class="op">.</span><span class="fu">constructor</span>(<span class="st">'Cheeta'</span>)<span class="op">;</span></span>
+<span id="cb763-4"><a href="ch_proto-chains-classes.html#cb763-4" aria-hidden="true" tabindex="-1"></a><span class="co">// cheeta is also an instance of Person</span></span>
+<span id="cb763-5"><a href="ch_proto-chains-classes.html#cb763-5" aria-hidden="true" tabindex="-1"></a><span class="co">// (the instanceof operator is explained later)</span></span>
+<span id="cb763-6"><a href="ch_proto-chains-classes.html#cb763-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(cheeta <span class="kw">instanceof</span> Person<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div>
+<p>Second, you can get the name of the class that created a given instance:</p>
+<div class="sourceCode" id="cb764"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb764-1"><a href="ch_proto-chains-classes.html#cb764-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> tarzan <span class="op">=</span> <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">'Tarzan'</span>)<span class="op">;</span></span>
+<span id="cb764-2"><a href="ch_proto-chains-classes.html#cb764-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb764-3"><a href="ch_proto-chains-classes.html#cb764-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(tarzan<span class="op">.</span><span class="at">constructor</span><span class="op">.</span><span class="at">name</span><span class="op">,</span> <span class="st">'Person'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="class-definitions-prototype-properties">29.2.3 Class definitions: prototype properties</h4>
+<p>All constructs in the body of the following class declaration create properties of <code>Foo.prototype</code>.</p>
+<div class="sourceCode" id="cb765"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb765-1"><a href="ch_proto-chains-classes.html#cb765-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Foo {</span>
+<span id="cb765-2"><a href="ch_proto-chains-classes.html#cb765-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(prop) {</span>
+<span id="cb765-3"><a href="ch_proto-chains-classes.html#cb765-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">prop</span> <span class="op">=</span> prop<span class="op">;</span></span>
+<span id="cb765-4"><a href="ch_proto-chains-classes.html#cb765-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb765-5"><a href="ch_proto-chains-classes.html#cb765-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">protoMethod</span>() {</span>
+<span id="cb765-6"><a href="ch_proto-chains-classes.html#cb765-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'protoMethod'</span><span class="op">;</span></span>
+<span id="cb765-7"><a href="ch_proto-chains-classes.html#cb765-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb765-8"><a href="ch_proto-chains-classes.html#cb765-8" aria-hidden="true" tabindex="-1"></a>  get <span class="fu">protoGetter</span>() {</span>
+<span id="cb765-9"><a href="ch_proto-chains-classes.html#cb765-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'protoGetter'</span><span class="op">;</span></span>
+<span id="cb765-10"><a href="ch_proto-chains-classes.html#cb765-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb765-11"><a href="ch_proto-chains-classes.html#cb765-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Let’s examine them in order:</p>
+<ul>
+<li><code>.constructor()</code> is called after creating a new instance of <code>Foo</code> to set up that instance.</li>
+<li><code>.protoMethod()</code> is a normal method. It is stored in <code>Foo.prototype</code>.</li>
+<li><code>.protoGetter</code> is a getter that is stored in <code>Foo.prototype</code>.</li>
+</ul>
+<p>The following interaction uses class <code>Foo</code>:</p>
+<div class="sourceCode" id="cb766"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb766-1"><a href="ch_proto-chains-classes.html#cb766-1" aria-hidden="true" tabindex="-1"></a>&gt; const foo = new Foo(123);</span>
+<span id="cb766-2"><a href="ch_proto-chains-classes.html#cb766-2" aria-hidden="true" tabindex="-1"></a>&gt; foo.prop</span>
+<span id="cb766-3"><a href="ch_proto-chains-classes.html#cb766-3" aria-hidden="true" tabindex="-1"></a><span class="kw">123</span></span>
+<span id="cb766-4"><a href="ch_proto-chains-classes.html#cb766-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb766-5"><a href="ch_proto-chains-classes.html#cb766-5" aria-hidden="true" tabindex="-1"></a>&gt; foo.protoMethod()</span>
+<span id="cb766-6"><a href="ch_proto-chains-classes.html#cb766-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'protoMethod'</span></span>
+<span id="cb766-7"><a href="ch_proto-chains-classes.html#cb766-7" aria-hidden="true" tabindex="-1"></a>&gt; foo.protoGetter</span>
+<span id="cb766-8"><a href="ch_proto-chains-classes.html#cb766-8" aria-hidden="true" tabindex="-1"></a><span class="kw">'protoGetter'</span></span></code></pre></div>
+<h4 id="class-definitions-static-properties">29.2.4 Class definitions: static properties</h4>
+<p><a id="index-entry-359" class="index-entry"></a></p>
+<p>All constructs in the body of the following class declaration create so-called <em>static</em> properties – properties of <code>Bar</code> itself.</p>
+<div class="sourceCode" id="cb767"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb767-1"><a href="ch_proto-chains-classes.html#cb767-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Bar {</span>
+<span id="cb767-2"><a href="ch_proto-chains-classes.html#cb767-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">static</span> <span class="fu">staticMethod</span>() {</span>
+<span id="cb767-3"><a href="ch_proto-chains-classes.html#cb767-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'staticMethod'</span><span class="op">;</span></span>
+<span id="cb767-4"><a href="ch_proto-chains-classes.html#cb767-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb767-5"><a href="ch_proto-chains-classes.html#cb767-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">static</span> get <span class="fu">staticGetter</span>() {</span>
+<span id="cb767-6"><a href="ch_proto-chains-classes.html#cb767-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'staticGetter'</span><span class="op">;</span></span>
+<span id="cb767-7"><a href="ch_proto-chains-classes.html#cb767-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb767-8"><a href="ch_proto-chains-classes.html#cb767-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The static method and the static getter are used as follows:</p>
+<div class="sourceCode" id="cb768"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb768-1"><a href="ch_proto-chains-classes.html#cb768-1" aria-hidden="true" tabindex="-1"></a>&gt; Bar.staticMethod()</span>
+<span id="cb768-2"><a href="ch_proto-chains-classes.html#cb768-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'staticMethod'</span></span>
+<span id="cb768-3"><a href="ch_proto-chains-classes.html#cb768-3" aria-hidden="true" tabindex="-1"></a>&gt; Bar.staticGetter</span>
+<span id="cb768-4"><a href="ch_proto-chains-classes.html#cb768-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'staticGetter'</span></span></code></pre></div>
+<h4 id="the-instanceof-operator">29.2.5 The <code>instanceof</code> operator</h4>
+<p><a id="index-entry-360" class="index-entry"></a></p>
+<p>The <code>instanceof</code> operator tells you if a value is an instance of a given class:</p>
+<div class="sourceCode" id="cb769"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb769-1"><a href="ch_proto-chains-classes.html#cb769-1" aria-hidden="true" tabindex="-1"></a>&gt; new Person('Jane') instanceof Person</span>
+<span id="cb769-2"><a href="ch_proto-chains-classes.html#cb769-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb769-3"><a href="ch_proto-chains-classes.html#cb769-3" aria-hidden="true" tabindex="-1"></a>&gt; ({}) instanceof Person</span>
+<span id="cb769-4"><a href="ch_proto-chains-classes.html#cb769-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb769-5"><a href="ch_proto-chains-classes.html#cb769-5" aria-hidden="true" tabindex="-1"></a>&gt; ({}) instanceof Object</span>
+<span id="cb769-6"><a href="ch_proto-chains-classes.html#cb769-6" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb769-7"><a href="ch_proto-chains-classes.html#cb769-7" aria-hidden="true" tabindex="-1"></a>&gt; [] instanceof Array</span>
+<span id="cb769-8"><a href="ch_proto-chains-classes.html#cb769-8" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>We’ll explore the <code>instanceof</code> operator in more detail <a href="ch_proto-chains-classes.html#instanceof-operator">later</a>, after we have looked at subclassing.</p>
+<h4 id="why-i-recommend-classes">29.2.6 Why I recommend classes</h4>
+<p>I recommend using classes for the following reasons:</p>
+<ul>
+<li><p>Classes are a common standard for object creation and inheritance that is now widely supported across frameworks (React, Angular, Ember, etc.). This is an improvement to how things were before, when almost every framework had its own inheritance library.</p></li>
+<li><p>They help tools such as IDEs and type checkers with their work and enable new features there.</p></li>
+<li><p>If you come from another language to JavaScript and are used to classes, then you can get started more quickly.</p></li>
+<li><p>JavaScript engines optimize them. That is, code that uses classes is almost always faster than code that uses a custom inheritance library.</p></li>
+<li><p>You can subclass built-in constructor functions such as <code>Error</code>.</p></li>
+</ul>
+<p>That doesn’t mean that classes are perfect:</p>
+<ul>
+<li><p>There is a risk of overdoing inheritance.</p></li>
+<li><p>There is a risk of putting too much functionality in classes (when some of it is often better put in functions).</p></li>
+<li><p>How they work superficially and under the hood is quite different. In other words, there is a disconnect between syntax and semantics. Two examples are:</p>
+<ul>
+<li>A method definition inside a class <code>C</code> creates a method in the object <code>C.prototype</code>.</li>
+<li>Classes are functions.</li>
+</ul>
+<p>The motivation for the disconnect is backward compatibility. Thankfully, the disconnect causes few problems in practice; you are usually OK if you go along with what classes pretend to be.</p></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Writing a class</strong></p>
+<p><code>exercises/proto-chains-classes/point_class_test.mjs</code></p>
+</div>
+<h3 id="private-data-for-classes">29.3 Private data for classes</h3>
+<p><a id="index-entry-361" class="index-entry"></a><a id="index-entry-362" class="index-entry"></a></p>
+<p>This section describes techniques for hiding some of the data of an object from the outside. We discuss them in the context of classes, but they also work for objects created directly, e.g., via object literals.</p>
+<h4 id="private-data-naming-convention">29.3.1 Private data: naming convention</h4>
+<p>The first technique makes a property private by prefixing its name with an underscore. This doesn’t protect the property in any way; it merely signals to the outside: “You don’t need to know about this property.”</p>
+<p>In the following code, the properties <code>._counter</code> and <code>._action</code> are private.</p>
+<div class="sourceCode" id="cb770"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb770-1"><a href="ch_proto-chains-classes.html#cb770-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Countdown {</span>
+<span id="cb770-2"><a href="ch_proto-chains-classes.html#cb770-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(counter<span class="op">,</span> action) {</span>
+<span id="cb770-3"><a href="ch_proto-chains-classes.html#cb770-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">_counter</span> <span class="op">=</span> counter<span class="op">;</span></span>
+<span id="cb770-4"><a href="ch_proto-chains-classes.html#cb770-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">_action</span> <span class="op">=</span> action<span class="op">;</span></span>
+<span id="cb770-5"><a href="ch_proto-chains-classes.html#cb770-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb770-6"><a href="ch_proto-chains-classes.html#cb770-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dec</span>() {</span>
+<span id="cb770-7"><a href="ch_proto-chains-classes.html#cb770-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">_counter</span><span class="op">--;</span></span>
+<span id="cb770-8"><a href="ch_proto-chains-classes.html#cb770-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">this</span><span class="op">.</span><span class="at">_counter</span> <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb770-9"><a href="ch_proto-chains-classes.html#cb770-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">_action</span>()<span class="op">;</span></span>
+<span id="cb770-10"><a href="ch_proto-chains-classes.html#cb770-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb770-11"><a href="ch_proto-chains-classes.html#cb770-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb770-12"><a href="ch_proto-chains-classes.html#cb770-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb770-13"><a href="ch_proto-chains-classes.html#cb770-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb770-14"><a href="ch_proto-chains-classes.html#cb770-14" aria-hidden="true" tabindex="-1"></a><span class="co">// The two properties aren’t really private:</span></span>
+<span id="cb770-15"><a href="ch_proto-chains-classes.html#cb770-15" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb770-16"><a href="ch_proto-chains-classes.html#cb770-16" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(<span class="kw">new</span> <span class="fu">Countdown</span>())<span class="op">,</span></span>
+<span id="cb770-17"><a href="ch_proto-chains-classes.html#cb770-17" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'_counter'</span><span class="op">,</span> <span class="st">'_action'</span>])<span class="op">;</span></span></code></pre></div>
+<p>With this technique, you don’t get any protection and private names can clash. On the plus side, it is easy to use.</p>
+<h4 id="private-data-weakmaps">29.3.2 Private data: WeakMaps</h4>
+<p>Another technique is to use WeakMaps. How exactly that works is explained <a href="ch_weakmaps.html#private-data-in-weakmaps">in the chapter on WeakMaps</a>. This is a preview:</p>
+<div class="sourceCode" id="cb771"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb771-1"><a href="ch_proto-chains-classes.html#cb771-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _counter <span class="op">=</span> <span class="kw">new</span> <span class="bu">WeakMap</span>()<span class="op">;</span></span>
+<span id="cb771-2"><a href="ch_proto-chains-classes.html#cb771-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _action <span class="op">=</span> <span class="kw">new</span> <span class="bu">WeakMap</span>()<span class="op">;</span></span>
+<span id="cb771-3"><a href="ch_proto-chains-classes.html#cb771-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb771-4"><a href="ch_proto-chains-classes.html#cb771-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Countdown {</span>
+<span id="cb771-5"><a href="ch_proto-chains-classes.html#cb771-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(counter<span class="op">,</span> action) {</span>
+<span id="cb771-6"><a href="ch_proto-chains-classes.html#cb771-6" aria-hidden="true" tabindex="-1"></a>    _counter<span class="op">.</span><span class="fu">set</span>(<span class="kw">this</span><span class="op">,</span> counter)<span class="op">;</span></span>
+<span id="cb771-7"><a href="ch_proto-chains-classes.html#cb771-7" aria-hidden="true" tabindex="-1"></a>    _action<span class="op">.</span><span class="fu">set</span>(<span class="kw">this</span><span class="op">,</span> action)<span class="op">;</span></span>
+<span id="cb771-8"><a href="ch_proto-chains-classes.html#cb771-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb771-9"><a href="ch_proto-chains-classes.html#cb771-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dec</span>() {</span>
+<span id="cb771-10"><a href="ch_proto-chains-classes.html#cb771-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> counter <span class="op">=</span> _counter<span class="op">.</span><span class="fu">get</span>(<span class="kw">this</span>)<span class="op">;</span></span>
+<span id="cb771-11"><a href="ch_proto-chains-classes.html#cb771-11" aria-hidden="true" tabindex="-1"></a>    counter<span class="op">--;</span></span>
+<span id="cb771-12"><a href="ch_proto-chains-classes.html#cb771-12" aria-hidden="true" tabindex="-1"></a>    _counter<span class="op">.</span><span class="fu">set</span>(<span class="kw">this</span><span class="op">,</span> counter)<span class="op">;</span></span>
+<span id="cb771-13"><a href="ch_proto-chains-classes.html#cb771-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (counter <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb771-14"><a href="ch_proto-chains-classes.html#cb771-14" aria-hidden="true" tabindex="-1"></a>      _action<span class="op">.</span><span class="fu">get</span>(<span class="kw">this</span>)()<span class="op">;</span></span>
+<span id="cb771-15"><a href="ch_proto-chains-classes.html#cb771-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb771-16"><a href="ch_proto-chains-classes.html#cb771-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb771-17"><a href="ch_proto-chains-classes.html#cb771-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb771-18"><a href="ch_proto-chains-classes.html#cb771-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb771-19"><a href="ch_proto-chains-classes.html#cb771-19" aria-hidden="true" tabindex="-1"></a><span class="co">// The two pseudo-properties are truly private:</span></span>
+<span id="cb771-20"><a href="ch_proto-chains-classes.html#cb771-20" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb771-21"><a href="ch_proto-chains-classes.html#cb771-21" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(<span class="kw">new</span> <span class="fu">Countdown</span>())<span class="op">,</span></span>
+<span id="cb771-22"><a href="ch_proto-chains-classes.html#cb771-22" aria-hidden="true" tabindex="-1"></a>  [])<span class="op">;</span></span></code></pre></div>
+<p>This technique offers you considerable protection from outside access and there can’t be any name clashes. But it is also more complicated to use.</p>
+<h4 id="more-techniques-for-private-data">29.3.3 More techniques for private data</h4>
+<p>This book explains the most important techniques for private data in classes. There will also probably soon be built-in support for it. Consult the ECMAScript proposal <a href="https://github.com/tc39/proposal-class-fields">“Class Public Instance Fields &amp; Private Instance Fields”</a> for details.</p>
+<p>A few additional techniques are explained in <a href="https://exploringjs.com/es6/ch_classes.html#sec_private-data-for-classes"><em>Exploring ES6</em></a>.</p>
+<h3 id="subclassing">29.4 Subclassing</h3>
+<p><a id="index-entry-363" class="index-entry"></a><a id="index-entry-364" class="index-entry"></a></p>
+<p>Classes can also subclass (“extend”) existing classes. As an example, the following class <code>Employee</code> subclasses <code>Person</code>:</p>
+<div class="sourceCode" id="cb772"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb772-1"><a href="ch_proto-chains-classes.html#cb772-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Person {</span>
+<span id="cb772-2"><a href="ch_proto-chains-classes.html#cb772-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(name) {</span>
+<span id="cb772-3"><a href="ch_proto-chains-classes.html#cb772-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">name</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb772-4"><a href="ch_proto-chains-classes.html#cb772-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb772-5"><a href="ch_proto-chains-classes.html#cb772-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>() {</span>
+<span id="cb772-6"><a href="ch_proto-chains-classes.html#cb772-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`Person named </span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs">`</span><span class="op">;</span></span>
+<span id="cb772-7"><a href="ch_proto-chains-classes.html#cb772-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb772-8"><a href="ch_proto-chains-classes.html#cb772-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">static</span> <span class="fu">logNames</span>(persons) {</span>
+<span id="cb772-9"><a href="ch_proto-chains-classes.html#cb772-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> person <span class="kw">of</span> persons) {</span>
+<span id="cb772-10"><a href="ch_proto-chains-classes.html#cb772-10" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(person<span class="op">.</span><span class="at">name</span>)<span class="op">;</span></span>
+<span id="cb772-11"><a href="ch_proto-chains-classes.html#cb772-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb772-12"><a href="ch_proto-chains-classes.html#cb772-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb772-13"><a href="ch_proto-chains-classes.html#cb772-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb772-14"><a href="ch_proto-chains-classes.html#cb772-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb772-15"><a href="ch_proto-chains-classes.html#cb772-15" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Employee <span class="kw">extends</span> Person {</span>
+<span id="cb772-16"><a href="ch_proto-chains-classes.html#cb772-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(name<span class="op">,</span> title) {</span>
+<span id="cb772-17"><a href="ch_proto-chains-classes.html#cb772-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">super</span>(name)<span class="op">;</span></span>
+<span id="cb772-18"><a href="ch_proto-chains-classes.html#cb772-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">title</span> <span class="op">=</span> title<span class="op">;</span></span>
+<span id="cb772-19"><a href="ch_proto-chains-classes.html#cb772-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb772-20"><a href="ch_proto-chains-classes.html#cb772-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>() {</span>
+<span id="cb772-21"><a href="ch_proto-chains-classes.html#cb772-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">super</span><span class="op">.</span><span class="fu">describe</span>() <span class="op">+</span></span>
+<span id="cb772-22"><a href="ch_proto-chains-classes.html#cb772-22" aria-hidden="true" tabindex="-1"></a>      <span class="vs">` (</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">title</span><span class="sc">}</span><span class="vs">)`</span><span class="op">;</span></span>
+<span id="cb772-23"><a href="ch_proto-chains-classes.html#cb772-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb772-24"><a href="ch_proto-chains-classes.html#cb772-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb772-25"><a href="ch_proto-chains-classes.html#cb772-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb772-26"><a href="ch_proto-chains-classes.html#cb772-26" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> <span class="kw">new</span> <span class="fu">Employee</span>(<span class="st">'Jane'</span><span class="op">,</span> <span class="st">'CTO'</span>)<span class="op">;</span></span>
+<span id="cb772-27"><a href="ch_proto-chains-classes.html#cb772-27" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb772-28"><a href="ch_proto-chains-classes.html#cb772-28" aria-hidden="true" tabindex="-1"></a>  jane<span class="op">.</span><span class="fu">describe</span>()<span class="op">,</span></span>
+<span id="cb772-29"><a href="ch_proto-chains-classes.html#cb772-29" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Person named Jane (CTO)'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Two comments:</p>
+<ul>
+<li><p>Inside a <code>.constructor()</code> method, you must call the super-constructor via <code>super()</code> before you can access <code>this</code>. That’s because <code>this</code> doesn’t exist before the super-constructor is called (this phenomenon is specific to classes).</p></li>
+<li><p>Static methods are also inherited. For example, <code>Employee</code> inherits the static method <code>.logNames()</code>:</p>
+<div class="sourceCode" id="cb773"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb773-1"><a href="ch_proto-chains-classes.html#cb773-1" aria-hidden="true" tabindex="-1"></a>&gt; 'logNames' in Employee</span>
+<span id="cb773-2"><a href="ch_proto-chains-classes.html#cb773-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Subclassing</strong></p>
+<p><code>exercises/proto-chains-classes/color_point_class_test.mjs</code></p>
+</div>
+<h4 id="subclasses-under-the-hood-advanced">29.4.1 Subclasses under the hood (advanced)</h4>
+<figure>
+<img src="img-book/8b048ae6d82e1a091f97d0b99007994316fae790.svg" id="fig:oo_subclassing" width="377" height="234" alt="Figure 14: These are the objects that make up class Person and its subclass, Employee. The left column is about classes. The right column is about the Employee instance jane and its prototype chain."><figcaption aria-hidden="true">Figure 14: These are the objects that make up class <code>Person</code> and its subclass, <code>Employee</code>. The left column is about classes. The right column is about the <code>Employee</code> instance <code>jane</code> and its prototype chain.</figcaption>
+</figure>
+<p>The classes <code>Person</code> and <code>Employee</code> from the previous section are made up of several objects (fig.&nbsp;<a href="#fig:oo_subclassing">14</a>). One key insight for understanding how these objects are related is that there are two prototype chains:</p>
+<ul>
+<li>The instance prototype chain, on the right.</li>
+<li>The class prototype chain, on the left.</li>
+</ul>
+<h5 id="the-instance-prototype-chain-right-column">29.4.1.1 The instance prototype chain (right column)</h5>
+<p>The instance prototype chain starts with <code>jane</code> and continues with <code>Employee.prototype</code> and <code>Person.prototype</code>. In principle, the prototype chain ends at this point, but we get one more object: <code>Object.prototype</code>. This prototype provides services to virtually all objects, which is why it is included here, too:</p>
+<div class="sourceCode" id="cb774"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb774-1"><a href="ch_proto-chains-classes.html#cb774-1" aria-hidden="true" tabindex="-1"></a>&gt; Object.getPrototypeOf(Person.prototype) === Object.prototype</span>
+<span id="cb774-2"><a href="ch_proto-chains-classes.html#cb774-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h5 id="the-class-prototype-chain-left-column">29.4.1.2 The class prototype chain (left column)</h5>
+<p>In the class prototype chain, <code>Employee</code> comes first, <code>Person</code> next. Afterward, the chain continues with <code>Function.prototype</code>, which is only there because <code>Person</code> is a function and functions need the services of <code>Function.prototype</code>.</p>
+<div class="sourceCode" id="cb775"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb775-1"><a href="ch_proto-chains-classes.html#cb775-1" aria-hidden="true" tabindex="-1"></a>&gt; Object.getPrototypeOf(Person) === Function.prototype</span>
+<span id="cb775-2"><a href="ch_proto-chains-classes.html#cb775-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h4 id="instanceof-operator">29.4.2 <code>instanceof</code> in more detail (advanced)</h4>
+<p>We have not yet seen how <code>instanceof</code> really works. Given the expression:</p>
+<div class="sourceCode" id="cb776"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb776-1"><a href="ch_proto-chains-classes.html#cb776-1" aria-hidden="true" tabindex="-1"></a>x <span class="kw">instanceof</span> C</span></code></pre></div>
+<p>How does <code>instanceof</code> determine if <code>x</code> is an instance of <code>C</code> (or a subclass of <code>C</code>)? It does so by checking if <code>C.prototype</code> is in the prototype chain of <code>x</code>. That is, the following expression is equivalent:</p>
+<div class="sourceCode" id="cb777"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb777-1"><a href="ch_proto-chains-classes.html#cb777-1" aria-hidden="true" tabindex="-1"></a>C<span class="op">.</span><span class="at">prototype</span><span class="op">.</span><span class="fu">isPrototypeOf</span>(x)</span></code></pre></div>
+<p>If we go back to fig.&nbsp;<a href="#fig:oo_subclassing">14</a>, we can confirm that the prototype chain does lead us to the following correct answers:</p>
+<div class="sourceCode" id="cb778"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb778-1"><a href="ch_proto-chains-classes.html#cb778-1" aria-hidden="true" tabindex="-1"></a>&gt; jane instanceof Employee</span>
+<span id="cb778-2"><a href="ch_proto-chains-classes.html#cb778-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb778-3"><a href="ch_proto-chains-classes.html#cb778-3" aria-hidden="true" tabindex="-1"></a>&gt; jane instanceof Person</span>
+<span id="cb778-4"><a href="ch_proto-chains-classes.html#cb778-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb778-5"><a href="ch_proto-chains-classes.html#cb778-5" aria-hidden="true" tabindex="-1"></a>&gt; jane instanceof Object</span>
+<span id="cb778-6"><a href="ch_proto-chains-classes.html#cb778-6" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h4 id="prototype-chains-of-built-in-objects-advanced">29.4.3 Prototype chains of built-in objects (advanced)</h4>
+<p>Next, we’ll use our knowledge of subclassing to understand the prototype chains of a few built-in objects. The following tool function <code>p()</code> helps us with our explorations.</p>
+<div class="sourceCode" id="cb779"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb779-1"><a href="ch_proto-chains-classes.html#cb779-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> p <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="at">getPrototypeOf</span><span class="op">.</span><span class="fu">bind</span>(<span class="bu">Object</span>)<span class="op">;</span></span></code></pre></div>
+<p>We extracted method <code>.getPrototypeOf()</code> of <code>Object</code> and assigned it to <code>p</code>.</p>
+<h5 id="the-prototype-chain-of">29.4.3.1 The prototype chain of <code>{}</code></h5>
+<p>Let’s start by examining plain objects:</p>
+<div class="sourceCode" id="cb780"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb780-1"><a href="ch_proto-chains-classes.html#cb780-1" aria-hidden="true" tabindex="-1"></a>&gt; p({}) === Object.prototype</span>
+<span id="cb780-2"><a href="ch_proto-chains-classes.html#cb780-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb780-3"><a href="ch_proto-chains-classes.html#cb780-3" aria-hidden="true" tabindex="-1"></a>&gt; p(p({})) === null</span>
+<span id="cb780-4"><a href="ch_proto-chains-classes.html#cb780-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<figure>
+<img src="img-book/c65e3ba5d1d2b585da95f3ea9ae745634c29ead2.svg" id="fig:proto_chain_object" width="152" height="158" alt="Figure 15: The prototype chain of an object created via an object literal starts with that object, continues with Object.prototype, and ends with null."><figcaption aria-hidden="true">Figure 15: The prototype chain of an object created via an object literal starts with that object, continues with <code>Object.prototype</code>, and ends with <code>null</code>.</figcaption>
+</figure>
+<p>Fig.&nbsp;<a href="#fig:proto_chain_object">15</a> shows a diagram for this prototype chain. We can see that <code>{}</code> really is an instance of <code>Object</code> – <code>Object.prototype</code> is in its prototype chain.</p>
+<h5 id="the-prototype-chain-of-1">29.4.3.2 The prototype chain of <code>[]</code></h5>
+<p>What does the prototype chain of an Array look like?</p>
+<div class="sourceCode" id="cb781"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb781-1"><a href="ch_proto-chains-classes.html#cb781-1" aria-hidden="true" tabindex="-1"></a>&gt; p([]) === Array.prototype</span>
+<span id="cb781-2"><a href="ch_proto-chains-classes.html#cb781-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb781-3"><a href="ch_proto-chains-classes.html#cb781-3" aria-hidden="true" tabindex="-1"></a>&gt; p(p([])) === Object.prototype</span>
+<span id="cb781-4"><a href="ch_proto-chains-classes.html#cb781-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb781-5"><a href="ch_proto-chains-classes.html#cb781-5" aria-hidden="true" tabindex="-1"></a>&gt; p(p(p([]))) === null</span>
+<span id="cb781-6"><a href="ch_proto-chains-classes.html#cb781-6" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<figure>
+<img src="img-book/1f863fe570fc887e785e0349b5bc42de4ef17b4d.svg" id="fig:proto_chain_array" width="152" height="233" alt="Figure 16: The prototype chain of an Array has these members: the Array instance, Array.prototype, Object.prototype, null."><figcaption aria-hidden="true">Figure 16: The prototype chain of an Array has these members: the Array instance, <code>Array.prototype</code>, <code>Object.prototype</code>, <code>null</code>.</figcaption>
+</figure>
+<p>This prototype chain (visualized in fig.&nbsp;<a href="#fig:proto_chain_array">16</a>) tells us that an Array object is an instance of <code>Array</code>, which is a subclass of <code>Object</code>.</p>
+<h5 id="the-prototype-chain-of-function">29.4.3.3 The prototype chain of <code>function () {}</code></h5>
+<p>Lastly, the prototype chain of an ordinary function tells us that all functions are objects:</p>
+<div class="sourceCode" id="cb782"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb782-1"><a href="ch_proto-chains-classes.html#cb782-1" aria-hidden="true" tabindex="-1"></a>&gt; p(function () {}) === Function.prototype</span>
+<span id="cb782-2"><a href="ch_proto-chains-classes.html#cb782-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb782-3"><a href="ch_proto-chains-classes.html#cb782-3" aria-hidden="true" tabindex="-1"></a>&gt; p(p(function () {})) === Object.prototype</span>
+<span id="cb782-4"><a href="ch_proto-chains-classes.html#cb782-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h5 id="non-instances-of-object">29.4.3.4 Objects that aren’t instances of <code>Object</code></h5>
+<p>An object is only an instance of <code>Object</code> if <code>Object.prototype</code> is in its prototype chain. Most objects created via various literals are instances of <code>Object</code>:</p>
+<div class="sourceCode" id="cb783"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb783-1"><a href="ch_proto-chains-classes.html#cb783-1" aria-hidden="true" tabindex="-1"></a>&gt; ({}) instanceof Object</span>
+<span id="cb783-2"><a href="ch_proto-chains-classes.html#cb783-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb783-3"><a href="ch_proto-chains-classes.html#cb783-3" aria-hidden="true" tabindex="-1"></a>&gt; (() =&gt; {}) instanceof Object</span>
+<span id="cb783-4"><a href="ch_proto-chains-classes.html#cb783-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb783-5"><a href="ch_proto-chains-classes.html#cb783-5" aria-hidden="true" tabindex="-1"></a>&gt; /abc/ug instanceof Object</span>
+<span id="cb783-6"><a href="ch_proto-chains-classes.html#cb783-6" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Objects that don’t have prototypes are not instances of <code>Object</code>:</p>
+<div class="sourceCode" id="cb784"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb784-1"><a href="ch_proto-chains-classes.html#cb784-1" aria-hidden="true" tabindex="-1"></a>&gt; ({ __proto__: null }) instanceof Object</span>
+<span id="cb784-2"><a href="ch_proto-chains-classes.html#cb784-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<p><code>Object.prototype</code> ends most prototype chains. Its prototype is <code>null</code>, which means it isn’t an instance of <code>Object</code> either:</p>
+<div class="sourceCode" id="cb785"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb785-1"><a href="ch_proto-chains-classes.html#cb785-1" aria-hidden="true" tabindex="-1"></a>&gt; Object.prototype instanceof Object</span>
+<span id="cb785-2"><a href="ch_proto-chains-classes.html#cb785-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<h5 id="proto">29.4.3.5 How exactly does the pseudo-property <code>.__proto__</code> work?</h5>
+<p>The pseudo-property <code>.__proto__</code> is implemented by class <code>Object</code> via a getter and a setter. It could be implemented like this:</p>
+<div class="sourceCode" id="cb786"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb786-1"><a href="ch_proto-chains-classes.html#cb786-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="bu">Object</span> {</span>
+<span id="cb786-2"><a href="ch_proto-chains-classes.html#cb786-2" aria-hidden="true" tabindex="-1"></a>  get <span class="fu">__proto__</span>() {</span>
+<span id="cb786-3"><a href="ch_proto-chains-classes.html#cb786-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">getPrototypeOf</span>(<span class="kw">this</span>)<span class="op">;</span></span>
+<span id="cb786-4"><a href="ch_proto-chains-classes.html#cb786-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb786-5"><a href="ch_proto-chains-classes.html#cb786-5" aria-hidden="true" tabindex="-1"></a>  set <span class="fu">__proto__</span>(other) {</span>
+<span id="cb786-6"><a href="ch_proto-chains-classes.html#cb786-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Object</span><span class="op">.</span><span class="fu">setPrototypeOf</span>(<span class="kw">this</span><span class="op">,</span> other)<span class="op">;</span></span>
+<span id="cb786-7"><a href="ch_proto-chains-classes.html#cb786-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb786-8"><a href="ch_proto-chains-classes.html#cb786-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb786-9"><a href="ch_proto-chains-classes.html#cb786-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>That means that you can switch <code>.__proto__</code> off by creating an object that doesn’t have <code>Object.prototype</code> in its prototype chain (see the previous section):</p>
+<div class="sourceCode" id="cb787"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb787-1"><a href="ch_proto-chains-classes.html#cb787-1" aria-hidden="true" tabindex="-1"></a>&gt; '__proto__' in {}</span>
+<span id="cb787-2"><a href="ch_proto-chains-classes.html#cb787-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb787-3"><a href="ch_proto-chains-classes.html#cb787-3" aria-hidden="true" tabindex="-1"></a>&gt; '__proto__' in { __proto__: null }</span>
+<span id="cb787-4"><a href="ch_proto-chains-classes.html#cb787-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<h4 id="dispatched-vs.-direct-method-calls-advanced">29.4.4 Dispatched vs.&nbsp;direct method calls (advanced)</h4>
+<p><a id="index-entry-365" class="index-entry"></a><a id="index-entry-366" class="index-entry"></a> <a id="index-entry-367" class="index-entry"></a><a id="index-entry-368" class="index-entry"></a></p>
+<p>Let’s examine how method calls work with classes. We are revisiting <code>jane</code> from earlier:</p>
+<div class="sourceCode" id="cb788"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb788-1"><a href="ch_proto-chains-classes.html#cb788-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Person {</span>
+<span id="cb788-2"><a href="ch_proto-chains-classes.html#cb788-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(name) {</span>
+<span id="cb788-3"><a href="ch_proto-chains-classes.html#cb788-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">name</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb788-4"><a href="ch_proto-chains-classes.html#cb788-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb788-5"><a href="ch_proto-chains-classes.html#cb788-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>() {</span>
+<span id="cb788-6"><a href="ch_proto-chains-classes.html#cb788-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'Person named '</span><span class="op">+</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="op">;</span></span>
+<span id="cb788-7"><a href="ch_proto-chains-classes.html#cb788-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb788-8"><a href="ch_proto-chains-classes.html#cb788-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb788-9"><a href="ch_proto-chains-classes.html#cb788-9" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> <span class="kw">new</span> <span class="fu">Person</span>(<span class="st">'Jane'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Fig.&nbsp;<a href="#fig:jane_proto_chain">17</a> has a diagram with <code>jane</code>’s prototype chain.</p>
+<figure>
+<img src="img-book/012ec88adc43f494e1b313cdb75f875435fc9cf8.svg" id="fig:jane_proto_chain" width="171" height="198" alt="Figure 17: The prototype chain of jane starts with jane and continues with Person.prototype."><figcaption aria-hidden="true">Figure 17: The prototype chain of <code>jane</code> starts with <code>jane</code> and continues with <code>Person.prototype</code>.</figcaption>
+</figure>
+<p>Normal method calls are <em>dispatched</em> – the method call <code>jane.describe()</code> happens in two steps:</p>
+<ul>
+<li><p>Dispatch: In the prototype chain of <code>jane</code>, find the first property whose key is <code>'describe'</code> and retrieve its value.</p>
+<div class="sourceCode" id="cb789"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb789-1"><a href="ch_proto-chains-classes.html#cb789-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func <span class="op">=</span> jane<span class="op">.</span><span class="at">describe</span><span class="op">;</span></span></code></pre></div></li>
+<li><p>Call: Call the value, while setting <code>this</code> to <code>jane</code>.</p>
+<div class="sourceCode" id="cb790"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb790-1"><a href="ch_proto-chains-classes.html#cb790-1" aria-hidden="true" tabindex="-1"></a>func<span class="op">.</span><span class="fu">call</span>(jane)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<p>This way of dynamically looking for a method and invoking it is called <em>dynamic dispatch</em>.</p>
+<p>You can make the same method call <em>directly</em>, without dispatching:</p>
+<div class="sourceCode" id="cb791"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb791-1"><a href="ch_proto-chains-classes.html#cb791-1" aria-hidden="true" tabindex="-1"></a>Person<span class="op">.</span><span class="at">prototype</span><span class="op">.</span><span class="at">describe</span><span class="op">.</span><span class="fu">call</span>(jane)</span></code></pre></div>
+<p>This time, we directly point to the method via <code>Person.prototype.describe</code> and don’t search for it in the prototype chain. We also specify <code>this</code> differently via <code>.call()</code>.</p>
+<p>Note that <code>this</code> always points to the beginning of a prototype chain. That enables <code>.describe()</code> to access <code>.name</code>.</p>
+<h5 id="borrowing-methods">29.4.4.1 Borrowing methods</h5>
+<p>Direct method calls become useful when you are working with methods of <code>Object.prototype</code>. For example, <code>Object.prototype.hasOwnProperty(k)</code> checks if <code>this</code> has a non-inherited property whose key is <code>k</code>:</p>
+<div class="sourceCode" id="cb792"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb792-1"><a href="ch_proto-chains-classes.html#cb792-1" aria-hidden="true" tabindex="-1"></a>&gt; const obj = { foo: 123 };</span>
+<span id="cb792-2"><a href="ch_proto-chains-classes.html#cb792-2" aria-hidden="true" tabindex="-1"></a>&gt; obj.hasOwnProperty('foo')</span>
+<span id="cb792-3"><a href="ch_proto-chains-classes.html#cb792-3" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb792-4"><a href="ch_proto-chains-classes.html#cb792-4" aria-hidden="true" tabindex="-1"></a>&gt; obj.hasOwnProperty('bar')</span>
+<span id="cb792-5"><a href="ch_proto-chains-classes.html#cb792-5" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<p>However, in the prototype chain of an object, there may be another property with the key <code>'hasOwnProperty'</code> that overrides the method in <code>Object.prototype</code>. Then a dispatched method call doesn’t work:</p>
+<div class="sourceCode" id="cb793"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb793-1"><a href="ch_proto-chains-classes.html#cb793-1" aria-hidden="true" tabindex="-1"></a>&gt; const obj = { hasOwnProperty: true };</span>
+<span id="cb793-2"><a href="ch_proto-chains-classes.html#cb793-2" aria-hidden="true" tabindex="-1"></a>&gt; obj.hasOwnProperty('bar')</span>
+<span id="cb793-3"><a href="ch_proto-chains-classes.html#cb793-3" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: obj.hasOwnProperty is not a function</span></span></code></pre></div>
+<p>The workaround is to use a direct method call:</p>
+<div class="sourceCode" id="cb794"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb794-1"><a href="ch_proto-chains-classes.html#cb794-1" aria-hidden="true" tabindex="-1"></a>&gt; Object.prototype.hasOwnProperty.call(obj, 'bar')</span>
+<span id="cb794-2"><a href="ch_proto-chains-classes.html#cb794-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb794-3"><a href="ch_proto-chains-classes.html#cb794-3" aria-hidden="true" tabindex="-1"></a>&gt; Object.prototype.hasOwnProperty.call(obj, 'hasOwnProperty')</span>
+<span id="cb794-4"><a href="ch_proto-chains-classes.html#cb794-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>This kind of direct method call is often abbreviated as follows:</p>
+<div class="sourceCode" id="cb795"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb795-1"><a href="ch_proto-chains-classes.html#cb795-1" aria-hidden="true" tabindex="-1"></a>&gt; ({}).hasOwnProperty.call(obj, 'bar')</span>
+<span id="cb795-2"><a href="ch_proto-chains-classes.html#cb795-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb795-3"><a href="ch_proto-chains-classes.html#cb795-3" aria-hidden="true" tabindex="-1"></a>&gt; ({}).hasOwnProperty.call(obj, 'hasOwnProperty')</span>
+<span id="cb795-4"><a href="ch_proto-chains-classes.html#cb795-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>This pattern may seem inefficient, but most engines optimize this pattern, so performance should not be an issue.</p>
+<h4 id="mixin-classes-advanced">29.4.5 Mixin classes (advanced)</h4>
+<p><a id="index-entry-369" class="index-entry"></a><a id="index-entry-370" class="index-entry"></a> <a id="index-entry-371" class="index-entry"></a><a id="index-entry-372" class="index-entry"></a> <a id="index-entry-373" class="index-entry"></a><a id="index-entry-374" class="index-entry"></a></p>
+<p>JavaScript’s class system only supports <em>single inheritance</em>. That is, each class can have at most one superclass. One way around this limitation is via a technique called <em>mixin classes</em> (short: <em>mixins</em>).</p>
+<p>The idea is as follows: Let’s say we want a class <code>C</code> to inherit from two superclasses <code>S1</code> and <code>S2</code>. That would be <em>multiple inheritance</em>, which JavaScript doesn’t support.</p>
+<p>Our workaround is to turn <code>S1</code> and <code>S2</code> into <em>mixins</em>, factories for subclasses:</p>
+<div class="sourceCode" id="cb796"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb796-1"><a href="ch_proto-chains-classes.html#cb796-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> S1 <span class="op">=</span> (Sup) <span class="kw">=&gt;</span> <span class="kw">class</span> <span class="kw">extends</span> Sup { <span class="co">/*···*/</span> }<span class="op">;</span></span>
+<span id="cb796-2"><a href="ch_proto-chains-classes.html#cb796-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> S2 <span class="op">=</span> (Sup) <span class="kw">=&gt;</span> <span class="kw">class</span> <span class="kw">extends</span> Sup { <span class="co">/*···*/</span> }<span class="op">;</span></span></code></pre></div>
+<p>Each of these two functions returns a class that extends a given superclass <code>Sup</code>. We create class <code>C</code> as follows:</p>
+<div class="sourceCode" id="cb797"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb797-1"><a href="ch_proto-chains-classes.html#cb797-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> C <span class="kw">extends</span> <span class="fu">S2</span>(<span class="fu">S1</span>(<span class="bu">Object</span>)) {</span>
+<span id="cb797-2"><a href="ch_proto-chains-classes.html#cb797-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">/*···*/</span></span>
+<span id="cb797-3"><a href="ch_proto-chains-classes.html#cb797-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>We now have a class <code>C</code> that extends a class <code>S2</code> that extends a class <code>S1</code> that extends <code>Object</code> (which most classes do implicitly).</p>
+<h5 id="example-a-mixin-for-brand-management">29.4.5.1 Example: a mixin for brand management</h5>
+<p>We implement a mixin <code>Branded</code> that has helper methods for setting and getting the brand of an object:</p>
+<div class="sourceCode" id="cb798"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb798-1"><a href="ch_proto-chains-classes.html#cb798-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> Branded <span class="op">=</span> (Sup) <span class="kw">=&gt;</span> <span class="kw">class</span> <span class="kw">extends</span> Sup {</span>
+<span id="cb798-2"><a href="ch_proto-chains-classes.html#cb798-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setBrand</span>(brand) {</span>
+<span id="cb798-3"><a href="ch_proto-chains-classes.html#cb798-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">_brand</span> <span class="op">=</span> brand<span class="op">;</span></span>
+<span id="cb798-4"><a href="ch_proto-chains-classes.html#cb798-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">;</span></span>
+<span id="cb798-5"><a href="ch_proto-chains-classes.html#cb798-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb798-6"><a href="ch_proto-chains-classes.html#cb798-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getBrand</span>() {</span>
+<span id="cb798-7"><a href="ch_proto-chains-classes.html#cb798-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span><span class="at">_brand</span><span class="op">;</span></span>
+<span id="cb798-8"><a href="ch_proto-chains-classes.html#cb798-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb798-9"><a href="ch_proto-chains-classes.html#cb798-9" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>We use this mixin to implement brand management for a class <code>Car</code>:</p>
+<div class="sourceCode" id="cb799"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb799-1"><a href="ch_proto-chains-classes.html#cb799-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Car <span class="kw">extends</span> <span class="fu">Branded</span>(<span class="bu">Object</span>) {</span>
+<span id="cb799-2"><a href="ch_proto-chains-classes.html#cb799-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(model) {</span>
+<span id="cb799-3"><a href="ch_proto-chains-classes.html#cb799-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">super</span>()<span class="op">;</span></span>
+<span id="cb799-4"><a href="ch_proto-chains-classes.html#cb799-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">_model</span> <span class="op">=</span> model<span class="op">;</span></span>
+<span id="cb799-5"><a href="ch_proto-chains-classes.html#cb799-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb799-6"><a href="ch_proto-chains-classes.html#cb799-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">toString</span>() {</span>
+<span id="cb799-7"><a href="ch_proto-chains-classes.html#cb799-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="fu">getBrand</span>()<span class="sc">}</span><span class="vs"> </span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">_model</span><span class="sc">}</span><span class="vs">`</span><span class="op">;</span></span>
+<span id="cb799-8"><a href="ch_proto-chains-classes.html#cb799-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb799-9"><a href="ch_proto-chains-classes.html#cb799-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The following code confirms that the mixin worked: <code>Car</code> has method <code>.setBrand()</code> of <code>Branded</code>.</p>
+<div class="sourceCode" id="cb800"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb800-1"><a href="ch_proto-chains-classes.html#cb800-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> modelT <span class="op">=</span> <span class="kw">new</span> <span class="fu">Car</span>(<span class="st">'Model T'</span>)<span class="op">.</span><span class="fu">setBrand</span>(<span class="st">'Ford'</span>)<span class="op">;</span></span>
+<span id="cb800-2"><a href="ch_proto-chains-classes.html#cb800-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(modelT<span class="op">.</span><span class="fu">toString</span>()<span class="op">,</span> <span class="st">'Ford Model T'</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="the-benefits-of-mixins">29.4.5.2 The benefits of mixins</h5>
+<p>Mixins free us from the constraints of single inheritance:</p>
+<ul>
+<li>The same class can extend a single superclass and zero or more mixins.</li>
+<li>The same mixin can be used by multiple classes.</li>
+</ul>
+<h3 id="faq-objects">29.5 FAQ: objects</h3>
+<h4 id="why-do-objects-preserve-the-insertion-order-of-properties">29.5.1 Why do objects preserve the insertion order of properties?</h4>
+<p>In principle, objects are unordered. The main reason for ordering properties is so that operations that list entries, keys, or values are deterministic. That helps, e.g., with testing.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/19">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="pt_collections.html">VII Collections</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

@@ -1,0 +1,409 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_values">12 Values</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>12.1 <a href="ch_values.html#whats-a-type">What’s a type?</a></li>
+<li>12.2 <a href="ch_values.html#javascripts-type-hierarchy">JavaScript’s type hierarchy</a></li>
+<li>12.3 <a href="ch_values.html#the-types-of-the-language-specification">The types of the language specification</a></li>
+<li>12.4 <a href="ch_values.html#primitive-values-vs.-objects">Primitive values vs.&nbsp;objects</a>
+<ul>
+<li>12.4.1 <a href="ch_values.html#primitive-values-short-primitives">Primitive values (short: primitives)</a></li>
+<li>12.4.2 <a href="ch_values.html#objects">Objects</a></li>
+</ul></li>
+<li>12.5 <a href="ch_values.html#the-operators-typeof-and-instanceof-whats-the-type-of-a-value">The operators <code>typeof</code> and <code>instanceof</code>: what’s the type of a value?</a>
+<ul>
+<li>12.5.1 <a href="ch_values.html#typeof"><code>typeof</code></a></li>
+<li>12.5.2 <a href="ch_values.html#instanceof"><code>instanceof</code></a></li>
+</ul></li>
+<li>12.6 <a href="ch_values.html#classes-and-constructor-functions">Classes and constructor functions</a>
+<ul>
+<li>12.6.1 <a href="ch_values.html#constructor-functions-associated-with-primitive-types">Constructor functions associated with primitive types</a></li>
+</ul></li>
+<li>12.7 <a href="ch_values.html#converting-between-types">Converting between types</a>
+<ul>
+<li>12.7.1 <a href="ch_values.html#explicit-conversion-between-types">Explicit conversion between types</a></li>
+<li>12.7.2 <a href="ch_values.html#coercion-automatic-conversion-between-types">Coercion (automatic conversion between types)</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>In this chapter, we’ll examine what kinds of values JavaScript has.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/eye-regular.svg" height="24">&nbsp; <strong>Supporting tool: <code>===</code></strong></p>
+<p>In this chapter, we’ll occasionally use the strict equality operator. <code>a === b</code> evaluates to <code>true</code> if <code>a</code> and <code>b</code> are equal. What exactly that means is explained in <a href="ch_operators.html#strict-equality">§13.4.2 “Strict equality (<code>===</code> and <code>!==</code>)”</a>.</p>
+</div>
+<h3 id="whats-a-type">12.1 What’s a type?</h3>
+<p><a id="index-entry-69" class="index-entry"></a></p>
+<p>For this chapter, I consider types to be sets of values – for example, the type <code>boolean</code> is the set { <code>false</code>, <code>true</code> }.</p>
+<h3 id="javascripts-type-hierarchy">12.2 JavaScript’s type hierarchy</h3>
+<p><a id="index-entry-70" class="index-entry"></a></p>
+<figure>
+<img src="img-book/b8c834a3420a3b2d2df0d90dfa0c1dfd1f2ffbc9.svg" id="fig:type_hierarchy" data-factor="0.4" width="429" height="259" alt="Figure 6: A partial hierarchy of JavaScript’s types. Missing are the classes for errors, the classes associated with primitive types, and more. The diagram hints at the fact that not all objects are instances of Object."><figcaption aria-hidden="true">Figure 6: A partial hierarchy of JavaScript’s types. Missing are the classes for errors, the classes associated with primitive types, and more. The diagram hints at the fact that not all objects are instances of <code>Object</code>.</figcaption>
+</figure>
+<p>Fig.&nbsp;<a href="#fig:type_hierarchy">6</a> shows JavaScript’s type hierarchy. What do we learn from that diagram?</p>
+<ul>
+<li>JavaScript distinguishes two kinds of values: primitive values and objects. We’ll see soon what the difference is.</li>
+<li>The diagram differentiates objects and instances of class <code>Object</code>. Each instance of <code>Object</code> is also an object, but not vice versa. However, virtually all objects that you’ll encounter in practice are instances of <code>Object</code> – for example, objects created via object literals. More details on this topic are explained in <a href="ch_proto-chains-classes.html#non-instances-of-object">§29.4.3.4 “Objects that aren’t instances of <code>Object</code>”</a>.</li>
+</ul>
+<h3 id="the-types-of-the-language-specification">12.3 The types of the language specification</h3>
+<p>The ECMAScript specification only knows a total of eight types. The names of those types are (I’m using TypeScript’s names, not the spec’s names):</p>
+<ul>
+<li><code>undefined</code> with the only element <code>undefined</code></li>
+<li><code>null</code> with the only element <code>null</code></li>
+<li><code>boolean</code> with the elements <code>false</code> and <code>true</code></li>
+<li><code>number</code> the type of all numbers (e.g., <code>-123</code>, <code>3.141</code>)</li>
+<li><code>bigint</code> the type of all big integers (e.g., <code>-123n</code>)</li>
+<li><code>string</code> the type of all strings (e.g., <code>'abc'</code>)</li>
+<li><code>symbol</code> the type of all symbols (e.g., <code>Symbol('My Symbol')</code>)</li>
+<li><code>object</code> the type of all objects (different from <code>Object</code>, the type of all instances of class <code>Object</code> and its subclasses)</li>
+</ul>
+<h3 id="primitive-values-vs.-objects">12.4 Primitive values vs.&nbsp;objects</h3>
+<p><a id="index-entry-71" class="index-entry"></a><a id="index-entry-72" class="index-entry"></a></p>
+<p>The specification makes an important distinction between values:</p>
+<ul>
+<li><em>Primitive values</em> are the elements of the types <code>undefined</code>, <code>null</code>, <code>boolean</code>, <code>number</code>, <code>bigint</code>, <code>string</code>, <code>symbol</code>.</li>
+<li>All other values are <em>objects</em>.</li>
+</ul>
+<p>In contrast to Java (that inspired JavaScript here), primitive values are not second-class citizens. The difference between them and objects is more subtle. In a nutshell:</p>
+<ul>
+<li>Primitive values: are atomic building blocks of data in JavaScript.
+<ul>
+<li>They are <em>passed by value</em>: when primitive values are assigned to variables or passed to functions, their contents are copied.</li>
+<li>They are <em>compared by value</em>: when comparing two primitive values, their contents are compared.</li>
+</ul></li>
+<li>Objects: are compound pieces of data.
+<ul>
+<li>They are <em>passed by identity</em> (my term): when objects are assigned to variables or passed to functions, their <em>identities</em> (think pointers) are copied.</li>
+<li>They are <em>compared by identity</em> (my term): when comparing two objects, their identities are compared.</li>
+</ul></li>
+</ul>
+<p>Other than that, primitive values and objects are quite similar: they both have <em>properties</em> (key-value entries) and can be used in the same locations.</p>
+<p>Next, we’ll look at primitive values and objects in more depth.</p>
+<h4 id="primitive-values-short-primitives">12.4.1 Primitive values (short: primitives)</h4>
+<p><a id="index-entry-73" class="index-entry"></a></p>
+<h5 id="primitives-are-immutable">12.4.1.1 Primitives are immutable</h5>
+<p>You can’t change, add, or remove properties of primitives:</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb137-1"><a href="ch_values.html#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> str <span class="op">=</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb137-2"><a href="ch_values.html#cb137-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(str<span class="op">.</span><span class="at">length</span><span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span>
+<span id="cb137-3"><a href="ch_values.html#cb137-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb137-4"><a href="ch_values.html#cb137-4" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> { str<span class="op">.</span><span class="at">length</span> <span class="op">=</span> <span class="dv">1</span> }<span class="op">,</span></span>
+<span id="cb137-5"><a href="ch_values.html#cb137-5" aria-hidden="true" tabindex="-1"></a>  <span class="ss">/</span><span class="sc">^</span><span class="ss">TypeError: Cannot assign to read only property 'length'/</span></span>
+<span id="cb137-6"><a href="ch_values.html#cb137-6" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<h5 id="primitives-are-passed-by-value">12.4.1.2 Primitives are <em>passed by value</em></h5>
+<p><a id="index-entry-74" class="index-entry"></a></p>
+<p>Primitives are <em>passed by value</em>: variables (including parameters) store the contents of the primitives. When assigning a primitive value to a variable or passing it as an argument to a function, its content is copied.</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb138-1"><a href="ch_values.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> x <span class="op">=</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb138-2"><a href="ch_values.html#cb138-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> y <span class="op">=</span> x<span class="op">;</span></span>
+<span id="cb138-3"><a href="ch_values.html#cb138-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(y<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="primitives-are-compared-by-value">12.4.1.3 Primitives are <em>compared by value</em></h5>
+<p><a id="index-entry-75" class="index-entry"></a></p>
+<p>Primitives are <em>compared by value</em>: when comparing two primitive values, we compare their contents.</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb139-1"><a href="ch_values.html#cb139-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">123</span> <span class="op">===</span> <span class="dv">123</span><span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb139-2"><a href="ch_values.html#cb139-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="st">'abc'</span> <span class="op">===</span> <span class="st">'abc'</span><span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div>
+<p>To see what’s so special about this way of comparing, read on and find out how objects are compared.</p>
+<h4 id="objects">12.4.2 Objects</h4>
+<p>Objects are covered in detail in <a href="ch_single-objects.html">§28 “Single objects”</a> and the following chapter. Here, we mainly focus on how they differ from primitive values.</p>
+<p>Let’s first explore two common ways of creating objects:</p>
+<ul>
+<li><p>Object literal:</p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb140-1"><a href="ch_values.html#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb140-2"><a href="ch_values.html#cb140-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb140-3"><a href="ch_values.html#cb140-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span><span class="op">,</span></span>
+<span id="cb140-4"><a href="ch_values.html#cb140-4" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>The object literal starts and ends with curly braces <code>{}</code>. It creates an object with two properties. The first property has the key <code>'first'</code> (a string) and the value <code>'Jane'</code>. The second property has the key <code>'last'</code> and the value <code>'Doe'</code>. For more information on object literals, consult <a href="ch_single-objects.html#object-literals">§28.2.1 “Object literals: properties”</a>.</p></li>
+<li><p>Array literal:</p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb141-1"><a href="ch_values.html#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> fruits <span class="op">=</span> [<span class="st">'strawberry'</span><span class="op">,</span> <span class="st">'apple'</span>]<span class="op">;</span></span></code></pre></div>
+<p>The Array literal starts and ends with square brackets <code>[]</code>. It creates an Array with two <em>elements</em>: <code>'strawberry'</code> and <code>'apple'</code>. For more information on Array literals, consult <a href="ch_arrays.html#array-literals">§31.2.1 “Creating, reading, writing Arrays”</a>.</p></li>
+</ul>
+<h5 id="objects-are-mutable-by-default">12.4.2.1 Objects are mutable by default</h5>
+<p>By default, you can freely change, add, and remove the properties of objects:</p>
+<div class="sourceCode" id="cb142"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb142-1"><a href="ch_values.html#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb142-2"><a href="ch_values.html#cb142-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb142-3"><a href="ch_values.html#cb142-3" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="at">count</span> <span class="op">=</span> <span class="dv">2</span><span class="op">;</span> <span class="co">// add a property</span></span>
+<span id="cb142-4"><a href="ch_values.html#cb142-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">count</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb142-5"><a href="ch_values.html#cb142-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb142-6"><a href="ch_values.html#cb142-6" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="at">count</span> <span class="op">=</span> <span class="dv">3</span><span class="op">;</span> <span class="co">// change a property</span></span>
+<span id="cb142-7"><a href="ch_values.html#cb142-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">count</span><span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="objects-are-passed-by-identity">12.4.2.2 Objects are <em>passed by identity</em></h5>
+<p><a id="index-entry-76" class="index-entry"></a> <a id="index-entry-77" class="index-entry"></a><a id="index-entry-78" class="index-entry"></a></p>
+<p>Objects are <em>passed by identity</em> (my term): variables (including parameters) store the <em>identities</em> of objects.</p>
+<p>The identity of an object is like a pointer (or a transparent reference) to the object’s actual data on the <em>heap</em> (think shared main memory of a JavaScript engine). <a id="index-entry-79" class="index-entry"></a></p>
+<p>When assigning an object to a variable or passing it as an argument to a function, its identity is copied. Each object literal creates a fresh object on the heap and returns its identity.</p>
+<div class="sourceCode" id="cb143"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb143-1"><a href="ch_values.html#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> a <span class="op">=</span> {}<span class="op">;</span> <span class="co">// fresh empty object</span></span>
+<span id="cb143-2"><a href="ch_values.html#cb143-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Pass the identity in `a` to `b`:</span></span>
+<span id="cb143-3"><a href="ch_values.html#cb143-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> b <span class="op">=</span> a<span class="op">;</span></span>
+<span id="cb143-4"><a href="ch_values.html#cb143-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb143-5"><a href="ch_values.html#cb143-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Now `a` and `b` point to the same object</span></span>
+<span id="cb143-6"><a href="ch_values.html#cb143-6" aria-hidden="true" tabindex="-1"></a><span class="co">// (they “share” that object):</span></span>
+<span id="cb143-7"><a href="ch_values.html#cb143-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(a <span class="op">===</span> b<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb143-8"><a href="ch_values.html#cb143-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb143-9"><a href="ch_values.html#cb143-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Changing `a` also changes `b`:</span></span>
+<span id="cb143-10"><a href="ch_values.html#cb143-10" aria-hidden="true" tabindex="-1"></a>a<span class="op">.</span><span class="at">name</span> <span class="op">=</span> <span class="st">'Tessa'</span><span class="op">;</span></span>
+<span id="cb143-11"><a href="ch_values.html#cb143-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(b<span class="op">.</span><span class="at">name</span><span class="op">,</span> <span class="st">'Tessa'</span>)<span class="op">;</span></span></code></pre></div>
+<p><a id="index-entry-80" class="index-entry"></a></p>
+<p>JavaScript uses <em>garbage collection</em> to automatically manage memory:</p>
+<div class="sourceCode" id="cb144"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb144-1"><a href="ch_values.html#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> obj <span class="op">=</span> { <span class="dt">prop</span><span class="op">:</span> <span class="st">'value'</span> }<span class="op">;</span></span>
+<span id="cb144-2"><a href="ch_values.html#cb144-2" aria-hidden="true" tabindex="-1"></a>obj <span class="op">=</span> {}<span class="op">;</span></span></code></pre></div>
+<p>Now the old value <code>{ prop: 'value' }</code> of <code>obj</code> is <em>garbage</em> (not used anymore). JavaScript will automatically <em>garbage-collect</em> it (remove it from memory), at some point in time (possibly never if there is enough free memory).</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>Details: passing by identity</strong></p>
+<p>“Passing by identity” means that the identity of an object (a transparent reference) is passed by value. This approach is also called <a href="https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_sharing">“passing by sharing”</a>.</p>
+</div>
+<h5 id="objects-are-compared-by-identity">12.4.2.3 Objects are <em>compared by identity</em></h5>
+<p><a id="index-entry-81" class="index-entry"></a></p>
+<p>Objects are <em>compared by identity</em> (my term): two variables are only equal if they contain the same object identity. They are not equal if they refer to different objects with the same content.</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb145-1"><a href="ch_values.html#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {}<span class="op">;</span> <span class="co">// fresh empty object</span></span>
+<span id="cb145-2"><a href="ch_values.html#cb145-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj <span class="op">===</span> obj<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span> <span class="co">// same identity</span></span>
+<span id="cb145-3"><a href="ch_values.html#cb145-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>({} <span class="op">===</span> {}<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span> <span class="co">// different identities, same content</span></span></code></pre></div>
+<h3 id="the-operators-typeof-and-instanceof-whats-the-type-of-a-value">12.5 The operators <code>typeof</code> and <code>instanceof</code>: what’s the type of a value?</h3>
+<p><a id="index-entry-82" class="index-entry"></a><a id="index-entry-83" class="index-entry"></a></p>
+<p>The two operators <code>typeof</code> and <code>instanceof</code> let you determine what type a given value <code>x</code> has:</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb146-1"><a href="ch_values.html#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="kw">typeof</span> x <span class="op">===</span> <span class="st">'string'</span>) ···</span>
+<span id="cb146-2"><a href="ch_values.html#cb146-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="kw">instanceof</span> <span class="bu">Array</span>) ···</span></code></pre></div>
+<p>How do they differ?</p>
+<ul>
+<li><code>typeof</code> distinguishes the 7 types of the specification (minus one omission, plus one addition).</li>
+<li><code>instanceof</code> tests which class created a given value.</li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/lightbulb-regular.svg" height="24">&nbsp; <strong>Rule of thumb: <code>typeof</code> is for primitive values; <code>instanceof</code> is for objects</strong></p>
+</div>
+<h4 id="typeof">12.5.1 <code>typeof</code></h4>
+<div id="tbl:typeof-results">
+<table>
+<caption>Table 2: The results of the <code>typeof</code> operator.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><code>x</code></th>
+<th style="text-align: left;"><code>typeof x</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>undefined</code></td>
+<td style="text-align: left;"><code>'undefined'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>null</code></td>
+<td style="text-align: left;"><code>'object'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Boolean</td>
+<td style="text-align: left;"><code>'boolean'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number</td>
+<td style="text-align: left;"><code>'number'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bigint</td>
+<td style="text-align: left;"><code>'bigint'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">String</td>
+<td style="text-align: left;"><code>'string'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Symbol</td>
+<td style="text-align: left;"><code>'symbol'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Function</td>
+<td style="text-align: left;"><code>'function'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">All other objects</td>
+<td style="text-align: left;"><code>'object'</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Tbl.&nbsp;<a href="#tbl:typeof-results">2</a> lists all results of <code>typeof</code>. They roughly correspond to the 7 types of the language specification. Alas, there are two differences, and they are language quirks:</p>
+<ul>
+<li><code>typeof null</code> returns <code>'object'</code> and not <code>'null'</code>. That’s a bug. Unfortunately, it can’t be fixed. TC39 tried to do that, but it broke too much code on the web.</li>
+<li><code>typeof</code> of a function should be <code>'object'</code> (functions are objects). Introducing a separate category for functions is confusing.</li>
+</ul>
+<p>These are a few examples of using <code>typeof</code>:</p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb147-1"><a href="ch_values.html#cb147-1" aria-hidden="true" tabindex="-1"></a>&gt; typeof undefined</span>
+<span id="cb147-2"><a href="ch_values.html#cb147-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'undefined'</span></span>
+<span id="cb147-3"><a href="ch_values.html#cb147-3" aria-hidden="true" tabindex="-1"></a>&gt; typeof 123n</span>
+<span id="cb147-4"><a href="ch_values.html#cb147-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'bigint'</span></span>
+<span id="cb147-5"><a href="ch_values.html#cb147-5" aria-hidden="true" tabindex="-1"></a>&gt; typeof 'abc'</span>
+<span id="cb147-6"><a href="ch_values.html#cb147-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'string'</span></span>
+<span id="cb147-7"><a href="ch_values.html#cb147-7" aria-hidden="true" tabindex="-1"></a>&gt; typeof {}</span>
+<span id="cb147-8"><a href="ch_values.html#cb147-8" aria-hidden="true" tabindex="-1"></a><span class="kw">'object'</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercises: Two exercises on <code>typeof</code></strong></p>
+<ul>
+<li><p><code>exercises/values/typeof_exrc.mjs</code></p></li>
+<li>Bonus: <code>exercises/values/is_object_test.mjs</code></li>
+</ul>
+</div>
+<h4 id="instanceof">12.5.2 <code>instanceof</code></h4>
+<p>This operator answers the question: has a value <code>x</code> been created by a class <code>C</code>?</p>
+<div class="sourceCode" id="cb148"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb148-1"><a href="ch_values.html#cb148-1" aria-hidden="true" tabindex="-1"></a>x <span class="kw">instanceof</span> C</span></code></pre></div>
+<p>For example:</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb149-1"><a href="ch_values.html#cb149-1" aria-hidden="true" tabindex="-1"></a>&gt; (function() {}) instanceof Function</span>
+<span id="cb149-2"><a href="ch_values.html#cb149-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb149-3"><a href="ch_values.html#cb149-3" aria-hidden="true" tabindex="-1"></a>&gt; ({}) instanceof Object</span>
+<span id="cb149-4"><a href="ch_values.html#cb149-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb149-5"><a href="ch_values.html#cb149-5" aria-hidden="true" tabindex="-1"></a>&gt; [] instanceof Array</span>
+<span id="cb149-6"><a href="ch_values.html#cb149-6" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Primitive values are not instances of anything:</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb150-1"><a href="ch_values.html#cb150-1" aria-hidden="true" tabindex="-1"></a>&gt; 123 instanceof Number</span>
+<span id="cb150-2"><a href="ch_values.html#cb150-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb150-3"><a href="ch_values.html#cb150-3" aria-hidden="true" tabindex="-1"></a>&gt; '' instanceof String</span>
+<span id="cb150-4"><a href="ch_values.html#cb150-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb150-5"><a href="ch_values.html#cb150-5" aria-hidden="true" tabindex="-1"></a>&gt; '' instanceof Object</span>
+<span id="cb150-6"><a href="ch_values.html#cb150-6" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: <code>instanceof</code></strong></p>
+<p><code>exercises/values/instanceof_exrc.mjs</code></p>
+</div>
+<h3 id="classes-and-constructor-functions">12.6 Classes and constructor functions</h3>
+<p>JavaScript’s original factories for objects are <em>constructor functions</em>: ordinary functions that return “instances” of themselves if you invoke them via the <code>new</code> operator.</p>
+<p>ES6 introduced <em>classes</em>, which are mainly better syntax for constructor functions.</p>
+<p>In this book, I’m using the terms <em>constructor function</em> and <em>class</em> interchangeably.</p>
+<p>Classes can be seen as partitioning the single type <code>object</code> of the specification into subtypes – they give us more types than the limited 7 ones of the specification. Each class is the type of the objects that were created by it.</p>
+<h4 id="constructor-functions-associated-with-primitive-types">12.6.1 Constructor functions associated with primitive types</h4>
+<p>Each primitive type (except for the spec-internal types for <code>undefined</code> and <code>null</code>) has an associated <em>constructor function</em> (think class):</p>
+<ul>
+<li>The constructor function <code>Boolean</code> is associated with booleans.</li>
+<li>The constructor function <code>Number</code> is associated with numbers.</li>
+<li>The constructor function <code>String</code> is associated with strings.</li>
+<li>The constructor function <code>Symbol</code> is associated with symbols.</li>
+</ul>
+<p>Each of these functions plays several roles – for example, <code>Number</code>:</p>
+<ul>
+<li><p>You can use it as a function and convert values to numbers:</p>
+<div class="sourceCode" id="cb151"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb151-1"><a href="ch_values.html#cb151-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span>(<span class="st">'123'</span>)<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>Number.prototype</code> provides the properties for numbers – for example, method <code>.toString()</code>:</p>
+<div class="sourceCode" id="cb152"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb152-1"><a href="ch_values.html#cb152-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>((<span class="dv">123</span>)<span class="op">.</span><span class="at">toString</span><span class="op">,</span> <span class="bu">Number</span><span class="op">.</span><span class="at">prototype</span><span class="op">.</span><span class="at">toString</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>Number</code> is a namespace/container object for tool functions for numbers – for example:</p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb153-1"><a href="ch_values.html#cb153-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span><span class="op">.</span><span class="fu">isInteger</span>(<span class="dv">123</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p>Lastly, you can also use <code>Number</code> as a class and create number objects. These objects are different from real numbers and should be avoided.</p>
+<div class="sourceCode" id="cb154"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb154-1"><a href="ch_values.html#cb154-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">notEqual</span>(<span class="kw">new</span> <span class="bu">Number</span>(<span class="dv">123</span>)<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb154-2"><a href="ch_values.html#cb154-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">new</span> <span class="bu">Number</span>(<span class="dv">123</span>)<span class="op">.</span><span class="fu">valueOf</span>()<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h5 id="wrapping-primitive-values">12.6.1.1 Wrapping primitive values</h5>
+<p><a id="index-entry-84" class="index-entry"></a></p>
+<p>The constructor functions related to primitive types are also called <em>wrapper types</em> because they provide the canonical way of converting primitive values to objects. In the process, primitive values are “wrapped” in objects.</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb155-1"><a href="ch_values.html#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> prim <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb155-2"><a href="ch_values.html#cb155-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">typeof</span> prim<span class="op">,</span> <span class="st">'boolean'</span>)<span class="op">;</span></span>
+<span id="cb155-3"><a href="ch_values.html#cb155-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(prim <span class="kw">instanceof</span> <span class="bu">Boolean</span><span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span>
+<span id="cb155-4"><a href="ch_values.html#cb155-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb155-5"><a href="ch_values.html#cb155-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> wrapped <span class="op">=</span> <span class="bu">Object</span>(prim)<span class="op">;</span></span>
+<span id="cb155-6"><a href="ch_values.html#cb155-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">typeof</span> wrapped<span class="op">,</span> <span class="st">'object'</span>)<span class="op">;</span></span>
+<span id="cb155-7"><a href="ch_values.html#cb155-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(wrapped <span class="kw">instanceof</span> <span class="bu">Boolean</span><span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb155-8"><a href="ch_values.html#cb155-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb155-9"><a href="ch_values.html#cb155-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(wrapped<span class="op">.</span><span class="fu">valueOf</span>()<span class="op">,</span> prim)<span class="op">;</span> <span class="co">// unwrap</span></span></code></pre></div>
+<p>Wrapping rarely matters in practice, but it is used internally in the language specification, to give primitives properties.</p>
+<h3 id="converting-between-types">12.7 Converting between types</h3>
+<p>There are two ways in which values are converted to other types in JavaScript:</p>
+<ul>
+<li>Explicit conversion: via functions such as <code>String()</code>.</li>
+<li><em>Coercion</em> (automatic conversion): happens when an operation receives operands/parameters that it can’t work with. <a id="index-entry-85" class="index-entry"></a></li>
+</ul>
+<h4 id="explicit-conversion-between-types">12.7.1 Explicit conversion between types</h4>
+<p>The function associated with a primitive type explicitly converts values to that type:</p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb156-1"><a href="ch_values.html#cb156-1" aria-hidden="true" tabindex="-1"></a>&gt; Boolean(0)</span>
+<span id="cb156-2"><a href="ch_values.html#cb156-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb156-3"><a href="ch_values.html#cb156-3" aria-hidden="true" tabindex="-1"></a>&gt; Number('123')</span>
+<span id="cb156-4"><a href="ch_values.html#cb156-4" aria-hidden="true" tabindex="-1"></a><span class="kw">123</span></span>
+<span id="cb156-5"><a href="ch_values.html#cb156-5" aria-hidden="true" tabindex="-1"></a>&gt; String(123)</span>
+<span id="cb156-6"><a href="ch_values.html#cb156-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'123'</span></span></code></pre></div>
+<p><a id="index-entry-86" class="index-entry"></a></p>
+<p>You can also use <code>Object()</code> to convert values to objects:</p>
+<div class="sourceCode" id="cb157"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb157-1"><a href="ch_values.html#cb157-1" aria-hidden="true" tabindex="-1"></a>&gt; typeof Object(123)</span>
+<span id="cb157-2"><a href="ch_values.html#cb157-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'object'</span></span></code></pre></div>
+<p>The following table describes in more detail how this conversion works:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><code>x</code></th>
+<th style="text-align: left;"><code>Object(x)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>undefined</code></td>
+<td style="text-align: left;"><code>{}</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>null</code></td>
+<td style="text-align: left;"><code>{}</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;"><code>new Boolean(x)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">number</td>
+<td style="text-align: left;"><code>new Number(x)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">bigint</td>
+<td style="text-align: left;">An instance of <code>BigInt</code> (<code>new</code> throws <code>TypeError</code>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><code>new String(x)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">symbol</td>
+<td style="text-align: left;">An instance of <code>Symbol</code> (<code>new</code> throws <code>TypeError</code>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object</td>
+<td style="text-align: left;"><code>x</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="coercion-automatic-conversion-between-types">12.7.2 Coercion (automatic conversion between types)</h4>
+<p>For many operations, JavaScript automatically converts the operands/parameters if their types don’t fit. This kind of automatic conversion is called <em>coercion</em>.</p>
+<p>For example, the multiplication operator coerces its operands to numbers:</p>
+<div class="sourceCode" id="cb158"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb158-1"><a href="ch_values.html#cb158-1" aria-hidden="true" tabindex="-1"></a>&gt; '7' * '3'</span>
+<span id="cb158-2"><a href="ch_values.html#cb158-2" aria-hidden="true" tabindex="-1"></a><span class="kw">21</span></span></code></pre></div>
+<p>Many built-in functions coerce, too. For example, <code>parseInt()</code> coerces its parameter to string (parsing stops at the first character that is not a digit):</p>
+<div class="sourceCode" id="cb159"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb159-1"><a href="ch_values.html#cb159-1" aria-hidden="true" tabindex="-1"></a>&gt; parseInt(123.45)</span>
+<span id="cb159-2"><a href="ch_values.html#cb159-2" aria-hidden="true" tabindex="-1"></a><span class="kw">123</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Converting values to primitives</strong></p>
+<p><code>exercises/values/conversion_exrc.mjs</code></p>
+</div>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/7">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_operators.html">13 Operators</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

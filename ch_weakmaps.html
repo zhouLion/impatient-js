@@ -1,0 +1,157 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_weakmaps">34 WeakMaps (<code>WeakMap</code>) (advanced)</h2>
+<p><a id="index-entry-422" class="index-entry"></a><a id="index-entry-423" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>34.1 <a href="ch_weakmaps.html#weakmaps-as-black-boxes">WeakMaps are black boxes</a></li>
+<li>34.2 <a href="ch_weakmaps.html#weakmap-keys-are-weakly-held">The keys of a WeakMap are <em>weakly held</em></a>
+<ul>
+<li>34.2.1 <a href="ch_weakmaps.html#all-weakmap-keys-must-be-objects">All WeakMap keys must be objects</a></li>
+<li>34.2.2 <a href="ch_weakmaps.html#use-case-attaching-values-to-objects">Use case: attaching values to objects</a></li>
+</ul></li>
+<li>34.3 <a href="ch_weakmaps.html#examples">Examples</a>
+<ul>
+<li>34.3.1 <a href="ch_weakmaps.html#caching-computed-results-via-weakmaps">Caching computed results via WeakMaps</a></li>
+<li>34.3.2 <a href="ch_weakmaps.html#private-data-in-weakmaps">Keeping private data in WeakMaps</a></li>
+</ul></li>
+<li>34.4 <a href="ch_weakmaps.html#weakmap-api">WeakMap API</a></li>
+</ul>
+</div>
+<hr>
+<p>WeakMaps are similar to Maps, with the following differences:</p>
+<ul>
+<li>They are black boxes, where a value can only be accessed if you have both the WeakMap and the key.</li>
+<li>The keys of a WeakMap are <em>weakly held</em>: if an object is a key in a WeakMap, it can still be garbage-collected. That lets us use WeakMaps to attach data to objects.</li>
+</ul>
+<p><span data-refcheck="#weakmaps-as-black-boxes #weakmap-keys-are-weakly-held">The next two sections</span> examine in more detail what that means.</p>
+<h3 id="weakmaps-as-black-boxes">34.1 WeakMaps are black boxes</h3>
+<p>It is impossible to inspect what’s inside a WeakMap:</p>
+<ul>
+<li>For example, you can’t iterate or loop over keys, values or entries. And you can’t compute the size.</li>
+<li>Additionally, you can’t clear a WeakMap either – you have to create a fresh instance.</li>
+</ul>
+<p>These restrictions enable a security property. Quoting <a href="https://github.com/tc39/tc39-notes/blob/master/meetings/2014-11/nov-19.md#412-should-weakmapweakset-have-a-clear-method-markm">Mark Miller</a>:</p>
+<blockquote>
+<p>The mapping from weakmap/key pair value can only be observed or affected by someone who has both the weakmap and the key. With <code>clear()</code>, someone with only the WeakMap would’ve been able to affect the WeakMap-and-key-to-value mapping.</p>
+</blockquote>
+<h3 id="weakmap-keys-are-weakly-held">34.2 The keys of a WeakMap are <em>weakly held</em></h3>
+<p>The keys of a WeakMap are said to be <em>weakly held</em>: Normally if one object refers to another one, then the latter object can’t be garbage-collected as long as the former exists. With a WeakMap, that is different: If an object is a key and not referred to elsewhere, it can be garbage-collected while the WeakMap still exists. That also leads to the corresponding entry being removed (but there is no way to observe that).</p>
+<h4 id="all-weakmap-keys-must-be-objects">34.2.1 All WeakMap keys must be objects</h4>
+<p>All WeakMap keys must be objects. You get an error if you use a primitive value:</p>
+<div class="sourceCode" id="cb1011"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1011-1"><a href="ch_weakmaps.html#cb1011-1" aria-hidden="true" tabindex="-1"></a>&gt; const wm = new WeakMap();</span>
+<span id="cb1011-2"><a href="ch_weakmaps.html#cb1011-2" aria-hidden="true" tabindex="-1"></a>&gt; wm.set(123, 'test')</span>
+<span id="cb1011-3"><a href="ch_weakmaps.html#cb1011-3" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Invalid value used as weak map key</span></span></code></pre></div>
+<p>With primitive values as keys, WeakMaps wouldn’t be black boxes anymore. But given that primitive values are never garbage-collected, you don’t profit from weakly held keys anyway, and can just as well use a normal Map.</p>
+<h4 id="use-case-attaching-values-to-objects">34.2.2 Use case: attaching values to objects</h4>
+<p>This is the main use case for WeakMaps: you can use them to externally attach values to objects – for example:</p>
+<div class="sourceCode" id="cb1012"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1012-1"><a href="ch_weakmaps.html#cb1012-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> wm <span class="op">=</span> <span class="kw">new</span> <span class="bu">WeakMap</span>()<span class="op">;</span></span>
+<span id="cb1012-2"><a href="ch_weakmaps.html#cb1012-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1012-3"><a href="ch_weakmaps.html#cb1012-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> obj <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb1012-4"><a href="ch_weakmaps.html#cb1012-4" aria-hidden="true" tabindex="-1"></a>  wm<span class="op">.</span><span class="fu">set</span>(obj<span class="op">,</span> <span class="st">'attachedValue'</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1012-5"><a href="ch_weakmaps.html#cb1012-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1012-6"><a href="ch_weakmaps.html#cb1012-6" aria-hidden="true" tabindex="-1"></a><span class="co">// (B)</span></span></code></pre></div>
+<p>In line A, we attach a value to <code>obj</code>. In line B, <code>obj</code> can already be garbage-collected, even though <code>wm</code> still exists. This technique of attaching a value to an object is equivalent to a property of that object being stored externally. If <code>wm</code> were a property, the previous code would look as follows:</p>
+<div class="sourceCode" id="cb1013"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1013-1"><a href="ch_weakmaps.html#cb1013-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1013-2"><a href="ch_weakmaps.html#cb1013-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> obj <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb1013-3"><a href="ch_weakmaps.html#cb1013-3" aria-hidden="true" tabindex="-1"></a>  obj<span class="op">.</span><span class="at">wm</span> <span class="op">=</span> <span class="st">'attachedValue'</span><span class="op">;</span></span>
+<span id="cb1013-4"><a href="ch_weakmaps.html#cb1013-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="examples">34.3 Examples</h3>
+<h4 id="caching-computed-results-via-weakmaps">34.3.1 Caching computed results via WeakMaps</h4>
+<p>With WeakMaps, you can associate previously computed results with objects without having to worry about memory management. The following function <code>countOwnKeys()</code> is an example: it caches previous results in the WeakMap <code>cache</code>.</p>
+<div class="sourceCode" id="cb1014"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1014-1"><a href="ch_weakmaps.html#cb1014-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> cache <span class="op">=</span> <span class="kw">new</span> <span class="bu">WeakMap</span>()<span class="op">;</span></span>
+<span id="cb1014-2"><a href="ch_weakmaps.html#cb1014-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">countOwnKeys</span>(obj) {</span>
+<span id="cb1014-3"><a href="ch_weakmaps.html#cb1014-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (cache<span class="op">.</span><span class="fu">has</span>(obj)) {</span>
+<span id="cb1014-4"><a href="ch_weakmaps.html#cb1014-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [cache<span class="op">.</span><span class="fu">get</span>(obj)<span class="op">,</span> <span class="st">'cached'</span>]<span class="op">;</span></span>
+<span id="cb1014-5"><a href="ch_weakmaps.html#cb1014-5" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb1014-6"><a href="ch_weakmaps.html#cb1014-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> count <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(obj)<span class="op">.</span><span class="at">length</span><span class="op">;</span></span>
+<span id="cb1014-7"><a href="ch_weakmaps.html#cb1014-7" aria-hidden="true" tabindex="-1"></a>    cache<span class="op">.</span><span class="fu">set</span>(obj<span class="op">,</span> count)<span class="op">;</span></span>
+<span id="cb1014-8"><a href="ch_weakmaps.html#cb1014-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [count<span class="op">,</span> <span class="st">'computed'</span>]<span class="op">;</span></span>
+<span id="cb1014-9"><a href="ch_weakmaps.html#cb1014-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1014-10"><a href="ch_weakmaps.html#cb1014-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>If we use this function with an object <code>obj</code>, you can see that the result is only computed for the first invocation, while a cached value is used for the second invocation:</p>
+<div class="sourceCode" id="cb1015"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1015-1"><a href="ch_weakmaps.html#cb1015-1" aria-hidden="true" tabindex="-1"></a>&gt; const obj = { foo: 1, bar: 2};</span>
+<span id="cb1015-2"><a href="ch_weakmaps.html#cb1015-2" aria-hidden="true" tabindex="-1"></a>&gt; countOwnKeys(obj)</span>
+<span id="cb1015-3"><a href="ch_weakmaps.html#cb1015-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[2, 'computed']</span></span>
+<span id="cb1015-4"><a href="ch_weakmaps.html#cb1015-4" aria-hidden="true" tabindex="-1"></a>&gt; countOwnKeys(obj)</span>
+<span id="cb1015-5"><a href="ch_weakmaps.html#cb1015-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[2, 'cached']</span></span></code></pre></div>
+<h4 id="private-data-in-weakmaps">34.3.2 Keeping private data in WeakMaps</h4>
+<p>In the following code, the WeakMaps <code>_counter</code> and <code>_action</code> are used to store the values of virtual properties of instances of <code>Countdown</code>:</p>
+<div class="sourceCode" id="cb1016"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1016-1"><a href="ch_weakmaps.html#cb1016-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _counter <span class="op">=</span> <span class="kw">new</span> <span class="bu">WeakMap</span>()<span class="op">;</span></span>
+<span id="cb1016-2"><a href="ch_weakmaps.html#cb1016-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _action <span class="op">=</span> <span class="kw">new</span> <span class="bu">WeakMap</span>()<span class="op">;</span></span>
+<span id="cb1016-3"><a href="ch_weakmaps.html#cb1016-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1016-4"><a href="ch_weakmaps.html#cb1016-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Countdown {</span>
+<span id="cb1016-5"><a href="ch_weakmaps.html#cb1016-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(counter<span class="op">,</span> action) {</span>
+<span id="cb1016-6"><a href="ch_weakmaps.html#cb1016-6" aria-hidden="true" tabindex="-1"></a>    _counter<span class="op">.</span><span class="fu">set</span>(<span class="kw">this</span><span class="op">,</span> counter)<span class="op">;</span></span>
+<span id="cb1016-7"><a href="ch_weakmaps.html#cb1016-7" aria-hidden="true" tabindex="-1"></a>    _action<span class="op">.</span><span class="fu">set</span>(<span class="kw">this</span><span class="op">,</span> action)<span class="op">;</span></span>
+<span id="cb1016-8"><a href="ch_weakmaps.html#cb1016-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1016-9"><a href="ch_weakmaps.html#cb1016-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dec</span>() {</span>
+<span id="cb1016-10"><a href="ch_weakmaps.html#cb1016-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> counter <span class="op">=</span> _counter<span class="op">.</span><span class="fu">get</span>(<span class="kw">this</span>)<span class="op">;</span></span>
+<span id="cb1016-11"><a href="ch_weakmaps.html#cb1016-11" aria-hidden="true" tabindex="-1"></a>    counter<span class="op">--;</span></span>
+<span id="cb1016-12"><a href="ch_weakmaps.html#cb1016-12" aria-hidden="true" tabindex="-1"></a>    _counter<span class="op">.</span><span class="fu">set</span>(<span class="kw">this</span><span class="op">,</span> counter)<span class="op">;</span></span>
+<span id="cb1016-13"><a href="ch_weakmaps.html#cb1016-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (counter <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb1016-14"><a href="ch_weakmaps.html#cb1016-14" aria-hidden="true" tabindex="-1"></a>      _action<span class="op">.</span><span class="fu">get</span>(<span class="kw">this</span>)()<span class="op">;</span></span>
+<span id="cb1016-15"><a href="ch_weakmaps.html#cb1016-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1016-16"><a href="ch_weakmaps.html#cb1016-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1016-17"><a href="ch_weakmaps.html#cb1016-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1016-18"><a href="ch_weakmaps.html#cb1016-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1016-19"><a href="ch_weakmaps.html#cb1016-19" aria-hidden="true" tabindex="-1"></a><span class="co">// The two pseudo-properties are truly private:</span></span>
+<span id="cb1016-20"><a href="ch_weakmaps.html#cb1016-20" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1016-21"><a href="ch_weakmaps.html#cb1016-21" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(<span class="kw">new</span> <span class="fu">Countdown</span>())<span class="op">,</span></span>
+<span id="cb1016-22"><a href="ch_weakmaps.html#cb1016-22" aria-hidden="true" tabindex="-1"></a>  [])<span class="op">;</span></span></code></pre></div>
+<p>This is how <code>Countdown</code> is used:</p>
+<div class="sourceCode" id="cb1017"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1017-1"><a href="ch_weakmaps.html#cb1017-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> invoked <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb1017-2"><a href="ch_weakmaps.html#cb1017-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1017-3"><a href="ch_weakmaps.html#cb1017-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> cd <span class="op">=</span> <span class="kw">new</span> <span class="fu">Countdown</span>(<span class="dv">3</span><span class="op">,</span> () <span class="kw">=&gt;</span> invoked <span class="op">=</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb1017-4"><a href="ch_weakmaps.html#cb1017-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1017-5"><a href="ch_weakmaps.html#cb1017-5" aria-hidden="true" tabindex="-1"></a>cd<span class="op">.</span><span class="fu">dec</span>()<span class="op">;</span> assert<span class="op">.</span><span class="fu">equal</span>(invoked<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span>
+<span id="cb1017-6"><a href="ch_weakmaps.html#cb1017-6" aria-hidden="true" tabindex="-1"></a>cd<span class="op">.</span><span class="fu">dec</span>()<span class="op">;</span> assert<span class="op">.</span><span class="fu">equal</span>(invoked<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span>
+<span id="cb1017-7"><a href="ch_weakmaps.html#cb1017-7" aria-hidden="true" tabindex="-1"></a>cd<span class="op">.</span><span class="fu">dec</span>()<span class="op">;</span> assert<span class="op">.</span><span class="fu">equal</span>(invoked<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: WeakMaps for private data</strong></p>
+<p><code>exercises/weakmaps/weakmaps_private_data_test.mjs</code></p>
+</div>
+<h3 id="weakmap-api">34.4 WeakMap API</h3>
+<p>The constructor and the four methods of <code>WeakMap</code> work the same as <a href="ch_maps.html#quickref-maps">their <code>Map</code> equivalents</a>:</p>
+<ul>
+<li><code>new WeakMap&lt;K, V&gt;(entries?: Iterable&lt;[K, V]&gt;)</code> <sup>[ES6]</sup></li>
+<li><code>.delete(key: K) : boolean</code> <sup>[ES6]</sup></li>
+<li><code>.get(key: K) : V</code> <sup>[ES6]</sup></li>
+<li><code>.has(key: K) : boolean</code> <sup>[ES6]</sup></li>
+<li><code>.set(key: K, value: V) : this</code> <sup>[ES6]</sup></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/36">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_sets.html">35 Sets (<code>Set</code>)</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

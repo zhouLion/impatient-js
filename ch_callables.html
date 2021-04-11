@@ -1,0 +1,774 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_callables">25 Callable values</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>25.1 <a href="ch_callables.html#kinds-of-functions">Kinds of functions</a></li>
+<li>25.2 <a href="ch_callables.html#ordinary-functions">Ordinary functions</a>
+<ul>
+<li>25.2.1 <a href="ch_callables.html#named-function-expressions">Named function expressions (advanced)</a></li>
+<li>25.2.2 <a href="ch_callables.html#terminology-function-definitions-and-function-expressions">Terminology: function definitions and function expressions</a></li>
+<li>25.2.3 <a href="ch_callables.html#parts-of-a-function-declaration">Parts of a function declaration</a></li>
+<li>25.2.4 <a href="ch_callables.html#roles-of-ordinary-functions">Roles played by ordinary functions</a></li>
+<li>25.2.5 <a href="ch_callables.html#terminology-entity-vs.-syntax-vs.-role-advanced">Terminology: entity vs.&nbsp;syntax vs.&nbsp;role (advanced)</a></li>
+</ul></li>
+<li>25.3 <a href="ch_callables.html#specialized-functions">Specialized functions</a>
+<ul>
+<li>25.3.1 <a href="ch_callables.html#specialized-functions-are-still-functions">Specialized functions are still functions</a></li>
+<li>25.3.2 <a href="ch_callables.html#arrow-functions">Arrow functions</a></li>
+<li>25.3.3 <a href="ch_callables.html#this-in-callables">The special variable <code>this</code> in methods, ordinary functions and arrow functions</a></li>
+<li>25.3.4 <a href="ch_callables.html#prefer-specialized-functions">Recommendation: prefer specialized functions over ordinary functions</a></li>
+</ul></li>
+<li>25.4 <a href="ch_callables.html#summary-kinds-of-callable-values">Summary: kinds of callable values</a></li>
+<li>25.5 <a href="ch_callables.html#returning-values-from-functions-and-methods">Returning values from functions and methods</a></li>
+<li>25.6 <a href="ch_callables.html#parameter-handling">Parameter handling</a>
+<ul>
+<li>25.6.1 <a href="ch_callables.html#terminology-parameters-vs.-arguments">Terminology: parameters vs.&nbsp;arguments</a></li>
+<li>25.6.2 <a href="ch_callables.html#callback-function">Terminology: callback</a></li>
+<li>25.6.3 <a href="ch_callables.html#too-many-or-not-enough-arguments">Too many or not enough arguments</a></li>
+<li>25.6.4 <a href="ch_callables.html#parameter-default-values">Parameter default values</a></li>
+<li>25.6.5 <a href="ch_callables.html#rest-parameters">Rest parameters</a></li>
+<li>25.6.6 <a href="ch_callables.html#named-parameters">Named parameters</a></li>
+<li>25.6.7 <a href="ch_callables.html#simulating-named-parameters">Simulating named parameters</a></li>
+<li>25.6.8 <a href="ch_callables.html#spread-arguments">Spreading (<code>...</code>) into function calls</a></li>
+</ul></li>
+<li>25.7 <a href="ch_callables.html#methods-of-functions-.call-.apply-.bind">Methods of functions: <code>.call()</code>, <code>.apply()</code>, <code>.bind()</code></a>
+<ul>
+<li>25.7.1 <a href="ch_callables.html#Function.prototype.call">The function method <code>.call()</code></a></li>
+<li>25.7.2 <a href="ch_callables.html#Function.prototype.apply">The function method <code>.apply()</code></a></li>
+<li>25.7.3 <a href="ch_callables.html#Function.prototype.bind">The function method <code>.bind()</code></a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>In this chapter, we look at JavaScript values that can be invoked: functions, methods, and classes.</p>
+<h3 id="kinds-of-functions">25.1 Kinds of functions</h3>
+<p><a id="index-entry-227" class="index-entry"></a><a id="index-entry-228" class="index-entry"></a> <a id="index-entry-229" class="index-entry"></a><a id="index-entry-230" class="index-entry"></a></p>
+<p>JavaScript has two categories of functions:</p>
+<ul>
+<li><p>An <em>ordinary function</em> can play several roles:</p>
+<ul>
+<li>Real function</li>
+<li>Method</li>
+<li>Constructor function</li>
+</ul></li>
+<li><p>A <em>specialized function</em> can only play one of those roles – for example:</p>
+<ul>
+<li>An <em>arrow function</em> can only be a real function.</li>
+<li>A <em>method</em> can only be a method.</li>
+<li>A <em>class</em> can only be a constructor function.</li>
+</ul>
+<p>Specialized functions were added to the language in ECMAScript 6.</p></li>
+</ul>
+<p>Read on to find out what all of those things mean.</p>
+<h3 id="ordinary-functions">25.2 Ordinary functions</h3>
+<p><a id="index-entry-231" class="index-entry"></a> <a id="index-entry-232" class="index-entry"></a><a id="index-entry-233" class="index-entry"></a></p>
+<p>The following code shows two ways of doing (roughly) the same thing: creating an ordinary function.</p>
+<div class="sourceCode" id="cb532"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb532-1"><a href="ch_callables.html#cb532-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Function declaration (a statement)</span></span>
+<span id="cb532-2"><a href="ch_callables.html#cb532-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">ordinary1</span>(a<span class="op">,</span> b<span class="op">,</span> c) {</span>
+<span id="cb532-3"><a href="ch_callables.html#cb532-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb532-4"><a href="ch_callables.html#cb532-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb532-5"><a href="ch_callables.html#cb532-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb532-6"><a href="ch_callables.html#cb532-6" aria-hidden="true" tabindex="-1"></a><span class="co">// const plus anonymous (nameless) function expression</span></span>
+<span id="cb532-7"><a href="ch_callables.html#cb532-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ordinary2 <span class="op">=</span> <span class="kw">function</span> (a<span class="op">,</span> b<span class="op">,</span> c) {</span>
+<span id="cb532-8"><a href="ch_callables.html#cb532-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb532-9"><a href="ch_callables.html#cb532-9" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>Inside a scope, function declarations are activated early (see <a href="ch_variables-assignment.html#declarations-scope-activation">§11.8 “Declarations: scope and activation”</a>) and can be called before they are declared. That is occasionally useful.</p>
+<p>Variable declarations, such as the one for <code>ordinary2</code>, are not activated early.</p>
+<h4 id="named-function-expressions">25.2.1 Named function expressions (advanced)</h4>
+<p><a id="index-entry-234" class="index-entry"></a><a id="index-entry-235" class="index-entry"></a></p>
+<p>So far, we have only seen anonymous function expressions – which don’t have names:</p>
+<div class="sourceCode" id="cb533"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb533-1"><a href="ch_callables.html#cb533-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> anonFuncExpr <span class="op">=</span> <span class="kw">function</span> (a<span class="op">,</span> b<span class="op">,</span> c) {</span>
+<span id="cb533-2"><a href="ch_callables.html#cb533-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb533-3"><a href="ch_callables.html#cb533-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>But there are also <em>named function expressions</em>:</p>
+<div class="sourceCode" id="cb534"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb534-1"><a href="ch_callables.html#cb534-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> namedFuncExpr <span class="op">=</span> <span class="kw">function</span> <span class="fu">myName</span>(a<span class="op">,</span> b<span class="op">,</span> c) {</span>
+<span id="cb534-2"><a href="ch_callables.html#cb534-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// `myName` is only accessible in here</span></span>
+<span id="cb534-3"><a href="ch_callables.html#cb534-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p><code>myName</code> is only accessible inside the body of the function. The function can use it to refer to itself (for self-recursion, etc.) – independently of which variable it is assigned to:</p>
+<div class="sourceCode" id="cb535"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb535-1"><a href="ch_callables.html#cb535-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func <span class="op">=</span> <span class="kw">function</span> <span class="fu">funcExpr</span>() { <span class="cf">return</span> funcExpr }<span class="op">;</span></span>
+<span id="cb535-2"><a href="ch_callables.html#cb535-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">func</span>()<span class="op">,</span> func)<span class="op">;</span></span>
+<span id="cb535-3"><a href="ch_callables.html#cb535-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb535-4"><a href="ch_callables.html#cb535-4" aria-hidden="true" tabindex="-1"></a><span class="co">// The name `funcExpr` only exists inside the function body:</span></span>
+<span id="cb535-5"><a href="ch_callables.html#cb535-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(() <span class="kw">=&gt;</span> <span class="fu">funcExpr</span>()<span class="op">,</span> <span class="bu">ReferenceError</span>)<span class="op">;</span></span></code></pre></div>
+<p>Even if they are not assigned to variables, named function expressions have names (line A):</p>
+<div class="sourceCode" id="cb536"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb536-1"><a href="ch_callables.html#cb536-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getNameOfCallback</span>(callback) {</span>
+<span id="cb536-2"><a href="ch_callables.html#cb536-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> callback<span class="op">.</span><span class="at">name</span><span class="op">;</span></span>
+<span id="cb536-3"><a href="ch_callables.html#cb536-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb536-4"><a href="ch_callables.html#cb536-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb536-5"><a href="ch_callables.html#cb536-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb536-6"><a href="ch_callables.html#cb536-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getNameOfCallback</span>(<span class="kw">function</span> () {})<span class="op">,</span> <span class="st">''</span>)<span class="op">;</span> <span class="co">// anonymous</span></span>
+<span id="cb536-7"><a href="ch_callables.html#cb536-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb536-8"><a href="ch_callables.html#cb536-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb536-9"><a href="ch_callables.html#cb536-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getNameOfCallback</span>(<span class="kw">function</span> <span class="fu">named</span>() {})<span class="op">,</span> <span class="st">'named'</span>)<span class="op">;</span> <span class="co">// (A)</span></span></code></pre></div>
+<p>Note that functions created via function declarations or variable declarations always have names:</p>
+<div class="sourceCode" id="cb537"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb537-1"><a href="ch_callables.html#cb537-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">funcDecl</span>() {}</span>
+<span id="cb537-2"><a href="ch_callables.html#cb537-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb537-3"><a href="ch_callables.html#cb537-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getNameOfCallback</span>(funcDecl)<span class="op">,</span> <span class="st">'funcDecl'</span>)<span class="op">;</span></span>
+<span id="cb537-4"><a href="ch_callables.html#cb537-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb537-5"><a href="ch_callables.html#cb537-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> funcExpr <span class="op">=</span> <span class="kw">function</span> () {}<span class="op">;</span></span>
+<span id="cb537-6"><a href="ch_callables.html#cb537-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb537-7"><a href="ch_callables.html#cb537-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getNameOfCallback</span>(funcExpr)<span class="op">,</span> <span class="st">'funcExpr'</span>)<span class="op">;</span></span></code></pre></div>
+<p>One benefit of functions having names is that those names show up in <a href="ch_exception-handling.html#exception-stack-trace">exception stack traces</a>.</p>
+<h4 id="terminology-function-definitions-and-function-expressions">25.2.2 Terminology: function definitions and function expressions</h4>
+<p>A <em>function definition</em> is syntax that creates functions:</p>
+<ul>
+<li>A function declaration (a statement)</li>
+<li>A function expression</li>
+</ul>
+<p>Function declarations always produce ordinary functions. Function expressions produce either ordinary functions or specialized functions:</p>
+<ul>
+<li>Ordinary function expressions (which we have already encountered):
+<ul>
+<li>Anonymous function expressions</li>
+<li>Named function expressions</li>
+</ul></li>
+<li>Specialized function expressions (which we’ll look at later):
+<ul>
+<li>Arrow functions (which are always expressions)</li>
+</ul></li>
+</ul>
+<p>While function declarations are still popular in JavaScript, function expressions are almost always arrow functions in modern code.</p>
+<h4 id="parts-of-a-function-declaration">25.2.3 Parts of a function declaration</h4>
+<p>Let’s examine the parts of a function declaration via the following example. Most of the terms also apply to function expressions.</p>
+<div class="sourceCode" id="cb538"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb538-1"><a href="ch_callables.html#cb538-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">add</span>(x<span class="op">,</span> y) {</span>
+<span id="cb538-2"><a href="ch_callables.html#cb538-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
+<span id="cb538-3"><a href="ch_callables.html#cb538-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<ul>
+<li><code>add</code> is the <em>name</em> of the function declaration.</li>
+<li><code>add(x, y)</code> is the <em>head</em> of the function declaration.</li>
+<li><code>x</code> and <code>y</code> are the <em>parameters</em>.</li>
+<li>The curly braces (<code>{</code> and <code>}</code>) and everything between them are the <em>body</em> of the function declaration.</li>
+<li>The <code>return</code> statement explicitly returns a value from the function.</li>
+</ul>
+<h5 id="trailing-commas-parameters">25.2.3.1 Trailing commas in parameter lists</h5>
+<p><a id="index-entry-236" class="index-entry"></a></p>
+<p>JavaScript has always allowed and ignored trailing commas in Array literals. Since ES5, they are also allowed in object literals. Since ES2017, we can add trailing commas to parameter lists (declarations and invocations):</p>
+<div class="sourceCode" id="cb539"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb539-1"><a href="ch_callables.html#cb539-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Declaration</span></span>
+<span id="cb539-2"><a href="ch_callables.html#cb539-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">retrieveData</span>(</span>
+<span id="cb539-3"><a href="ch_callables.html#cb539-3" aria-hidden="true" tabindex="-1"></a>  contentText<span class="op">,</span></span>
+<span id="cb539-4"><a href="ch_callables.html#cb539-4" aria-hidden="true" tabindex="-1"></a>  keyword<span class="op">,</span></span>
+<span id="cb539-5"><a href="ch_callables.html#cb539-5" aria-hidden="true" tabindex="-1"></a>  {unique<span class="op">,</span> ignoreCase<span class="op">,</span> pageSize}<span class="op">,</span> <span class="co">// trailing comma</span></span>
+<span id="cb539-6"><a href="ch_callables.html#cb539-6" aria-hidden="true" tabindex="-1"></a>) {</span>
+<span id="cb539-7"><a href="ch_callables.html#cb539-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb539-8"><a href="ch_callables.html#cb539-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb539-9"><a href="ch_callables.html#cb539-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb539-10"><a href="ch_callables.html#cb539-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Invocation</span></span>
+<span id="cb539-11"><a href="ch_callables.html#cb539-11" aria-hidden="true" tabindex="-1"></a><span class="fu">retrieveData</span>(</span>
+<span id="cb539-12"><a href="ch_callables.html#cb539-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">''</span><span class="op">,</span></span>
+<span id="cb539-13"><a href="ch_callables.html#cb539-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">null</span><span class="op">,</span></span>
+<span id="cb539-14"><a href="ch_callables.html#cb539-14" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">ignoreCase</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="dt">pageSize</span><span class="op">:</span> <span class="dv">10</span>}<span class="op">,</span> <span class="co">// trailing comma</span></span>
+<span id="cb539-15"><a href="ch_callables.html#cb539-15" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<h4 id="roles-of-ordinary-functions">25.2.4 Roles played by ordinary functions</h4>
+<p><a id="index-entry-237" class="index-entry"></a><a id="index-entry-238" class="index-entry"></a><a id="index-entry-239" class="index-entry"></a></p>
+<p>Consider the following function declaration from the previous section:</p>
+<div class="sourceCode" id="cb540"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb540-1"><a href="ch_callables.html#cb540-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">add</span>(x<span class="op">,</span> y) {</span>
+<span id="cb540-2"><a href="ch_callables.html#cb540-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
+<span id="cb540-3"><a href="ch_callables.html#cb540-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>This function declaration creates an ordinary function whose name is <code>add</code>. As an ordinary function, <code>add()</code> can play three roles:</p>
+<ul>
+<li><p>Real function: invoked via a function call. <a id="index-entry-240" class="index-entry"></a></p>
+<div class="sourceCode" id="cb541"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb541-1"><a href="ch_callables.html#cb541-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">add</span>(<span class="dv">2</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p>Method: stored in a property, invoked via a method call. <a id="index-entry-241" class="index-entry"></a></p>
+<div class="sourceCode" id="cb542"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb542-1"><a href="ch_callables.html#cb542-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> { <span class="dt">addAsMethod</span><span class="op">:</span> add }<span class="op">;</span></span>
+<span id="cb542-2"><a href="ch_callables.html#cb542-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="fu">addAsMethod</span>(<span class="dv">2</span><span class="op">,</span> <span class="dv">4</span>)<span class="op">,</span> <span class="dv">6</span>)<span class="op">;</span> <span class="co">// (A)</span></span></code></pre></div>
+<p>In line A, <code>obj</code> is called the <em>receiver</em> of the method call.</p></li>
+<li><p>Constructor function: invoked via <code>new</code>. <a id="index-entry-242" class="index-entry"></a></p>
+<div class="sourceCode" id="cb543"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb543-1"><a href="ch_callables.html#cb543-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> inst <span class="op">=</span> <span class="kw">new</span> <span class="fu">add</span>()<span class="op">;</span></span>
+<span id="cb543-2"><a href="ch_callables.html#cb543-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(inst <span class="kw">instanceof</span> add<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div>
+<p>As an aside, the names of constructor functions (incl.&nbsp;classes) normally start with capital letters.</p></li>
+</ul>
+<h4 id="terminology-entity-vs.-syntax-vs.-role-advanced">25.2.5 Terminology: entity vs.&nbsp;syntax vs.&nbsp;role (advanced)</h4>
+<p>The distinction between the concepts <em>syntax</em>, <em>entity</em>, and <em>role</em> is subtle and often doesn’t matter. But I’d like to sharpen your eye for it:</p>
+<ul>
+<li>An <em>entity</em> is a JavaScript feature as it “lives” in RAM. An ordinary function is an entity.
+<ul>
+<li>Entities include: ordinary functions, arrow functions, methods, and classes.</li>
+</ul></li>
+<li><em>Syntax</em> is the code that we use to create entities. Function declarations and anonymous function expressions are syntax. They both create entities that are called ordinary functions.
+<ul>
+<li>Syntax includes: function declarations and anonymous function expressions. The syntax that produces arrow functions is also called <em>arrow functions</em>. The same is true for methods and classes.</li>
+</ul></li>
+<li>A <em>role</em> describes how we use entities. The entity <em>ordinary function</em> can play the role <em>real function</em>, or the role <em>method</em>, or the role <em>class</em>. The entity <em>arrow function</em> can also play the role <em>real function</em>.
+<ul>
+<li>The roles of functions are: real function, method, and constructor function.</li>
+</ul></li>
+</ul>
+<p>Many other programming languages only have a single entity that plays the role <em>real function</em>. Then they can use the name <em>function</em> for both role and entity.</p>
+<h3 id="specialized-functions">25.3 Specialized functions</h3>
+<p>Specialized functions are single-purpose versions of ordinary functions. Each one of them specializes in a single role:</p>
+<ul>
+<li><p>The purpose of an <em>arrow function</em> is to be a real function:</p>
+<div class="sourceCode" id="cb544"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb544-1"><a href="ch_callables.html#cb544-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arrow <span class="op">=</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb544-2"><a href="ch_callables.html#cb544-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb544-3"><a href="ch_callables.html#cb544-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb544-4"><a href="ch_callables.html#cb544-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">arrow</span>()<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p>The purpose of a <em>method</em> is to be a method:</p>
+<div class="sourceCode" id="cb545"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb545-1"><a href="ch_callables.html#cb545-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb545-2"><a href="ch_callables.html#cb545-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">myMethod</span>() {</span>
+<span id="cb545-3"><a href="ch_callables.html#cb545-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb545-4"><a href="ch_callables.html#cb545-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb545-5"><a href="ch_callables.html#cb545-5" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb545-6"><a href="ch_callables.html#cb545-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="fu">myMethod</span>()<span class="op">,</span> <span class="st">'abc'</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p>The purpose of a <em>class</em> is to be a constructor function:</p>
+<div class="sourceCode" id="cb546"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb546-1"><a href="ch_callables.html#cb546-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MyClass {</span>
+<span id="cb546-2"><a href="ch_callables.html#cb546-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* ··· */</span></span>
+<span id="cb546-3"><a href="ch_callables.html#cb546-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb546-4"><a href="ch_callables.html#cb546-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> inst <span class="op">=</span> <span class="kw">new</span> <span class="fu">MyClass</span>()<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<p>Apart from nicer syntax, each kind of specialized function also supports new features, making them better at their jobs than ordinary functions.</p>
+<ul>
+<li>Arrow functions are explained <span data-refcheck="#arrow-functions">soon</span>.</li>
+<li>Methods are explained <a href="ch_single-objects.html#methods-and-this">in the chapter on single objects</a>.</li>
+<li>Classes are explained <a href="ch_proto-chains-classes.html#classes">in the chapter on classes</a>.</li>
+</ul>
+<p>Tbl.&nbsp;<a href="#tbl:capabilities-of-functions">16</a> lists the capabilities of ordinary and specialized functions.</p>
+<div id="tbl:capabilities-of-functions">
+<table>
+<caption>Table 16: Capabilities of four kinds of functions. If a cell value is in parentheses, that implies some kind of limitation. The special variable <code>this</code> is explained in <a href="ch_callables.html#this-in-callables">§25.3.3 “The special variable <code>this</code> in methods, ordinary functions and arrow functions”</a>.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Function call</th>
+<th style="text-align: left;">Method call</th>
+<th style="text-align: left;">Constructor call</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Ordinary function</td>
+<td style="text-align: left;">(<code>this === undefined</code>)</td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Arrow function</td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;">(lexical <code>this</code>)</td>
+<td style="text-align: left;"><code>✘</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Method</td>
+<td style="text-align: left;">(<code>this === undefined</code>)</td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"><code>✘</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Class</td>
+<td style="text-align: left;"><code>✘</code></td>
+<td style="text-align: left;"><code>✘</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="specialized-functions-are-still-functions">25.3.1 Specialized functions are still functions</h4>
+<p>It’s important to note that arrow functions, methods, and classes are still categorized as functions:</p>
+<div class="sourceCode" id="cb547"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb547-1"><a href="ch_callables.html#cb547-1" aria-hidden="true" tabindex="-1"></a>&gt; (() =&gt; {}) instanceof Function</span>
+<span id="cb547-2"><a href="ch_callables.html#cb547-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb547-3"><a href="ch_callables.html#cb547-3" aria-hidden="true" tabindex="-1"></a>&gt; ({ method() {} }.method) instanceof Function</span>
+<span id="cb547-4"><a href="ch_callables.html#cb547-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb547-5"><a href="ch_callables.html#cb547-5" aria-hidden="true" tabindex="-1"></a>&gt; (class SomeClass {}) instanceof Function</span>
+<span id="cb547-6"><a href="ch_callables.html#cb547-6" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h4 id="arrow-functions">25.3.2 Arrow functions</h4>
+<p><a id="index-entry-243" class="index-entry"></a><a id="index-entry-244" class="index-entry"></a></p>
+<p>Arrow functions were added to JavaScript for two reasons:</p>
+<ol type="1">
+<li>To provide a more concise way for creating functions.</li>
+<li>They work better as real functions inside methods: Methods can refer to the object that received a method call via the special variable <code>this</code>. Arrow functions can access the <code>this</code> of a surrounding method, ordinary functions can’t (because they have their own <code>this</code>).</li>
+</ol>
+<p>We’ll first examine the syntax of arrow functions and then how <code>this</code> works in various functions.</p>
+<h5 id="the-syntax-of-arrow-functions">25.3.2.1 The syntax of arrow functions</h5>
+<p>Let’s review the syntax of an anonymous function expression:</p>
+<div class="sourceCode" id="cb548"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb548-1"><a href="ch_callables.html#cb548-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> f <span class="op">=</span> <span class="kw">function</span> (x<span class="op">,</span> y<span class="op">,</span> z) { <span class="cf">return</span> <span class="dv">123</span> }<span class="op">;</span></span></code></pre></div>
+<p>The (roughly) equivalent arrow function looks as follows. Arrow functions are expressions.</p>
+<div class="sourceCode" id="cb549"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb549-1"><a href="ch_callables.html#cb549-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> f <span class="op">=</span> (x<span class="op">,</span> y<span class="op">,</span> z) <span class="kw">=&gt;</span> { <span class="cf">return</span> <span class="dv">123</span> }<span class="op">;</span></span></code></pre></div>
+<p>Here, the body of the arrow function is a block. But it can also be an expression. The following arrow function works exactly like the previous one.</p>
+<div class="sourceCode" id="cb550"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb550-1"><a href="ch_callables.html#cb550-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> f <span class="op">=</span> (x<span class="op">,</span> y<span class="op">,</span> z) <span class="kw">=&gt;</span> <span class="dv">123</span><span class="op">;</span></span></code></pre></div>
+<p>If an arrow function has only a single parameter and that parameter is an identifier (not <a href="ch_destructuring.html">a destructuring pattern</a>) then you can omit the parentheses around the parameter:</p>
+<div class="sourceCode" id="cb551"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb551-1"><a href="ch_callables.html#cb551-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> id <span class="op">=</span> x <span class="kw">=&gt;</span> x<span class="op">;</span></span></code></pre></div>
+<p>That is convenient when passing arrow functions as parameters to other functions or methods:</p>
+<div class="sourceCode" id="cb552"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb552-1"><a href="ch_callables.html#cb552-1" aria-hidden="true" tabindex="-1"></a>&gt; [1,2,3].map(x =&gt; x+1)</span>
+<span id="cb552-2"><a href="ch_callables.html#cb552-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 2, 3, 4 ]</span></span></code></pre></div>
+<p>This previous example demonstrates one benefit of arrow functions – conciseness. If we perform the same task with a function expression, our code is more verbose:</p>
+<div class="sourceCode" id="cb553"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb553-1"><a href="ch_callables.html#cb553-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>]<span class="op">.</span><span class="fu">map</span>(<span class="kw">function</span> (x) { <span class="cf">return</span> x<span class="op">+</span><span class="dv">1</span> })<span class="op">;</span></span></code></pre></div>
+<h5 id="returning-object-literal-from-arrow-function">25.3.2.2 Syntax pitfall: returning an object literal from an arrow function</h5>
+<p>If you want the expression body of an arrow function to be an object literal, you must put the literal in parentheses:</p>
+<div class="sourceCode" id="cb554"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb554-1"><a href="ch_callables.html#cb554-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func1 <span class="op">=</span> () <span class="kw">=&gt;</span> ({<span class="dt">a</span><span class="op">:</span> <span class="dv">1</span>})<span class="op">;</span></span>
+<span id="cb554-2"><a href="ch_callables.html#cb554-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="fu">func1</span>()<span class="op">,</span> { <span class="dt">a</span><span class="op">:</span> <span class="dv">1</span> })<span class="op">;</span></span></code></pre></div>
+<p>If you don’t, JavaScript thinks, the arrow function has a block body (that doesn’t return anything):</p>
+<div class="sourceCode" id="cb555"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb555-1"><a href="ch_callables.html#cb555-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func2 <span class="op">=</span> () <span class="kw">=&gt;</span> {<span class="dt">a</span><span class="op">:</span> <span class="dv">1</span>}<span class="op">;</span></span>
+<span id="cb555-2"><a href="ch_callables.html#cb555-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="fu">func2</span>()<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>{a: 1}</code> is interpreted as a block with <a href="ch_control-flow.html#labels">the label <code>a:</code></a> and the expression statement <code>1</code>. Without an explicit <code>return</code> statement, the block body returns <code>undefined</code>.</p>
+<p>This pitfall is caused by <a href="ch_syntax.html#ambiguous-syntax">syntactic ambiguity</a>: object literals and code blocks have the same syntax. We use the parentheses to tell JavaScript that the body is an expression (an object literal) and not a statement (a block).</p>
+<h4 id="this-in-callables">25.3.3 The special variable <code>this</code> in methods, ordinary functions and arrow functions</h4>
+<div class="notebox">
+<p><img src="img-book/img/icons/eye-regular.svg" height="24">&nbsp; <strong>The special variable <code>this</code> is an object-oriented feature</strong></p>
+<p>We are taking a quick look at the special variable <code>this</code> here, in order to understand why arrow functions are better real functions than ordinary functions.</p>
+<p>But this feature only matters in object-oriented programming and is covered in more depth in <a href="ch_single-objects.html#methods-and-this">§28.4 “Methods and the special variable <code>this</code>”</a>. Therefore, don’t worry if you don’t fully understand it yet.</p>
+</div>
+<p>Inside methods, the special variable <code>this</code> lets us access the <em>receiver</em> – the object which received the method call:</p>
+<div class="sourceCode" id="cb556"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb556-1"><a href="ch_callables.html#cb556-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb556-2"><a href="ch_callables.html#cb556-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">myMethod</span>() {</span>
+<span id="cb556-3"><a href="ch_callables.html#cb556-3" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">this</span><span class="op">,</span> obj)<span class="op">;</span></span>
+<span id="cb556-4"><a href="ch_callables.html#cb556-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb556-5"><a href="ch_callables.html#cb556-5" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb556-6"><a href="ch_callables.html#cb556-6" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="fu">myMethod</span>()<span class="op">;</span></span></code></pre></div>
+<p>Ordinary functions can be methods and therefore also have the implicit parameter <code>this</code>:</p>
+<div class="sourceCode" id="cb557"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb557-1"><a href="ch_callables.html#cb557-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb557-2"><a href="ch_callables.html#cb557-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">myMethod</span><span class="op">:</span> <span class="kw">function</span> () {</span>
+<span id="cb557-3"><a href="ch_callables.html#cb557-3" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">this</span><span class="op">,</span> obj)<span class="op">;</span></span>
+<span id="cb557-4"><a href="ch_callables.html#cb557-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb557-5"><a href="ch_callables.html#cb557-5" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb557-6"><a href="ch_callables.html#cb557-6" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="fu">myMethod</span>()<span class="op">;</span></span></code></pre></div>
+<p><code>this</code> is even an implicit parameter when we use an ordinary function as a real function. Then its value is <code>undefined</code> (in <a href="ch_syntax.html#strict-mode">strict mode</a>):</p>
+<div class="sourceCode" id="cb558"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb558-1"><a href="ch_callables.html#cb558-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">ordinaryFunc</span>() {</span>
+<span id="cb558-2"><a href="ch_callables.html#cb558-2" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">this</span><span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span>
+<span id="cb558-3"><a href="ch_callables.html#cb558-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb558-4"><a href="ch_callables.html#cb558-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ordinaryFunc</span>()<span class="op">;</span></span></code></pre></div>
+<p>That means that an ordinary function, used as a real function, can’t access the <code>this</code> of a surrounding method (line A). In contrast, arrow functions don’t have <code>this</code> as an implicit parameter. They treat it like any other variable and can therefore access the <code>this</code> of a surrounding method (line B):</p>
+<div class="sourceCode" id="cb559"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb559-1"><a href="ch_callables.html#cb559-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jill <span class="op">=</span> {</span>
+<span id="cb559-2"><a href="ch_callables.html#cb559-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">'Jill'</span><span class="op">,</span></span>
+<span id="cb559-3"><a href="ch_callables.html#cb559-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">someMethod</span>() {</span>
+<span id="cb559-4"><a href="ch_callables.html#cb559-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="fu">ordinaryFunc</span>() {</span>
+<span id="cb559-5"><a href="ch_callables.html#cb559-5" aria-hidden="true" tabindex="-1"></a>      assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb559-6"><a href="ch_callables.html#cb559-6" aria-hidden="true" tabindex="-1"></a>        () <span class="kw">=&gt;</span> <span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="op">,</span> <span class="co">// (A)</span></span>
+<span id="cb559-7"><a href="ch_callables.html#cb559-7" aria-hidden="true" tabindex="-1"></a>        <span class="ss">/</span><span class="sc">^</span><span class="ss">TypeError: Cannot read property 'name' of undefined</span><span class="sc">$</span><span class="ss">/</span>)<span class="op">;</span></span>
+<span id="cb559-8"><a href="ch_callables.html#cb559-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb559-9"><a href="ch_callables.html#cb559-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ordinaryFunc</span>()<span class="op">;</span></span>
+<span id="cb559-10"><a href="ch_callables.html#cb559-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb559-11"><a href="ch_callables.html#cb559-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> arrowFunc <span class="op">=</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb559-12"><a href="ch_callables.html#cb559-12" aria-hidden="true" tabindex="-1"></a>      assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="op">,</span> <span class="st">'Jill'</span>)<span class="op">;</span> <span class="co">// (B)</span></span>
+<span id="cb559-13"><a href="ch_callables.html#cb559-13" aria-hidden="true" tabindex="-1"></a>    }<span class="op">;</span></span>
+<span id="cb559-14"><a href="ch_callables.html#cb559-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrowFunc</span>()<span class="op">;</span></span>
+<span id="cb559-15"><a href="ch_callables.html#cb559-15" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb559-16"><a href="ch_callables.html#cb559-16" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb559-17"><a href="ch_callables.html#cb559-17" aria-hidden="true" tabindex="-1"></a>jill<span class="op">.</span><span class="fu">someMethod</span>()<span class="op">;</span></span></code></pre></div>
+<p>In this code, we can observe two ways of handling <code>this</code>:</p>
+<ul>
+<li><p>Dynamic <code>this</code>: In line A, we try to access the <code>this</code> of <code>.someMethod()</code> from an ordinary function. There, it is <em>shadowed</em> by the function’s own <code>this</code>, which is <code>undefined</code> (as filled in by the function call). Given that ordinary functions receive their <code>this</code> via (dynamic) function or method calls, their <code>this</code> is called <em>dynamic</em>.</p></li>
+<li><p>Lexical <code>this</code>: In line B, we again try to access the <code>this</code> of <code>.someMethod()</code>. This time, we succeed because the arrow function does not have its own <code>this</code>. <code>this</code> is resolved <em>lexically</em>, just like any other variable. That’s why the <code>this</code> of arrow functions is called <em>lexical</em>.</p></li>
+</ul>
+<p><a id="index-entry-245" class="index-entry"></a><a id="index-entry-246" class="index-entry"></a> <a id="index-entry-247" class="index-entry"></a><a id="index-entry-248" class="index-entry"></a></p>
+<h4 id="prefer-specialized-functions">25.3.4 Recommendation: prefer specialized functions over ordinary functions</h4>
+<p>Normally, you should prefer specialized functions over ordinary functions, especially classes and methods.</p>
+<p>When it comes to real functions, the choice between an arrow function and an ordinary function is less clear-cut, though:</p>
+<ul>
+<li><p>For anonymous inline function expressions, arrow functions are clear winners, due to their compact syntax and them not having <code>this</code> as an implicit parameter:</p>
+<div class="sourceCode" id="cb560"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb560-1"><a href="ch_callables.html#cb560-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> twiceOrdinary <span class="op">=</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">.</span><span class="fu">map</span>(<span class="kw">function</span> (x) {<span class="cf">return</span> x <span class="op">*</span> <span class="dv">2</span>})<span class="op">;</span></span>
+<span id="cb560-2"><a href="ch_callables.html#cb560-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> twiceArrow <span class="op">=</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> x <span class="op">*</span> <span class="dv">2</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p>For stand-alone named function declarations, arrow functions still benefit from lexical <code>this</code>. But function declarations (which produce ordinary functions) have nice syntax and early activation is also occasionally useful (see <a href="ch_variables-assignment.html#declarations-scope-activation">§11.8 “Declarations: scope and activation”</a>). If <code>this</code> doesn’t appear in the body of an ordinary function, there is no downside to using it as a real function. The static checking tool ESLint can warn us during development when we do this wrong via <a href="https://eslint.org/docs/rules/no-invalid-this">a built-in rule</a>.</p>
+<div class="sourceCode" id="cb561"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb561-1"><a href="ch_callables.html#cb561-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">timesOrdinary</span>(x<span class="op">,</span> y) {</span>
+<span id="cb561-2"><a href="ch_callables.html#cb561-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x <span class="op">*</span> y<span class="op">;</span></span>
+<span id="cb561-3"><a href="ch_callables.html#cb561-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb561-4"><a href="ch_callables.html#cb561-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> timesArrow <span class="op">=</span> (x<span class="op">,</span> y) <span class="kw">=&gt;</span> {</span>
+<span id="cb561-5"><a href="ch_callables.html#cb561-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x <span class="op">*</span> y<span class="op">;</span></span>
+<span id="cb561-6"><a href="ch_callables.html#cb561-6" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h3 id="summary-kinds-of-callable-values">25.4 Summary: kinds of callable values</h3>
+<div class="notebox">
+<p><img src="img-book/img/icons/eye-regular.svg" height="24">&nbsp; <strong>This section refers to upcoming content</strong></p>
+<p>This section mainly serves as a reference for the current and upcoming chapters. Don’t worry if you don’t understand everything.</p>
+</div>
+<p>So far, all (real) functions and methods, that we have seen, were:</p>
+<ul>
+<li>Single-result</li>
+<li>Synchronous</li>
+</ul>
+<p>Later chapters will cover other modes of programming:</p>
+<ul>
+<li><em>Iteration</em> treats objects as containers of data (so-called <em>iterables</em>) and provides a standardized way for retrieving what is inside them. If a function or a method returns an iterable, it returns multiple values.</li>
+<li><em>Asynchronous programming</em> deals with handling a long-running computation. You are notified when the computation is finished and can do something else in between. The standard pattern for asynchronously delivering single results is called <em>Promise</em>.</li>
+</ul>
+<p>These modes can be combined – for example, there are synchronous iterables and asynchronous iterables.</p>
+<p>Several new kinds of functions and methods help with some of the mode combinations:</p>
+<ul>
+<li><em>Async functions</em> help implement functions that return Promises. There are also <em>async methods</em>.</li>
+<li><em>Synchronous generator functions</em> help implement functions that return synchronous iterables. There are also <em>synchronous generator methods</em>.</li>
+<li><em>Asynchronous generator functions</em> help implement functions that return asynchronous iterables. There are also <em>asynchronous generator methods</em>.</li>
+</ul>
+<p>That leaves us with 4 kinds (2 × 2) of functions and methods:</p>
+<ul>
+<li>Synchronous vs.&nbsp;asynchronous</li>
+<li>Generator vs.&nbsp;single-result</li>
+</ul>
+<p>Tbl.&nbsp;<a href="#tbl:syntax-functions-methods">17</a> gives an overview of the syntax for creating these 4 kinds of functions and methods.</p>
+<div id="tbl:syntax-functions-methods">
+<table>
+<caption>Table 17: Syntax for creating functions and methods. The last column specifies how many values are produced by an entity.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"><strong>Result</strong></th>
+<th style="text-align: left;"><strong>#</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Sync function</strong></td>
+<td style="text-align: left;"><strong>Sync method</strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>function f() {}</code></td>
+<td style="text-align: left;"><code>{ m() {} }</code></td>
+<td style="text-align: left;">value</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>f = function () {}</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>f = () =&gt; {}</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Sync generator function</strong></td>
+<td style="text-align: left;"><strong>Sync gen. method</strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>function* f() {}</code></td>
+<td style="text-align: left;"><code>{ * m() {} }</code></td>
+<td style="text-align: left;">iterable</td>
+<td style="text-align: left;">0+</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>f = function* () {}</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Async function</strong></td>
+<td style="text-align: left;"><strong>Async method</strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>async function f() {}</code></td>
+<td style="text-align: left;"><code>{ async m() {} }</code></td>
+<td style="text-align: left;">Promise</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>f = async function () {}</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>f = async () =&gt; {}</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Async generator function</strong></td>
+<td style="text-align: left;"><strong>Async gen. method</strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>async function* f() {}</code></td>
+<td style="text-align: left;"><code>{ async * m() {} }</code></td>
+<td style="text-align: left;">async iterable</td>
+<td style="text-align: left;">0+</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>f = async function* () {}</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="returning-values-from-functions-and-methods">25.5 Returning values from functions and methods</h3>
+<p>(Everything mentioned in this section applies to both functions and methods.)</p>
+<p>The <code>return</code> statement explicitly returns a value from a function:</p>
+<div class="sourceCode" id="cb562"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb562-1"><a href="ch_callables.html#cb562-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>() {</span>
+<span id="cb562-2"><a href="ch_callables.html#cb562-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb562-3"><a href="ch_callables.html#cb562-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb562-4"><a href="ch_callables.html#cb562-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">func</span>()<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span></code></pre></div>
+<p>Another example:</p>
+<div class="sourceCode" id="cb563"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb563-1"><a href="ch_callables.html#cb563-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">boolToYesNo</span>(bool) {</span>
+<span id="cb563-2"><a href="ch_callables.html#cb563-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (bool) {</span>
+<span id="cb563-3"><a href="ch_callables.html#cb563-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'Yes'</span><span class="op">;</span></span>
+<span id="cb563-4"><a href="ch_callables.html#cb563-4" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb563-5"><a href="ch_callables.html#cb563-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'No'</span><span class="op">;</span></span>
+<span id="cb563-6"><a href="ch_callables.html#cb563-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb563-7"><a href="ch_callables.html#cb563-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb563-8"><a href="ch_callables.html#cb563-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">boolToYesNo</span>(<span class="kw">true</span>)<span class="op">,</span> <span class="st">'Yes'</span>)<span class="op">;</span></span>
+<span id="cb563-9"><a href="ch_callables.html#cb563-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">boolToYesNo</span>(<span class="kw">false</span>)<span class="op">,</span> <span class="st">'No'</span>)<span class="op">;</span></span></code></pre></div>
+<p>If, at the end of a function, you haven’t returned anything explicitly, JavaScript returns <code>undefined</code> for you:</p>
+<div class="sourceCode" id="cb564"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb564-1"><a href="ch_callables.html#cb564-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">noReturn</span>() {</span>
+<span id="cb564-2"><a href="ch_callables.html#cb564-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// No explicit return</span></span>
+<span id="cb564-3"><a href="ch_callables.html#cb564-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb564-4"><a href="ch_callables.html#cb564-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">noReturn</span>()<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="parameter-handling">25.6 Parameter handling</h3>
+<p>Once again, I am only mentioning functions in this section, but everything also applies to methods.</p>
+<h4 id="terminology-parameters-vs.-arguments">25.6.1 Terminology: parameters vs.&nbsp;arguments</h4>
+<p><a id="index-entry-249" class="index-entry"></a><a id="index-entry-250" class="index-entry"></a> <a id="index-entry-251" class="index-entry"></a><a id="index-entry-252" class="index-entry"></a></p>
+<p>The term <em>parameter</em> and the term <em>argument</em> basically mean the same thing. If you want to, you can make the following distinction:</p>
+<ul>
+<li><p><em>Parameters</em> are part of a function definition. They are also called <em>formal parameters</em> and <em>formal arguments</em>.</p></li>
+<li><p><em>Arguments</em> are part of a function call. They are also called <em>actual parameters</em> and <em>actual arguments</em>.</p></li>
+</ul>
+<h4 id="callback-function">25.6.2 Terminology: callback</h4>
+<p><a id="index-entry-253" class="index-entry"></a></p>
+<p>A <em>callback</em> or <em>callback function</em> is a function that is an argument of a function or method call.</p>
+<p>The following is an example of a callback:</p>
+<div class="sourceCode" id="cb565"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb565-1"><a href="ch_callables.html#cb565-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> myArray <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb565-2"><a href="ch_callables.html#cb565-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> callback <span class="op">=</span> (x) <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb565-3"><a href="ch_callables.html#cb565-3" aria-hidden="true" tabindex="-1"></a>myArray<span class="op">.</span><span class="fu">forEach</span>(callback)<span class="op">;</span></span>
+<span id="cb565-4"><a href="ch_callables.html#cb565-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb565-5"><a href="ch_callables.html#cb565-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb565-6"><a href="ch_callables.html#cb565-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb565-7"><a href="ch_callables.html#cb565-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div>
+<h4 id="too-many-or-not-enough-arguments">25.6.3 Too many or not enough arguments</h4>
+<p>JavaScript does not complain if a function call provides a different number of arguments than expected by the function definition:</p>
+<ul>
+<li>Extra arguments are ignored.</li>
+<li>Missing parameters are set to <code>undefined</code>.</li>
+</ul>
+<p>For example:</p>
+<div class="sourceCode" id="cb566"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb566-1"><a href="ch_callables.html#cb566-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">foo</span>(x<span class="op">,</span> y) {</span>
+<span id="cb566-2"><a href="ch_callables.html#cb566-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> [x<span class="op">,</span> y]<span class="op">;</span></span>
+<span id="cb566-3"><a href="ch_callables.html#cb566-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb566-4"><a href="ch_callables.html#cb566-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb566-5"><a href="ch_callables.html#cb566-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Too many arguments:</span></span>
+<span id="cb566-6"><a href="ch_callables.html#cb566-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="fu">foo</span>(<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>)<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span>
+<span id="cb566-7"><a href="ch_callables.html#cb566-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb566-8"><a href="ch_callables.html#cb566-8" aria-hidden="true" tabindex="-1"></a><span class="co">// The expected number of arguments:</span></span>
+<span id="cb566-9"><a href="ch_callables.html#cb566-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="fu">foo</span>(<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>)<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span>
+<span id="cb566-10"><a href="ch_callables.html#cb566-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb566-11"><a href="ch_callables.html#cb566-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Not enough arguments:</span></span>
+<span id="cb566-12"><a href="ch_callables.html#cb566-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="fu">foo</span>(<span class="st">'a'</span>)<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="kw">undefined</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="parameter-default-values">25.6.4 Parameter default values</h4>
+<p><a id="index-entry-254" class="index-entry"></a><a id="index-entry-255" class="index-entry"></a></p>
+<p>Parameter default values specify the value to use if a parameter has not been provided – for example:</p>
+<div class="sourceCode" id="cb567"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb567-1"><a href="ch_callables.html#cb567-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">f</span>(x<span class="op">,</span> y<span class="op">=</span><span class="dv">0</span>) {</span>
+<span id="cb567-2"><a href="ch_callables.html#cb567-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> [x<span class="op">,</span> y]<span class="op">;</span></span>
+<span id="cb567-3"><a href="ch_callables.html#cb567-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb567-4"><a href="ch_callables.html#cb567-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb567-5"><a href="ch_callables.html#cb567-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="fu">f</span>(<span class="dv">1</span>)<span class="op">,</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">0</span>])<span class="op">;</span></span>
+<span id="cb567-6"><a href="ch_callables.html#cb567-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="fu">f</span>()<span class="op">,</span> [<span class="kw">undefined</span><span class="op">,</span> <span class="dv">0</span>])<span class="op">;</span></span></code></pre></div>
+<p><code>undefined</code> also triggers the default value:</p>
+<div class="sourceCode" id="cb568"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb568-1"><a href="ch_callables.html#cb568-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb568-2"><a href="ch_callables.html#cb568-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">f</span>(<span class="kw">undefined</span><span class="op">,</span> <span class="kw">undefined</span>)<span class="op">,</span></span>
+<span id="cb568-3"><a href="ch_callables.html#cb568-3" aria-hidden="true" tabindex="-1"></a>  [<span class="kw">undefined</span><span class="op">,</span> <span class="dv">0</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="rest-parameters">25.6.5 Rest parameters</h4>
+<p><a id="index-entry-256" class="index-entry"></a></p>
+<p>A rest parameter is declared by prefixing an identifier with three dots (<code>...</code>). During a function or method call, it receives an Array with all remaining arguments. If there are no extra arguments at the end, it is an empty Array – for example:</p>
+<div class="sourceCode" id="cb569"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb569-1"><a href="ch_callables.html#cb569-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">f</span>(x<span class="op">,</span> <span class="op">...</span>y) {</span>
+<span id="cb569-2"><a href="ch_callables.html#cb569-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> [x<span class="op">,</span> y]<span class="op">;</span></span>
+<span id="cb569-3"><a href="ch_callables.html#cb569-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb569-4"><a href="ch_callables.html#cb569-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb569-5"><a href="ch_callables.html#cb569-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">f</span>(<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>)<span class="op">,</span></span>
+<span id="cb569-6"><a href="ch_callables.html#cb569-6" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'a'</span><span class="op">,</span> [<span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]])<span class="op">;</span></span>
+<span id="cb569-7"><a href="ch_callables.html#cb569-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb569-8"><a href="ch_callables.html#cb569-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">f</span>()<span class="op">,</span></span>
+<span id="cb569-9"><a href="ch_callables.html#cb569-9" aria-hidden="true" tabindex="-1"></a>  [<span class="kw">undefined</span><span class="op">,</span> []])<span class="op">;</span></span></code></pre></div>
+<h5 id="enforcing-a-certain-number-of-arguments-via-a-rest-parameter">25.6.5.1 Enforcing a certain number of arguments via a rest parameter</h5>
+<p>You can use a rest parameter to enforce a certain number of arguments. Take, for example, the following function:</p>
+<div class="sourceCode" id="cb570"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb570-1"><a href="ch_callables.html#cb570-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">createPoint</span>(x<span class="op">,</span> y) {</span>
+<span id="cb570-2"><a href="ch_callables.html#cb570-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {x<span class="op">,</span> y}<span class="op">;</span></span>
+<span id="cb570-3"><a href="ch_callables.html#cb570-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// same as {x: x, y: y}</span></span>
+<span id="cb570-4"><a href="ch_callables.html#cb570-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>This is how we force callers to always provide two arguments:</p>
+<div class="sourceCode" id="cb571"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb571-1"><a href="ch_callables.html#cb571-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">createPoint</span>(<span class="op">...</span>args) {</span>
+<span id="cb571-2"><a href="ch_callables.html#cb571-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (args<span class="op">.</span><span class="at">length</span> <span class="op">!==</span> <span class="dv">2</span>) {</span>
+<span id="cb571-3"><a href="ch_callables.html#cb571-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Please provide exactly 2 arguments!'</span>)<span class="op">;</span></span>
+<span id="cb571-4"><a href="ch_callables.html#cb571-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb571-5"><a href="ch_callables.html#cb571-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> [x<span class="op">,</span> y] <span class="op">=</span> args<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb571-6"><a href="ch_callables.html#cb571-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {x<span class="op">,</span> y}<span class="op">;</span></span>
+<span id="cb571-7"><a href="ch_callables.html#cb571-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>In line A, we access the elements of <code>args</code> via <a href="ch_destructuring.html"><em>destructuring</em></a>.</p>
+<h4 id="named-parameters">25.6.6 Named parameters</h4>
+<p><a id="index-entry-257" class="index-entry"></a></p>
+<p>When someone calls a function, the arguments provided by the caller are assigned to the parameters received by the callee. Two common ways of performing the mapping are:</p>
+<ol type="1">
+<li><p>Positional parameters: An argument is assigned to a parameter if they have the same position. A function call with only positional arguments looks as follows.</p>
+<p></p>
+<div class="sourceCode" id="cb572"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb572-1"><a href="ch_callables.html#cb572-1" aria-hidden="true" tabindex="-1"></a><span class="fu">selectEntries</span>(<span class="dv">3</span><span class="op">,</span> <span class="dv">20</span><span class="op">,</span> <span class="dv">2</span>)</span></code></pre></div></li>
+<li><p>Named parameters: An argument is assigned to a parameter if they have the same name. JavaScript doesn’t have named parameters, but you can simulate them. For example, this is a function call with only (simulated) named arguments:</p>
+<p></p>
+<div class="sourceCode" id="cb573"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb573-1"><a href="ch_callables.html#cb573-1" aria-hidden="true" tabindex="-1"></a><span class="fu">selectEntries</span>({<span class="dt">start</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> <span class="dt">end</span><span class="op">:</span> <span class="dv">20</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">2</span>})</span></code></pre></div></li>
+</ol>
+<p>Named parameters have several benefits:</p>
+<ul>
+<li><p>They lead to more self-explanatory code because each argument has a descriptive label. Just compare the two versions of <code>selectEntries()</code>: with the second one, it is much easier to see what happens.</p></li>
+<li><p>The order of the arguments doesn’t matter (as long as the names are correct).</p></li>
+<li><p>Handling more than one optional parameter is more convenient: callers can easily provide any subset of all optional parameters and don’t have to be aware of the ones they omit (with positional parameters, you have to fill in preceding optional parameters, with <code>undefined</code>).</p></li>
+</ul>
+<h4 id="simulating-named-parameters">25.6.7 Simulating named parameters</h4>
+<p>JavaScript doesn’t have real named parameters. The official way of simulating them is via object literals:</p>
+<div class="sourceCode" id="cb574"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb574-1"><a href="ch_callables.html#cb574-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">selectEntries</span>({start<span class="op">=</span><span class="dv">0</span><span class="op">,</span> end<span class="op">=-</span><span class="dv">1</span><span class="op">,</span> step<span class="op">=</span><span class="dv">1</span>}) {</span>
+<span id="cb574-2"><a href="ch_callables.html#cb574-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {start<span class="op">,</span> end<span class="op">,</span> step}<span class="op">;</span></span>
+<span id="cb574-3"><a href="ch_callables.html#cb574-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>This function uses <a href="ch_destructuring.html"><em>destructuring</em></a> to access the properties of its single parameter. The pattern it uses is an abbreviation for the following pattern:</p>
+<div class="sourceCode" id="cb575"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb575-1"><a href="ch_callables.html#cb575-1" aria-hidden="true" tabindex="-1"></a>{<span class="dt">start</span><span class="op">:</span> start<span class="op">=</span><span class="dv">0</span><span class="op">,</span> <span class="dt">end</span><span class="op">:</span> end<span class="op">=-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> step<span class="op">=</span><span class="dv">1</span>}</span></code></pre></div>
+<p>This destructuring pattern works for empty object literals:</p>
+<div class="sourceCode" id="cb576"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb576-1"><a href="ch_callables.html#cb576-1" aria-hidden="true" tabindex="-1"></a>&gt; selectEntries({})</span>
+<span id="cb576-2"><a href="ch_callables.html#cb576-2" aria-hidden="true" tabindex="-1"></a><span class="kw">{ start: 0, end: -1, step: 1 }</span></span></code></pre></div>
+<p>But it does not work if you call the function without any parameters:</p>
+<div class="sourceCode" id="cb577"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb577-1"><a href="ch_callables.html#cb577-1" aria-hidden="true" tabindex="-1"></a>&gt; selectEntries()</span>
+<span id="cb577-2"><a href="ch_callables.html#cb577-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Cannot read property 'start' of undefined</span></span></code></pre></div>
+<p>You can fix this by providing a default value for the whole pattern. This default value works the same as default values for simpler parameter definitions: if the parameter is missing, the default is used.</p>
+<div class="sourceCode" id="cb578"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb578-1"><a href="ch_callables.html#cb578-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">selectEntries</span>({start<span class="op">=</span><span class="dv">0</span><span class="op">,</span> end<span class="op">=-</span><span class="dv">1</span><span class="op">,</span> step<span class="op">=</span><span class="dv">1</span>} <span class="op">=</span> {}) {</span>
+<span id="cb578-2"><a href="ch_callables.html#cb578-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {start<span class="op">,</span> end<span class="op">,</span> step}<span class="op">;</span></span>
+<span id="cb578-3"><a href="ch_callables.html#cb578-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb578-4"><a href="ch_callables.html#cb578-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb578-5"><a href="ch_callables.html#cb578-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">selectEntries</span>()<span class="op">,</span></span>
+<span id="cb578-6"><a href="ch_callables.html#cb578-6" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">start</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">end</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span> })<span class="op">;</span></span></code></pre></div>
+<h4 id="spread-arguments">25.6.8 Spreading (<code>...</code>) into function calls</h4>
+<p><a id="index-entry-258" class="index-entry"></a></p>
+<p>If you put three dots (<code>...</code>) in front of the argument of a function call, then you <em>spread</em> it. That means that the argument must be <a href="ch_sync-iteration.html">an <em>iterable</em> object</a> and the iterated values all become arguments. In other words, a single argument is expanded into multiple arguments – for example:</p>
+<div class="sourceCode" id="cb579"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb579-1"><a href="ch_callables.html#cb579-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>(x<span class="op">,</span> y) {</span>
+<span id="cb579-2"><a href="ch_callables.html#cb579-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb579-3"><a href="ch_callables.html#cb579-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(y)<span class="op">;</span></span>
+<span id="cb579-4"><a href="ch_callables.html#cb579-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb579-5"><a href="ch_callables.html#cb579-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> someIterable <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb579-6"><a href="ch_callables.html#cb579-6" aria-hidden="true" tabindex="-1"></a><span class="fu">func</span>(<span class="op">...</span>someIterable)<span class="op">;</span></span>
+<span id="cb579-7"><a href="ch_callables.html#cb579-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// same as func('a', 'b')</span></span>
+<span id="cb579-8"><a href="ch_callables.html#cb579-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb579-9"><a href="ch_callables.html#cb579-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb579-10"><a href="ch_callables.html#cb579-10" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb579-11"><a href="ch_callables.html#cb579-11" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div>
+<p>Spreading and rest parameters use the same syntax (<code>...</code>), but they serve opposite purposes:</p>
+<ul>
+<li>Rest parameters are used when defining functions or methods. They collect arguments into Arrays.</li>
+<li>Spread arguments are used when calling functions or methods. They turn iterable objects into arguments.</li>
+</ul>
+<h5 id="example-spreading-into-math.max">25.6.8.1 Example: spreading into <code>Math.max()</code></h5>
+<p><code>Math.max()</code> returns the largest one of its zero or more arguments. Alas, it can’t be used for Arrays, but spreading gives us a way out:</p>
+<div class="sourceCode" id="cb580"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb580-1"><a href="ch_callables.html#cb580-1" aria-hidden="true" tabindex="-1"></a>&gt; Math.max(-1, 5, 11, 3)</span>
+<span id="cb580-2"><a href="ch_callables.html#cb580-2" aria-hidden="true" tabindex="-1"></a><span class="kw">11</span></span>
+<span id="cb580-3"><a href="ch_callables.html#cb580-3" aria-hidden="true" tabindex="-1"></a>&gt; Math.max(...[-1, 5, 11, 3])</span>
+<span id="cb580-4"><a href="ch_callables.html#cb580-4" aria-hidden="true" tabindex="-1"></a><span class="kw">11</span></span>
+<span id="cb580-5"><a href="ch_callables.html#cb580-5" aria-hidden="true" tabindex="-1"></a>&gt; Math.max(-1, ...[-5, 11], 3)</span>
+<span id="cb580-6"><a href="ch_callables.html#cb580-6" aria-hidden="true" tabindex="-1"></a><span class="kw">11</span></span></code></pre></div>
+<h5 id="example-spreading-into-array.prototype.push">25.6.8.2 Example: spreading into <code>Array.prototype.push()</code></h5>
+<p>Similarly, the Array method <code>.push()</code> destructively adds its zero or more parameters to the end of its Array. JavaScript has no method for destructively appending an Array to another one. Once again, we are saved by spreading:</p>
+<div class="sourceCode" id="cb581"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb581-1"><a href="ch_callables.html#cb581-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr1 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb581-2"><a href="ch_callables.html#cb581-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr2 <span class="op">=</span> [<span class="st">'c'</span><span class="op">,</span> <span class="st">'d'</span>]<span class="op">;</span></span>
+<span id="cb581-3"><a href="ch_callables.html#cb581-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb581-4"><a href="ch_callables.html#cb581-4" aria-hidden="true" tabindex="-1"></a>arr1<span class="op">.</span><span class="fu">push</span>(<span class="op">...</span>arr2)<span class="op">;</span></span>
+<span id="cb581-5"><a href="ch_callables.html#cb581-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr1<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span><span class="op">,</span> <span class="st">'d'</span>])<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercises: Parameter handling</strong></p>
+<ul>
+<li>Positional parameters: <code>exercises/callables/positional_parameters_test.mjs</code></li>
+<li>Named parameters: <code>exercises/callables/named_parameters_test.mjs</code></li>
+</ul>
+</div>
+<h3 id="methods-of-functions-.call-.apply-.bind">25.7 Methods of functions: <code>.call()</code>, <code>.apply()</code>, <code>.bind()</code></h3>
+<p>Functions are objects and have methods. In this section, we look at three of those methods: <code>.call()</code>, <code>.apply()</code>, and <code>.bind()</code>.</p>
+<h4 id="Function.prototype.call">25.7.1 The function method <code>.call()</code></h4>
+<p>Each function <code>someFunc</code> has the following method:</p>
+<div class="sourceCode" id="cb582"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb582-1"><a href="ch_callables.html#cb582-1" aria-hidden="true" tabindex="-1"></a>someFunc<span class="op">.</span><span class="fu">call</span>(thisValue<span class="op">,</span> arg1<span class="op">,</span> arg2<span class="op">,</span> arg3)<span class="op">;</span></span></code></pre></div>
+<p>This method invocation is loosely equivalent to the following function call:</p>
+<div class="sourceCode" id="cb583"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb583-1"><a href="ch_callables.html#cb583-1" aria-hidden="true" tabindex="-1"></a><span class="fu">someFunc</span>(arg1<span class="op">,</span> arg2<span class="op">,</span> arg3)<span class="op">;</span></span></code></pre></div>
+<p>However, with <code>.call()</code>, we can also specify a value for <a href="ch_callables.html#this-in-callables">the implicit parameter <code>this</code></a>.</p>
+<p>The following code demonstrates the use of <code>.call()</code>:</p>
+<div class="sourceCode" id="cb584"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb584-1"><a href="ch_callables.html#cb584-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>(x<span class="op">,</span> y) {</span>
+<span id="cb584-2"><a href="ch_callables.html#cb584-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> [<span class="kw">this</span><span class="op">,</span> x<span class="op">,</span> y]<span class="op">;</span></span>
+<span id="cb584-3"><a href="ch_callables.html#cb584-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb584-4"><a href="ch_callables.html#cb584-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb584-5"><a href="ch_callables.html#cb584-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb584-6"><a href="ch_callables.html#cb584-6" aria-hidden="true" tabindex="-1"></a>  func<span class="op">.</span><span class="fu">call</span>(<span class="st">'hello'</span><span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>)<span class="op">,</span></span>
+<span id="cb584-7"><a href="ch_callables.html#cb584-7" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'hello'</span><span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span></code></pre></div>
+<p>As we have seen before, if we function-call an ordinary function, its <code>this</code> is <code>undefined</code>:</p>
+<div class="sourceCode" id="cb585"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb585-1"><a href="ch_callables.html#cb585-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb585-2"><a href="ch_callables.html#cb585-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">func</span>(<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>)<span class="op">,</span></span>
+<span id="cb585-3"><a href="ch_callables.html#cb585-3" aria-hidden="true" tabindex="-1"></a>  [<span class="kw">undefined</span><span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span></code></pre></div>
+<p>Therefore, the previous function call is equivalent to:</p>
+<div class="sourceCode" id="cb586"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb586-1"><a href="ch_callables.html#cb586-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb586-2"><a href="ch_callables.html#cb586-2" aria-hidden="true" tabindex="-1"></a>  func<span class="op">.</span><span class="fu">call</span>(<span class="kw">undefined</span><span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>)<span class="op">,</span></span>
+<span id="cb586-3"><a href="ch_callables.html#cb586-3" aria-hidden="true" tabindex="-1"></a>  [<span class="kw">undefined</span><span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span></code></pre></div>
+<p>In arrow functions, the value for <code>this</code> provided via <code>.call()</code> is ignored.</p>
+<h4 id="Function.prototype.apply">25.7.2 The function method <code>.apply()</code></h4>
+<p>Each function <code>someFunc</code> has the following method:</p>
+<div class="sourceCode" id="cb587"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb587-1"><a href="ch_callables.html#cb587-1" aria-hidden="true" tabindex="-1"></a>someFunc<span class="op">.</span><span class="fu">apply</span>(thisValue<span class="op">,</span> [arg1<span class="op">,</span> arg2<span class="op">,</span> arg3])<span class="op">;</span></span></code></pre></div>
+<p>This method invocation is loosely equivalent to the following function call (which uses <a href="ch_callables.html#spread-arguments">spreading</a>):</p>
+<div class="sourceCode" id="cb588"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb588-1"><a href="ch_callables.html#cb588-1" aria-hidden="true" tabindex="-1"></a><span class="fu">someFunc</span>(<span class="op">...</span>[arg1<span class="op">,</span> arg2<span class="op">,</span> arg3])<span class="op">;</span></span></code></pre></div>
+<p>However, with <code>.apply()</code>, we can also specify a value for <a href="ch_callables.html#this-in-callables">the implicit parameter <code>this</code></a>.</p>
+<p>The following code demonstrates the use of <code>.apply()</code>:</p>
+<div class="sourceCode" id="cb589"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb589-1"><a href="ch_callables.html#cb589-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>(x<span class="op">,</span> y) {</span>
+<span id="cb589-2"><a href="ch_callables.html#cb589-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> [<span class="kw">this</span><span class="op">,</span> x<span class="op">,</span> y]<span class="op">;</span></span>
+<span id="cb589-3"><a href="ch_callables.html#cb589-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb589-4"><a href="ch_callables.html#cb589-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb589-5"><a href="ch_callables.html#cb589-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> args <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb589-6"><a href="ch_callables.html#cb589-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb589-7"><a href="ch_callables.html#cb589-7" aria-hidden="true" tabindex="-1"></a>  func<span class="op">.</span><span class="fu">apply</span>(<span class="st">'hello'</span><span class="op">,</span> args)<span class="op">,</span></span>
+<span id="cb589-8"><a href="ch_callables.html#cb589-8" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'hello'</span><span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="Function.prototype.bind">25.7.3 The function method <code>.bind()</code></h4>
+<p><code>.bind()</code> is another method of function objects. This method is invoked as follows:</p>
+<div class="sourceCode" id="cb590"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb590-1"><a href="ch_callables.html#cb590-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> boundFunc <span class="op">=</span> someFunc<span class="op">.</span><span class="fu">bind</span>(thisValue<span class="op">,</span> arg1<span class="op">,</span> arg2)<span class="op">;</span></span></code></pre></div>
+<p><code>.bind()</code> returns a new function <code>boundFunc()</code>. Calling that function invokes <code>someFunc()</code> with <code>this</code> set to <code>thisValue</code> and these parameters: <code>arg1</code>, <code>arg2</code>, followed by the parameters of <code>boundFunc()</code>.</p>
+<p>That is, the following two function calls are equivalent:</p>
+<div class="sourceCode" id="cb591"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb591-1"><a href="ch_callables.html#cb591-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boundFunc</span>(<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>)</span>
+<span id="cb591-2"><a href="ch_callables.html#cb591-2" aria-hidden="true" tabindex="-1"></a>someFunc<span class="op">.</span><span class="fu">call</span>(thisValue<span class="op">,</span> arg1<span class="op">,</span> arg2<span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>)</span></code></pre></div>
+<h5 id="an-alternative-to-.bind">25.7.3.1 An alternative to <code>.bind()</code></h5>
+<p>Another way of pre-filling <code>this</code> and parameters is via an arrow function:</p>
+<div class="sourceCode" id="cb592"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb592-1"><a href="ch_callables.html#cb592-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> boundFunc2 <span class="op">=</span> (<span class="op">...</span>args) <span class="kw">=&gt;</span></span>
+<span id="cb592-2"><a href="ch_callables.html#cb592-2" aria-hidden="true" tabindex="-1"></a>  someFunc<span class="op">.</span><span class="fu">call</span>(thisValue<span class="op">,</span> arg1<span class="op">,</span> arg2<span class="op">,</span> <span class="op">...</span>args)<span class="op">;</span></span></code></pre></div>
+<h5 id="an-implementation-of-.bind">25.7.3.2 An implementation of <code>.bind()</code></h5>
+<p>Considering the previous section, <code>.bind()</code> can be implemented as a real function as follows:</p>
+<div class="sourceCode" id="cb593"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb593-1"><a href="ch_callables.html#cb593-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">bind</span>(func<span class="op">,</span> thisValue<span class="op">,</span> <span class="op">...</span>boundArgs) {</span>
+<span id="cb593-2"><a href="ch_callables.html#cb593-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (<span class="op">...</span>args) <span class="kw">=&gt;</span></span>
+<span id="cb593-3"><a href="ch_callables.html#cb593-3" aria-hidden="true" tabindex="-1"></a>    func<span class="op">.</span><span class="fu">call</span>(thisValue<span class="op">,</span> <span class="op">...</span>boundArgs<span class="op">,</span> <span class="op">...</span>args)<span class="op">;</span></span>
+<span id="cb593-4"><a href="ch_callables.html#cb593-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h5 id="example-binding-a-real-function">25.7.3.3 Example: binding a real function</h5>
+<p>Using <code>.bind()</code> for real functions is somewhat unintuitive because we have to provide a value for <code>this</code>. Given that it is <code>undefined</code> during function calls, it is usually set to <code>undefined</code> or <code>null</code>.</p>
+<p>In the following example, we create <code>add8()</code>, a function that has one parameter, by binding the first parameter of <code>add()</code> to <code>8</code>.</p>
+<div class="sourceCode" id="cb594"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb594-1"><a href="ch_callables.html#cb594-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">add</span>(x<span class="op">,</span> y) {</span>
+<span id="cb594-2"><a href="ch_callables.html#cb594-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
+<span id="cb594-3"><a href="ch_callables.html#cb594-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb594-4"><a href="ch_callables.html#cb594-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb594-5"><a href="ch_callables.html#cb594-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> add8 <span class="op">=</span> add<span class="op">.</span><span class="fu">bind</span>(<span class="kw">undefined</span><span class="op">,</span> <span class="dv">8</span>)<span class="op">;</span></span>
+<span id="cb594-6"><a href="ch_callables.html#cb594-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">add8</span>(<span class="dv">1</span>)<span class="op">,</span> <span class="dv">9</span>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/17">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_dynamic-code-evaluation.html">26 Evaluating code dynamically: <code>eval()</code>, <code>new Function()</code> (advanced)</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

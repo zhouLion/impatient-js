@@ -1,0 +1,274 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_symbols">22 Symbols</h2>
+<p><a id="index-entry-209" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>22.1 <a href="ch_symbols.html#symbols-are-primitives-that-are-also-like-objects">Symbols are primitives that are also like objects</a>
+<ul>
+<li>22.1.1 <a href="ch_symbols.html#symbols-are-primitive-values">Symbols are primitive values</a></li>
+<li>22.1.2 <a href="ch_symbols.html#symbols-are-also-like-objects">Symbols are also like objects</a></li>
+</ul></li>
+<li>22.2 <a href="ch_symbols.html#symbol-descriptions">The descriptions of symbols</a></li>
+<li>22.3 <a href="ch_symbols.html#use-cases-for-symbols">Use cases for symbols</a>
+<ul>
+<li>22.3.1 <a href="ch_symbols.html#symbols-as-values-for-constants">Symbols as values for constants</a></li>
+<li>22.3.2 <a href="ch_symbols.html#symbols-as-unique-property-keys">Symbols as unique property keys</a></li>
+</ul></li>
+<li>22.4 <a href="ch_symbols.html#publicly-known-symbols">Publicly known symbols</a></li>
+<li>22.5 <a href="ch_symbols.html#converting-symbols">Converting symbols</a></li>
+</ul>
+</div>
+<hr>
+<h3 id="symbols-are-primitives-that-are-also-like-objects">22.1 Symbols are primitives that are also like objects</h3>
+<p>Symbols are primitive values that are created via the factory function <code>Symbol()</code>:</p>
+<div class="sourceCode" id="cb464"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb464-1"><a href="ch_symbols.html#cb464-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> mySymbol <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'mySymbol'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The parameter is optional and provides a description, which is mainly useful for debugging.</p>
+<h4 id="symbols-are-primitive-values">22.1.1 Symbols are primitive values</h4>
+<p>Symbols are primitive values:</p>
+<ul>
+<li><p>They have to be categorized via <code>typeof</code>:</p>
+<div class="sourceCode" id="cb465"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb465-1"><a href="ch_symbols.html#cb465-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> sym <span class="op">=</span> <span class="bu">Symbol</span>()<span class="op">;</span></span>
+<span id="cb465-2"><a href="ch_symbols.html#cb465-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">typeof</span> sym<span class="op">,</span> <span class="st">'symbol'</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p>They can be property keys in objects:</p>
+<div class="sourceCode" id="cb466"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb466-1"><a href="ch_symbols.html#cb466-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb466-2"><a href="ch_symbols.html#cb466-2" aria-hidden="true" tabindex="-1"></a>  [sym]<span class="op">:</span> <span class="dv">123</span><span class="op">,</span></span>
+<span id="cb466-3"><a href="ch_symbols.html#cb466-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="symbols-are-also-like-objects">22.1.2 Symbols are also like objects</h4>
+<p>Even though symbols are primitives, they are also like objects in that each value created by <code>Symbol()</code> is unique and not compared by value:</p>
+<div class="sourceCode" id="cb467"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb467-1"><a href="ch_symbols.html#cb467-1" aria-hidden="true" tabindex="-1"></a>&gt; Symbol() === Symbol()</span>
+<span id="cb467-2"><a href="ch_symbols.html#cb467-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<p>Prior to symbols, objects were the best choice if we needed values that were unique (only equal to themselves):</p>
+<div class="sourceCode" id="cb468"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb468-1"><a href="ch_symbols.html#cb468-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> string1 <span class="op">=</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb468-2"><a href="ch_symbols.html#cb468-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> string2 <span class="op">=</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb468-3"><a href="ch_symbols.html#cb468-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb468-4"><a href="ch_symbols.html#cb468-4" aria-hidden="true" tabindex="-1"></a>  string1 <span class="op">===</span> string2<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span> <span class="co">// not unique</span></span>
+<span id="cb468-5"><a href="ch_symbols.html#cb468-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb468-6"><a href="ch_symbols.html#cb468-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> object1 <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb468-7"><a href="ch_symbols.html#cb468-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> object2 <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb468-8"><a href="ch_symbols.html#cb468-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb468-9"><a href="ch_symbols.html#cb468-9" aria-hidden="true" tabindex="-1"></a>  object1 <span class="op">===</span> object2<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span> <span class="co">// unique</span></span>
+<span id="cb468-10"><a href="ch_symbols.html#cb468-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb468-11"><a href="ch_symbols.html#cb468-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> symbol1 <span class="op">=</span> <span class="bu">Symbol</span>()<span class="op">;</span></span>
+<span id="cb468-12"><a href="ch_symbols.html#cb468-12" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> symbol2 <span class="op">=</span> <span class="bu">Symbol</span>()<span class="op">;</span></span>
+<span id="cb468-13"><a href="ch_symbols.html#cb468-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb468-14"><a href="ch_symbols.html#cb468-14" aria-hidden="true" tabindex="-1"></a>  symbol1 <span class="op">===</span> symbol2<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span> <span class="co">// unique</span></span></code></pre></div>
+<h3 id="symbol-descriptions">22.2 The descriptions of symbols</h3>
+<p>The parameter we pass to the symbol factory function provides a description for the created symbol:</p>
+<div class="sourceCode" id="cb469"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb469-1"><a href="ch_symbols.html#cb469-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> mySymbol <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'mySymbol'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The description can be accessed in two ways.</p>
+<p>First, it is part of the string returned by <code>.toString()</code>:</p>
+<div class="sourceCode" id="cb470"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb470-1"><a href="ch_symbols.html#cb470-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(mySymbol<span class="op">.</span><span class="fu">toString</span>()<span class="op">,</span> <span class="st">'Symbol(mySymbol)'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Second, since ES2019, we can retrieve the description via the property <code>.description</code>:</p>
+<div class="sourceCode" id="cb471"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb471-1"><a href="ch_symbols.html#cb471-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(mySymbol<span class="op">.</span><span class="at">description</span><span class="op">,</span> <span class="st">'mySymbol'</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="use-cases-for-symbols">22.3 Use cases for symbols</h3>
+<p>The main use cases for symbols, are:</p>
+<ul>
+<li>Values for constants</li>
+<li>Unique property keys</li>
+</ul>
+<h4 id="symbols-as-values-for-constants">22.3.1 Symbols as values for constants</h4>
+<p>Let’s assume you want to create constants representing the colors red, orange, yellow, green, blue, and violet. One simple way of doing so would be to use strings:</p>
+<div class="sourceCode" id="cb472"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb472-1"><a href="ch_symbols.html#cb472-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> COLOR_BLUE <span class="op">=</span> <span class="st">'Blue'</span><span class="op">;</span></span></code></pre></div>
+<p>On the plus side, logging that constant produces helpful output. On the minus side, there is a risk of mistaking an unrelated value for a color because two strings with the same content are considered equal:</p>
+<div class="sourceCode" id="cb473"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb473-1"><a href="ch_symbols.html#cb473-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> MOOD_BLUE <span class="op">=</span> <span class="st">'Blue'</span><span class="op">;</span></span>
+<span id="cb473-2"><a href="ch_symbols.html#cb473-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(COLOR_BLUE<span class="op">,</span> MOOD_BLUE)<span class="op">;</span></span></code></pre></div>
+<p>We can fix that problem via symbols:</p>
+<div class="sourceCode" id="cb474"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb474-1"><a href="ch_symbols.html#cb474-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> COLOR_BLUE <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'Blue'</span>)<span class="op">;</span></span>
+<span id="cb474-2"><a href="ch_symbols.html#cb474-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> MOOD_BLUE <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'Blue'</span>)<span class="op">;</span></span>
+<span id="cb474-3"><a href="ch_symbols.html#cb474-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb474-4"><a href="ch_symbols.html#cb474-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">notEqual</span>(COLOR_BLUE<span class="op">,</span> MOOD_BLUE)<span class="op">;</span></span></code></pre></div>
+<p>Let’s use symbol-valued constants to implement a function:</p>
+<div class="sourceCode" id="cb475"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb475-1"><a href="ch_symbols.html#cb475-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> COLOR_RED    <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'Red'</span>)<span class="op">;</span></span>
+<span id="cb475-2"><a href="ch_symbols.html#cb475-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> COLOR_ORANGE <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'Orange'</span>)<span class="op">;</span></span>
+<span id="cb475-3"><a href="ch_symbols.html#cb475-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> COLOR_YELLOW <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'Yellow'</span>)<span class="op">;</span></span>
+<span id="cb475-4"><a href="ch_symbols.html#cb475-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> COLOR_GREEN  <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'Green'</span>)<span class="op">;</span></span>
+<span id="cb475-5"><a href="ch_symbols.html#cb475-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> COLOR_BLUE   <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'Blue'</span>)<span class="op">;</span></span>
+<span id="cb475-6"><a href="ch_symbols.html#cb475-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> COLOR_VIOLET <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'Violet'</span>)<span class="op">;</span></span>
+<span id="cb475-7"><a href="ch_symbols.html#cb475-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb475-8"><a href="ch_symbols.html#cb475-8" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getComplement</span>(color) {</span>
+<span id="cb475-9"><a href="ch_symbols.html#cb475-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> (color) {</span>
+<span id="cb475-10"><a href="ch_symbols.html#cb475-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dt">COLOR_RED</span><span class="op">:</span></span>
+<span id="cb475-11"><a href="ch_symbols.html#cb475-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> COLOR_GREEN<span class="op">;</span></span>
+<span id="cb475-12"><a href="ch_symbols.html#cb475-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dt">COLOR_ORANGE</span><span class="op">:</span></span>
+<span id="cb475-13"><a href="ch_symbols.html#cb475-13" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> COLOR_BLUE<span class="op">;</span></span>
+<span id="cb475-14"><a href="ch_symbols.html#cb475-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dt">COLOR_YELLOW</span><span class="op">:</span></span>
+<span id="cb475-15"><a href="ch_symbols.html#cb475-15" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> COLOR_VIOLET<span class="op">;</span></span>
+<span id="cb475-16"><a href="ch_symbols.html#cb475-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dt">COLOR_GREEN</span><span class="op">:</span></span>
+<span id="cb475-17"><a href="ch_symbols.html#cb475-17" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> COLOR_RED<span class="op">;</span></span>
+<span id="cb475-18"><a href="ch_symbols.html#cb475-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dt">COLOR_BLUE</span><span class="op">:</span></span>
+<span id="cb475-19"><a href="ch_symbols.html#cb475-19" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> COLOR_ORANGE<span class="op">;</span></span>
+<span id="cb475-20"><a href="ch_symbols.html#cb475-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dt">COLOR_VIOLET</span><span class="op">:</span></span>
+<span id="cb475-21"><a href="ch_symbols.html#cb475-21" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> COLOR_YELLOW<span class="op">;</span></span>
+<span id="cb475-22"><a href="ch_symbols.html#cb475-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb475-23"><a href="ch_symbols.html#cb475-23" aria-hidden="true" tabindex="-1"></a>      <span class="cf">throw</span> <span class="kw">new</span> <span class="fu">Exception</span>(<span class="st">'Unknown color: '</span><span class="op">+</span>color)<span class="op">;</span></span>
+<span id="cb475-24"><a href="ch_symbols.html#cb475-24" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb475-25"><a href="ch_symbols.html#cb475-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb475-26"><a href="ch_symbols.html#cb475-26" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">getComplement</span>(COLOR_YELLOW)<span class="op">,</span> COLOR_VIOLET)<span class="op">;</span></span></code></pre></div>
+<h4 id="symbols-as-unique-property-keys">22.3.2 Symbols as unique property keys</h4>
+<p>The keys of properties (fields) in objects are used at two levels:</p>
+<ul>
+<li><p>The program operates at a <em>base level</em>. The keys at that level reflect the <em>problem domain</em> – the area in which a program solves a problem – for example:</p>
+<ul>
+<li>If a program manages employees, the property keys may be about job titles, salary categories, department IDs, etc.</li>
+<li>If the program is a chess app, the property keys may be about chess pieces, chess boards, player colors, etc.</li>
+</ul></li>
+<li><p>ECMAScript and many libraries operate at a <em>meta-level</em>. They manage data and provide services that are not part of the problem domain – for example:</p>
+<ul>
+<li><p>The standard method <code>.toString()</code> is used by ECMAScript when creating a string representation of an object (line A):</p>
+<div class="sourceCode" id="cb476"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb476-1"><a href="ch_symbols.html#cb476-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> point <span class="op">=</span> {</span>
+<span id="cb476-2"><a href="ch_symbols.html#cb476-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> <span class="dv">7</span><span class="op">,</span></span>
+<span id="cb476-3"><a href="ch_symbols.html#cb476-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> <span class="dv">4</span><span class="op">,</span></span>
+<span id="cb476-4"><a href="ch_symbols.html#cb476-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">toString</span>() {</span>
+<span id="cb476-5"><a href="ch_symbols.html#cb476-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`(</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">x</span><span class="sc">}</span><span class="vs">, </span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">y</span><span class="sc">}</span><span class="vs">)`</span><span class="op">;</span></span>
+<span id="cb476-6"><a href="ch_symbols.html#cb476-6" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb476-7"><a href="ch_symbols.html#cb476-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb476-8"><a href="ch_symbols.html#cb476-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb476-9"><a href="ch_symbols.html#cb476-9" aria-hidden="true" tabindex="-1"></a>  <span class="bu">String</span>(point)<span class="op">,</span> <span class="st">'(7, 4)'</span>)<span class="op">;</span> <span class="co">// (A)</span></span></code></pre></div>
+<p><code>.x</code> and <code>.y</code> are base-level properties – they are used to solve the problem of computing with points. <code>.toString()</code> is a meta-level property – it doesn’t have anything to do with the problem domain.</p></li>
+<li><p>The standard ECMAScript method <code>.toJSON()</code></p>
+<div class="sourceCode" id="cb477"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb477-1"><a href="ch_symbols.html#cb477-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> point <span class="op">=</span> {</span>
+<span id="cb477-2"><a href="ch_symbols.html#cb477-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> <span class="dv">7</span><span class="op">,</span></span>
+<span id="cb477-3"><a href="ch_symbols.html#cb477-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> <span class="dv">4</span><span class="op">,</span></span>
+<span id="cb477-4"><a href="ch_symbols.html#cb477-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">toJSON</span>() {</span>
+<span id="cb477-5"><a href="ch_symbols.html#cb477-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [<span class="kw">this</span><span class="op">.</span><span class="at">x</span><span class="op">,</span> <span class="kw">this</span><span class="op">.</span><span class="at">y</span>]<span class="op">;</span></span>
+<span id="cb477-6"><a href="ch_symbols.html#cb477-6" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb477-7"><a href="ch_symbols.html#cb477-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb477-8"><a href="ch_symbols.html#cb477-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb477-9"><a href="ch_symbols.html#cb477-9" aria-hidden="true" tabindex="-1"></a>  <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(point)<span class="op">,</span> <span class="st">'[7,4]'</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>.x</code> and <code>.y</code> are base-level properties, <code>.toJSON()</code> is a meta-level property.</p></li>
+</ul></li>
+</ul>
+<p>The base level and the meta-level of a program must be independent: Base-level property keys should not be in conflict with meta-level property keys.</p>
+<p>If we use names (strings) as property keys, we are facing two challenges:</p>
+<ul>
+<li><p>When a language is first created, it can use any meta-level names it wants. Base-level code is forced to avoid those names. Later, however, when much base-level code already exists, meta-level names can’t be chosen freely, anymore.</p></li>
+<li><p>We could introduce naming rules to separate base level and meta-level. For example, Python brackets meta-level names with two underscores: <code>__init__</code>, <code>__iter__</code>, <code>__hash__</code>, etc. However, the meta-level names of the language and the meta-level names of libraries would still exist in the same namespace and can clash.</p></li>
+</ul>
+<p>These are two examples of where the latter was an issue for JavaScript:</p>
+<ul>
+<li><p>In May 2018, the Array method <code>.flatten()</code> had to be renamed to <code>.flat()</code> because the former name was already used by libraries (<a href="https://github.com/tc39/proposal-flatMap/commit/093eacc7fe0906e70f7626bf6c7d6e9dfc53cce9">source</a>).</p></li>
+<li><p>In November 2020, the Array method <code>.item()</code> had to be renamed to <code>.at()</code> because the former name was already used by library (<a href="https://github.com/tc39/proposal-relative-indexing-method#web-incompatibility-history">source</a>).</p></li>
+</ul>
+<p>Symbols, used as property keys, help us here: Each symbol is unique and a symbol key never clashes with any other string or symbol key.</p>
+<h5 id="example-a-library-with-a-meta-level-method">22.3.2.1 Example: a library with a meta-level method</h5>
+<p>As an example, let’s assume we are writing a library that treats objects differently if they implement a special method. This is what defining a property key for such a method and implementing it for an object would look like:</p>
+<div class="sourceCode" id="cb478"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb478-1"><a href="ch_symbols.html#cb478-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> specialMethod <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'specialMethod'</span>)<span class="op">;</span></span>
+<span id="cb478-2"><a href="ch_symbols.html#cb478-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb478-3"><a href="ch_symbols.html#cb478-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">_id</span><span class="op">:</span> <span class="st">'kf12oi'</span><span class="op">,</span></span>
+<span id="cb478-4"><a href="ch_symbols.html#cb478-4" aria-hidden="true" tabindex="-1"></a>  [specialMethod]() { <span class="co">// (A)</span></span>
+<span id="cb478-5"><a href="ch_symbols.html#cb478-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span><span class="at">_id</span><span class="op">;</span></span>
+<span id="cb478-6"><a href="ch_symbols.html#cb478-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb478-7"><a href="ch_symbols.html#cb478-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb478-8"><a href="ch_symbols.html#cb478-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj[specialMethod]()<span class="op">,</span> <span class="st">'kf12oi'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The square brackets in line A enable us to specify that the method must have the key <code>specialMethod</code>. More details are explained in <a href="ch_single-objects.html#computed-property-keys">§28.6.2 “Computed property keys”</a>.</p>
+<h3 id="publicly-known-symbols">22.4 Publicly known symbols</h3>
+<p><a id="index-entry-210" class="index-entry"></a><a id="index-entry-211" class="index-entry"></a></p>
+<p>Symbols that play special roles within ECMAScript are called <em>publicly known symbols</em>. Examples include:</p>
+<ul>
+<li><p><code>Symbol.iterator</code>: makes an object <em>iterable</em>. It’s the key of a method that returns an iterator. For more information on this topic, see <a href="ch_sync-iteration.html">§30 “Synchronous iteration”</a>.</p></li>
+<li><p><code>Symbol.hasInstance</code>: customizes how <code>instanceof</code> works. If an object implements a method with that key, it can be used at the right-hand side of that operator. For example:</p>
+<div class="sourceCode" id="cb479"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb479-1"><a href="ch_symbols.html#cb479-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> PrimitiveNull <span class="op">=</span> {</span>
+<span id="cb479-2"><a href="ch_symbols.html#cb479-2" aria-hidden="true" tabindex="-1"></a>  [<span class="bu">Symbol</span><span class="op">.</span><span class="at">hasInstance</span>](x) {</span>
+<span id="cb479-3"><a href="ch_symbols.html#cb479-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">===</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb479-4"><a href="ch_symbols.html#cb479-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb479-5"><a href="ch_symbols.html#cb479-5" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb479-6"><a href="ch_symbols.html#cb479-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">null</span> <span class="kw">instanceof</span> PrimitiveNull<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>Symbol.toStringTag</code>: influences the default <code>.toString()</code> method.</p>
+<div class="sourceCode" id="cb480"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb480-1"><a href="ch_symbols.html#cb480-1" aria-hidden="true" tabindex="-1"></a>&gt; String({})</span>
+<span id="cb480-2"><a href="ch_symbols.html#cb480-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'[object Object]'</span></span>
+<span id="cb480-3"><a href="ch_symbols.html#cb480-3" aria-hidden="true" tabindex="-1"></a>&gt; String({ [Symbol.toStringTag]: 'is no money' })</span>
+<span id="cb480-4"><a href="ch_symbols.html#cb480-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'[object is no money]'</span></span></code></pre></div>
+<p>Note: It’s usually better to override <code>.toString()</code>.</p></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercises: Publicly known symbols</strong></p>
+<ul>
+<li><code>Symbol.toStringTag</code>: <code>exercises/symbols/to_string_tag_test.mjs</code></li>
+<li><code>Symbol.hasInstance</code>: <code>exercises/symbols/has_instance_test.mjs</code></li>
+</ul>
+</div>
+<h3 id="converting-symbols">22.5 Converting symbols</h3>
+<p>What happens if we convert a symbol <code>sym</code> to another primitive type? Tbl.&nbsp;<a href="#tbl:converting-to-symbol">15</a> has the answers.</p>
+<div id="tbl:converting-to-symbol">
+<table>
+<caption>Table 15: The results of converting symbols to other primitive types.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Convert to</th>
+<th style="text-align: left;">Explicit conversion</th>
+<th style="text-align: left;">Coercion (implicit conv.)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;"><code>Boolean(sym)</code> <code>→</code> OK</td>
+<td style="text-align: left;"><code>!sym</code> <code>→</code> OK</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">number</td>
+<td style="text-align: left;"><code>Number(sym)</code> <code>→</code> <code>TypeError</code></td>
+<td style="text-align: left;"><code>sym*2</code> <code>→</code> <code>TypeError</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><code>String(sym)</code> <code>→</code> OK</td>
+<td style="text-align: left;"><code>''+sym</code> <code>→</code> <code>TypeError</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>sym.toString()</code> <code>→</code> OK</td>
+<td style="text-align: left;"><code>`${sym}`</code> <code>→</code> <code>TypeError</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>One key pitfall with symbols is how often exceptions are thrown when converting them to something else. What is the thinking behind that? First, conversion to number never makes sense and should be warned about. Second, converting a symbol to a string is indeed useful for diagnostic output. But it also makes sense to warn about accidentally turning a symbol into a string (which is a different kind of property key):</p>
+<div class="sourceCode" id="cb481"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb481-1"><a href="ch_symbols.html#cb481-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb481-2"><a href="ch_symbols.html#cb481-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> sym <span class="op">=</span> <span class="bu">Symbol</span>()<span class="op">;</span></span>
+<span id="cb481-3"><a href="ch_symbols.html#cb481-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb481-4"><a href="ch_symbols.html#cb481-4" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> { obj[<span class="st">'__'</span><span class="op">+</span>sym<span class="op">+</span><span class="st">'__'</span>] <span class="op">=</span> <span class="kw">true</span> }<span class="op">,</span></span>
+<span id="cb481-5"><a href="ch_symbols.html#cb481-5" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">message</span><span class="op">:</span> <span class="st">'Cannot convert a Symbol value to a string'</span> })<span class="op">;</span></span></code></pre></div>
+<p>The downside is that the exceptions make working with symbols more complicated. You have to explicitly convert symbols when assembling strings via the plus operator:</p>
+<div class="sourceCode" id="cb482"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb482-1"><a href="ch_symbols.html#cb482-1" aria-hidden="true" tabindex="-1"></a>&gt; const mySymbol = Symbol('mySymbol');</span>
+<span id="cb482-2"><a href="ch_symbols.html#cb482-2" aria-hidden="true" tabindex="-1"></a>&gt; 'Symbol I used: ' + mySymbol</span>
+<span id="cb482-3"><a href="ch_symbols.html#cb482-3" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Cannot convert a Symbol value to a string</span></span>
+<span id="cb482-4"><a href="ch_symbols.html#cb482-4" aria-hidden="true" tabindex="-1"></a>&gt; 'Symbol I used: ' + String(mySymbol)</span>
+<span id="cb482-5"><a href="ch_symbols.html#cb482-5" aria-hidden="true" tabindex="-1"></a><span class="kw">'Symbol I used: Symbol(mySymbol)'</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/15">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="pt_control-flow-data-flow.html">V Control flow and data flow</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

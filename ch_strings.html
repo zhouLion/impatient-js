@@ -1,0 +1,640 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_strings">20 Strings</h2>
+<p><a id="index-entry-197" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>20.1 <a href="ch_strings.html#plain-string-literals">Plain string literals</a>
+<ul>
+<li>20.1.1 <a href="ch_strings.html#escaping">Escaping</a></li>
+</ul></li>
+<li>20.2 <a href="ch_strings.html#accessing-characters-and-code-points">Accessing characters and code points</a>
+<ul>
+<li>20.2.1 <a href="ch_strings.html#accessing-javascript-characters">Accessing JavaScript characters</a></li>
+<li>20.2.2 <a href="ch_strings.html#accessing-unicode-code-point-characters-via-for-of-and-spreading">Accessing Unicode code point characters via <code>for-of</code> and spreading</a></li>
+</ul></li>
+<li>20.3 <a href="ch_strings.html#string-concatenation-via">String concatenation via <code>+</code></a></li>
+<li>20.4 <a href="ch_strings.html#converting-to-string">Converting to string</a>
+<ul>
+<li>20.4.1 <a href="ch_strings.html#stringifying-objects">Stringifying objects</a></li>
+<li>20.4.2 <a href="ch_strings.html#customizing-the-stringification-of-objects">Customizing the stringification of objects</a></li>
+<li>20.4.3 <a href="ch_strings.html#an-alternate-way-of-stringifying-values">An alternate way of stringifying values</a></li>
+</ul></li>
+<li>20.5 <a href="ch_strings.html#comparing-strings">Comparing strings</a></li>
+<li>20.6 <a href="ch_strings.html#atoms-of-text">Atoms of text: Unicode characters, JavaScript characters, grapheme clusters</a>
+<ul>
+<li>20.6.1 <a href="ch_strings.html#working-with-code-points">Working with code points</a></li>
+<li>20.6.2 <a href="ch_strings.html#working-with-code-units-char-codes">Working with code units (char codes)</a></li>
+<li>20.6.3 <a href="ch_strings.html#ascii-escapes">ASCII escapes</a></li>
+<li>20.6.4 <a href="ch_strings.html#caveat-grapheme-clusters">Caveat: grapheme clusters</a></li>
+</ul></li>
+<li>20.7 <a href="ch_strings.html#quickref-strings">Quick reference: Strings</a>
+<ul>
+<li>20.7.1 <a href="ch_strings.html#converting-to-string-1">Converting to string</a></li>
+<li>20.7.2 <a href="ch_strings.html#numeric-values-of-characters">Numeric values of characters</a></li>
+<li>20.7.3 <a href="ch_strings.html#string-operators">String operators</a></li>
+<li>20.7.4 <a href="ch_strings.html#string.prototype-finding-and-matching"><code>String.prototype</code>: finding and matching</a></li>
+<li>20.7.5 <a href="ch_strings.html#string-api-extracting"><code>String.prototype</code>: extracting</a></li>
+<li>20.7.6 <a href="ch_strings.html#string.prototype-combining"><code>String.prototype</code>: combining</a></li>
+<li>20.7.7 <a href="ch_strings.html#string.prototype-transforming"><code>String.prototype</code>: transforming</a></li>
+<li>20.7.8 <a href="ch_strings.html#sources-2">Sources</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>Strings are primitive values in JavaScript and immutable. That is, string-related operations always produce new strings and never change existing strings.</p>
+<h3 id="plain-string-literals">20.1 Plain string literals</h3>
+<p>Plain string literals are delimited by either single quotes or double quotes:</p>
+<div class="sourceCode" id="cb376"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb376-1"><a href="ch_strings.html#cb376-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> str1 <span class="op">=</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb376-2"><a href="ch_strings.html#cb376-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> str2 <span class="op">=</span> <span class="st">"abc"</span><span class="op">;</span></span>
+<span id="cb376-3"><a href="ch_strings.html#cb376-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(str1<span class="op">,</span> str2)<span class="op">;</span></span></code></pre></div>
+<p>Single quotes are used more often because it makes it easier to mention HTML, where double quotes are preferred.</p>
+<p><a href="ch_template-literals.html">The next chapter</a> covers <em>template literals</em>, which give us:</p>
+<ul>
+<li>String interpolation</li>
+<li>Multiple lines</li>
+<li>Raw string literals (backslash has no special meaning)</li>
+</ul>
+<h4 id="escaping">20.1.1 Escaping</h4>
+<p>The backslash lets us create special characters:</p>
+<ul>
+<li>Unix line break: <code>'\n'</code></li>
+<li>Windows line break: <code>'\r\n'</code></li>
+<li>Tab: <code>'\t'</code></li>
+<li>Backslash: <code>'\\'</code></li>
+</ul>
+<p>The backslash also lets us use the delimiter of a string literal inside that literal:</p>
+<div class="sourceCode" id="cb377"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb377-1"><a href="ch_strings.html#cb377-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb377-2"><a href="ch_strings.html#cb377-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'She said: "Let</span><span class="sc">\'</span><span class="st">s go!"'</span><span class="op">,</span></span>
+<span id="cb377-3"><a href="ch_strings.html#cb377-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"She said: </span><span class="sc">\"</span><span class="st">Let's go!</span><span class="sc">\"</span><span class="st">"</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="accessing-characters-and-code-points">20.2 Accessing characters and code points</h3>
+<h4 id="accessing-javascript-characters">20.2.1 Accessing JavaScript characters</h4>
+<p>JavaScript has no extra data type for characters – characters are always represented as strings.</p>
+<div class="sourceCode" id="cb378"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb378-1"><a href="ch_strings.html#cb378-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> str <span class="op">=</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb378-2"><a href="ch_strings.html#cb378-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb378-3"><a href="ch_strings.html#cb378-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Reading a character at a given index</span></span>
+<span id="cb378-4"><a href="ch_strings.html#cb378-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(str[<span class="dv">1</span>]<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span>
+<span id="cb378-5"><a href="ch_strings.html#cb378-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb378-6"><a href="ch_strings.html#cb378-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Counting the characters in a string:</span></span>
+<span id="cb378-7"><a href="ch_strings.html#cb378-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(str<span class="op">.</span><span class="at">length</span><span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="accessing-unicode-code-point-characters-via-for-of-and-spreading">20.2.2 Accessing Unicode code point characters via <code>for-of</code> and spreading</h4>
+<p>Iterating over strings via <code>for-of</code> or spreading (<code>...</code>) visits Unicode code point characters. Each code point character is encoded by 1–2 JavaScript characters. For more information, see <a href="ch_strings.html#atoms-of-text">§20.6 “Atoms of text: Unicode characters, JavaScript characters, grapheme clusters”</a>.</p>
+<p>This is how we iterate over the code point characters of a string via <code>for-of</code>:</p>
+<div class="sourceCode" id="cb379"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb379-1"><a href="ch_strings.html#cb379-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> ch <span class="kw">of</span> <span class="st">'x🙂y'</span>) {</span>
+<span id="cb379-2"><a href="ch_strings.html#cb379-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(ch)<span class="op">;</span></span>
+<span id="cb379-3"><a href="ch_strings.html#cb379-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb379-4"><a href="ch_strings.html#cb379-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb379-5"><a href="ch_strings.html#cb379-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 'x'</span></span>
+<span id="cb379-6"><a href="ch_strings.html#cb379-6" aria-hidden="true" tabindex="-1"></a><span class="co">// '🙂'</span></span>
+<span id="cb379-7"><a href="ch_strings.html#cb379-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'y'</span></span></code></pre></div>
+<p>And this is how we convert a string into an Array of code point characters via spreading:</p>
+<div class="sourceCode" id="cb380"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb380-1"><a href="ch_strings.html#cb380-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span><span class="st">'x🙂y'</span>]<span class="op">,</span> [<span class="st">'x'</span><span class="op">,</span> <span class="st">'🙂'</span><span class="op">,</span> <span class="st">'y'</span>])<span class="op">;</span></span></code></pre></div>
+<h3 id="string-concatenation-via">20.3 String concatenation via <code>+</code></h3>
+<p><a id="index-entry-198" class="index-entry"></a></p>
+<p>If at least one operand is a string, the plus operator (<code>+</code>) converts any non-strings to strings and concatenates the result:</p>
+<div class="sourceCode" id="cb381"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb381-1"><a href="ch_strings.html#cb381-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">3</span> <span class="op">+</span> <span class="st">' times '</span> <span class="op">+</span> <span class="dv">4</span><span class="op">,</span> <span class="st">'3 times 4'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The assignment operator <code>+=</code> is useful if we want to assemble a string, piece by piece:</p>
+<div class="sourceCode" id="cb382"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb382-1"><a href="ch_strings.html#cb382-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> str <span class="op">=</span> <span class="st">''</span><span class="op">;</span> <span class="co">// must be `let`!</span></span>
+<span id="cb382-2"><a href="ch_strings.html#cb382-2" aria-hidden="true" tabindex="-1"></a>str <span class="op">+=</span> <span class="st">'Say it'</span><span class="op">;</span></span>
+<span id="cb382-3"><a href="ch_strings.html#cb382-3" aria-hidden="true" tabindex="-1"></a>str <span class="op">+=</span> <span class="st">' one more'</span><span class="op">;</span></span>
+<span id="cb382-4"><a href="ch_strings.html#cb382-4" aria-hidden="true" tabindex="-1"></a>str <span class="op">+=</span> <span class="st">' time'</span><span class="op">;</span></span>
+<span id="cb382-5"><a href="ch_strings.html#cb382-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb382-6"><a href="ch_strings.html#cb382-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(str<span class="op">,</span> <span class="st">'Say it one more time'</span>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>Concatenating via <code>+</code> is efficient</strong></p>
+<p>Using <code>+</code> to assemble strings is quite efficient because most JavaScript engines internally optimize it.</p>
+</div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Concatenating strings</strong></p>
+<p><code>exercises/strings/concat_string_array_test.mjs</code></p>
+</div>
+<h3 id="converting-to-string">20.4 Converting to string</h3>
+<p><a id="index-entry-199" class="index-entry"></a></p>
+<p>These are three ways of converting a value <code>x</code> to a string:</p>
+<ul>
+<li><code>String(x)</code></li>
+<li><code>''+x</code></li>
+<li><code>x.toString()</code> (does not work for <code>undefined</code> and <code>null</code>)</li>
+</ul>
+<p>Recommendation: use the descriptive and safe <code>String()</code>.</p>
+<p>Examples:</p>
+<div class="sourceCode" id="cb383"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb383-1"><a href="ch_strings.html#cb383-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">String</span>(<span class="kw">undefined</span>)<span class="op">,</span> <span class="st">'undefined'</span>)<span class="op">;</span></span>
+<span id="cb383-2"><a href="ch_strings.html#cb383-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">String</span>(<span class="kw">null</span>)<span class="op">,</span> <span class="st">'null'</span>)<span class="op">;</span></span>
+<span id="cb383-3"><a href="ch_strings.html#cb383-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb383-4"><a href="ch_strings.html#cb383-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">String</span>(<span class="kw">false</span>)<span class="op">,</span> <span class="st">'false'</span>)<span class="op">;</span></span>
+<span id="cb383-5"><a href="ch_strings.html#cb383-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">String</span>(<span class="kw">true</span>)<span class="op">,</span> <span class="st">'true'</span>)<span class="op">;</span></span>
+<span id="cb383-6"><a href="ch_strings.html#cb383-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb383-7"><a href="ch_strings.html#cb383-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">String</span>(<span class="fl">123.45</span>)<span class="op">,</span> <span class="st">'123.45'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Pitfall for booleans: If we convert a boolean to a string via <code>String()</code>, we generally can’t convert it back via <code>Boolean()</code>:</p>
+<div class="sourceCode" id="cb384"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb384-1"><a href="ch_strings.html#cb384-1" aria-hidden="true" tabindex="-1"></a>&gt; String(false)</span>
+<span id="cb384-2"><a href="ch_strings.html#cb384-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'false'</span></span>
+<span id="cb384-3"><a href="ch_strings.html#cb384-3" aria-hidden="true" tabindex="-1"></a>&gt; Boolean('false')</span>
+<span id="cb384-4"><a href="ch_strings.html#cb384-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>The only string for which <code>Boolean()</code> returns <code>false</code>, is the empty string.</p>
+<h4 id="stringifying-objects">20.4.1 Stringifying objects</h4>
+<p>Plain objects have a default string representation that is not very useful:</p>
+<div class="sourceCode" id="cb385"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb385-1"><a href="ch_strings.html#cb385-1" aria-hidden="true" tabindex="-1"></a>&gt; String({a: 1})</span>
+<span id="cb385-2"><a href="ch_strings.html#cb385-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'[object Object]'</span></span></code></pre></div>
+<p>Arrays have a better string representation, but it still hides much information:</p>
+<div class="sourceCode" id="cb386"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb386-1"><a href="ch_strings.html#cb386-1" aria-hidden="true" tabindex="-1"></a>&gt; String(['a', 'b'])</span>
+<span id="cb386-2"><a href="ch_strings.html#cb386-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'a,b'</span></span>
+<span id="cb386-3"><a href="ch_strings.html#cb386-3" aria-hidden="true" tabindex="-1"></a>&gt; String(['a', ['b']])</span>
+<span id="cb386-4"><a href="ch_strings.html#cb386-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'a,b'</span></span>
+<span id="cb386-5"><a href="ch_strings.html#cb386-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb386-6"><a href="ch_strings.html#cb386-6" aria-hidden="true" tabindex="-1"></a>&gt; String([1, 2])</span>
+<span id="cb386-7"><a href="ch_strings.html#cb386-7" aria-hidden="true" tabindex="-1"></a><span class="kw">'1,2'</span></span>
+<span id="cb386-8"><a href="ch_strings.html#cb386-8" aria-hidden="true" tabindex="-1"></a>&gt; String(['1', '2'])</span>
+<span id="cb386-9"><a href="ch_strings.html#cb386-9" aria-hidden="true" tabindex="-1"></a><span class="kw">'1,2'</span></span>
+<span id="cb386-10"><a href="ch_strings.html#cb386-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb386-11"><a href="ch_strings.html#cb386-11" aria-hidden="true" tabindex="-1"></a>&gt; String([true])</span>
+<span id="cb386-12"><a href="ch_strings.html#cb386-12" aria-hidden="true" tabindex="-1"></a><span class="kw">'true'</span></span>
+<span id="cb386-13"><a href="ch_strings.html#cb386-13" aria-hidden="true" tabindex="-1"></a>&gt; String(['true'])</span>
+<span id="cb386-14"><a href="ch_strings.html#cb386-14" aria-hidden="true" tabindex="-1"></a><span class="kw">'true'</span></span>
+<span id="cb386-15"><a href="ch_strings.html#cb386-15" aria-hidden="true" tabindex="-1"></a>&gt; String(true)</span>
+<span id="cb386-16"><a href="ch_strings.html#cb386-16" aria-hidden="true" tabindex="-1"></a><span class="kw">'true'</span></span></code></pre></div>
+<p>Stringifying functions, returns their source code:</p>
+<div class="sourceCode" id="cb387"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb387-1"><a href="ch_strings.html#cb387-1" aria-hidden="true" tabindex="-1"></a>&gt; String(function f() {return 4})</span>
+<span id="cb387-2"><a href="ch_strings.html#cb387-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'function f() {return 4}'</span></span></code></pre></div>
+<h4 id="customizing-the-stringification-of-objects">20.4.2 Customizing the stringification of objects</h4>
+<p>We can override the built-in way of stringifying objects by implementing the method <code>toString()</code>:</p>
+<div class="sourceCode" id="cb388"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb388-1"><a href="ch_strings.html#cb388-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb388-2"><a href="ch_strings.html#cb388-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">toString</span>() {</span>
+<span id="cb388-3"><a href="ch_strings.html#cb388-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'hello'</span><span class="op">;</span></span>
+<span id="cb388-4"><a href="ch_strings.html#cb388-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb388-5"><a href="ch_strings.html#cb388-5" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb388-6"><a href="ch_strings.html#cb388-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb388-7"><a href="ch_strings.html#cb388-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">String</span>(obj)<span class="op">,</span> <span class="st">'hello'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="an-alternate-way-of-stringifying-values">20.4.3 An alternate way of stringifying values</h4>
+<p>The JSON data format is a text representation of JavaScript values. Therefore, <a href="ch_json.html#JSON.stringify"><code>JSON.stringify()</code></a> can also be used to convert values to strings:</p>
+<div class="sourceCode" id="cb389"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb389-1"><a href="ch_strings.html#cb389-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify({a: 1})</span>
+<span id="cb389-2"><a href="ch_strings.html#cb389-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'{"a":1}'</span></span>
+<span id="cb389-3"><a href="ch_strings.html#cb389-3" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(['a', ['b']])</span>
+<span id="cb389-4"><a href="ch_strings.html#cb389-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'["a",["b"]]'</span></span></code></pre></div>
+<p>The caveat is that JSON only supports <code>null</code>, booleans, numbers, strings, Arrays, and objects (which it always treats as if they were created by object literals).</p>
+<p>Tip: The third parameter lets us switch on multiline output and specify how much to indent – for example:</p>
+<div class="sourceCode" id="cb390"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb390-1"><a href="ch_strings.html#cb390-1" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({<span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span> <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span>}<span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="dv">2</span>))<span class="op">;</span></span></code></pre></div>
+<p>This statement produces the following output:</p>
+<pre class="text"><code>{
+  "first": "Jane",
+  "last": "Doe"
+}</code></pre>
+<h3 id="comparing-strings">20.5 Comparing strings</h3>
+<p>Strings can be compared via the following operators:</p>
+<pre class="text"><code>&lt; &lt;= &gt; &gt;=</code></pre>
+<p>There is one important caveat to consider: These operators compare based on the numeric values of JavaScript characters. That means that the order that JavaScript uses for strings is different from the one used in dictionaries and phone books:</p>
+<div class="sourceCode" id="cb393"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb393-1"><a href="ch_strings.html#cb393-1" aria-hidden="true" tabindex="-1"></a>&gt; 'A' &lt; 'B' // ok</span>
+<span id="cb393-2"><a href="ch_strings.html#cb393-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb393-3"><a href="ch_strings.html#cb393-3" aria-hidden="true" tabindex="-1"></a>&gt; 'a' &lt; 'B' // not ok</span>
+<span id="cb393-4"><a href="ch_strings.html#cb393-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb393-5"><a href="ch_strings.html#cb393-5" aria-hidden="true" tabindex="-1"></a>&gt; 'ä' &lt; 'b' // not ok</span>
+<span id="cb393-6"><a href="ch_strings.html#cb393-6" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<p>Properly comparing text is beyond the scope of this book. It is supported via <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Intl">the ECMAScript Internationalization API (<code>Intl</code>)</a>.</p>
+<h3 id="atoms-of-text">20.6 Atoms of text: Unicode characters, JavaScript characters, grapheme clusters</h3>
+<p>Quick recap of <a href="ch_unicode.html">§19 “Unicode – a brief introduction”</a>:</p>
+<ul>
+<li>Unicode characters are represented by <em>code points</em> – numbers which have a range of 21 bits.</li>
+<li>In JavaScript strings, Unicode is implemented via <em>code units</em> based on the encoding format UTF-16. Each code unit is a 16-bit number. One to two of code units are needed to encode a single code point.
+<ul>
+<li>Therefore, each JavaScript character is represented by a code unit. In the JavaScript standard library, code units are also called <em>char codes</em>. Which is what they are: numbers for JavaScript characters.</li>
+</ul></li>
+<li><em>Grapheme clusters</em> (<em>user-perceived characters</em>) are written symbols, as displayed on screen or paper. One or more Unicode characters are needed to encode a single grapheme cluster.</li>
+</ul>
+<p>The following code demonstrates that a single Unicode character comprises one or two JavaScript characters. We count the latter via <code>.length</code>:</p>
+<div class="sourceCode" id="cb394"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb394-1"><a href="ch_strings.html#cb394-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 3 Unicode characters, 3 JavaScript characters:</span></span>
+<span id="cb394-2"><a href="ch_strings.html#cb394-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="st">'abc'</span><span class="op">.</span><span class="at">length</span><span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span>
+<span id="cb394-3"><a href="ch_strings.html#cb394-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb394-4"><a href="ch_strings.html#cb394-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 1 Unicode character, 2 JavaScript characters:</span></span>
+<span id="cb394-5"><a href="ch_strings.html#cb394-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="st">'🙂'</span><span class="op">.</span><span class="at">length</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span></code></pre></div>
+<p>The following table summarizes the concepts we have just explored:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Entity</th>
+<th>Numeric representation</th>
+<th>Size</th>
+<th>Encoded via</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Grapheme cluster</td>
+<td></td>
+<td></td>
+<td>1+ code points</td>
+</tr>
+<tr class="even">
+<td>Unicode character</td>
+<td>Code point</td>
+<td>21 bits</td>
+<td>1–2 code units</td>
+</tr>
+<tr class="odd">
+<td>JavaScript character</td>
+<td>UTF-16 code unit</td>
+<td>16 bits</td>
+<td>–</td>
+</tr>
+</tbody>
+</table>
+<h4 id="working-with-code-points">20.6.1 Working with code points</h4>
+<p><a id="index-entry-200" class="index-entry"></a><a id="index-entry-201" class="index-entry"></a></p>
+<p>Let’s explore JavaScript’s tools for working with code points.</p>
+<p>A <em>Unicode code point escape</em> lets us specify a code point hexadecimally (1–5 digits). It produces one or two JavaScript characters.</p>
+<div class="sourceCode" id="cb395"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb395-1"><a href="ch_strings.html#cb395-1" aria-hidden="true" tabindex="-1"></a>&gt; '\u{1F642}'</span>
+<span id="cb395-2"><a href="ch_strings.html#cb395-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'🙂'</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>Unicode escape sequences</strong></p>
+<p>In the ECMAScript language specification, <em>Unicode code point escapes</em> and <em>Unicode code unit escapes</em> (which we’ll encounter later) are called <em>Unicode escape sequences</em>.</p>
+</div>
+<p><code>String.fromCodePoint()</code> converts a single code point to 1–2 JavaScript characters:</p>
+<div class="sourceCode" id="cb396"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb396-1"><a href="ch_strings.html#cb396-1" aria-hidden="true" tabindex="-1"></a>&gt; String.fromCodePoint(0x1F642)</span>
+<span id="cb396-2"><a href="ch_strings.html#cb396-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'🙂'</span></span></code></pre></div>
+<p><code>.codePointAt()</code> converts 1–2 JavaScript characters to a single code point:</p>
+<div class="sourceCode" id="cb397"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb397-1"><a href="ch_strings.html#cb397-1" aria-hidden="true" tabindex="-1"></a>&gt; '🙂'.codePointAt(0).toString(16)</span>
+<span id="cb397-2"><a href="ch_strings.html#cb397-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'1f642'</span></span></code></pre></div>
+<p>We can <em>iterate</em> over a string, which visits Unicode characters (not JavaScript characters). Iteration is described <a href="ch_sync-iteration.html">later in this book</a>. One way of iterating is via a <code>for-of</code> loop:</p>
+<div class="sourceCode" id="cb398"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb398-1"><a href="ch_strings.html#cb398-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> str <span class="op">=</span> <span class="st">'🙂a'</span><span class="op">;</span></span>
+<span id="cb398-2"><a href="ch_strings.html#cb398-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(str<span class="op">.</span><span class="at">length</span><span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span>
+<span id="cb398-3"><a href="ch_strings.html#cb398-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb398-4"><a href="ch_strings.html#cb398-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> codePointChar <span class="kw">of</span> str) {</span>
+<span id="cb398-5"><a href="ch_strings.html#cb398-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(codePointChar)<span class="op">;</span></span>
+<span id="cb398-6"><a href="ch_strings.html#cb398-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb398-7"><a href="ch_strings.html#cb398-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb398-8"><a href="ch_strings.html#cb398-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb398-9"><a href="ch_strings.html#cb398-9" aria-hidden="true" tabindex="-1"></a><span class="co">// '🙂'</span></span>
+<span id="cb398-10"><a href="ch_strings.html#cb398-10" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span></code></pre></div>
+<p><a href="ch_arrays.html#spreading-into-array-literals"><em>Spreading</em> (<code>...</code>) into Array literals</a> is also based on iteration and visits Unicode characters:</p>
+<div class="sourceCode" id="cb399"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb399-1"><a href="ch_strings.html#cb399-1" aria-hidden="true" tabindex="-1"></a>&gt; [...'🙂a']</span>
+<span id="cb399-2"><a href="ch_strings.html#cb399-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ '🙂', 'a' ]</span></span></code></pre></div>
+<p>That makes it a good tool for counting Unicode characters:</p>
+<div class="sourceCode" id="cb400"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb400-1"><a href="ch_strings.html#cb400-1" aria-hidden="true" tabindex="-1"></a>&gt; [...'🙂a'].length</span>
+<span id="cb400-2"><a href="ch_strings.html#cb400-2" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span>
+<span id="cb400-3"><a href="ch_strings.html#cb400-3" aria-hidden="true" tabindex="-1"></a>&gt; '🙂a'.length</span>
+<span id="cb400-4"><a href="ch_strings.html#cb400-4" aria-hidden="true" tabindex="-1"></a><span class="kw">3</span></span></code></pre></div>
+<h4 id="working-with-code-units-char-codes">20.6.2 Working with code units (char codes)</h4>
+<p><a id="index-entry-202" class="index-entry"></a><a id="index-entry-203" class="index-entry"></a></p>
+<p>Indices and lengths of strings are based on JavaScript characters (as represented by UTF-16 code units).</p>
+<p>To specify a code unit hexadecimally, we can use a <em>Unicode code unit escape</em> with exactly four hexadecimal digits:</p>
+<div class="sourceCode" id="cb401"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb401-1"><a href="ch_strings.html#cb401-1" aria-hidden="true" tabindex="-1"></a>&gt; '\uD83D\uDE42'</span>
+<span id="cb401-2"><a href="ch_strings.html#cb401-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'🙂'</span></span></code></pre></div>
+<p>And we can use <code>String.fromCharCode()</code>. <em>Char code</em> is the standard library’s name for <em>code unit</em>:</p>
+<div class="sourceCode" id="cb402"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb402-1"><a href="ch_strings.html#cb402-1" aria-hidden="true" tabindex="-1"></a>&gt; String.fromCharCode(0xD83D) + String.fromCharCode(0xDE42)</span>
+<span id="cb402-2"><a href="ch_strings.html#cb402-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'🙂'</span></span></code></pre></div>
+<p>To get the char code of a character, use <code>.charCodeAt()</code>:</p>
+<div class="sourceCode" id="cb403"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb403-1"><a href="ch_strings.html#cb403-1" aria-hidden="true" tabindex="-1"></a>&gt; '🙂'.charCodeAt(0).toString(16)</span>
+<span id="cb403-2"><a href="ch_strings.html#cb403-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'d83d'</span></span></code></pre></div>
+<h4 id="ascii-escapes">20.6.3 ASCII escapes</h4>
+<p><a id="index-entry-204" class="index-entry"></a><a id="index-entry-205" class="index-entry"></a></p>
+<p>If the code point of a character is below 256, we can refer to it via a <em>ASCII escape</em> with exactly two hexadecimal digits:</p>
+<div class="sourceCode" id="cb404"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb404-1"><a href="ch_strings.html#cb404-1" aria-hidden="true" tabindex="-1"></a>&gt; 'He\x6C\x6Co'</span>
+<span id="cb404-2"><a href="ch_strings.html#cb404-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'Hello'</span></span></code></pre></div>
+<p>(The official name of ASCII escapes is <em>Hexadecimal escape sequences</em> – it was the first escape that used hexadecimal numbers.)</p>
+<h4 id="caveat-grapheme-clusters">20.6.4 Caveat: grapheme clusters</h4>
+<p>When working with text that may be written in any human language, it’s best to split at the boundaries of grapheme clusters, not at the boundaries of Unicode characters.</p>
+<p>TC39 is working on <a href="https://github.com/tc39/proposal-intl-segmenter"><code>Intl.Segmenter</code></a>, a proposal for the ECMAScript Internationalization API to support Unicode segmentation (along grapheme cluster boundaries, word boundaries, sentence boundaries, etc.).</p>
+<p>Until that proposal becomes a standard, we can use one of several libraries that are available (do a web search for “JavaScript grapheme”).</p>
+<h3 id="quickref-strings">20.7 Quick reference: Strings</h3>
+<p>Strings are immutable; none of the string methods ever modify their strings.</p>
+<h4 id="converting-to-string-1">20.7.1 Converting to string</h4>
+<p>Tbl.&nbsp;<a href="#tbl:converting-to-string">14</a> describes how various values are converted to strings.</p>
+<div id="tbl:converting-to-string">
+<table>
+<caption>Table 14: Converting values to strings.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><code>x</code></th>
+<th style="text-align: left;"><code>String(x)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>undefined</code></td>
+<td style="text-align: left;"><code>'undefined'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>null</code></td>
+<td style="text-align: left;"><code>'null'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;"><code>false</code> <code>→</code> <code>'false'</code>, <code>true</code> <code>→</code> <code>'true'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">number</td>
+<td style="text-align: left;">Example: <code>123</code> <code>→</code> <code>'123'</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">bigint</td>
+<td style="text-align: left;">Example: <code>123n</code> <code>→</code> <code>'123'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><code>x</code> (input, unchanged)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">symbol</td>
+<td style="text-align: left;">Example: <code>Symbol('abc')</code> <code>→</code> <code>'Symbol(abc)'</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">Configurable via, e.g., <code>toString()</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="numeric-values-of-characters">20.7.2 Numeric values of characters</h4>
+<ul>
+<li><strong>Char code:</strong> represents a JavaScript character numerically. JavaScript’s name for <em>Unicode code unit</em>.
+<ul>
+<li>Size: 16 bits, unsigned</li>
+<li>Convert number to character: <code>String.fromCharCode()</code> <sup>[ES1]</sup></li>
+<li>Convert character to number: string method <code>.charCodeAt()</code> <sup>[ES1]</sup></li>
+</ul></li>
+<li><strong>Code point:</strong> represents a Unicode character numerically.
+<ul>
+<li>Size: 21 bits, unsigned (17 planes, 16 bits each)</li>
+<li>Convert number to character: <code>String.fromCodePoint()</code> <sup>[ES6]</sup></li>
+<li>Convert character to number: string method <code>.codePointAt()</code> <sup>[ES6]</sup></li>
+</ul></li>
+</ul>
+<h4 id="string-operators">20.7.3 String operators</h4>
+<div class="sourceCode" id="cb405"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb405-1"><a href="ch_strings.html#cb405-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Access characters via []</span></span>
+<span id="cb405-2"><a href="ch_strings.html#cb405-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> str <span class="op">=</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb405-3"><a href="ch_strings.html#cb405-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(str[<span class="dv">1</span>]<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span>
+<span id="cb405-4"><a href="ch_strings.html#cb405-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb405-5"><a href="ch_strings.html#cb405-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Concatenate strings via +</span></span>
+<span id="cb405-6"><a href="ch_strings.html#cb405-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="st">'a'</span> <span class="op">+</span> <span class="st">'b'</span> <span class="op">+</span> <span class="st">'c'</span><span class="op">,</span> <span class="st">'abc'</span>)<span class="op">;</span></span>
+<span id="cb405-7"><a href="ch_strings.html#cb405-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="st">'take '</span> <span class="op">+</span> <span class="dv">3</span> <span class="op">+</span> <span class="st">' oranges'</span><span class="op">,</span> <span class="st">'take 3 oranges'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="string.prototype-finding-and-matching">20.7.4 <code>String.prototype</code>: finding and matching</h4>
+<p>(<code>String.prototype</code> is where the methods of strings are stored.)</p>
+<ul>
+<li><p><code>.endsWith(searchString: string, endPos=this.length): boolean</code> <sup>[ES6]</sup></p>
+<p>Returns <code>true</code> if the string would end with <code>searchString</code> if its length were <code>endPos</code>. Returns <code>false</code> otherwise.</p>
+<div class="sourceCode" id="cb406"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb406-1"><a href="ch_strings.html#cb406-1" aria-hidden="true" tabindex="-1"></a>&gt; 'foo.txt'.endsWith('.txt')</span>
+<span id="cb406-2"><a href="ch_strings.html#cb406-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb406-3"><a href="ch_strings.html#cb406-3" aria-hidden="true" tabindex="-1"></a>&gt; 'abcde'.endsWith('cd', 4)</span>
+<span id="cb406-4"><a href="ch_strings.html#cb406-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div></li>
+<li><p><code>.includes(searchString: string, startPos=0): boolean</code> <sup>[ES6]</sup></p>
+<p>Returns <code>true</code> if the string contains the <code>searchString</code> and <code>false</code> otherwise. The search starts at <code>startPos</code>.</p>
+<div class="sourceCode" id="cb407"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb407-1"><a href="ch_strings.html#cb407-1" aria-hidden="true" tabindex="-1"></a>&gt; 'abc'.includes('b')</span>
+<span id="cb407-2"><a href="ch_strings.html#cb407-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb407-3"><a href="ch_strings.html#cb407-3" aria-hidden="true" tabindex="-1"></a>&gt; 'abc'.includes('b', 2)</span>
+<span id="cb407-4"><a href="ch_strings.html#cb407-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div></li>
+<li><p><code>.indexOf(searchString: string, minIndex=0): number</code> <sup>[ES1]</sup></p>
+<p>Returns the lowest index at which <code>searchString</code> appears within the string or <code>-1, otherwise. Any returned index will be</code>minIndex` or higher.</p>
+<div class="sourceCode" id="cb408"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb408-1"><a href="ch_strings.html#cb408-1" aria-hidden="true" tabindex="-1"></a>&gt; 'abab'.indexOf('a')</span>
+<span id="cb408-2"><a href="ch_strings.html#cb408-2" aria-hidden="true" tabindex="-1"></a><span class="kw">0</span></span>
+<span id="cb408-3"><a href="ch_strings.html#cb408-3" aria-hidden="true" tabindex="-1"></a>&gt; 'abab'.indexOf('a', 1)</span>
+<span id="cb408-4"><a href="ch_strings.html#cb408-4" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span>
+<span id="cb408-5"><a href="ch_strings.html#cb408-5" aria-hidden="true" tabindex="-1"></a>&gt; 'abab'.indexOf('c')</span>
+<span id="cb408-6"><a href="ch_strings.html#cb408-6" aria-hidden="true" tabindex="-1"></a><span class="kw">-1</span></span></code></pre></div></li>
+<li><p><code>.lastIndexOf(searchString: string, maxIndex=Infinity): number</code> <sup>[ES1]</sup></p>
+<p>Returns the highest index at which <code>searchString</code> appears within the string or <code>-1, otherwise. Any returned index will be</code>maxIndex` or lower.</p>
+<div class="sourceCode" id="cb409"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb409-1"><a href="ch_strings.html#cb409-1" aria-hidden="true" tabindex="-1"></a>&gt; 'abab'.lastIndexOf('ab', 2)</span>
+<span id="cb409-2"><a href="ch_strings.html#cb409-2" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span>
+<span id="cb409-3"><a href="ch_strings.html#cb409-3" aria-hidden="true" tabindex="-1"></a>&gt; 'abab'.lastIndexOf('ab', 1)</span>
+<span id="cb409-4"><a href="ch_strings.html#cb409-4" aria-hidden="true" tabindex="-1"></a><span class="kw">0</span></span>
+<span id="cb409-5"><a href="ch_strings.html#cb409-5" aria-hidden="true" tabindex="-1"></a>&gt; 'abab'.lastIndexOf('ab')</span>
+<span id="cb409-6"><a href="ch_strings.html#cb409-6" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span></code></pre></div></li>
+<li><p>[1 of 2] <code>.match(regExp: string | RegExp): RegExpMatchArray | null</code> <sup>[ES3]</sup></p>
+<p>If <code>regExp</code> is a regular expression with flag <code>/g</code> not set, then <code>.match()</code> returns the first match for <code>regExp</code> within the string. Or <code>null</code> if there is no match. If <code>regExp</code> is a string, it is used to create a regular expression (think parameter of <code>new RegExp()</code>) before performing the previously mentioned steps.</p>
+<p>The result has the following type:</p>
+<div class="sourceCode" id="cb410"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb410-1"><a href="ch_strings.html#cb410-1" aria-hidden="true" tabindex="-1"></a>interface RegExpMatchArray extends Array<span class="op">&lt;</span><span class="dt">string</span><span class="op">&gt;</span> {</span>
+<span id="cb410-2"><a href="ch_strings.html#cb410-2" aria-hidden="true" tabindex="-1"></a>  index<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
+<span id="cb410-3"><a href="ch_strings.html#cb410-3" aria-hidden="true" tabindex="-1"></a>  input<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb410-4"><a href="ch_strings.html#cb410-4" aria-hidden="true" tabindex="-1"></a>  groups<span class="op">:</span> <span class="dt">undefined</span> <span class="op">|</span> {</span>
+<span id="cb410-5"><a href="ch_strings.html#cb410-5" aria-hidden="true" tabindex="-1"></a>    [key<span class="op">:</span> <span class="dt">string</span>]<span class="op">:</span> <span class="dt">string</span></span>
+<span id="cb410-6"><a href="ch_strings.html#cb410-6" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb410-7"><a href="ch_strings.html#cb410-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Numbered capture groups become Array indices (which is why this type extends <code>Array</code>). <a href="ch_regexps.html#named-capture-groups">Named capture groups</a> (ES2018) become properties of <code>.groups</code>. In this mode, <code>.match()</code> works like <code>RegExp.prototype.exec()</code>.</p>
+<p>Examples:</p>
+<div class="sourceCode" id="cb411"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb411-1"><a href="ch_strings.html#cb411-1" aria-hidden="true" tabindex="-1"></a>&gt; 'ababb'.match(/a(b+)/)</span>
+<span id="cb411-2"><a href="ch_strings.html#cb411-2" aria-hidden="true" tabindex="-1"></a><span class="kw">{ 0: 'ab', 1: 'b', index: 0, input: 'ababb', groups: undefined }</span></span>
+<span id="cb411-3"><a href="ch_strings.html#cb411-3" aria-hidden="true" tabindex="-1"></a>&gt; 'ababb'.match(/a(?&lt;foo&gt;b+)/)</span>
+<span id="cb411-4"><a href="ch_strings.html#cb411-4" aria-hidden="true" tabindex="-1"></a><span class="kw">{ 0: 'ab', 1: 'b', index: 0, input: 'ababb', groups: { foo: 'b' } }</span></span>
+<span id="cb411-5"><a href="ch_strings.html#cb411-5" aria-hidden="true" tabindex="-1"></a>&gt; 'abab'.match(/x/)</span>
+<span id="cb411-6"><a href="ch_strings.html#cb411-6" aria-hidden="true" tabindex="-1"></a><span class="kw">null</span></span></code></pre></div></li>
+<li><p>[2 of 2] <code>.match(regExp: RegExp): string[] | null</code> <sup>[ES3]</sup></p>
+<p>If flag <code>/g</code> of <code>regExp</code> is set, <code>.match()</code> returns either an Array with all matches or <code>null</code> if there was no match.</p>
+<div class="sourceCode" id="cb412"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb412-1"><a href="ch_strings.html#cb412-1" aria-hidden="true" tabindex="-1"></a>&gt; 'ababb'.match(/a(b+)/g)</span>
+<span id="cb412-2"><a href="ch_strings.html#cb412-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'ab', 'abb' ]</span></span>
+<span id="cb412-3"><a href="ch_strings.html#cb412-3" aria-hidden="true" tabindex="-1"></a>&gt; 'ababb'.match(/a(?&lt;foo&gt;b+)/g)</span>
+<span id="cb412-4"><a href="ch_strings.html#cb412-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'ab', 'abb' ]</span></span>
+<span id="cb412-5"><a href="ch_strings.html#cb412-5" aria-hidden="true" tabindex="-1"></a>&gt; 'abab'.match(/x/g)</span>
+<span id="cb412-6"><a href="ch_strings.html#cb412-6" aria-hidden="true" tabindex="-1"></a><span class="kw">null</span></span></code></pre></div></li>
+<li><p><code>.search(regExp: string | RegExp): number</code> <sup>[ES3]</sup></p>
+<p>Returns the index at which <code>regExp</code> occurs within the string. If <code>regExp</code> is a string, it is used to create a regular expression (think parameter of <code>new RegExp()</code>).</p>
+<div class="sourceCode" id="cb413"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb413-1"><a href="ch_strings.html#cb413-1" aria-hidden="true" tabindex="-1"></a>&gt; 'a2b'.search(/[0-9]/)</span>
+<span id="cb413-2"><a href="ch_strings.html#cb413-2" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span>
+<span id="cb413-3"><a href="ch_strings.html#cb413-3" aria-hidden="true" tabindex="-1"></a>&gt; 'a2b'.search('[0-9]')</span>
+<span id="cb413-4"><a href="ch_strings.html#cb413-4" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span></code></pre></div></li>
+<li><p><code>.startsWith(searchString: string, startPos=0): boolean</code> <sup>[ES6]</sup></p>
+<p>Returns <code>true</code> if <code>searchString</code> occurs in the string at index <code>startPos</code>. Returns <code>false</code> otherwise.</p>
+<div class="sourceCode" id="cb414"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb414-1"><a href="ch_strings.html#cb414-1" aria-hidden="true" tabindex="-1"></a>&gt; '.gitignore'.startsWith('.')</span>
+<span id="cb414-2"><a href="ch_strings.html#cb414-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb414-3"><a href="ch_strings.html#cb414-3" aria-hidden="true" tabindex="-1"></a>&gt; 'abcde'.startsWith('bc', 1)</span>
+<span id="cb414-4"><a href="ch_strings.html#cb414-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div></li>
+</ul>
+<h4 id="string-api-extracting">20.7.5 <code>String.prototype</code>: extracting</h4>
+<ul>
+<li><p><code>.slice(start=0, end=this.length): string</code> <sup>[ES3]</sup></p>
+<p>Returns the substring of the string that starts at (including) index <code>start</code> and ends at (excluding) index <code>end</code>. If an index is negative, it is added to <code>.length</code> before it is used (<code>-1</code> becomes <code>this.length-1</code>, etc.).</p>
+<div class="sourceCode" id="cb415"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb415-1"><a href="ch_strings.html#cb415-1" aria-hidden="true" tabindex="-1"></a>&gt; 'abc'.slice(1, 3)</span>
+<span id="cb415-2"><a href="ch_strings.html#cb415-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'bc'</span></span>
+<span id="cb415-3"><a href="ch_strings.html#cb415-3" aria-hidden="true" tabindex="-1"></a>&gt; 'abc'.slice(1)</span>
+<span id="cb415-4"><a href="ch_strings.html#cb415-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'bc'</span></span>
+<span id="cb415-5"><a href="ch_strings.html#cb415-5" aria-hidden="true" tabindex="-1"></a>&gt; 'abc'.slice(-2)</span>
+<span id="cb415-6"><a href="ch_strings.html#cb415-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'bc'</span></span></code></pre></div></li>
+<li><p><code>.split(separator: string | RegExp, limit?: number): string[]</code> <sup>[ES3]</sup></p>
+<p>Splits the string into an Array of substrings – the strings that occur between the separators. The separator can be a string:</p>
+<div class="sourceCode" id="cb416"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb416-1"><a href="ch_strings.html#cb416-1" aria-hidden="true" tabindex="-1"></a>&gt; 'a | b | c'.split('|')</span>
+<span id="cb416-2"><a href="ch_strings.html#cb416-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a ', ' b ', ' c' ]</span></span></code></pre></div>
+<p>It can also be a regular expression:</p>
+<div class="sourceCode" id="cb417"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb417-1"><a href="ch_strings.html#cb417-1" aria-hidden="true" tabindex="-1"></a>&gt; 'a : b : c'.split(/ *: */)</span>
+<span id="cb417-2"><a href="ch_strings.html#cb417-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b', 'c' ]</span></span>
+<span id="cb417-3"><a href="ch_strings.html#cb417-3" aria-hidden="true" tabindex="-1"></a>&gt; 'a : b : c'.split(/( *):( *)/)</span>
+<span id="cb417-4"><a href="ch_strings.html#cb417-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', ' ', ' ', 'b', ' ', ' ', 'c' ]</span></span></code></pre></div>
+<p>The last invocation demonstrates that captures made by groups in the regular expression become elements of the returned Array.</p>
+<p><strong>Warning: <code>.split('')</code> splits a string into JavaScript characters.</strong> That doesn’t work well when dealing with astral Unicode characters (which are encoded as two JavaScript characters). For example, emojis are astral:</p>
+<div class="sourceCode" id="cb418"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb418-1"><a href="ch_strings.html#cb418-1" aria-hidden="true" tabindex="-1"></a>&gt; '🙂X🙂'.split('')</span>
+<span id="cb418-2"><a href="ch_strings.html#cb418-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ '\uD83D', '\uDE42', 'X', '\uD83D', '\uDE42' ]</span></span></code></pre></div>
+<p>Instead, it is better to use spreading:</p>
+<div class="sourceCode" id="cb419"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb419-1"><a href="ch_strings.html#cb419-1" aria-hidden="true" tabindex="-1"></a>&gt; [...'🙂X🙂']</span>
+<span id="cb419-2"><a href="ch_strings.html#cb419-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ '🙂', 'X', '🙂' ]</span></span></code></pre></div></li>
+<li><p><code>.substring(start: number, end=this.length): string</code> <sup>[ES1]</sup></p>
+<p>Use <code>.slice()</code> instead of this method. <code>.substring()</code> wasn’t implemented consistently in older engines and doesn’t support negative indices.</p></li>
+</ul>
+<h4 id="string.prototype-combining">20.7.6 <code>String.prototype</code>: combining</h4>
+<ul>
+<li><p><code>.concat(...strings: string[]): string</code> <sup>[ES3]</sup></p>
+<p>Returns the concatenation of the string and <code>strings</code>. <code>'a'.concat('b')</code> is equivalent to <code>'a'+'b'</code>. The latter is much more popular.</p>
+<div class="sourceCode" id="cb420"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb420-1"><a href="ch_strings.html#cb420-1" aria-hidden="true" tabindex="-1"></a>&gt; 'ab'.concat('cd', 'ef', 'gh')</span>
+<span id="cb420-2"><a href="ch_strings.html#cb420-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'abcdefgh'</span></span></code></pre></div></li>
+<li><p><span id="String.prototype.padEnd" class="texlabel"><code>.padEnd(len: number, fillString=' '): string</code> <sup>[ES2017]</sup></span></p>
+<p>Appends (fragments of) <code>fillString</code> to the string until it has the desired length <code>len</code>. If it already has or exceeds <code>len</code>, then it is returned without any changes.</p>
+<div class="sourceCode" id="cb421"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb421-1"><a href="ch_strings.html#cb421-1" aria-hidden="true" tabindex="-1"></a>&gt; '#'.padEnd(2)</span>
+<span id="cb421-2"><a href="ch_strings.html#cb421-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'# '</span></span>
+<span id="cb421-3"><a href="ch_strings.html#cb421-3" aria-hidden="true" tabindex="-1"></a>&gt; 'abc'.padEnd(2)</span>
+<span id="cb421-4"><a href="ch_strings.html#cb421-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'abc'</span></span>
+<span id="cb421-5"><a href="ch_strings.html#cb421-5" aria-hidden="true" tabindex="-1"></a>&gt; '#'.padEnd(5, 'abc')</span>
+<span id="cb421-6"><a href="ch_strings.html#cb421-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'#abca'</span></span></code></pre></div></li>
+<li><p><span id="String.prototype.padStart" class="texlabel"><code>.padStart(len: number, fillString=' '): string</code> <sup>[ES2017]</sup></span></p>
+<p>Prepends (fragments of) <code>fillString</code> to the string until it has the desired length <code>len</code>. If it already has or exceeds <code>len</code>, then it is returned without any changes.</p>
+<div class="sourceCode" id="cb422"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb422-1"><a href="ch_strings.html#cb422-1" aria-hidden="true" tabindex="-1"></a>&gt; '#'.padStart(2)</span>
+<span id="cb422-2"><a href="ch_strings.html#cb422-2" aria-hidden="true" tabindex="-1"></a><span class="kw">' #'</span></span>
+<span id="cb422-3"><a href="ch_strings.html#cb422-3" aria-hidden="true" tabindex="-1"></a>&gt; 'abc'.padStart(2)</span>
+<span id="cb422-4"><a href="ch_strings.html#cb422-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'abc'</span></span>
+<span id="cb422-5"><a href="ch_strings.html#cb422-5" aria-hidden="true" tabindex="-1"></a>&gt; '#'.padStart(5, 'abc')</span>
+<span id="cb422-6"><a href="ch_strings.html#cb422-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'abca#'</span></span></code></pre></div></li>
+<li><p><code>.repeat(count=0): string</code> <sup>[ES6]</sup></p>
+<p>Returns the string, concatenated <code>count</code> times.</p>
+<div class="sourceCode" id="cb423"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb423-1"><a href="ch_strings.html#cb423-1" aria-hidden="true" tabindex="-1"></a>&gt; '*'.repeat()</span>
+<span id="cb423-2"><a href="ch_strings.html#cb423-2" aria-hidden="true" tabindex="-1"></a><span class="kw">''</span></span>
+<span id="cb423-3"><a href="ch_strings.html#cb423-3" aria-hidden="true" tabindex="-1"></a>&gt; '*'.repeat(3)</span>
+<span id="cb423-4"><a href="ch_strings.html#cb423-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'***'</span></span></code></pre></div></li>
+</ul>
+<h4 id="string.prototype-transforming">20.7.7 <code>String.prototype</code>: transforming</h4>
+<ul>
+<li><p><code>.normalize(form: 'NFC'|'NFD'|'NFKC'|'NFKD' = 'NFC'): string</code> <sup>[ES6]</sup></p>
+<p>Normalizes the string according to <a href="https://unicode.org/reports/tr15/">the Unicode Normalization Forms</a>.</p></li>
+<li><p>[1 of 2] <code>.replaceAll(searchValue: string | RegExp, replaceValue: string): string</code> <sup>[ES2021]</sup></p>
+<div class="notebox">
+<p><img src="img-book/img/icons/lightbulb-regular.svg" height="24">&nbsp; <strong>What to do if you can’t use <code>.replaceAll()</code></strong></p>
+<p>If <code>.replaceAll()</code> isn’t available on your targeted platform, you can use <code>.replace()</code> instead. How is explained in <a href="ch_regexps.html#String.prototype.replace">§43.5.8.1 “<code>str.replace(searchValue, replacementValue)</code> <sup>[ES3]</sup>”</a>.</p>
+</div>
+<p>Replaces all matches of <code>searchValue</code> with <code>replaceValue</code>. If <code>searchValue</code> is a regular expression without flag <code>/g</code>, a <code>TypeError</code> is thrown.</p>
+<div class="sourceCode" id="cb424"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb424-1"><a href="ch_strings.html#cb424-1" aria-hidden="true" tabindex="-1"></a>&gt; 'x.x.'.replaceAll('.', '#')</span>
+<span id="cb424-2"><a href="ch_strings.html#cb424-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'x#x#'</span></span>
+<span id="cb424-3"><a href="ch_strings.html#cb424-3" aria-hidden="true" tabindex="-1"></a>&gt; 'x.x.'.replaceAll(/./g, '#')</span>
+<span id="cb424-4"><a href="ch_strings.html#cb424-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'####'</span></span>
+<span id="cb424-5"><a href="ch_strings.html#cb424-5" aria-hidden="true" tabindex="-1"></a>&gt; 'x.x.'.replaceAll(/./, '#')</span>
+<span id="cb424-6"><a href="ch_strings.html#cb424-6" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: String.prototype.replaceAll called with</span></span>
+<span id="cb424-7"><a href="ch_strings.html#cb424-7" aria-hidden="true" tabindex="-1"></a><span class="kw">a non-global RegExp argument</span></span></code></pre></div>
+<p>Special characters in <code>replaceValue</code> are:</p>
+<ul>
+<li><code>$$</code>: becomes <code>$</code></li>
+<li><code>$n</code>: becomes the capture of numbered group <code>n</code> (alas, <code>$0</code> stands for the string <code>'$0'</code>, it does not refer to the complete match)</li>
+<li><code>$&amp;</code>: becomes the complete match</li>
+<li><code>$`</code>: becomes everything before the match</li>
+<li><code>$'</code>: becomes everything after the match</li>
+</ul>
+<p>Examples:</p>
+<div class="sourceCode" id="cb425"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb425-1"><a href="ch_strings.html#cb425-1" aria-hidden="true" tabindex="-1"></a>&gt; 'a 1995-12 b'.replaceAll(/([0-9]{4})-([0-9]{2})/g, '|$2|')</span>
+<span id="cb425-2"><a href="ch_strings.html#cb425-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'a |12| b'</span></span>
+<span id="cb425-3"><a href="ch_strings.html#cb425-3" aria-hidden="true" tabindex="-1"></a>&gt; 'a 1995-12 b'.replaceAll(/([0-9]{4})-([0-9]{2})/g, '|$&amp;|')</span>
+<span id="cb425-4"><a href="ch_strings.html#cb425-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'a |1995-12| b'</span></span>
+<span id="cb425-5"><a href="ch_strings.html#cb425-5" aria-hidden="true" tabindex="-1"></a>&gt; 'a 1995-12 b'.replaceAll(/([0-9]{4})-([0-9]{2})/g, '|$`|')</span>
+<span id="cb425-6"><a href="ch_strings.html#cb425-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'a |a | b'</span></span></code></pre></div>
+<p><a href="ch_regexps.html#named-capture-groups">Named capture groups</a> (ES2018) are supported, too:</p>
+<ul>
+<li><code>$&lt;name&gt;</code> becomes the capture of named group <code>name</code></li>
+</ul>
+<p>Example:</p>
+<div class="sourceCode" id="cb426"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb426-1"><a href="ch_strings.html#cb426-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb426-2"><a href="ch_strings.html#cb426-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'a 1995-12 b'</span><span class="op">.</span><span class="fu">replaceAll</span>(</span>
+<span id="cb426-3"><a href="ch_strings.html#cb426-3" aria-hidden="true" tabindex="-1"></a>    <span class="ss">/</span><span class="sc">(?</span><span class="ss">&lt;year&gt;</span><span class="sc">[0-9]{4})</span><span class="ss">-</span><span class="sc">(?</span><span class="ss">&lt;month&gt;</span><span class="sc">[0-9]{2})</span><span class="ss">/g</span><span class="op">,</span> <span class="st">'|$&lt;month&gt;|'</span>)<span class="op">,</span></span>
+<span id="cb426-4"><a href="ch_strings.html#cb426-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">'a |12| b'</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p>[2 of 2] <code>.replaceAll(searchValue: string | RegExp, replacer: (...args: any[]) =&gt; string): string</code> <sup>[ES2021]</sup></p>
+<p>If the second parameter is a function, occurrences are replaced with the strings it returns. Its parameters <code>args</code> are:</p>
+<ul>
+<li><code>matched: string</code>. The complete match</li>
+<li><code>g1: string|undefined</code>. The capture of numbered group 1</li>
+<li><code>g2: string|undefined</code>. The capture of numbered group 2</li>
+<li>(Etc.)</li>
+<li><code>offset: number</code>. Where was the match found in the input string?</li>
+<li><code>input: string</code>. The whole input string</li>
+</ul>
+<div class="sourceCode" id="cb427"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb427-1"><a href="ch_strings.html#cb427-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> regexp <span class="op">=</span> <span class="ss">/</span><span class="sc">([0-9]{4})</span><span class="ss">-</span><span class="sc">([0-9]{2})</span><span class="ss">/g</span><span class="op">;</span></span>
+<span id="cb427-2"><a href="ch_strings.html#cb427-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> replacer <span class="op">=</span> (all<span class="op">,</span> year<span class="op">,</span> month) <span class="kw">=&gt;</span> <span class="st">'|'</span> <span class="op">+</span> all <span class="op">+</span> <span class="st">'|'</span><span class="op">;</span></span>
+<span id="cb427-3"><a href="ch_strings.html#cb427-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb427-4"><a href="ch_strings.html#cb427-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">'a 1995-12 b'</span><span class="op">.</span><span class="fu">replaceAll</span>(regexp<span class="op">,</span> replacer)<span class="op">,</span></span>
+<span id="cb427-5"><a href="ch_strings.html#cb427-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">'a |1995-12| b'</span>)<span class="op">;</span></span></code></pre></div>
+<p><a href="ch_regexps.html#named-capture-groups">Named capture groups</a> (ES2018) are supported, too. If there are any, an argument is added at the end with an object whose properties contain the captures:</p>
+<div class="sourceCode" id="cb428"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb428-1"><a href="ch_strings.html#cb428-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> regexp <span class="op">=</span> <span class="ss">/</span><span class="sc">(?</span><span class="ss">&lt;year&gt;</span><span class="sc">[0-9]{4})</span><span class="ss">-</span><span class="sc">(?</span><span class="ss">&lt;month&gt;</span><span class="sc">[0-9]{2})</span><span class="ss">/g</span><span class="op">;</span></span>
+<span id="cb428-2"><a href="ch_strings.html#cb428-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> replacer <span class="op">=</span> (<span class="op">...</span>args) <span class="kw">=&gt;</span> {</span>
+<span id="cb428-3"><a href="ch_strings.html#cb428-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> groups<span class="op">=</span>args<span class="op">.</span><span class="fu">pop</span>()<span class="op">;</span></span>
+<span id="cb428-4"><a href="ch_strings.html#cb428-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="st">'|'</span> <span class="op">+</span> groups<span class="op">.</span><span class="at">month</span> <span class="op">+</span> <span class="st">'|'</span><span class="op">;</span></span>
+<span id="cb428-5"><a href="ch_strings.html#cb428-5" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb428-6"><a href="ch_strings.html#cb428-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb428-7"><a href="ch_strings.html#cb428-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">'a 1995-12 b'</span><span class="op">.</span><span class="fu">replaceAll</span>(regexp<span class="op">,</span> replacer)<span class="op">,</span></span>
+<span id="cb428-8"><a href="ch_strings.html#cb428-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">'a |12| b'</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>.replace(searchValue: string | RegExp, replaceValue: string): string</code> <sup>[ES3]</sup></p></li>
+<li><p><code>.replace(searchValue: string | RegExp, replacer: (...args: any[]) =&gt; string): string</code> <sup>[ES3]</sup></p>
+<p><code>.replace()</code> works like <code>.replaceAll()</code>, but only replaces the first occurrence if <code>searchValue</code> is a string or a regular expression without <code>/g</code>:</p>
+<div class="sourceCode" id="cb429"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb429-1"><a href="ch_strings.html#cb429-1" aria-hidden="true" tabindex="-1"></a>&gt; 'x.x.'.replace('.', '#')</span>
+<span id="cb429-2"><a href="ch_strings.html#cb429-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'x#x.'</span></span>
+<span id="cb429-3"><a href="ch_strings.html#cb429-3" aria-hidden="true" tabindex="-1"></a>&gt; 'x.x.'.replace(/./, '#')</span>
+<span id="cb429-4"><a href="ch_strings.html#cb429-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'#.x.'</span></span></code></pre></div>
+<p>For more information on this method, see <a href="ch_regexps.html#String.prototype.replace">§43.5.8.1 “<code>str.replace(searchValue, replacementValue)</code> <sup>[ES3]</sup>”</a>.</p></li>
+<li><p><code>.toUpperCase(): string</code> <sup>[ES1]</sup></p>
+<p>Returns a copy of the string in which all lowercase alphabetic characters are converted to uppercase. How well that works for various alphabets, depends on the JavaScript engine.</p>
+<div class="sourceCode" id="cb430"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb430-1"><a href="ch_strings.html#cb430-1" aria-hidden="true" tabindex="-1"></a>&gt; '-a2b-'.toUpperCase()</span>
+<span id="cb430-2"><a href="ch_strings.html#cb430-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'-A2B-'</span></span>
+<span id="cb430-3"><a href="ch_strings.html#cb430-3" aria-hidden="true" tabindex="-1"></a>&gt; 'αβγ'.toUpperCase()</span>
+<span id="cb430-4"><a href="ch_strings.html#cb430-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'ΑΒΓ'</span></span></code></pre></div></li>
+<li><p><code>.toLowerCase(): string</code> <sup>[ES1]</sup></p>
+<p>Returns a copy of the string in which all uppercase alphabetic characters are converted to lowercase. How well that works for various alphabets, depends on the JavaScript engine.</p>
+<div class="sourceCode" id="cb431"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb431-1"><a href="ch_strings.html#cb431-1" aria-hidden="true" tabindex="-1"></a>&gt; '-A2B-'.toLowerCase()</span>
+<span id="cb431-2"><a href="ch_strings.html#cb431-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'-a2b-'</span></span>
+<span id="cb431-3"><a href="ch_strings.html#cb431-3" aria-hidden="true" tabindex="-1"></a>&gt; 'ΑΒΓ'.toLowerCase()</span>
+<span id="cb431-4"><a href="ch_strings.html#cb431-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'αβγ'</span></span></code></pre></div></li>
+<li><p><code>.trim(): string</code> <sup>[ES5]</sup></p>
+<p>Returns a copy of the string in which all leading and trailing whitespace (spaces, tabs, line terminators, etc.) is gone.</p>
+<div class="sourceCode" id="cb432"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb432-1"><a href="ch_strings.html#cb432-1" aria-hidden="true" tabindex="-1"></a>&gt; '\r\n#\t  '.trim()</span>
+<span id="cb432-2"><a href="ch_strings.html#cb432-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'#'</span></span>
+<span id="cb432-3"><a href="ch_strings.html#cb432-3" aria-hidden="true" tabindex="-1"></a>&gt; '  abc  '.trim()</span>
+<span id="cb432-4"><a href="ch_strings.html#cb432-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'abc'</span></span></code></pre></div></li>
+<li><p><span id="String.prototype.trimEnd" class="texlabel"><code>.trimEnd(): string</code> <sup>[ES2019]</sup></span></p>
+<p>Similar to <code>.trim()</code> but only the end of the string is trimmed:</p>
+<div class="sourceCode" id="cb433"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb433-1"><a href="ch_strings.html#cb433-1" aria-hidden="true" tabindex="-1"></a>&gt; '  abc  '.trimEnd()</span>
+<span id="cb433-2"><a href="ch_strings.html#cb433-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'  abc'</span></span></code></pre></div></li>
+<li><p><span id="String.prototype.trimStart" class="texlabel"><code>.trimStart(): string</code> <sup>[ES2019]</sup></span></p>
+<p>Similar to <code>.trim()</code> but only the beginning of the string is trimmed:</p>
+<div class="sourceCode" id="cb434"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb434-1"><a href="ch_strings.html#cb434-1" aria-hidden="true" tabindex="-1"></a>&gt; '  abc  '.trimStart()</span>
+<span id="cb434-2"><a href="ch_strings.html#cb434-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'abc  '</span></span></code></pre></div></li>
+</ul>
+<h4 id="sources-2">20.7.8 Sources</h4>
+<ul>
+<li><a href="https://github.com/Microsoft/TypeScript/blob/master/lib/">TypeScript’s built-in typings</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">MDN web docs for JavaScript</a></li>
+<li><a href="https://tc39.github.io/ecma262/">ECMAScript language specification</a></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Using string methods</strong></p>
+<p><code>exercises/strings/remove_extension_test.mjs</code></p>
+</div>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/13">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_template-literals.html">21 Using template literals and tagged templates</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

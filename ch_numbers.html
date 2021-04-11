@@ -1,0 +1,1067 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_numbers">16 Numbers</h2>
+<p><a id="index-entry-132" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>16.1 <a href="ch_numbers.html#numbers-are-used-for-both-floating-point-numbers-and-integers">Numbers are used for both floating point numbers and integers</a></li>
+<li>16.2 <a href="ch_numbers.html#number-literals">Number literals</a>
+<ul>
+<li>16.2.1 <a href="ch_numbers.html#integer-literals">Integer literals</a></li>
+<li>16.2.2 <a href="ch_numbers.html#floating-point-literals">Floating point literals</a></li>
+<li>16.2.3 <a href="ch_numbers.html#syntactic-pitfall-properties-of-integer-literals">Syntactic pitfall: properties of integer literals</a></li>
+<li>16.2.4 <a href="ch_numbers.html#numeric-separator-number-literals">Underscores (<code>_</code>) as separators in number literals [ES2021]</a></li>
+</ul></li>
+<li>16.3 <a href="ch_numbers.html#arithmetic-operators">Arithmetic operators</a>
+<ul>
+<li>16.3.1 <a href="ch_numbers.html#binary-arithmetic-operators">Binary arithmetic operators</a></li>
+<li>16.3.2 <a href="ch_numbers.html#unary-plus-and-negation--">Unary plus (<code>+</code>) and negation (<code>-</code>)</a></li>
+<li>16.3.3 <a href="ch_numbers.html#incrementing-and-decrementing---">Incrementing (<code>++</code>) and decrementing (<code>--</code>)</a></li>
+</ul></li>
+<li>16.4 <a href="ch_numbers.html#converting-to-number">Converting to number</a></li>
+<li>16.5 <a href="ch_numbers.html#error-values">Error values</a>
+<ul>
+<li>16.5.1 <a href="ch_numbers.html#nan">Error value: <code>NaN</code></a></li>
+<li>16.5.2 <a href="ch_numbers.html#error-value-infinity">Error value: <code>Infinity</code></a></li>
+</ul></li>
+<li>16.6 <a href="ch_numbers.html#the-precision-of-numbers-careful-with-decimal-fractions">The precision of numbers: careful with decimal fractions</a></li>
+<li>16.7 <a href="ch_numbers.html#advanced-2">(Advanced)</a></li>
+<li>16.8 <a href="ch_numbers.html#background-floating-point-precision">Background: floating point precision</a>
+<ul>
+<li>16.8.1 <a href="ch_numbers.html#a-simplified-representation-of-floating-point-numbers">A simplified representation of floating point numbers</a></li>
+</ul></li>
+<li>16.9 <a href="ch_numbers.html#integer-numbers-in-javascript">Integer numbers in JavaScript</a>
+<ul>
+<li>16.9.1 <a href="ch_numbers.html#converting-to-integer">Converting to integer</a></li>
+<li>16.9.2 <a href="ch_numbers.html#ranges-of-integer-numbers-in-javascript">Ranges of integer numbers in JavaScript</a></li>
+<li>16.9.3 <a href="ch_numbers.html#safe-integers">Safe integers</a></li>
+</ul></li>
+<li>16.10 <a href="ch_numbers.html#bitwise-operators">Bitwise operators</a>
+<ul>
+<li>16.10.1 <a href="ch_numbers.html#internally-bitwise-operators-work-with-32-bit-integers">Internally, bitwise operators work with 32-bit integers</a></li>
+<li>16.10.2 <a href="ch_numbers.html#bitwise-not">Bitwise Not</a></li>
+<li>16.10.3 <a href="ch_numbers.html#binary-bitwise-operators">Binary bitwise operators</a></li>
+<li>16.10.4 <a href="ch_numbers.html#bitwise-shift-operators">Bitwise shift operators</a></li>
+<li>16.10.5 <a href="ch_numbers.html#b32"><code>b32()</code>: displaying unsigned 32-bit integers in binary notation</a></li>
+</ul></li>
+<li>16.11 <a href="ch_numbers.html#quick-reference-numbers">Quick reference: numbers</a>
+<ul>
+<li>16.11.1 <a href="ch_numbers.html#global-functions-for-numbers">Global functions for numbers</a></li>
+<li>16.11.2 <a href="ch_numbers.html#static-properties-of-number">Static properties of <code>Number</code></a></li>
+<li>16.11.3 <a href="ch_numbers.html#static-methods-of-number">Static methods of <code>Number</code></a></li>
+<li>16.11.4 <a href="ch_numbers.html#methods-of-number.prototype">Methods of <code>Number.prototype</code></a></li>
+<li>16.11.5 <a href="ch_numbers.html#sources">Sources</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>JavaScript has two kinds of numeric values:</p>
+<ul>
+<li><em>Numbers</em> are 64-bit floating point numbers and are also used for smaller integers (within a range of plus/minus 53 bits).</li>
+<li><em>Bigints</em> represent integers with an arbitrary precision.</li>
+</ul>
+<p>This chapter covers numbers. Bigints are covered <a href="ch_bigints.html">later in this book</a>.</p>
+<h3 id="numbers-are-used-for-both-floating-point-numbers-and-integers">16.1 Numbers are used for both floating point numbers and integers</h3>
+<p>The type <code>number</code> is used for both integers and floating point numbers in JavaScript:</p>
+<div class="sourceCode" id="cb239"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb239-1"><a href="ch_numbers.html#cb239-1" aria-hidden="true" tabindex="-1"></a><span class="dv">98</span></span>
+<span id="cb239-2"><a href="ch_numbers.html#cb239-2" aria-hidden="true" tabindex="-1"></a><span class="fl">123.45</span></span></code></pre></div>
+<p>However, all numbers are <em>doubles</em>, 64-bit floating point numbers implemented according to the <em>IEEE Standard for Floating-Point Arithmetic</em> (IEEE 754).</p>
+<p>Integer numbers are simply floating point numbers without a decimal fraction:</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb240-1"><a href="ch_numbers.html#cb240-1" aria-hidden="true" tabindex="-1"></a>&gt; 98 === 98.0</span>
+<span id="cb240-2"><a href="ch_numbers.html#cb240-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Note that, under the hood, most JavaScript engines are often able to use real integers, with all associated performance and storage size benefits.</p>
+<h3 id="number-literals">16.2 Number literals</h3>
+<p>Let’s examine literals for numbers.</p>
+<h4 id="integer-literals">16.2.1 Integer literals</h4>
+<p><a id="index-entry-133" class="index-entry"></a><a id="index-entry-134" class="index-entry"></a><a id="index-entry-135" class="index-entry"></a><a id="index-entry-136" class="index-entry"></a></p>
+<p>Several <em>integer literals</em> let us express integers with various bases:</p>
+<div class="sourceCode" id="cb241"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb241-1"><a href="ch_numbers.html#cb241-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Binary (base 2)</span></span>
+<span id="cb241-2"><a href="ch_numbers.html#cb241-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bn">0b11</span><span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span> <span class="co">// ES6</span></span>
+<span id="cb241-3"><a href="ch_numbers.html#cb241-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb241-4"><a href="ch_numbers.html#cb241-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Octal (base 8)</span></span>
+<span id="cb241-5"><a href="ch_numbers.html#cb241-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bn">0o10</span><span class="op">,</span> <span class="dv">8</span>)<span class="op">;</span> <span class="co">// ES6</span></span>
+<span id="cb241-6"><a href="ch_numbers.html#cb241-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb241-7"><a href="ch_numbers.html#cb241-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Decimal (base 10)</span></span>
+<span id="cb241-8"><a href="ch_numbers.html#cb241-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">35</span><span class="op">,</span> <span class="dv">35</span>)<span class="op">;</span></span>
+<span id="cb241-9"><a href="ch_numbers.html#cb241-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb241-10"><a href="ch_numbers.html#cb241-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Hexadecimal (base 16)</span></span>
+<span id="cb241-11"><a href="ch_numbers.html#cb241-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bn">0xE7</span><span class="op">,</span> <span class="dv">231</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="floating-point-literals">16.2.2 Floating point literals</h4>
+<p><a id="index-entry-137" class="index-entry"></a><a id="index-entry-138" class="index-entry"></a></p>
+<p>Floating point numbers can only be expressed in base 10.</p>
+<p>Fractions:</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb242-1"><a href="ch_numbers.html#cb242-1" aria-hidden="true" tabindex="-1"></a>&gt; 35.0</span>
+<span id="cb242-2"><a href="ch_numbers.html#cb242-2" aria-hidden="true" tabindex="-1"></a><span class="kw">35</span></span></code></pre></div>
+<p>Exponent: <code>eN</code> means ×10<sup>N</sup></p>
+<div class="sourceCode" id="cb243"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb243-1"><a href="ch_numbers.html#cb243-1" aria-hidden="true" tabindex="-1"></a>&gt; 3e2</span>
+<span id="cb243-2"><a href="ch_numbers.html#cb243-2" aria-hidden="true" tabindex="-1"></a><span class="kw">300</span></span>
+<span id="cb243-3"><a href="ch_numbers.html#cb243-3" aria-hidden="true" tabindex="-1"></a>&gt; 3e-2</span>
+<span id="cb243-4"><a href="ch_numbers.html#cb243-4" aria-hidden="true" tabindex="-1"></a><span class="kw">0.03</span></span>
+<span id="cb243-5"><a href="ch_numbers.html#cb243-5" aria-hidden="true" tabindex="-1"></a>&gt; 0.3e2</span>
+<span id="cb243-6"><a href="ch_numbers.html#cb243-6" aria-hidden="true" tabindex="-1"></a><span class="kw">30</span></span></code></pre></div>
+<h4 id="syntactic-pitfall-properties-of-integer-literals">16.2.3 Syntactic pitfall: properties of integer literals</h4>
+<p>Accessing a property of an integer literal entails a pitfall: If the integer literal is immediately followed by a dot, then that dot is interpreted as a decimal dot:</p>
+<pre class="text"><code>7.toString(); // syntax error</code></pre>
+<p>There are four ways to work around this pitfall:</p>
+<div class="sourceCode" id="cb245"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb245-1"><a href="ch_numbers.html#cb245-1" aria-hidden="true" tabindex="-1"></a><span class="dv">7</span><span class="op">.</span><span class="fl">0.</span><span class="fu">toString</span>()</span>
+<span id="cb245-2"><a href="ch_numbers.html#cb245-2" aria-hidden="true" tabindex="-1"></a>(<span class="dv">7</span>)<span class="op">.</span><span class="fu">toString</span>()</span>
+<span id="cb245-3"><a href="ch_numbers.html#cb245-3" aria-hidden="true" tabindex="-1"></a><span class="dv">7</span><span class="op">..</span><span class="fu">toString</span>()</span>
+<span id="cb245-4"><a href="ch_numbers.html#cb245-4" aria-hidden="true" tabindex="-1"></a><span class="dv">7</span> <span class="op">.</span><span class="fu">toString</span>()  <span class="co">// space before dot</span></span></code></pre></div>
+<h4 id="numeric-separator-number-literals">16.2.4 Underscores (<code>_</code>) as separators in number literals [ES2021]</h4>
+<p>Grouping digits to make long numbers more readable has a long tradition. For example:</p>
+<ul>
+<li>In 1825, London had 1,335,000 inhabitants.</li>
+<li>The distance between Earth and Sun is 149,600,000 km.</li>
+</ul>
+<p>Since ES2021, we can use underscores as separators in number literals:</p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb246-1"><a href="ch_numbers.html#cb246-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> inhabitantsOfLondon <span class="op">=</span> 1_335_000<span class="op">;</span></span>
+<span id="cb246-2"><a href="ch_numbers.html#cb246-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> distanceEarthSunInKm <span class="op">=</span> 149_600_000<span class="op">;</span></span></code></pre></div>
+<p>With other bases, grouping is important, too:</p>
+<div class="sourceCode" id="cb247"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb247-1"><a href="ch_numbers.html#cb247-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> fileSystemPermission <span class="op">=</span> <span class="bn">0b111</span>_111_000<span class="op">;</span></span>
+<span id="cb247-2"><a href="ch_numbers.html#cb247-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> bytes <span class="op">=</span> <span class="bn">0b1111</span>_10101011_11110000_00001101<span class="op">;</span></span>
+<span id="cb247-3"><a href="ch_numbers.html#cb247-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> words <span class="op">=</span> 0xFAB_F00D<span class="op">;</span></span></code></pre></div>
+<p>We can also use the separator in fractions and exponents:</p>
+<div class="sourceCode" id="cb248"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb248-1"><a href="ch_numbers.html#cb248-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> massOfElectronInKg <span class="op">=</span> <span class="fl">9.109</span>_383_56e<span class="dv">-31</span><span class="op">;</span></span>
+<span id="cb248-2"><a href="ch_numbers.html#cb248-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> trillionInShortScale <span class="op">=</span> <span class="fl">1e1</span>_2<span class="op">;</span></span></code></pre></div>
+<h5 id="where-can-we-put-separators">16.2.4.1 Where can we put separators?</h5>
+<p>The locations of separators are restricted in two ways:</p>
+<ul>
+<li><p>We can only put underscores between two digits. Therefore, all of the following number literals are illegal:</p>
+<div class="sourceCode" id="cb249"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb249-1"><a href="ch_numbers.html#cb249-1" aria-hidden="true" tabindex="-1"></a>3_<span class="op">.</span><span class="dv">141</span></span>
+<span id="cb249-2"><a href="ch_numbers.html#cb249-2" aria-hidden="true" tabindex="-1"></a><span class="fl">3.</span>_141</span>
+<span id="cb249-3"><a href="ch_numbers.html#cb249-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb249-4"><a href="ch_numbers.html#cb249-4" aria-hidden="true" tabindex="-1"></a>1_e12</span>
+<span id="cb249-5"><a href="ch_numbers.html#cb249-5" aria-hidden="true" tabindex="-1"></a>1e_12</span>
+<span id="cb249-6"><a href="ch_numbers.html#cb249-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb249-7"><a href="ch_numbers.html#cb249-7" aria-hidden="true" tabindex="-1"></a>_1464301  <span class="co">// valid variable name!</span></span>
+<span id="cb249-8"><a href="ch_numbers.html#cb249-8" aria-hidden="true" tabindex="-1"></a>1464301_</span>
+<span id="cb249-9"><a href="ch_numbers.html#cb249-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb249-10"><a href="ch_numbers.html#cb249-10" aria-hidden="true" tabindex="-1"></a>0_b111111000</span>
+<span id="cb249-11"><a href="ch_numbers.html#cb249-11" aria-hidden="true" tabindex="-1"></a>0b_111111000</span></code></pre></div></li>
+<li><p>We can’t use more than one underscore in a row:</p>
+<div class="sourceCode" id="cb250"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb250-1"><a href="ch_numbers.html#cb250-1" aria-hidden="true" tabindex="-1"></a>123__456 <span class="co">// two underscores – not allowed</span></span></code></pre></div></li>
+</ul>
+<p>The motivation behind these restrictions is to keep parsing simple and to avoid strange edge cases.</p>
+<h5 id="parsing-numbers-with-separators">16.2.4.2 Parsing numbers with separators</h5>
+<p>The following functions for parsing numbers do not support separators:</p>
+<ul>
+<li><code>Number()</code></li>
+<li><code>parseInt()</code></li>
+<li><code>parseFloat()</code></li>
+</ul>
+<p>For example:</p>
+<div class="sourceCode" id="cb251"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb251-1"><a href="ch_numbers.html#cb251-1" aria-hidden="true" tabindex="-1"></a>&gt; Number('123_456')</span>
+<span id="cb251-2"><a href="ch_numbers.html#cb251-2" aria-hidden="true" tabindex="-1"></a><span class="kw">NaN</span></span>
+<span id="cb251-3"><a href="ch_numbers.html#cb251-3" aria-hidden="true" tabindex="-1"></a>&gt; parseInt('123_456')</span>
+<span id="cb251-4"><a href="ch_numbers.html#cb251-4" aria-hidden="true" tabindex="-1"></a><span class="kw">123</span></span></code></pre></div>
+<p>The rationale is that numeric separators are for code. Other kinds of input should be processed differently.</p>
+<h3 id="arithmetic-operators">16.3 Arithmetic operators</h3>
+<h4 id="binary-arithmetic-operators">16.3.1 Binary arithmetic operators</h4>
+<p><a id="index-entry-139" class="index-entry"></a><a id="index-entry-140" class="index-entry"></a><a id="index-entry-141" class="index-entry"></a> <a id="index-entry-142" class="index-entry"></a><a id="index-entry-143" class="index-entry"></a><a id="index-entry-144" class="index-entry"></a> <a id="index-entry-145" class="index-entry"></a><a id="index-entry-146" class="index-entry"></a><a id="index-entry-147" class="index-entry"></a> <a id="index-entry-148" class="index-entry"></a><a id="index-entry-149" class="index-entry"></a> <a id="index-entry-150" class="index-entry"></a><a id="index-entry-151" class="index-entry"></a><a id="index-entry-152" class="index-entry"></a></p>
+<p>Tbl.&nbsp;<a href="#tbl:binary-arithmetic-operators">5</a> lists JavaScript’s binary arithmetic operators.</p>
+<div id="tbl:binary-arithmetic-operators">
+<table>
+<caption>Table 5: Binary arithmetic operators.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Operator</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>n + m</code></td>
+<td style="text-align: left;">Addition</td>
+<td style="text-align: left;">ES1</td>
+<td style="text-align: left;"><code>3 + 4</code> <code>→</code> <code>7</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>n - m</code></td>
+<td style="text-align: left;">Subtraction</td>
+<td style="text-align: left;">ES1</td>
+<td style="text-align: left;"><code>9 - 1</code> <code>→</code> <code>8</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>n * m</code></td>
+<td style="text-align: left;">Multiplication</td>
+<td style="text-align: left;">ES1</td>
+<td style="text-align: left;"><code>3 * 2.25</code> <code>→</code> <code>6.75</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>n / m</code></td>
+<td style="text-align: left;">Division</td>
+<td style="text-align: left;">ES1</td>
+<td style="text-align: left;"><code>5.625 / 5</code> <code>→</code> <code>1.125</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>n % m</code></td>
+<td style="text-align: left;">Remainder</td>
+<td style="text-align: left;">ES1</td>
+<td style="text-align: left;"><code>8 % 5</code> <code>→</code> <code>3</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>-8 % 5</code> <code>→</code> <code>-3</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>n ** m</code></td>
+<td style="text-align: left;">Exponentiation</td>
+<td style="text-align: left;">ES2016</td>
+<td style="text-align: left;"><code>4 ** 2</code> <code>→</code> <code>16</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="is-a-remainder-operator">16.3.1.1 <code>%</code> is a remainder operator</h5>
+<p><code>%</code> is a remainder operator, not a modulo operator. Its result has the sign of the first operand:</p>
+<div class="sourceCode" id="cb252"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb252-1"><a href="ch_numbers.html#cb252-1" aria-hidden="true" tabindex="-1"></a>&gt; 5 % 3</span>
+<span id="cb252-2"><a href="ch_numbers.html#cb252-2" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span>
+<span id="cb252-3"><a href="ch_numbers.html#cb252-3" aria-hidden="true" tabindex="-1"></a>&gt; -5 % 3</span>
+<span id="cb252-4"><a href="ch_numbers.html#cb252-4" aria-hidden="true" tabindex="-1"></a><span class="kw">-2</span></span></code></pre></div>
+<p>For more information on the difference between remainder and modulo, see the blog post <a href="https://2ality.com/2019/08/remainder-vs-modulo.html">“Remainder operator vs.&nbsp;modulo operator (with JavaScript code)”</a> on 2ality.</p>
+<h4 id="unary-plus-and-negation--">16.3.2 Unary plus (<code>+</code>) and negation (<code>-</code>)</h4>
+<p><a id="index-entry-153" class="index-entry"></a><a id="index-entry-154" class="index-entry"></a> <a id="index-entry-155" class="index-entry"></a><a id="index-entry-156" class="index-entry"></a></p>
+<p>Tbl.&nbsp;<a href="#tbl:unary-plus-negation">6</a> summarizes the two operators <em>unary plus</em> (<code>+</code>) and <em>negation</em> (<code>-</code>).</p>
+<div id="tbl:unary-plus-negation">
+<table>
+<caption>Table 6: The operators unary plus (<code>+</code>) and negation (<code>-</code>).</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Operator</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>+n</code></td>
+<td style="text-align: left;">Unary plus</td>
+<td style="text-align: left;">ES1</td>
+<td style="text-align: left;"><code>+(-7)</code> <code>→</code> <code>-7</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>-n</code></td>
+<td style="text-align: left;">Unary negation</td>
+<td style="text-align: left;">ES1</td>
+<td style="text-align: left;"><code>-(-7)</code> <code>→</code> <code>7</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Both operators coerce their operands to numbers:</p>
+<div class="sourceCode" id="cb253"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb253-1"><a href="ch_numbers.html#cb253-1" aria-hidden="true" tabindex="-1"></a>&gt; +'5'</span>
+<span id="cb253-2"><a href="ch_numbers.html#cb253-2" aria-hidden="true" tabindex="-1"></a><span class="kw">5</span></span>
+<span id="cb253-3"><a href="ch_numbers.html#cb253-3" aria-hidden="true" tabindex="-1"></a>&gt; +'-12'</span>
+<span id="cb253-4"><a href="ch_numbers.html#cb253-4" aria-hidden="true" tabindex="-1"></a><span class="kw">-12</span></span>
+<span id="cb253-5"><a href="ch_numbers.html#cb253-5" aria-hidden="true" tabindex="-1"></a>&gt; -'9'</span>
+<span id="cb253-6"><a href="ch_numbers.html#cb253-6" aria-hidden="true" tabindex="-1"></a><span class="kw">-9</span></span></code></pre></div>
+<p>Thus, unary plus lets us convert arbitrary values to numbers.</p>
+<h4 id="incrementing-and-decrementing---">16.3.3 Incrementing (<code>++</code>) and decrementing (<code>--</code>)</h4>
+<p><a id="index-entry-157" class="index-entry"></a><a id="index-entry-158" class="index-entry"></a> <a id="index-entry-159" class="index-entry"></a><a id="index-entry-160" class="index-entry"></a> <a id="index-entry-161" class="index-entry"></a><a id="index-entry-162" class="index-entry"></a> <a id="index-entry-163" class="index-entry"></a><a id="index-entry-164" class="index-entry"></a></p>
+<p>The incrementation operator <code>++</code> exists in a prefix version and a suffix version. In both versions, it destructively adds one to its operand. Therefore, its operand must be a storage location that can be changed.</p>
+<p>The decrementation operator <code>--</code> works the same, but subtracts one from its operand. The next two examples explain the difference between the prefix and the suffix version.</p>
+<p>Tbl.&nbsp;<a href="#tbl:incrementing-decrementing">7</a> summarizes the incrementation and decrementation operators.</p>
+<div id="tbl:incrementing-decrementing">
+<table>
+<caption>Table 7: Incrementation operators and decrementation operators.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Operator</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>v++</code></td>
+<td style="text-align: left;">Increment</td>
+<td style="text-align: left;">ES1</td>
+<td style="text-align: left;"><code>let v=0; [v++, v]</code> <code>→</code> <code>[0, 1]</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>++v</code></td>
+<td style="text-align: left;">Increment</td>
+<td style="text-align: left;">ES1</td>
+<td style="text-align: left;"><code>let v=0; [++v, v]</code> <code>→</code> <code>[1, 1]</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>v--</code></td>
+<td style="text-align: left;">Decrement</td>
+<td style="text-align: left;">ES1</td>
+<td style="text-align: left;"><code>let v=1; [v--, v]</code> <code>→</code> <code>[1, 0]</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>--v</code></td>
+<td style="text-align: left;">Decrement</td>
+<td style="text-align: left;">ES1</td>
+<td style="text-align: left;"><code>let v=1; [--v, v]</code> <code>→</code> <code>[0, 0]</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Next, we’ll look at examples of these operators in use.</p>
+<p>Prefix <code>++</code> and prefix <code>--</code> change their operands and then return them.</p>
+<div class="sourceCode" id="cb254"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb254-1"><a href="ch_numbers.html#cb254-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> foo <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb254-2"><a href="ch_numbers.html#cb254-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="op">++</span>foo<span class="op">,</span> <span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb254-3"><a href="ch_numbers.html#cb254-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(foo<span class="op">,</span> <span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb254-4"><a href="ch_numbers.html#cb254-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb254-5"><a href="ch_numbers.html#cb254-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> bar <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb254-6"><a href="ch_numbers.html#cb254-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="op">--</span>bar<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb254-7"><a href="ch_numbers.html#cb254-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(bar<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span></code></pre></div>
+<p>Suffix <code>++</code> and suffix <code>--</code> return their operands and then change them.</p>
+<div class="sourceCode" id="cb255"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb255-1"><a href="ch_numbers.html#cb255-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> foo <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb255-2"><a href="ch_numbers.html#cb255-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(foo<span class="op">++,</span> <span class="dv">3</span>)<span class="op">;</span></span>
+<span id="cb255-3"><a href="ch_numbers.html#cb255-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(foo<span class="op">,</span> <span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb255-4"><a href="ch_numbers.html#cb255-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb255-5"><a href="ch_numbers.html#cb255-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> bar <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb255-6"><a href="ch_numbers.html#cb255-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(bar<span class="op">--,</span> <span class="dv">3</span>)<span class="op">;</span></span>
+<span id="cb255-7"><a href="ch_numbers.html#cb255-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(bar<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="operands-not-just-variables">16.3.3.1 Operands: not just variables</h5>
+<p>We can also apply these operators to property values:</p>
+<div class="sourceCode" id="cb256"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb256-1"><a href="ch_numbers.html#cb256-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> { <span class="dt">a</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">;</span></span>
+<span id="cb256-2"><a href="ch_numbers.html#cb256-2" aria-hidden="true" tabindex="-1"></a><span class="op">++</span>obj<span class="op">.</span><span class="at">a</span><span class="op">;</span></span>
+<span id="cb256-3"><a href="ch_numbers.html#cb256-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">a</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span></code></pre></div>
+<p>And to Array elements:</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb257-1"><a href="ch_numbers.html#cb257-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [ <span class="dv">4</span> ]<span class="op">;</span></span>
+<span id="cb257-2"><a href="ch_numbers.html#cb257-2" aria-hidden="true" tabindex="-1"></a>arr[<span class="dv">0</span>]<span class="op">++;</span></span>
+<span id="cb257-3"><a href="ch_numbers.html#cb257-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr<span class="op">,</span> [<span class="dv">5</span>])<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Number operators</strong></p>
+<p><code>exercises/numbers-math/is_odd_test.mjs</code></p>
+</div>
+<h3 id="converting-to-number">16.4 Converting to number</h3>
+<p><a id="index-entry-165" class="index-entry"></a></p>
+<p>These are three ways of converting values to numbers:</p>
+<ul>
+<li><code>Number(value)</code></li>
+<li><code>+value</code></li>
+<li><code>parseFloat(value)</code> (avoid; different than the other two!)</li>
+</ul>
+<p>Recommendation: use the descriptive <code>Number()</code>. Tbl.&nbsp;<a href="#tbl:converting-values-to-numbers">8</a> summarizes how it works.</p>
+<div id="tbl:converting-values-to-numbers">
+<table>
+<caption>Table 8: Converting values to numbers.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><code>x</code></th>
+<th style="text-align: left;"><code>Number(x)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>undefined</code></td>
+<td style="text-align: left;"><code>NaN</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>null</code></td>
+<td style="text-align: left;"><code>+0</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;"><code>false</code> <code>→</code> <code>+0</code>, <code>true</code> <code>→</code> <code>1</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">number</td>
+<td style="text-align: left;"><code>x</code> (no change)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">bigint</td>
+<td style="text-align: left;">Throws <code>TypeError</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><code>''</code> <code>→</code> <code>+0</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Other <code>→</code> parsed number, ignoring leading/trailing whitespace</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">symbol</td>
+<td style="text-align: left;">Throws <code>TypeError</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">Configurable (e.g.&nbsp;via <code>.valueOf()</code>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Examples:</p>
+<div class="sourceCode" id="cb258"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb258-1"><a href="ch_numbers.html#cb258-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span>(<span class="fl">123.45</span>)<span class="op">,</span> <span class="fl">123.45</span>)<span class="op">;</span></span>
+<span id="cb258-2"><a href="ch_numbers.html#cb258-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb258-3"><a href="ch_numbers.html#cb258-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span>(<span class="st">''</span>)<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb258-4"><a href="ch_numbers.html#cb258-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span>(<span class="st">'</span><span class="sc">\n</span><span class="st"> 123.45 </span><span class="sc">\t</span><span class="st">'</span>)<span class="op">,</span> <span class="fl">123.45</span>)<span class="op">;</span></span>
+<span id="cb258-5"><a href="ch_numbers.html#cb258-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span>(<span class="st">'xyz'</span>)<span class="op">,</span> <span class="kw">NaN</span>)<span class="op">;</span></span></code></pre></div>
+<p>How objects are converted to numbers can be configured – for example, by overriding <code>.valueOf()</code>:</p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb259-1"><a href="ch_numbers.html#cb259-1" aria-hidden="true" tabindex="-1"></a>&gt; Number({ valueOf() { return 123 } })</span>
+<span id="cb259-2"><a href="ch_numbers.html#cb259-2" aria-hidden="true" tabindex="-1"></a><span class="kw">123</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Converting to number</strong></p>
+<p><code>exercises/numbers-math/parse_number_test.mjs</code></p>
+</div>
+<h3 id="error-values">16.5 Error values</h3>
+<p>Two number values are returned when errors happen:</p>
+<ul>
+<li><code>NaN</code></li>
+<li><code>Infinity</code></li>
+</ul>
+<h4 id="nan">16.5.1 Error value: <code>NaN</code></h4>
+<p><a id="index-entry-166" class="index-entry"></a></p>
+<p><code>NaN</code> is an abbreviation of “not a number”. Ironically, JavaScript considers it to be a number:</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb260-1"><a href="ch_numbers.html#cb260-1" aria-hidden="true" tabindex="-1"></a>&gt; typeof NaN</span>
+<span id="cb260-2"><a href="ch_numbers.html#cb260-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'number'</span></span></code></pre></div>
+<p>When is <code>NaN</code> returned?</p>
+<p><code>NaN</code> is returned if a number can’t be parsed:</p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb261-1"><a href="ch_numbers.html#cb261-1" aria-hidden="true" tabindex="-1"></a>&gt; Number('$$$')</span>
+<span id="cb261-2"><a href="ch_numbers.html#cb261-2" aria-hidden="true" tabindex="-1"></a><span class="kw">NaN</span></span>
+<span id="cb261-3"><a href="ch_numbers.html#cb261-3" aria-hidden="true" tabindex="-1"></a>&gt; Number(undefined)</span>
+<span id="cb261-4"><a href="ch_numbers.html#cb261-4" aria-hidden="true" tabindex="-1"></a><span class="kw">NaN</span></span></code></pre></div>
+<p><code>NaN</code> is returned if an operation can’t be performed:</p>
+<div class="sourceCode" id="cb262"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb262-1"><a href="ch_numbers.html#cb262-1" aria-hidden="true" tabindex="-1"></a>&gt; Math.log(-1)</span>
+<span id="cb262-2"><a href="ch_numbers.html#cb262-2" aria-hidden="true" tabindex="-1"></a><span class="kw">NaN</span></span>
+<span id="cb262-3"><a href="ch_numbers.html#cb262-3" aria-hidden="true" tabindex="-1"></a>&gt; Math.sqrt(-1)</span>
+<span id="cb262-4"><a href="ch_numbers.html#cb262-4" aria-hidden="true" tabindex="-1"></a><span class="kw">NaN</span></span></code></pre></div>
+<p><code>NaN</code> is returned if an operand or argument is <code>NaN</code> (to propagate errors):</p>
+<div class="sourceCode" id="cb263"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb263-1"><a href="ch_numbers.html#cb263-1" aria-hidden="true" tabindex="-1"></a>&gt; NaN - 3</span>
+<span id="cb263-2"><a href="ch_numbers.html#cb263-2" aria-hidden="true" tabindex="-1"></a><span class="kw">NaN</span></span>
+<span id="cb263-3"><a href="ch_numbers.html#cb263-3" aria-hidden="true" tabindex="-1"></a>&gt; 7 ** NaN</span>
+<span id="cb263-4"><a href="ch_numbers.html#cb263-4" aria-hidden="true" tabindex="-1"></a><span class="kw">NaN</span></span></code></pre></div>
+<h5 id="checking-for-nan">16.5.1.1 Checking for <code>NaN</code></h5>
+<p><code>NaN</code> is the only JavaScript value that is not strictly equal to itself:</p>
+<div class="sourceCode" id="cb264"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb264-1"><a href="ch_numbers.html#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> n <span class="op">=</span> <span class="kw">NaN</span><span class="op">;</span></span>
+<span id="cb264-2"><a href="ch_numbers.html#cb264-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(n <span class="op">===</span> n<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span></code></pre></div>
+<p>These are several ways of checking if a value <code>x</code> is <code>NaN</code>:</p>
+<div class="sourceCode" id="cb265"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb265-1"><a href="ch_numbers.html#cb265-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> <span class="kw">NaN</span><span class="op">;</span></span>
+<span id="cb265-2"><a href="ch_numbers.html#cb265-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb265-3"><a href="ch_numbers.html#cb265-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span><span class="op">.</span><span class="fu">isNaN</span>(x)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span> <span class="co">// preferred</span></span>
+<span id="cb265-4"><a href="ch_numbers.html#cb265-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">is</span>(x<span class="op">,</span> <span class="kw">NaN</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb265-5"><a href="ch_numbers.html#cb265-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(x <span class="op">!==</span> x<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div>
+<p>In the last line, we use the comparison quirk to detect <code>NaN</code>.</p>
+<h5 id="finding-nan-in-arrays">16.5.1.2 Finding <code>NaN</code> in Arrays</h5>
+<p>Some Array methods can’t find <code>NaN</code>:</p>
+<div class="sourceCode" id="cb266"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb266-1"><a href="ch_numbers.html#cb266-1" aria-hidden="true" tabindex="-1"></a>&gt; [NaN].indexOf(NaN)</span>
+<span id="cb266-2"><a href="ch_numbers.html#cb266-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-1</span></span></code></pre></div>
+<p>Others can:</p>
+<div class="sourceCode" id="cb267"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb267-1"><a href="ch_numbers.html#cb267-1" aria-hidden="true" tabindex="-1"></a>&gt; [NaN].includes(NaN)</span>
+<span id="cb267-2"><a href="ch_numbers.html#cb267-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb267-3"><a href="ch_numbers.html#cb267-3" aria-hidden="true" tabindex="-1"></a>&gt; [NaN].findIndex(x =&gt; Number.isNaN(x))</span>
+<span id="cb267-4"><a href="ch_numbers.html#cb267-4" aria-hidden="true" tabindex="-1"></a><span class="kw">0</span></span>
+<span id="cb267-5"><a href="ch_numbers.html#cb267-5" aria-hidden="true" tabindex="-1"></a>&gt; [NaN].find(x =&gt; Number.isNaN(x))</span>
+<span id="cb267-6"><a href="ch_numbers.html#cb267-6" aria-hidden="true" tabindex="-1"></a><span class="kw">NaN</span></span></code></pre></div>
+<p>Alas, there is no simple rule of thumb. We have to check for each method how it handles <code>NaN</code>.</p>
+<h4 id="error-value-infinity">16.5.2 Error value: <code>Infinity</code></h4>
+<p><a id="index-entry-167" class="index-entry"></a></p>
+<p>When is the error value <code>Infinity</code> returned?</p>
+<p>Infinity is returned if a number is too large:</p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb268-1"><a href="ch_numbers.html#cb268-1" aria-hidden="true" tabindex="-1"></a>&gt; Math.pow(2, 1023)</span>
+<span id="cb268-2"><a href="ch_numbers.html#cb268-2" aria-hidden="true" tabindex="-1"></a><span class="kw">8.98846567431158e+307</span></span>
+<span id="cb268-3"><a href="ch_numbers.html#cb268-3" aria-hidden="true" tabindex="-1"></a>&gt; Math.pow(2, 1024)</span>
+<span id="cb268-4"><a href="ch_numbers.html#cb268-4" aria-hidden="true" tabindex="-1"></a><span class="kw">Infinity</span></span></code></pre></div>
+<p>Infinity is returned if there is a division by zero:</p>
+<div class="sourceCode" id="cb269"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb269-1"><a href="ch_numbers.html#cb269-1" aria-hidden="true" tabindex="-1"></a>&gt; 5 / 0</span>
+<span id="cb269-2"><a href="ch_numbers.html#cb269-2" aria-hidden="true" tabindex="-1"></a><span class="kw">Infinity</span></span>
+<span id="cb269-3"><a href="ch_numbers.html#cb269-3" aria-hidden="true" tabindex="-1"></a>&gt; -5 / 0</span>
+<span id="cb269-4"><a href="ch_numbers.html#cb269-4" aria-hidden="true" tabindex="-1"></a><span class="kw">-Infinity</span></span></code></pre></div>
+<h5 id="infinity-as-a-default-value">16.5.2.1 <code>Infinity</code> as a default value</h5>
+<p><code>Infinity</code> is larger than all other numbers (except <code>NaN</code>), making it a good default value:</p>
+<div class="sourceCode" id="cb270"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb270-1"><a href="ch_numbers.html#cb270-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">findMinimum</span>(numbers) {</span>
+<span id="cb270-2"><a href="ch_numbers.html#cb270-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> min <span class="op">=</span> <span class="kw">Infinity</span><span class="op">;</span></span>
+<span id="cb270-3"><a href="ch_numbers.html#cb270-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> n <span class="kw">of</span> numbers) {</span>
+<span id="cb270-4"><a href="ch_numbers.html#cb270-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (n <span class="op">&lt;</span> min) min <span class="op">=</span> n<span class="op">;</span></span>
+<span id="cb270-5"><a href="ch_numbers.html#cb270-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb270-6"><a href="ch_numbers.html#cb270-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> min<span class="op">;</span></span>
+<span id="cb270-7"><a href="ch_numbers.html#cb270-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb270-8"><a href="ch_numbers.html#cb270-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb270-9"><a href="ch_numbers.html#cb270-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">findMinimum</span>([<span class="dv">5</span><span class="op">,</span> <span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>])<span class="op">,</span> <span class="op">-</span><span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb270-10"><a href="ch_numbers.html#cb270-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">findMinimum</span>([])<span class="op">,</span> <span class="kw">Infinity</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="checking-for-infinity">16.5.2.2 Checking for <code>Infinity</code></h5>
+<p>These are two common ways of checking if a value <code>x</code> is <code>Infinity</code>:</p>
+<div class="sourceCode" id="cb271"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb271-1"><a href="ch_numbers.html#cb271-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> <span class="kw">Infinity</span><span class="op">;</span></span>
+<span id="cb271-2"><a href="ch_numbers.html#cb271-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb271-3"><a href="ch_numbers.html#cb271-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(x <span class="op">===</span> <span class="kw">Infinity</span><span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb271-4"><a href="ch_numbers.html#cb271-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span><span class="op">.</span><span class="fu">isFinite</span>(x)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Comparing numbers</strong></p>
+<p><code>exercises/numbers-math/find_max_test.mjs</code></p>
+</div>
+<h3 id="the-precision-of-numbers-careful-with-decimal-fractions">16.6 The precision of numbers: careful with decimal fractions</h3>
+<p>Internally, JavaScript floating point numbers are represented with base 2 (according to the IEEE 754 standard). That means that decimal fractions (base 10) can’t always be represented precisely:</p>
+<div class="sourceCode" id="cb272"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb272-1"><a href="ch_numbers.html#cb272-1" aria-hidden="true" tabindex="-1"></a>&gt; 0.1 + 0.2</span>
+<span id="cb272-2"><a href="ch_numbers.html#cb272-2" aria-hidden="true" tabindex="-1"></a><span class="kw">0.30000000000000004</span></span>
+<span id="cb272-3"><a href="ch_numbers.html#cb272-3" aria-hidden="true" tabindex="-1"></a>&gt; 1.3 * 3</span>
+<span id="cb272-4"><a href="ch_numbers.html#cb272-4" aria-hidden="true" tabindex="-1"></a><span class="kw">3.9000000000000004</span></span>
+<span id="cb272-5"><a href="ch_numbers.html#cb272-5" aria-hidden="true" tabindex="-1"></a>&gt; 1.4 * 100000000000000</span>
+<span id="cb272-6"><a href="ch_numbers.html#cb272-6" aria-hidden="true" tabindex="-1"></a><span class="kw">139999999999999.98</span></span></code></pre></div>
+<p>We therefore need to take rounding errors into consideration when performing arithmetic in JavaScript.</p>
+<p>Read on for an explanation of this phenomenon.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz: basic</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+<h3 id="advanced-2">16.7 (Advanced)</h3>
+<p>All remaining sections of this chapter are advanced.</p>
+<h3 id="background-floating-point-precision">16.8 Background: floating point precision</h3>
+<p>In JavaScript, computations with numbers don’t always produce correct results – for example:</p>
+<div class="sourceCode" id="cb273"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb273-1"><a href="ch_numbers.html#cb273-1" aria-hidden="true" tabindex="-1"></a>&gt; 0.1 + 0.2</span>
+<span id="cb273-2"><a href="ch_numbers.html#cb273-2" aria-hidden="true" tabindex="-1"></a><span class="kw">0.30000000000000004</span></span></code></pre></div>
+<p>To understand why, we need to explore how JavaScript represents floating point numbers internally. It uses three integers to do so, which take up a total of 64 bits of storage (double precision):</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Component</th>
+<th style="text-align: left;">Size</th>
+<th style="text-align: left;">Integer range</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Sign</td>
+<td style="text-align: left;">1 bit</td>
+<td style="text-align: left;">[0, 1]</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fraction</td>
+<td style="text-align: left;">52 bits</td>
+<td style="text-align: left;">[0, 2<sup>52</sup>−1]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Exponent</td>
+<td style="text-align: left;">11 bits</td>
+<td style="text-align: left;">[−1023, 1024]</td>
+</tr>
+</tbody>
+</table>
+<p>The floating point number represented by these integers is computed as follows:</p>
+<blockquote>
+<p>(–1)<sup>sign</sup> × 0b1.fraction × 2<sup>exponent</sup></p>
+</blockquote>
+<p>This representation can’t encode a zero because its second component (involving the fraction) always has a leading 1. Therefore, a zero is encoded via the special exponent −1023 and a fraction 0.</p>
+<h4 id="a-simplified-representation-of-floating-point-numbers">16.8.1 A simplified representation of floating point numbers</h4>
+<p>To make further discussions easier, we simplify the previous representation:</p>
+<ul>
+<li>Instead of base 2 (binary), we use base 10 (decimal) because that’s what most people are more familiar with.</li>
+<li>The <em>fraction</em> is a natural number that is interpreted as a fraction (digits after a point). We switch to a <em>mantissa</em>, an integer that is interpreted as itself. As a consequence, the exponent is used differently, but its fundamental role doesn’t change.</li>
+<li>As the mantissa is an integer (with its own sign), we don’t need a separate sign, anymore.</li>
+</ul>
+<p>The new representation works like this:</p>
+<blockquote>
+<p>mantissa × 10<sup>exponent</sup></p>
+</blockquote>
+<p>Let’s try out this representation for a few floating point numbers.</p>
+<ul>
+<li><p>For the integer −123, we mainly need the mantissa:</p>
+<div class="sourceCode" id="cb274"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb274-1"><a href="ch_numbers.html#cb274-1" aria-hidden="true" tabindex="-1"></a>&gt; -123 * (10 ** 0)</span>
+<span id="cb274-2"><a href="ch_numbers.html#cb274-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-123</span></span></code></pre></div></li>
+<li><p>For the number 1.5, we imagine there being a point after the mantissa. We use a negative exponent to move that point one digit to the left:</p>
+<div class="sourceCode" id="cb275"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb275-1"><a href="ch_numbers.html#cb275-1" aria-hidden="true" tabindex="-1"></a>&gt; 15 * (10 ** -1)</span>
+<span id="cb275-2"><a href="ch_numbers.html#cb275-2" aria-hidden="true" tabindex="-1"></a><span class="kw">1.5</span></span></code></pre></div></li>
+<li><p>For the number 0.25, we move the point two digits to the left:</p>
+<div class="sourceCode" id="cb276"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb276-1"><a href="ch_numbers.html#cb276-1" aria-hidden="true" tabindex="-1"></a>&gt; 25 * (10 ** -2)</span>
+<span id="cb276-2"><a href="ch_numbers.html#cb276-2" aria-hidden="true" tabindex="-1"></a><span class="kw">0.25</span></span></code></pre></div></li>
+</ul>
+<p>Representations with negative exponents can also be written as fractions with positive exponents in the denominators:</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb277-1"><a href="ch_numbers.html#cb277-1" aria-hidden="true" tabindex="-1"></a>&gt; 15 * (10 ** -1) === 15 / (10 ** 1)</span>
+<span id="cb277-2"><a href="ch_numbers.html#cb277-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb277-3"><a href="ch_numbers.html#cb277-3" aria-hidden="true" tabindex="-1"></a>&gt; 25 * (10 ** -2) === 25 / (10 ** 2)</span>
+<span id="cb277-4"><a href="ch_numbers.html#cb277-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>These fractions help with understanding why there are numbers that our encoding cannot represent:</p>
+<ul>
+<li><p><code>1/10</code> can be represented. It already has the required format: a power of 10 in the denominator.</p></li>
+<li><p><code>1/2</code> can be represented as <code>5/10</code>. We turned the 2 in the denominator into a power of 10 by multiplying the numerator and denominator by 5.</p></li>
+<li><p><code>1/4</code> can be represented as <code>25/100</code>. We turned the 4 in the denominator into a power of 10 by multiplying the numerator and denominator by 25.</p></li>
+<li><p><code>1/3</code> cannot be represented. There is no way to turn the denominator into a power of 10. (The prime factors of 10 are 2 and 5. Therefore, any denominator that only has these prime factors can be converted to a power of 10, by multiplying both the numerator and denominator by enough twos and fives. If a denominator has a different prime factor, then there’s nothing we can do.)</p></li>
+</ul>
+<p>To conclude our excursion, we switch back to base 2:</p>
+<ul>
+<li><code>0.5 = 1/2</code> can be represented with base 2 because the denominator is already a power of 2.</li>
+<li><code>0.25 = 1/4</code> can be represented with base 2 because the denominator is already a power of 2.</li>
+<li><code>0.1 = 1/10</code> cannot be represented because the denominator cannot be converted to a power of 2.</li>
+<li><code>0.2 = 2/10</code> cannot be represented because the denominator cannot be converted to a power of 2.</li>
+</ul>
+<p>Now we can see why <code>0.1 + 0.2</code> doesn’t produce a correct result: internally, neither of the two operands can be represented precisely.</p>
+<p>The only way to compute precisely with decimal fractions is by internally switching to base 10. For many programming languages, base 2 is the default and base 10 an option. For example, Java has the class <a href="https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html"><code>BigDecimal</code></a> and Python has the module <a href="https://docs.python.org/3/library/decimal.html"><code>decimal</code></a>. There are tentative plans to add something similar to JavaScript: <a href="https://github.com/tc39/proposals/blob/master/stage-0-proposals.md">the ECMAScript proposal “Decimal”</a> is currently at stage 0.</p>
+<h3 id="integer-numbers-in-javascript">16.9 Integer numbers in JavaScript</h3>
+<p><a id="index-entry-168" class="index-entry"></a></p>
+<p>Integer numbers are normal (floating point) numbers without decimal fractions:</p>
+<div class="sourceCode" id="cb278"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb278-1"><a href="ch_numbers.html#cb278-1" aria-hidden="true" tabindex="-1"></a>&gt; 1 === 1.0</span>
+<span id="cb278-2"><a href="ch_numbers.html#cb278-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb278-3"><a href="ch_numbers.html#cb278-3" aria-hidden="true" tabindex="-1"></a>&gt; Number.isInteger(1.0)</span>
+<span id="cb278-4"><a href="ch_numbers.html#cb278-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>In this section, we’ll look at a few tools for working with these pseudo-integers. JavaScript also supports <a href="ch_bigints.html"><em>bigints</em></a>, which are real integers.</p>
+<h4 id="converting-to-integer">16.9.1 Converting to integer</h4>
+<p>The recommended way of converting numbers to integers is to use one of the rounding methods of the <code>Math</code> object:</p>
+<ul>
+<li><p><code>Math.floor(n)</code>: returns the largest integer <code>i</code> ≤ <code>n</code></p>
+<div class="sourceCode" id="cb279"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb279-1"><a href="ch_numbers.html#cb279-1" aria-hidden="true" tabindex="-1"></a>&gt; Math.floor(2.1)</span>
+<span id="cb279-2"><a href="ch_numbers.html#cb279-2" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span>
+<span id="cb279-3"><a href="ch_numbers.html#cb279-3" aria-hidden="true" tabindex="-1"></a>&gt; Math.floor(2.9)</span>
+<span id="cb279-4"><a href="ch_numbers.html#cb279-4" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span></code></pre></div></li>
+<li><p><code>Math.ceil(n)</code>: returns the smallest integer <code>i</code> ≥ <code>n</code></p>
+<div class="sourceCode" id="cb280"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb280-1"><a href="ch_numbers.html#cb280-1" aria-hidden="true" tabindex="-1"></a>&gt; Math.ceil(2.1)</span>
+<span id="cb280-2"><a href="ch_numbers.html#cb280-2" aria-hidden="true" tabindex="-1"></a><span class="kw">3</span></span>
+<span id="cb280-3"><a href="ch_numbers.html#cb280-3" aria-hidden="true" tabindex="-1"></a>&gt; Math.ceil(2.9)</span>
+<span id="cb280-4"><a href="ch_numbers.html#cb280-4" aria-hidden="true" tabindex="-1"></a><span class="kw">3</span></span></code></pre></div></li>
+<li><p><code>Math.round(n)</code>: returns the integer that is “closest” to <code>n</code> with <code>__.5</code> being rounded up – for example:</p>
+<div class="sourceCode" id="cb281"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb281-1"><a href="ch_numbers.html#cb281-1" aria-hidden="true" tabindex="-1"></a>&gt; Math.round(2.4)</span>
+<span id="cb281-2"><a href="ch_numbers.html#cb281-2" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span>
+<span id="cb281-3"><a href="ch_numbers.html#cb281-3" aria-hidden="true" tabindex="-1"></a>&gt; Math.round(2.5)</span>
+<span id="cb281-4"><a href="ch_numbers.html#cb281-4" aria-hidden="true" tabindex="-1"></a><span class="kw">3</span></span></code></pre></div></li>
+<li><p><code>Math.trunc(n)</code>: removes any decimal fraction (after the point) that <code>n</code> has, therefore turning it into an integer.</p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb282-1"><a href="ch_numbers.html#cb282-1" aria-hidden="true" tabindex="-1"></a>&gt; Math.trunc(2.1)</span>
+<span id="cb282-2"><a href="ch_numbers.html#cb282-2" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span>
+<span id="cb282-3"><a href="ch_numbers.html#cb282-3" aria-hidden="true" tabindex="-1"></a>&gt; Math.trunc(2.9)</span>
+<span id="cb282-4"><a href="ch_numbers.html#cb282-4" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span></code></pre></div></li>
+</ul>
+<p>For more information on rounding, consult <a href="ch_math.html#math-rounding">§17.3 “Rounding”</a>.</p>
+<h4 id="ranges-of-integer-numbers-in-javascript">16.9.2 Ranges of integer numbers in JavaScript</h4>
+<p>These are important ranges of integer numbers in JavaScript:</p>
+<ul>
+<li><strong>Safe integers:</strong> can be represented “safely” by JavaScript (more on what that means in <span data-refcheck="#safe-integers">the next subsection</span>)
+<ul>
+<li>Precision: 53 bits plus sign</li>
+<li>Range: (−2<sup>53</sup>, 2<sup>53</sup>)</li>
+</ul></li>
+<li><strong>Array indices</strong>
+<ul>
+<li>Precision: 32 bits, unsigned</li>
+<li>Range: [0, 2<sup>32</sup>−1) (excluding the maximum length)</li>
+<li>Typed Arrays have a larger range of 53 bits (safe and unsigned)</li>
+</ul></li>
+<li><strong>Bitwise operators</strong> (bitwise Or, etc.)
+<ul>
+<li>Precision: 32 bits</li>
+<li>Range of unsigned right shift (<code>&gt;&gt;&gt;</code>): unsigned, [0, 2<sup>32</sup>)</li>
+<li>Range of all other bitwise operators: signed, [−2<sup>31</sup>, 2<sup>31</sup>)</li>
+</ul></li>
+</ul>
+<h4 id="safe-integers">16.9.3 Safe integers</h4>
+<p><a id="index-entry-169" class="index-entry"></a><a id="index-entry-170" class="index-entry"></a></p>
+<p>This is the range of integer numbers that are <em>safe</em> in JavaScript (53 bits plus a sign):</p>
+<blockquote>
+<p>[–2<sup>53</sup>–1, 2<sup>53</sup>–1]</p>
+</blockquote>
+<p>An integer is <em>safe</em> if it is represented by exactly one JavaScript number. Given that JavaScript numbers are encoded as a fraction multiplied by 2 to the power of an exponent, higher integers can also be represented, but then there are gaps between them.</p>
+<p>For example (18014398509481984 is 2<sup>54</sup>):</p>
+<div class="sourceCode" id="cb283"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb283-1"><a href="ch_numbers.html#cb283-1" aria-hidden="true" tabindex="-1"></a>&gt; 18014398509481984</span>
+<span id="cb283-2"><a href="ch_numbers.html#cb283-2" aria-hidden="true" tabindex="-1"></a><span class="kw">18014398509481984</span></span>
+<span id="cb283-3"><a href="ch_numbers.html#cb283-3" aria-hidden="true" tabindex="-1"></a>&gt; 18014398509481985</span>
+<span id="cb283-4"><a href="ch_numbers.html#cb283-4" aria-hidden="true" tabindex="-1"></a><span class="kw">18014398509481984</span></span>
+<span id="cb283-5"><a href="ch_numbers.html#cb283-5" aria-hidden="true" tabindex="-1"></a>&gt; 18014398509481986</span>
+<span id="cb283-6"><a href="ch_numbers.html#cb283-6" aria-hidden="true" tabindex="-1"></a><span class="kw">18014398509481984</span></span>
+<span id="cb283-7"><a href="ch_numbers.html#cb283-7" aria-hidden="true" tabindex="-1"></a>&gt; 18014398509481987</span>
+<span id="cb283-8"><a href="ch_numbers.html#cb283-8" aria-hidden="true" tabindex="-1"></a><span class="kw">18014398509481988</span></span></code></pre></div>
+<p>The following properties of <code>Number</code> help determine if an integer is safe:</p>
+<div class="sourceCode" id="cb284"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb284-1"><a href="ch_numbers.html#cb284-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span><span class="op">.</span><span class="cn">MAX_SAFE_INTEGER</span><span class="op">,</span> (<span class="dv">2</span> <span class="op">**</span> <span class="dv">53</span>) <span class="op">-</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb284-2"><a href="ch_numbers.html#cb284-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span><span class="op">.</span><span class="cn">MIN_SAFE_INTEGER</span><span class="op">,</span> <span class="op">-</span><span class="bu">Number</span><span class="op">.</span><span class="cn">MAX_SAFE_INTEGER</span>)<span class="op">;</span></span>
+<span id="cb284-3"><a href="ch_numbers.html#cb284-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb284-4"><a href="ch_numbers.html#cb284-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span><span class="op">.</span><span class="fu">isSafeInteger</span>(<span class="dv">5</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb284-5"><a href="ch_numbers.html#cb284-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span><span class="op">.</span><span class="fu">isSafeInteger</span>(<span class="st">'5'</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span>
+<span id="cb284-6"><a href="ch_numbers.html#cb284-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span><span class="op">.</span><span class="fu">isSafeInteger</span>(<span class="fl">5.1</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span>
+<span id="cb284-7"><a href="ch_numbers.html#cb284-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span><span class="op">.</span><span class="fu">isSafeInteger</span>(<span class="bu">Number</span><span class="op">.</span><span class="cn">MAX_SAFE_INTEGER</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb284-8"><a href="ch_numbers.html#cb284-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">Number</span><span class="op">.</span><span class="fu">isSafeInteger</span>(<span class="bu">Number</span><span class="op">.</span><span class="cn">MAX_SAFE_INTEGER</span><span class="op">+</span><span class="dv">1</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Detecting safe integers</strong></p>
+<p><code>exercises/numbers-math/is_safe_integer_test.mjs</code></p>
+</div>
+<h5 id="safe-computations">16.9.3.1 Safe computations</h5>
+<p>Let’s look at computations involving unsafe integers.</p>
+<p>The following result is incorrect and unsafe, even though both of its operands are safe:</p>
+<div class="sourceCode" id="cb285"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb285-1"><a href="ch_numbers.html#cb285-1" aria-hidden="true" tabindex="-1"></a>&gt; 9007199254740990 + 3</span>
+<span id="cb285-2"><a href="ch_numbers.html#cb285-2" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740992</span></span></code></pre></div>
+<p>The following result is safe, but incorrect. The first operand is unsafe; the second operand is safe:</p>
+<div class="sourceCode" id="cb286"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb286-1"><a href="ch_numbers.html#cb286-1" aria-hidden="true" tabindex="-1"></a>&gt; 9007199254740995 - 10</span>
+<span id="cb286-2"><a href="ch_numbers.html#cb286-2" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740986</span></span></code></pre></div>
+<p>Therefore, the result of an expression <code>a op b</code> is correct if and only if:</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb287-1"><a href="ch_numbers.html#cb287-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isSafeInteger</span>(a) <span class="op">&amp;&amp;</span> <span class="fu">isSafeInteger</span>(b) <span class="op">&amp;&amp;</span> <span class="fu">isSafeInteger</span>(a op b)</span></code></pre></div>
+<p>That is, both operands and the result must be safe.</p>
+<h3 id="bitwise-operators">16.10 Bitwise operators</h3>
+<h4 id="internally-bitwise-operators-work-with-32-bit-integers">16.10.1 Internally, bitwise operators work with 32-bit integers</h4>
+<p>Internally, JavaScript’s bitwise operators work with 32-bit integers. They produce their results in the following steps:</p>
+<ul>
+<li>Input (JavaScript numbers): The 1–2 operands are first converted to JavaScript numbers (64-bit floating point numbers) and then to 32-bit integers.</li>
+<li>Computation (32-bit integers): The actual operation processes 32-bit integers and produces a 32-bit integer.</li>
+<li>Output (JavaScript number): Before returning the result, it is converted back to a JavaScript number.</li>
+</ul>
+<h5 id="the-types-of-operands-and-results">16.10.1.1 The types of operands and results</h5>
+<p>For each bitwise operator, this book mentions the types of its operands and its result. Each type is always one of the following two:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+<th>Size</th>
+<th style="text-align: left;">Range</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Int32</td>
+<td style="text-align: left;">signed 32-bit integer</td>
+<td>32 bits incl.&nbsp;sign</td>
+<td style="text-align: left;">[−2<sup>31</sup>, 2<sup>31</sup>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Uint32</td>
+<td style="text-align: left;">unsigned 32-bit integer</td>
+<td>32 bits</td>
+<td style="text-align: left;">[0, 2<sup>32</sup>)</td>
+</tr>
+</tbody>
+</table>
+<p>Considering the previously mentioned steps, I recommend to pretend that bitwise operators internally work with unsigned 32-bit integers (step “computation”) and that Int32 and Uint32 only affect how JavaScript numbers are converted to and from integers (steps “input” and “output”).</p>
+<h5 id="displaying-javascript-numbers-as-unsigned-32-bit-integers">16.10.1.2 Displaying JavaScript numbers as unsigned 32-bit integers</h5>
+<p>While exploring the bitwise operators, it occasionally helps to display JavaScript numbers as unsigned 32-bit integers in binary notation. That’s what <code>b32()</code> does (whose implementation is shown later):</p>
+<div class="sourceCode" id="cb288"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb288-1"><a href="ch_numbers.html#cb288-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb288-2"><a href="ch_numbers.html#cb288-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">b32</span>(<span class="op">-</span><span class="dv">1</span>)<span class="op">,</span></span>
+<span id="cb288-3"><a href="ch_numbers.html#cb288-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'11111111111111111111111111111111'</span>)<span class="op">;</span></span>
+<span id="cb288-4"><a href="ch_numbers.html#cb288-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb288-5"><a href="ch_numbers.html#cb288-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">b32</span>(<span class="dv">1</span>)<span class="op">,</span></span>
+<span id="cb288-6"><a href="ch_numbers.html#cb288-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">'00000000000000000000000000000001'</span>)<span class="op">;</span></span>
+<span id="cb288-7"><a href="ch_numbers.html#cb288-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb288-8"><a href="ch_numbers.html#cb288-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">b32</span>(<span class="dv">2</span> <span class="op">**</span> <span class="dv">31</span>)<span class="op">,</span></span>
+<span id="cb288-9"><a href="ch_numbers.html#cb288-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">'10000000000000000000000000000000'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="bitwise-not">16.10.2 Bitwise Not</h4>
+<p><a id="index-entry-171" class="index-entry"></a><a id="index-entry-172" class="index-entry"></a> <a id="index-entry-173" class="index-entry"></a></p>
+<div id="tbl:bitwise-not">
+<table>
+<caption>Table 9: The bitwise Not operator.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Operation</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Type signature</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>~num</code></td>
+<td style="text-align: left;">Bitwise Not, <em>ones’ complement</em></td>
+<td style="text-align: left;">Int32 <code>→</code> Int32</td>
+<td>ES1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The bitwise Not operator (tbl.&nbsp;<a href="#tbl:bitwise-not">9</a>) inverts each binary digit of its operand:</p>
+<div class="sourceCode" id="cb289"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb289-1"><a href="ch_numbers.html#cb289-1" aria-hidden="true" tabindex="-1"></a>&gt; b32(~0b100)</span>
+<span id="cb289-2"><a href="ch_numbers.html#cb289-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'11111111111111111111111111111011'</span></span></code></pre></div>
+<p>This so-called <em>ones’ complement</em> is similar to a negative for some arithmetic operations. For example, adding an integer to its ones’ complement is always <code>-1</code>:</p>
+<div class="sourceCode" id="cb290"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb290-1"><a href="ch_numbers.html#cb290-1" aria-hidden="true" tabindex="-1"></a>&gt; 4 + ~4</span>
+<span id="cb290-2"><a href="ch_numbers.html#cb290-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-1</span></span>
+<span id="cb290-3"><a href="ch_numbers.html#cb290-3" aria-hidden="true" tabindex="-1"></a>&gt; -11 + ~-11</span>
+<span id="cb290-4"><a href="ch_numbers.html#cb290-4" aria-hidden="true" tabindex="-1"></a><span class="kw">-1</span></span></code></pre></div>
+<h4 id="binary-bitwise-operators">16.10.3 Binary bitwise operators</h4>
+<p><a id="index-entry-174" class="index-entry"></a><a id="index-entry-175" class="index-entry"></a> <a id="index-entry-176" class="index-entry"></a><a id="index-entry-177" class="index-entry"></a> <a id="index-entry-178" class="index-entry"></a><a id="index-entry-179" class="index-entry"></a></p>
+<div id="tbl:binary-bitwise-operators">
+<table>
+<caption>Table 10: Binary bitwise operators.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Operation</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Type signature</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>num1 &amp; num2</code></td>
+<td style="text-align: left;">Bitwise And</td>
+<td style="text-align: left;">Int32 × Int32 <code>→</code> Int32</td>
+<td>ES1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>num1 ¦ num2</code></td>
+<td style="text-align: left;">Bitwise Or</td>
+<td style="text-align: left;">Int32 × Int32 <code>→</code> Int32</td>
+<td>ES1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>num1 ^ num2</code></td>
+<td style="text-align: left;">Bitwise Xor</td>
+<td style="text-align: left;">Int32 × Int32 <code>→</code> Int32</td>
+<td>ES1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The binary bitwise operators (tbl.&nbsp;<a href="#tbl:binary-bitwise-operators">10</a>) combine the bits of their operands to produce their results:</p>
+<div class="sourceCode" id="cb291"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb291-1"><a href="ch_numbers.html#cb291-1" aria-hidden="true" tabindex="-1"></a>&gt; (0b1010 &amp; 0b0011).toString(2).padStart(4, '0')</span>
+<span id="cb291-2"><a href="ch_numbers.html#cb291-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'0010'</span></span>
+<span id="cb291-3"><a href="ch_numbers.html#cb291-3" aria-hidden="true" tabindex="-1"></a>&gt; (0b1010 | 0b0011).toString(2).padStart(4, '0')</span>
+<span id="cb291-4"><a href="ch_numbers.html#cb291-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'1011'</span></span>
+<span id="cb291-5"><a href="ch_numbers.html#cb291-5" aria-hidden="true" tabindex="-1"></a>&gt; (0b1010 ^ 0b0011).toString(2).padStart(4, '0')</span>
+<span id="cb291-6"><a href="ch_numbers.html#cb291-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'1001'</span></span></code></pre></div>
+<h4 id="bitwise-shift-operators">16.10.4 Bitwise shift operators</h4>
+<p><a id="index-entry-180" class="index-entry"></a><a id="index-entry-181" class="index-entry"></a> <a id="index-entry-182" class="index-entry"></a><a id="index-entry-183" class="index-entry"></a> <a id="index-entry-184" class="index-entry"></a><a id="index-entry-185" class="index-entry"></a></p>
+<div id="tbl:bitwise-shift-operators-short">
+<table>
+<caption>Table 11: Bitwise shift operators.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Operation</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Type signature</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>num &lt;&lt; count</code></td>
+<td style="text-align: left;">Left shift</td>
+<td style="text-align: left;">Int32 × Uint32 <code>→</code> Int32</td>
+<td>ES1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>num &gt;&gt; count</code></td>
+<td style="text-align: left;">Signed right shift</td>
+<td style="text-align: left;">Int32 × Uint32 <code>→</code> Int32</td>
+<td>ES1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>num &gt;&gt;&gt; count</code></td>
+<td style="text-align: left;">Unsigned right shift</td>
+<td style="text-align: left;">Uint32 × Uint32 <code>→</code> Uint32</td>
+<td>ES1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The shift operators (tbl.&nbsp;<a href="#tbl:bitwise-shift-operators-short">11</a>) move binary digits to the left or to the right:</p>
+<div class="sourceCode" id="cb292"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb292-1"><a href="ch_numbers.html#cb292-1" aria-hidden="true" tabindex="-1"></a>&gt; (0b10 &lt;&lt; 1).toString(2)</span>
+<span id="cb292-2"><a href="ch_numbers.html#cb292-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'100'</span></span></code></pre></div>
+<p><code>&gt;&gt;</code> preserves highest bit, <code>&gt;&gt;&gt;</code> doesn’t:</p>
+<div class="sourceCode" id="cb293"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb293-1"><a href="ch_numbers.html#cb293-1" aria-hidden="true" tabindex="-1"></a>&gt; b32(0b10000000000000000000000000000010 &gt;&gt; 1)</span>
+<span id="cb293-2"><a href="ch_numbers.html#cb293-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'11000000000000000000000000000001'</span></span>
+<span id="cb293-3"><a href="ch_numbers.html#cb293-3" aria-hidden="true" tabindex="-1"></a>&gt; b32(0b10000000000000000000000000000010 &gt;&gt;&gt; 1)</span>
+<span id="cb293-4"><a href="ch_numbers.html#cb293-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'01000000000000000000000000000001'</span></span></code></pre></div>
+<h4 id="b32">16.10.5 <code>b32()</code>: displaying unsigned 32-bit integers in binary notation</h4>
+<p>We have now used <code>b32()</code> a few times. The following code is an implementation of it:</p>
+<div class="sourceCode" id="cb294"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb294-1"><a href="ch_numbers.html#cb294-1" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb294-2"><a href="ch_numbers.html#cb294-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Return a string representing n as a 32-bit unsigned integer,</span></span>
+<span id="cb294-3"><a href="ch_numbers.html#cb294-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * in binary notation.</span></span>
+<span id="cb294-4"><a href="ch_numbers.html#cb294-4" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb294-5"><a href="ch_numbers.html#cb294-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">b32</span>(n) {</span>
+<span id="cb294-6"><a href="ch_numbers.html#cb294-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// &gt;&gt;&gt; ensures highest bit isn’t interpreted as a sign</span></span>
+<span id="cb294-7"><a href="ch_numbers.html#cb294-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (n <span class="op">&gt;&gt;&gt;</span> <span class="dv">0</span>)<span class="op">.</span><span class="fu">toString</span>(<span class="dv">2</span>)<span class="op">.</span><span class="fu">padStart</span>(<span class="dv">32</span><span class="op">,</span> <span class="st">'0'</span>)<span class="op">;</span></span>
+<span id="cb294-8"><a href="ch_numbers.html#cb294-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb294-9"><a href="ch_numbers.html#cb294-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb294-10"><a href="ch_numbers.html#cb294-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">b32</span>(<span class="dv">6</span>)<span class="op">,</span></span>
+<span id="cb294-11"><a href="ch_numbers.html#cb294-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">'00000000000000000000000000000110'</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>n &gt;&gt;&gt; 0</code> means that we are shifting <code>n</code> zero bits to the right. Therefore, in principle, the <code>&gt;&gt;&gt;</code> operator does nothing, but it still coerces <code>n</code> to an unsigned 32-bit integer:</p>
+<div class="sourceCode" id="cb295"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb295-1"><a href="ch_numbers.html#cb295-1" aria-hidden="true" tabindex="-1"></a>&gt; 12 &gt;&gt;&gt; 0</span>
+<span id="cb295-2"><a href="ch_numbers.html#cb295-2" aria-hidden="true" tabindex="-1"></a><span class="kw">12</span></span>
+<span id="cb295-3"><a href="ch_numbers.html#cb295-3" aria-hidden="true" tabindex="-1"></a>&gt; -12 &gt;&gt;&gt; 0</span>
+<span id="cb295-4"><a href="ch_numbers.html#cb295-4" aria-hidden="true" tabindex="-1"></a><span class="kw">4294967284</span></span>
+<span id="cb295-5"><a href="ch_numbers.html#cb295-5" aria-hidden="true" tabindex="-1"></a>&gt; (2**32 + 1) &gt;&gt;&gt; 0</span>
+<span id="cb295-6"><a href="ch_numbers.html#cb295-6" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span></code></pre></div>
+<h3 id="quick-reference-numbers">16.11 Quick reference: numbers</h3>
+<h4 id="global-functions-for-numbers">16.11.1 Global functions for numbers</h4>
+<p>JavaScript has the following four global functions for numbers:</p>
+<ul>
+<li><code>isFinite()</code></li>
+<li><code>isNaN()</code></li>
+<li><code>parseFloat()</code></li>
+<li><code>parseInt()</code></li>
+</ul>
+<p>However, it is better to use the corresponding methods of <code>Number</code> (<code>Number.isFinite()</code>, etc.), which have fewer pitfalls. They were introduced with ES6 and are discussed below.</p>
+<h4 id="static-properties-of-number">16.11.2 Static properties of <code>Number</code></h4>
+<ul>
+<li><p><code>.EPSILON: number</code> <sup>[ES6]</sup></p>
+<p>The difference between 1 and the next representable floating point number. In general, <a href="https://en.wikipedia.org/wiki/Machine_epsilon">a machine epsilon</a> provides an upper bound for rounding errors in floating point arithmetic.</p>
+<ul>
+<li>Approximately: 2.2204460492503130808472633361816 × 10<sup>-16</sup></li>
+</ul></li>
+<li><p><code>.MAX_SAFE_INTEGER: number</code> <sup>[ES6]</sup></p>
+<p>The largest integer that JavaScript can represent unambiguously (2<sup>53</sup>−1).</p></li>
+<li><p><code>.MAX_VALUE: number</code> <sup>[ES1]</sup></p>
+<p>The largest positive finite JavaScript number.</p>
+<ul>
+<li>Approximately: 1.7976931348623157 × 10<sup>308</sup></li>
+</ul></li>
+<li><p><code>.MIN_SAFE_INTEGER: number</code> <sup>[ES6]</sup></p>
+<p>The smallest integer that JavaScript can represent unambiguously (−2<sup>53</sup>+1).</p></li>
+<li><p><code>.MIN_VALUE: number</code> <sup>[ES1]</sup></p>
+<p>The smallest positive JavaScript number. Approximately 5 × 10<sup>−324</sup>.</p></li>
+<li><p><code>.NaN: number</code> <sup>[ES1]</sup></p>
+<p>The same as the global variable <code>NaN</code>.</p></li>
+<li><p><code>.NEGATIVE_INFINITY: number</code> <sup>[ES1]</sup></p>
+<p>The same as <code>-Number.POSITIVE_INFINITY</code>.</p></li>
+<li><p><code>.POSITIVE_INFINITY: number</code> <sup>[ES1]</sup></p>
+<p>The same as the global variable <code>Infinity</code>.</p></li>
+</ul>
+<h4 id="static-methods-of-number">16.11.3 Static methods of <code>Number</code></h4>
+<ul>
+<li><p><code>.isFinite(num: number): boolean</code> <sup>[ES6]</sup></p>
+<p>Returns <code>true</code> if <code>num</code> is an actual number (neither <code>Infinity</code> nor <code>-Infinity</code> nor <code>NaN</code>).</p>
+<div class="sourceCode" id="cb296"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb296-1"><a href="ch_numbers.html#cb296-1" aria-hidden="true" tabindex="-1"></a>&gt; Number.isFinite(Infinity)</span>
+<span id="cb296-2"><a href="ch_numbers.html#cb296-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb296-3"><a href="ch_numbers.html#cb296-3" aria-hidden="true" tabindex="-1"></a>&gt; Number.isFinite(-Infinity)</span>
+<span id="cb296-4"><a href="ch_numbers.html#cb296-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb296-5"><a href="ch_numbers.html#cb296-5" aria-hidden="true" tabindex="-1"></a>&gt; Number.isFinite(NaN)</span>
+<span id="cb296-6"><a href="ch_numbers.html#cb296-6" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb296-7"><a href="ch_numbers.html#cb296-7" aria-hidden="true" tabindex="-1"></a>&gt; Number.isFinite(123)</span>
+<span id="cb296-8"><a href="ch_numbers.html#cb296-8" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div></li>
+<li><p><code>.isInteger(num: number): boolean</code> <sup>[ES6]</sup></p>
+<p>Returns <code>true</code> if <code>num</code> is a number and does not have a decimal fraction.</p>
+<div class="sourceCode" id="cb297"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb297-1"><a href="ch_numbers.html#cb297-1" aria-hidden="true" tabindex="-1"></a>&gt; Number.isInteger(-17)</span>
+<span id="cb297-2"><a href="ch_numbers.html#cb297-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb297-3"><a href="ch_numbers.html#cb297-3" aria-hidden="true" tabindex="-1"></a>&gt; Number.isInteger(33)</span>
+<span id="cb297-4"><a href="ch_numbers.html#cb297-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb297-5"><a href="ch_numbers.html#cb297-5" aria-hidden="true" tabindex="-1"></a>&gt; Number.isInteger(33.1)</span>
+<span id="cb297-6"><a href="ch_numbers.html#cb297-6" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb297-7"><a href="ch_numbers.html#cb297-7" aria-hidden="true" tabindex="-1"></a>&gt; Number.isInteger('33')</span>
+<span id="cb297-8"><a href="ch_numbers.html#cb297-8" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb297-9"><a href="ch_numbers.html#cb297-9" aria-hidden="true" tabindex="-1"></a>&gt; Number.isInteger(NaN)</span>
+<span id="cb297-10"><a href="ch_numbers.html#cb297-10" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb297-11"><a href="ch_numbers.html#cb297-11" aria-hidden="true" tabindex="-1"></a>&gt; Number.isInteger(Infinity)</span>
+<span id="cb297-12"><a href="ch_numbers.html#cb297-12" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div></li>
+<li><p><code>.isNaN(num: number): boolean</code> <sup>[ES6]</sup></p>
+<p>Returns <code>true</code> if <code>num</code> is the value <code>NaN</code>:</p>
+<div class="sourceCode" id="cb298"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb298-1"><a href="ch_numbers.html#cb298-1" aria-hidden="true" tabindex="-1"></a>&gt; Number.isNaN(NaN)</span>
+<span id="cb298-2"><a href="ch_numbers.html#cb298-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb298-3"><a href="ch_numbers.html#cb298-3" aria-hidden="true" tabindex="-1"></a>&gt; Number.isNaN(123)</span>
+<span id="cb298-4"><a href="ch_numbers.html#cb298-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb298-5"><a href="ch_numbers.html#cb298-5" aria-hidden="true" tabindex="-1"></a>&gt; Number.isNaN('abc')</span>
+<span id="cb298-6"><a href="ch_numbers.html#cb298-6" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div></li>
+<li><p><code>.isSafeInteger(num: number): boolean</code> <sup>[ES6]</sup></p>
+<p>Returns <code>true</code> if <code>num</code> is a number and unambiguously represents an integer.</p></li>
+<li><p><code>.parseFloat(str: string): number</code> <sup>[ES6]</sup></p>
+<p>Coerces its parameter to string and parses it as a floating point number. For converting strings to numbers, <code>Number()</code> (which ignores leading and trailing whitespace) is usually a better choice than <code>Number.parseFloat()</code> (which ignores leading whitespace and illegal trailing characters and can hide problems).</p>
+<div class="sourceCode" id="cb299"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb299-1"><a href="ch_numbers.html#cb299-1" aria-hidden="true" tabindex="-1"></a>&gt; Number.parseFloat(' 123.4#')</span>
+<span id="cb299-2"><a href="ch_numbers.html#cb299-2" aria-hidden="true" tabindex="-1"></a><span class="kw">123.4</span></span>
+<span id="cb299-3"><a href="ch_numbers.html#cb299-3" aria-hidden="true" tabindex="-1"></a>&gt; Number(' 123.4#')</span>
+<span id="cb299-4"><a href="ch_numbers.html#cb299-4" aria-hidden="true" tabindex="-1"></a><span class="kw">NaN</span></span></code></pre></div></li>
+<li><p><code>.parseInt(str: string, radix=10): number</code> <sup>[ES6]</sup></p>
+<p>Coerces its parameter to string and parses it as an integer, ignoring leading whitespace and illegal trailing characters:</p>
+<div class="sourceCode" id="cb300"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb300-1"><a href="ch_numbers.html#cb300-1" aria-hidden="true" tabindex="-1"></a>&gt; Number.parseInt('  123#')</span>
+<span id="cb300-2"><a href="ch_numbers.html#cb300-2" aria-hidden="true" tabindex="-1"></a><span class="kw">123</span></span></code></pre></div>
+<p>The parameter <code>radix</code> specifies the base of the number to be parsed:</p>
+<div class="sourceCode" id="cb301"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb301-1"><a href="ch_numbers.html#cb301-1" aria-hidden="true" tabindex="-1"></a>&gt; Number.parseInt('101', 2)</span>
+<span id="cb301-2"><a href="ch_numbers.html#cb301-2" aria-hidden="true" tabindex="-1"></a><span class="kw">5</span></span>
+<span id="cb301-3"><a href="ch_numbers.html#cb301-3" aria-hidden="true" tabindex="-1"></a>&gt; Number.parseInt('FF', 16)</span>
+<span id="cb301-4"><a href="ch_numbers.html#cb301-4" aria-hidden="true" tabindex="-1"></a><span class="kw">255</span></span></code></pre></div>
+<p>Do not use this method to convert numbers to integers: coercing to string is inefficient. And stopping before the first non-digit is not a good algorithm for removing the fraction of a number. Here is an example where it goes wrong:</p>
+<div class="sourceCode" id="cb302"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb302-1"><a href="ch_numbers.html#cb302-1" aria-hidden="true" tabindex="-1"></a>&gt; Number.parseInt(1e21, 10) // wrong</span>
+<span id="cb302-2"><a href="ch_numbers.html#cb302-2" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span></code></pre></div>
+<p>It is better to use one of the rounding functions of <code>Math</code> to convert a number to an integer:</p>
+<div class="sourceCode" id="cb303"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb303-1"><a href="ch_numbers.html#cb303-1" aria-hidden="true" tabindex="-1"></a>&gt; Math.trunc(1e21) // correct</span>
+<span id="cb303-2"><a href="ch_numbers.html#cb303-2" aria-hidden="true" tabindex="-1"></a><span class="kw">1e+21</span></span></code></pre></div></li>
+</ul>
+<h4 id="methods-of-number.prototype">16.11.4 Methods of <code>Number.prototype</code></h4>
+<p>(<code>Number.prototype</code> is where the methods of numbers are stored.)</p>
+<ul>
+<li><p><code>.toExponential(fractionDigits?: number): string</code> <sup>[ES3]</sup></p>
+<p>Returns a string that represents the number via exponential notation. With <code>fractionDigits</code>, we can specify, how many digits should be shown of the number that is multiplied with the exponent (the default is to show as many digits as necessary).</p>
+<p>Example: number too small to get a positive exponent via <code>.toString()</code>.</p>
+<div class="sourceCode" id="cb304"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb304-1"><a href="ch_numbers.html#cb304-1" aria-hidden="true" tabindex="-1"></a>&gt; 1234..toString()</span>
+<span id="cb304-2"><a href="ch_numbers.html#cb304-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'1234'</span></span>
+<span id="cb304-3"><a href="ch_numbers.html#cb304-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb304-4"><a href="ch_numbers.html#cb304-4" aria-hidden="true" tabindex="-1"></a>&gt; 1234..toExponential() // 3 fraction digits</span>
+<span id="cb304-5"><a href="ch_numbers.html#cb304-5" aria-hidden="true" tabindex="-1"></a><span class="kw">'1.234e+3'</span></span>
+<span id="cb304-6"><a href="ch_numbers.html#cb304-6" aria-hidden="true" tabindex="-1"></a>&gt; 1234..toExponential(5)</span>
+<span id="cb304-7"><a href="ch_numbers.html#cb304-7" aria-hidden="true" tabindex="-1"></a><span class="kw">'1.23400e+3'</span></span>
+<span id="cb304-8"><a href="ch_numbers.html#cb304-8" aria-hidden="true" tabindex="-1"></a>&gt; 1234..toExponential(1)</span>
+<span id="cb304-9"><a href="ch_numbers.html#cb304-9" aria-hidden="true" tabindex="-1"></a><span class="kw">'1.2e+3'</span></span></code></pre></div>
+<p>Example: fraction not small enough to get a negative exponent via <code>.toString()</code>.</p>
+<div class="sourceCode" id="cb305"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb305-1"><a href="ch_numbers.html#cb305-1" aria-hidden="true" tabindex="-1"></a>&gt; 0.003.toString()</span>
+<span id="cb305-2"><a href="ch_numbers.html#cb305-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'0.003'</span></span>
+<span id="cb305-3"><a href="ch_numbers.html#cb305-3" aria-hidden="true" tabindex="-1"></a>&gt; 0.003.toExponential()</span>
+<span id="cb305-4"><a href="ch_numbers.html#cb305-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'3e-3'</span></span></code></pre></div></li>
+<li><p><code>.toFixed(fractionDigits=0): string</code> <sup>[ES3]</sup></p>
+<p>Returns an exponent-free representation of the number, rounded to <code>fractionDigits</code> digits.</p>
+<div class="sourceCode" id="cb306"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb306-1"><a href="ch_numbers.html#cb306-1" aria-hidden="true" tabindex="-1"></a>&gt; 0.00000012.toString() // with exponent</span>
+<span id="cb306-2"><a href="ch_numbers.html#cb306-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'1.2e-7'</span></span>
+<span id="cb306-3"><a href="ch_numbers.html#cb306-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb306-4"><a href="ch_numbers.html#cb306-4" aria-hidden="true" tabindex="-1"></a>&gt; 0.00000012.toFixed(10) // no exponent</span>
+<span id="cb306-5"><a href="ch_numbers.html#cb306-5" aria-hidden="true" tabindex="-1"></a><span class="kw">'0.0000001200'</span></span>
+<span id="cb306-6"><a href="ch_numbers.html#cb306-6" aria-hidden="true" tabindex="-1"></a>&gt; 0.00000012.toFixed()</span>
+<span id="cb306-7"><a href="ch_numbers.html#cb306-7" aria-hidden="true" tabindex="-1"></a><span class="kw">'0'</span></span></code></pre></div>
+<p>If the number is 10<sup>21</sup> or greater, even <code>.toFixed()</code> uses an exponent:</p>
+<div class="sourceCode" id="cb307"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb307-1"><a href="ch_numbers.html#cb307-1" aria-hidden="true" tabindex="-1"></a>&gt; (10 ** 21).toFixed()</span>
+<span id="cb307-2"><a href="ch_numbers.html#cb307-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'1e+21'</span></span></code></pre></div></li>
+<li><p><code>.toPrecision(precision?: number): string</code> <sup>[ES3]</sup></p>
+<p>Works like <code>.toString()</code>, but <code>precision</code> specifies how many digits should be shown. If <code>precision</code> is missing, <code>.toString()</code> is used.</p>
+<div class="sourceCode" id="cb308"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb308-1"><a href="ch_numbers.html#cb308-1" aria-hidden="true" tabindex="-1"></a>&gt; 1234..toPrecision(3)  // requires exponential notation</span>
+<span id="cb308-2"><a href="ch_numbers.html#cb308-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'1.23e+3'</span></span>
+<span id="cb308-3"><a href="ch_numbers.html#cb308-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb308-4"><a href="ch_numbers.html#cb308-4" aria-hidden="true" tabindex="-1"></a>&gt; 1234..toPrecision(4)</span>
+<span id="cb308-5"><a href="ch_numbers.html#cb308-5" aria-hidden="true" tabindex="-1"></a><span class="kw">'1234'</span></span>
+<span id="cb308-6"><a href="ch_numbers.html#cb308-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb308-7"><a href="ch_numbers.html#cb308-7" aria-hidden="true" tabindex="-1"></a>&gt; 1234..toPrecision(5)</span>
+<span id="cb308-8"><a href="ch_numbers.html#cb308-8" aria-hidden="true" tabindex="-1"></a><span class="kw">'1234.0'</span></span>
+<span id="cb308-9"><a href="ch_numbers.html#cb308-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb308-10"><a href="ch_numbers.html#cb308-10" aria-hidden="true" tabindex="-1"></a>&gt; 1.234.toPrecision(3)</span>
+<span id="cb308-11"><a href="ch_numbers.html#cb308-11" aria-hidden="true" tabindex="-1"></a><span class="kw">'1.23'</span></span></code></pre></div></li>
+<li><p><code>.toString(radix=10): string</code> <sup>[ES1]</sup></p>
+<p>Returns a string representation of the number.</p>
+<p>By default, we get a base 10 numeral as a result:</p>
+<div class="sourceCode" id="cb309"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb309-1"><a href="ch_numbers.html#cb309-1" aria-hidden="true" tabindex="-1"></a>&gt; 123.456.toString()</span>
+<span id="cb309-2"><a href="ch_numbers.html#cb309-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'123.456'</span></span></code></pre></div>
+<p>If we want the numeral to have a different base, we can specify it via <code>radix</code>:</p>
+<div class="sourceCode" id="cb310"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb310-1"><a href="ch_numbers.html#cb310-1" aria-hidden="true" tabindex="-1"></a>&gt; 4..toString(2) // binary (base 2)</span>
+<span id="cb310-2"><a href="ch_numbers.html#cb310-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'100'</span></span>
+<span id="cb310-3"><a href="ch_numbers.html#cb310-3" aria-hidden="true" tabindex="-1"></a>&gt; 4.5.toString(2)</span>
+<span id="cb310-4"><a href="ch_numbers.html#cb310-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'100.1'</span></span>
+<span id="cb310-5"><a href="ch_numbers.html#cb310-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb310-6"><a href="ch_numbers.html#cb310-6" aria-hidden="true" tabindex="-1"></a>&gt; 255..toString(16) // hexadecimal (base 16)</span>
+<span id="cb310-7"><a href="ch_numbers.html#cb310-7" aria-hidden="true" tabindex="-1"></a><span class="kw">'ff'</span></span>
+<span id="cb310-8"><a href="ch_numbers.html#cb310-8" aria-hidden="true" tabindex="-1"></a>&gt; 255.66796875.toString(16)</span>
+<span id="cb310-9"><a href="ch_numbers.html#cb310-9" aria-hidden="true" tabindex="-1"></a><span class="kw">'ff.ab'</span></span>
+<span id="cb310-10"><a href="ch_numbers.html#cb310-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb310-11"><a href="ch_numbers.html#cb310-11" aria-hidden="true" tabindex="-1"></a>&gt; 1234567890..toString(36)</span>
+<span id="cb310-12"><a href="ch_numbers.html#cb310-12" aria-hidden="true" tabindex="-1"></a><span class="kw">'kf12oi'</span></span></code></pre></div>
+<p><code>parseInt()</code> provides the inverse operation: it converts a string that contains an integer (no fraction!) numeral with a given base, to a number.</p>
+<div class="sourceCode" id="cb311"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb311-1"><a href="ch_numbers.html#cb311-1" aria-hidden="true" tabindex="-1"></a>&gt; parseInt('kf12oi', 36)</span>
+<span id="cb311-2"><a href="ch_numbers.html#cb311-2" aria-hidden="true" tabindex="-1"></a><span class="kw">1234567890</span></span></code></pre></div></li>
+</ul>
+<h4 id="sources">16.11.5 Sources</h4>
+<ul>
+<li>Wikipedia</li>
+<li><a href="https://github.com/Microsoft/TypeScript/blob/master/lib/">TypeScript’s built-in typings</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">MDN web docs for JavaScript</a></li>
+<li><a href="https://tc39.github.io/ecma262/">ECMAScript language specification</a></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz: advanced</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/11">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_math.html">17 <code>Math</code></a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

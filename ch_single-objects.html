@@ -1,0 +1,1027 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_single-objects">28 Single objects</h2>
+<p><a id="index-entry-303" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>28.1 <a href="ch_single-objects.html#what-is-an-object">What is an object?</a>
+<ul>
+<li>28.1.1 <a href="ch_single-objects.html#roles-of-objects-record-vs.-dictionary">Roles of objects: record vs.&nbsp;dictionary</a></li>
+</ul></li>
+<li>28.2 <a href="ch_single-objects.html#objects-as-records">Objects as records</a>
+<ul>
+<li>28.2.1 <a href="ch_single-objects.html#object-literals">Object literals: properties</a></li>
+<li>28.2.2 <a href="ch_single-objects.html#object-literals-property-value-shorthands">Object literals: property value shorthands</a></li>
+<li>28.2.3 <a href="ch_single-objects.html#getting-properties">Getting properties</a></li>
+<li>28.2.4 <a href="ch_single-objects.html#setting-properties">Setting properties</a></li>
+<li>28.2.5 <a href="ch_single-objects.html#object-literals-methods">Object literals: methods</a></li>
+<li>28.2.6 <a href="ch_single-objects.html#object-literals-accessors">Object literals: accessors</a></li>
+</ul></li>
+<li>28.3 <a href="ch_single-objects.html#spreading-into-object-literals">Spreading into object literals (<code>...</code>) [ES2018]</a>
+<ul>
+<li>28.3.1 <a href="ch_single-objects.html#use-case-for-spreading-copying-objects">Use case for spreading: copying objects</a></li>
+<li>28.3.2 <a href="ch_single-objects.html#use-case-for-spreading-default-values-for-missing-properties">Use case for spreading: default values for missing properties</a></li>
+<li>28.3.3 <a href="ch_single-objects.html#use-case-for-spreading-non-destructively-changing-properties">Use case for spreading: non-destructively changing properties</a></li>
+</ul></li>
+<li>28.4 <a href="ch_single-objects.html#methods-and-this">Methods and the special variable <code>this</code></a>
+<ul>
+<li>28.4.1 <a href="ch_single-objects.html#methods-are-properties-whose-values-are-functions">Methods are properties whose values are functions</a></li>
+<li>28.4.2 <a href="ch_single-objects.html#the-special-variable-this">The special variable <code>this</code></a></li>
+<li>28.4.3 <a href="ch_single-objects.html#methods-call">Methods and <code>.call()</code></a></li>
+<li>28.4.4 <a href="ch_single-objects.html#methods-bind">Methods and <code>.bind()</code></a></li>
+<li>28.4.5 <a href="ch_single-objects.html#extracting-methods"><code>this</code> pitfall: extracting methods</a></li>
+<li>28.4.6 <a href="ch_single-objects.html#shadowing-this"><code>this</code> pitfall: accidentally shadowing <code>this</code></a></li>
+<li>28.4.7 <a href="ch_single-objects.html#the-value-of-this-in-various-contexts-advanced">The value of <code>this</code> in various contexts (advanced)</a></li>
+</ul></li>
+<li>28.5 <a href="ch_single-objects.html#optional-chaining">Optional chaining for property accesses and method calls [ES2020] (advanced)</a>
+<ul>
+<li>28.5.1 <a href="ch_single-objects.html#example-optional-static-property-access">Example: optional static property access</a></li>
+<li>28.5.2 <a href="ch_single-objects.html#the-operators-in-more-detail-advanced">The operators in more detail (advanced)</a></li>
+<li>28.5.3 <a href="ch_single-objects.html#short-circuiting-advanced">Short-circuiting (advanced)</a></li>
+<li>28.5.4 <a href="ch_single-objects.html#frequently-asked-questions">Frequently asked questions</a></li>
+</ul></li>
+<li>28.6 <a href="ch_single-objects.html#objects-as-dictionaries-advanced">Objects as dictionaries (advanced)</a>
+<ul>
+<li>28.6.1 <a href="ch_single-objects.html#arbitrary-fixed-strings-as-property-keys">Arbitrary fixed strings as property keys</a></li>
+<li>28.6.2 <a href="ch_single-objects.html#computed-property-keys">Computed property keys</a></li>
+<li>28.6.3 <a href="ch_single-objects.html#in-operator">The <code>in</code> operator: is there a property with a given key?</a></li>
+<li>28.6.4 <a href="ch_single-objects.html#deleting-properties">Deleting properties</a></li>
+<li>28.6.5 <a href="ch_single-objects.html#listing-property-keys">Listing property keys</a></li>
+<li>28.6.6 <a href="ch_single-objects.html#Object.values">Listing property values via <code>Object.values()</code></a></li>
+<li>28.6.7 <a href="ch_single-objects.html#Object.entries">Listing property entries via <code>Object.entries()</code> [ES2017]</a></li>
+<li>28.6.8 <a href="ch_single-objects.html#order-of-properties">Properties are listed deterministically</a></li>
+<li>28.6.9 <a href="ch_single-objects.html#Object.fromEntries">Assembling objects via <code>Object.fromEntries()</code> [ES2019]</a></li>
+<li>28.6.10 <a href="ch_single-objects.html#the-pitfalls-of-using-an-object-as-a-dictionary">The pitfalls of using an object as a dictionary</a></li>
+</ul></li>
+<li>28.7 <a href="ch_single-objects.html#standard-methods-advanced">Standard methods (advanced)</a>
+<ul>
+<li>28.7.1 <a href="ch_single-objects.html#tostring"><code>.toString()</code></a></li>
+<li>28.7.2 <a href="ch_single-objects.html#valueof"><code>.valueOf()</code></a></li>
+</ul></li>
+<li>28.8 <a href="ch_single-objects.html#advanced-topics">Advanced topics</a>
+<ul>
+<li>28.8.1 <a href="ch_single-objects.html#object.assign-es6"><code>Object.assign()</code> [ES6]</a></li>
+<li>28.8.2 <a href="ch_single-objects.html#freezing-objects-es5">Freezing objects [ES5]</a></li>
+<li>28.8.3 <a href="ch_single-objects.html#property-attributes">Property attributes and property descriptors [ES5]</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>In this book, JavaScript’s style of object-oriented programming (OOP) is introduced in four steps. This chapter covers step 1; <a href="ch_proto-chains-classes.html">the next chapter</a> covers steps 2–4. The steps are (fig.&nbsp;<a href="#fig:oop_steps1">8</a>):</p>
+<ol type="1">
+<li><strong>Single objects (this chapter):</strong> How do <em>objects</em>, JavaScript’s basic OOP building blocks, work in isolation?</li>
+<li><strong>Prototype chains (next chapter):</strong> Each object has a chain of zero or more <em>prototype objects</em>. Prototypes are JavaScript’s core inheritance mechanism.</li>
+<li><strong>Classes (next chapter):</strong> JavaScript’s <em>classes</em> are factories for objects. The relationship between a class and its instances is based on prototypal inheritance.</li>
+<li><strong>Subclassing (next chapter):</strong> The relationship between a <em>subclass</em> and its <em>superclass</em> is also based on prototypal inheritance.</li>
+</ol>
+<figure>
+<img src="img-book/a5f3d243b908caeb74fa598e75fa5a8c0feee148.svg" id="fig:oop_steps1" data-factor="0.4" width="361" height="154" alt="Figure 8: This book introduces object-oriented programming in JavaScript in four steps."><figcaption aria-hidden="true">Figure 8: This book introduces object-oriented programming in JavaScript in four steps.</figcaption>
+</figure>
+<h3 id="what-is-an-object">28.1 What is an object?</h3>
+<p><a id="index-entry-304" class="index-entry"></a></p>
+<p>In JavaScript:</p>
+<ul>
+<li>An object is a set of <em>properties</em> (key-value entries).</li>
+<li>A property key can only be a string or a symbol.</li>
+</ul>
+<h4 id="roles-of-objects-record-vs.-dictionary">28.1.1 Roles of objects: record vs.&nbsp;dictionary</h4>
+<p><a id="index-entry-305" class="index-entry"></a><a id="index-entry-306" class="index-entry"></a></p>
+<p>Objects play two roles in JavaScript:</p>
+<ul>
+<li><p>Records: Objects-as-records have a fixed number of properties, whose keys are known at development time. Their values can have different types. <a id="index-entry-307" class="index-entry"></a></p></li>
+<li><p>Dictionaries: Objects-as-dictionaries have a variable number of properties, whose keys are not known at development time. All of their values have the same type. <a id="index-entry-308" class="index-entry"></a></p></li>
+</ul>
+<p>These roles influence how objects are explained in this chapter:</p>
+<ul>
+<li>First, we’ll explore objects-as-records. Even though property keys are strings or symbols under the hood, they will appear as fixed identifiers to us, in this part of the chapter.</li>
+<li>Later, we’ll explore objects-as-dictionaries. Note that <a href="ch_maps.html">Maps</a> are usually better dictionaries than objects. However, some of the operations that we’ll encounter, can also be useful for objects-as-records.</li>
+</ul>
+<h3 id="objects-as-records">28.2 Objects as records</h3>
+<p>Let’s first explore the role <em>record</em> of objects.</p>
+<h4 id="object-literals">28.2.1 Object literals: properties</h4>
+<p><a id="index-entry-309" class="index-entry"></a></p>
+<p><em>Object literals</em> are one way of creating objects-as-records. They are a stand-out feature of JavaScript: we can directly create objects – no need for classes! This is an example:</p>
+<div class="sourceCode" id="cb660"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb660-1"><a href="ch_single-objects.html#cb660-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb660-2"><a href="ch_single-objects.html#cb660-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb660-3"><a href="ch_single-objects.html#cb660-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span><span class="op">,</span> <span class="co">// optional trailing comma</span></span>
+<span id="cb660-4"><a href="ch_single-objects.html#cb660-4" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>In the example, we created an object via an object literal, which starts and ends with curly braces <code>{}</code>. Inside it, we defined two <em>properties</em> (key-value entries):</p>
+<ul>
+<li>The first property has the key <code>first</code> and the value <code>'Jane'</code>.</li>
+<li>The second property has the key <code>last</code> and the value <code>'Doe'</code>.</li>
+</ul>
+<p><a id="index-entry-310" class="index-entry"></a></p>
+<p>Since ES5, trailing commas are allowed in object literals.</p>
+<p>We will later see other ways of specifying property keys, but with this way of specifying them, they must follow the rules of JavaScript variable names. For example, we can use <code>first_name</code> as a property key, but not <code>first-name</code>). However, reserved words are allowed:</p>
+<div class="sourceCode" id="cb661"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb661-1"><a href="ch_single-objects.html#cb661-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb661-2"><a href="ch_single-objects.html#cb661-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">if</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb661-3"><a href="ch_single-objects.html#cb661-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb661-4"><a href="ch_single-objects.html#cb661-4" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>In order to check the effects of various operations on objects, we’ll occasionally use <code>Object.keys()</code> in this part of the chapter. It lists property keys:</p>
+<div class="sourceCode" id="cb662"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb662-1"><a href="ch_single-objects.html#cb662-1" aria-hidden="true" tabindex="-1"></a>&gt; Object.keys({a:1, b:2})</span>
+<span id="cb662-2"><a href="ch_single-objects.html#cb662-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b' ]</span></span></code></pre></div>
+<h4 id="object-literals-property-value-shorthands">28.2.2 Object literals: property value shorthands</h4>
+<p><a id="index-entry-311" class="index-entry"></a></p>
+<p>Whenever the value of a property is defined via a variable name and that name is the same as the key, we can omit the key.</p>
+<div class="sourceCode" id="cb663"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb663-1"><a href="ch_single-objects.html#cb663-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">createPoint</span>(x<span class="op">,</span> y) {</span>
+<span id="cb663-2"><a href="ch_single-objects.html#cb663-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {x<span class="op">,</span> y}<span class="op">;</span></span>
+<span id="cb663-3"><a href="ch_single-objects.html#cb663-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb663-4"><a href="ch_single-objects.html#cb663-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb663-5"><a href="ch_single-objects.html#cb663-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createPoint</span>(<span class="dv">9</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">,</span></span>
+<span id="cb663-6"><a href="ch_single-objects.html#cb663-6" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">x</span><span class="op">:</span> <span class="dv">9</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">2</span> }</span>
+<span id="cb663-7"><a href="ch_single-objects.html#cb663-7" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<h4 id="getting-properties">28.2.3 Getting properties</h4>
+<p>This is how we <em>get</em> (read) a property (line A):</p>
+<div class="sourceCode" id="cb664"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb664-1"><a href="ch_single-objects.html#cb664-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb664-2"><a href="ch_single-objects.html#cb664-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb664-3"><a href="ch_single-objects.html#cb664-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span><span class="op">,</span></span>
+<span id="cb664-4"><a href="ch_single-objects.html#cb664-4" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb664-5"><a href="ch_single-objects.html#cb664-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb664-6"><a href="ch_single-objects.html#cb664-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Get property .first</span></span>
+<span id="cb664-7"><a href="ch_single-objects.html#cb664-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(jane<span class="op">.</span><span class="at">first</span><span class="op">,</span> <span class="st">'Jane'</span>)<span class="op">;</span> <span class="co">// (A)</span></span></code></pre></div>
+<p>Getting an unknown property produces <code>undefined</code>:</p>
+<div class="sourceCode" id="cb665"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb665-1"><a href="ch_single-objects.html#cb665-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(jane<span class="op">.</span><span class="at">unknownProperty</span><span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="setting-properties">28.2.4 Setting properties</h4>
+<p>This is how we <em>set</em> (write to) a property:</p>
+<div class="sourceCode" id="cb666"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb666-1"><a href="ch_single-objects.html#cb666-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb666-2"><a href="ch_single-objects.html#cb666-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">prop</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb666-3"><a href="ch_single-objects.html#cb666-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb666-4"><a href="ch_single-objects.html#cb666-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">prop</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb666-5"><a href="ch_single-objects.html#cb666-5" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="at">prop</span> <span class="op">=</span> <span class="dv">2</span><span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb666-6"><a href="ch_single-objects.html#cb666-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">prop</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span></code></pre></div>
+<p>We just changed an existing property via setting. If we set an unknown property, we create a new entry:</p>
+<div class="sourceCode" id="cb667"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb667-1"><a href="ch_single-objects.html#cb667-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {}<span class="op">;</span> <span class="co">// empty object</span></span>
+<span id="cb667-2"><a href="ch_single-objects.html#cb667-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb667-3"><a href="ch_single-objects.html#cb667-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(obj)<span class="op">,</span> [])<span class="op">;</span></span>
+<span id="cb667-4"><a href="ch_single-objects.html#cb667-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb667-5"><a href="ch_single-objects.html#cb667-5" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="at">unknownProperty</span> <span class="op">=</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb667-6"><a href="ch_single-objects.html#cb667-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb667-7"><a href="ch_single-objects.html#cb667-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(obj)<span class="op">,</span> [<span class="st">'unknownProperty'</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="object-literals-methods">28.2.5 Object literals: methods</h4>
+<p><a id="index-entry-312" class="index-entry"></a></p>
+<p>The following code shows how to create the method <code>.says()</code> via an object literal:</p>
+<div class="sourceCode" id="cb668"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb668-1"><a href="ch_single-objects.html#cb668-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb668-2"><a href="ch_single-objects.html#cb668-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span> <span class="co">// data property</span></span>
+<span id="cb668-3"><a href="ch_single-objects.html#cb668-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">says</span>(text) {   <span class="co">// method</span></span>
+<span id="cb668-4"><a href="ch_single-objects.html#cb668-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">first</span><span class="sc">}</span><span class="vs"> says “</span><span class="sc">${</span>text<span class="sc">}</span><span class="vs">”`</span><span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb668-5"><a href="ch_single-objects.html#cb668-5" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span> <span class="co">// comma as separator (optional at end)</span></span>
+<span id="cb668-6"><a href="ch_single-objects.html#cb668-6" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb668-7"><a href="ch_single-objects.html#cb668-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(jane<span class="op">.</span><span class="fu">says</span>(<span class="st">'hello'</span>)<span class="op">,</span> <span class="st">'Jane says “hello”'</span>)<span class="op">;</span></span></code></pre></div>
+<p>During the method call <code>jane.says('hello')</code>, <code>jane</code> is called the <em>receiver</em> of the method call and assigned to the special variable <code>this</code> (more on <code>this</code> in <a href="ch_single-objects.html#methods-and-this">§28.4 “Methods and the special variable <code>this</code>”</a>). That enables method <code>.says()</code> to access the sibling property <code>.first</code> in line A.</p>
+<h4 id="object-literals-accessors">28.2.6 Object literals: accessors</h4>
+<p><a id="index-entry-313" class="index-entry"></a></p>
+<p>There are two kinds of accessors in JavaScript:</p>
+<ul>
+<li>A <em>getter</em> is a method-like entity that is invoked by getting a property.</li>
+<li>A <em>setter</em> is a method-like entity that is invoked by setting a property.</li>
+</ul>
+<h5 id="getters">28.2.6.1 Getters</h5>
+<p><a id="index-entry-314" class="index-entry"></a></p>
+<p>A getter is created by prefixing a method definition with the modifier <code>get</code>:</p>
+<div class="sourceCode" id="cb669"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb669-1"><a href="ch_single-objects.html#cb669-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb669-2"><a href="ch_single-objects.html#cb669-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb669-3"><a href="ch_single-objects.html#cb669-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span><span class="op">,</span></span>
+<span id="cb669-4"><a href="ch_single-objects.html#cb669-4" aria-hidden="true" tabindex="-1"></a>  get <span class="fu">full</span>() {</span>
+<span id="cb669-5"><a href="ch_single-objects.html#cb669-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">first</span><span class="sc">}</span><span class="vs"> </span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">last</span><span class="sc">}</span><span class="vs">`</span><span class="op">;</span></span>
+<span id="cb669-6"><a href="ch_single-objects.html#cb669-6" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb669-7"><a href="ch_single-objects.html#cb669-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb669-8"><a href="ch_single-objects.html#cb669-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb669-9"><a href="ch_single-objects.html#cb669-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(jane<span class="op">.</span><span class="at">full</span><span class="op">,</span> <span class="st">'Jane Doe'</span>)<span class="op">;</span></span>
+<span id="cb669-10"><a href="ch_single-objects.html#cb669-10" aria-hidden="true" tabindex="-1"></a>jane<span class="op">.</span><span class="at">first</span> <span class="op">=</span> <span class="st">'John'</span><span class="op">;</span></span>
+<span id="cb669-11"><a href="ch_single-objects.html#cb669-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(jane<span class="op">.</span><span class="at">full</span><span class="op">,</span> <span class="st">'John Doe'</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="setters">28.2.6.2 Setters</h5>
+<p><a id="index-entry-315" class="index-entry"></a></p>
+<p>A setter is created by prefixing a method definition with the modifier <code>set</code>:</p>
+<div class="sourceCode" id="cb670"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb670-1"><a href="ch_single-objects.html#cb670-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb670-2"><a href="ch_single-objects.html#cb670-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb670-3"><a href="ch_single-objects.html#cb670-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span><span class="op">,</span></span>
+<span id="cb670-4"><a href="ch_single-objects.html#cb670-4" aria-hidden="true" tabindex="-1"></a>  set <span class="fu">full</span>(fullName) {</span>
+<span id="cb670-5"><a href="ch_single-objects.html#cb670-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> parts <span class="op">=</span> fullName<span class="op">.</span><span class="fu">split</span>(<span class="st">' '</span>)<span class="op">;</span></span>
+<span id="cb670-6"><a href="ch_single-objects.html#cb670-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">first</span> <span class="op">=</span> parts[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb670-7"><a href="ch_single-objects.html#cb670-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">last</span> <span class="op">=</span> parts[<span class="dv">1</span>]<span class="op">;</span></span>
+<span id="cb670-8"><a href="ch_single-objects.html#cb670-8" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb670-9"><a href="ch_single-objects.html#cb670-9" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb670-10"><a href="ch_single-objects.html#cb670-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb670-11"><a href="ch_single-objects.html#cb670-11" aria-hidden="true" tabindex="-1"></a>jane<span class="op">.</span><span class="at">full</span> <span class="op">=</span> <span class="st">'Richard Roe'</span><span class="op">;</span></span>
+<span id="cb670-12"><a href="ch_single-objects.html#cb670-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(jane<span class="op">.</span><span class="at">first</span><span class="op">,</span> <span class="st">'Richard'</span>)<span class="op">;</span></span>
+<span id="cb670-13"><a href="ch_single-objects.html#cb670-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(jane<span class="op">.</span><span class="at">last</span><span class="op">,</span> <span class="st">'Roe'</span>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Creating an object via an object literal</strong></p>
+<p><code>exercises/single-objects/color_point_object_test.mjs</code></p>
+</div>
+<h3 id="spreading-into-object-literals">28.3 Spreading into object literals (<code>...</code>) [ES2018]</h3>
+<p><a id="index-entry-316" class="index-entry"></a></p>
+<p><a href="ch_callables.html#spread-arguments">Inside a function call</a>, spreading (<code>...</code>) turns the iterated values of <a href="ch_sync-iteration.html">an <em>iterable</em> object</a> into arguments.</p>
+<p>Inside an object literal, a <em>spread property</em> adds the properties of another object to the current one:</p>
+<div class="sourceCode" id="cb671"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb671-1"><a href="ch_single-objects.html#cb671-1" aria-hidden="true" tabindex="-1"></a>&gt; const obj = {foo: 1, bar: 2};</span>
+<span id="cb671-2"><a href="ch_single-objects.html#cb671-2" aria-hidden="true" tabindex="-1"></a>&gt; {...obj, baz: 3}</span>
+<span id="cb671-3"><a href="ch_single-objects.html#cb671-3" aria-hidden="true" tabindex="-1"></a><span class="kw">{ foo: 1, bar: 2, baz: 3 }</span></span></code></pre></div>
+<p>If property keys clash, the property that is mentioned last “wins”:</p>
+<div class="sourceCode" id="cb672"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb672-1"><a href="ch_single-objects.html#cb672-1" aria-hidden="true" tabindex="-1"></a>&gt; const obj = {foo: 1, bar: 2, baz: 3};</span>
+<span id="cb672-2"><a href="ch_single-objects.html#cb672-2" aria-hidden="true" tabindex="-1"></a>&gt; {...obj, foo: true}</span>
+<span id="cb672-3"><a href="ch_single-objects.html#cb672-3" aria-hidden="true" tabindex="-1"></a><span class="kw">{ foo: true, bar: 2, baz: 3 }</span></span>
+<span id="cb672-4"><a href="ch_single-objects.html#cb672-4" aria-hidden="true" tabindex="-1"></a>&gt; {foo: true, ...obj}</span>
+<span id="cb672-5"><a href="ch_single-objects.html#cb672-5" aria-hidden="true" tabindex="-1"></a><span class="kw">{ foo: 1, bar: 2, baz: 3 }</span></span></code></pre></div>
+<p>All values are spreadable, even <code>undefined</code> and <code>null</code>:</p>
+<div class="sourceCode" id="cb673"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb673-1"><a href="ch_single-objects.html#cb673-1" aria-hidden="true" tabindex="-1"></a>&gt; {...undefined}</span>
+<span id="cb673-2"><a href="ch_single-objects.html#cb673-2" aria-hidden="true" tabindex="-1"></a><span class="kw">{}</span></span>
+<span id="cb673-3"><a href="ch_single-objects.html#cb673-3" aria-hidden="true" tabindex="-1"></a>&gt; {...null}</span>
+<span id="cb673-4"><a href="ch_single-objects.html#cb673-4" aria-hidden="true" tabindex="-1"></a><span class="kw">{}</span></span>
+<span id="cb673-5"><a href="ch_single-objects.html#cb673-5" aria-hidden="true" tabindex="-1"></a>&gt; {...123}</span>
+<span id="cb673-6"><a href="ch_single-objects.html#cb673-6" aria-hidden="true" tabindex="-1"></a><span class="kw">{}</span></span>
+<span id="cb673-7"><a href="ch_single-objects.html#cb673-7" aria-hidden="true" tabindex="-1"></a>&gt; {...'abc'}</span>
+<span id="cb673-8"><a href="ch_single-objects.html#cb673-8" aria-hidden="true" tabindex="-1"></a><span class="kw">{ '0': 'a', '1': 'b', '2': 'c' }</span></span>
+<span id="cb673-9"><a href="ch_single-objects.html#cb673-9" aria-hidden="true" tabindex="-1"></a>&gt; {...['a', 'b']}</span>
+<span id="cb673-10"><a href="ch_single-objects.html#cb673-10" aria-hidden="true" tabindex="-1"></a><span class="kw">{ '0': 'a', '1': 'b' }</span></span></code></pre></div>
+<p>Property <code>.length</code> of strings and of Arrays is hidden from this kind of operation (it is not <em>enumerable</em>; see <a href="ch_single-objects.html#property-attributes">§28.8.3 “Property attributes and property descriptors [ES5]”</a> for more information).</p>
+<h4 id="use-case-for-spreading-copying-objects">28.3.1 Use case for spreading: copying objects</h4>
+<p><a id="index-entry-317" class="index-entry"></a><a id="index-entry-318" class="index-entry"></a><a id="index-entry-319" class="index-entry"></a> <a id="index-entry-320" class="index-entry"></a><a id="index-entry-321" class="index-entry"></a><a id="index-entry-322" class="index-entry"></a></p>
+<p>We can use spreading to create a copy of an object <code>original</code>:</p>
+<div class="sourceCode" id="cb674"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb674-1"><a href="ch_single-objects.html#cb674-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> copy <span class="op">=</span> {<span class="op">...</span>original}<span class="op">;</span></span></code></pre></div>
+<p>Caveat – copying is <em>shallow</em>: <code>copy</code> is a fresh object with duplicates of all properties (key-value entries) of <code>original</code>. But if property values are objects, then those are not copied themselves; they are shared between <code>original</code> and <code>copy</code>. Let’s look at an example:</p>
+<div class="sourceCode" id="cb675"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb675-1"><a href="ch_single-objects.html#cb675-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> original <span class="op">=</span> { <span class="dt">a</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">b</span><span class="op">:</span> {<span class="dt">foo</span><span class="op">:</span> <span class="kw">true</span>} }<span class="op">;</span></span>
+<span id="cb675-2"><a href="ch_single-objects.html#cb675-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> copy <span class="op">=</span> {<span class="op">...</span>original}<span class="op">;</span></span></code></pre></div>
+<p>The first level of <code>copy</code> is really a copy: If we change any properties at that level, it does not affect the original:</p>
+<div class="sourceCode" id="cb676"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb676-1"><a href="ch_single-objects.html#cb676-1" aria-hidden="true" tabindex="-1"></a>copy<span class="op">.</span><span class="at">a</span> <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb676-2"><a href="ch_single-objects.html#cb676-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb676-3"><a href="ch_single-objects.html#cb676-3" aria-hidden="true" tabindex="-1"></a>  original<span class="op">,</span> { <span class="dt">a</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">b</span><span class="op">:</span> {<span class="dt">foo</span><span class="op">:</span> <span class="kw">true</span>} })<span class="op">;</span> <span class="co">// no change</span></span></code></pre></div>
+<p>However, deeper levels are not copied. For example, the value of <code>.b</code> is shared between original and copy. Changing <code>.b</code> in the copy also changes it in the original.</p>
+<div class="sourceCode" id="cb677"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb677-1"><a href="ch_single-objects.html#cb677-1" aria-hidden="true" tabindex="-1"></a>copy<span class="op">.</span><span class="at">b</span><span class="op">.</span><span class="at">foo</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb677-2"><a href="ch_single-objects.html#cb677-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb677-3"><a href="ch_single-objects.html#cb677-3" aria-hidden="true" tabindex="-1"></a>  original<span class="op">,</span> { <span class="dt">a</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">b</span><span class="op">:</span> {<span class="dt">foo</span><span class="op">:</span> <span class="kw">false</span>} })<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/exclamation-triangle-regular.svg" height="24">&nbsp; <strong>JavaScript doesn’t have built-in support for deep copying</strong></p>
+<p><em>Deep copies</em> of objects (where all levels are copied) are notoriously difficult to do generically. Therefore, JavaScript does not have a built-in operation for them (for now). If we need such an operation, we have to implement it ourselves.</p>
+</div>
+<h4 id="use-case-for-spreading-default-values-for-missing-properties">28.3.2 Use case for spreading: default values for missing properties</h4>
+<p>If one of the inputs of our code is an object with data, we can make properties optional by specifying default values that are used if those properties are missing. One technique for doing so is via an object whose properties contain the default values. In the following example, that object is <code>DEFAULTS</code>:</p>
+<div class="sourceCode" id="cb678"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb678-1"><a href="ch_single-objects.html#cb678-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> DEFAULTS <span class="op">=</span> {<span class="dt">foo</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="st">'b'</span>}<span class="op">;</span></span>
+<span id="cb678-2"><a href="ch_single-objects.html#cb678-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> providedData <span class="op">=</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span>}<span class="op">;</span></span>
+<span id="cb678-3"><a href="ch_single-objects.html#cb678-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb678-4"><a href="ch_single-objects.html#cb678-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> allData <span class="op">=</span> {<span class="op">...</span>DEFAULTS<span class="op">,</span> <span class="op">...</span>providedData}<span class="op">;</span></span>
+<span id="cb678-5"><a href="ch_single-objects.html#cb678-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(allData<span class="op">,</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="st">'b'</span>})<span class="op">;</span></span></code></pre></div>
+<p>The result, the object <code>allData</code>, is created by copying <code>DEFAULTS</code> and overriding its properties with those of <code>providedData</code>.</p>
+<p>But we don’t need an object to specify the default values; we can also specify them inside the object literal, individually:</p>
+<div class="sourceCode" id="cb679"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb679-1"><a href="ch_single-objects.html#cb679-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> providedData <span class="op">=</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span>}<span class="op">;</span></span>
+<span id="cb679-2"><a href="ch_single-objects.html#cb679-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb679-3"><a href="ch_single-objects.html#cb679-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> allData <span class="op">=</span> {<span class="dt">foo</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="st">'b'</span><span class="op">,</span> <span class="op">...</span>providedData}<span class="op">;</span></span>
+<span id="cb679-4"><a href="ch_single-objects.html#cb679-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(allData<span class="op">,</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="st">'b'</span>})<span class="op">;</span></span></code></pre></div>
+<h4 id="use-case-for-spreading-non-destructively-changing-properties">28.3.3 Use case for spreading: non-destructively changing properties</h4>
+<p>So far, we have encountered one way of changing a property <code>.foo</code> of an object: We <em>set</em> it (line A) and mutate the object. That is, this way of changing a property is <em>destructive</em>.</p>
+<div class="sourceCode" id="cb680"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb680-1"><a href="ch_single-objects.html#cb680-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {<span class="dt">foo</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="st">'b'</span>}<span class="op">;</span></span>
+<span id="cb680-2"><a href="ch_single-objects.html#cb680-2" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="at">foo</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb680-3"><a href="ch_single-objects.html#cb680-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(obj<span class="op">,</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="st">'b'</span>})<span class="op">;</span></span></code></pre></div>
+<p>With spreading, we can change <code>.foo</code> <em>non-destructively</em> – we make a copy of <code>obj</code> where <code>.foo</code> has a different value:</p>
+<div class="sourceCode" id="cb681"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb681-1"><a href="ch_single-objects.html#cb681-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {<span class="dt">foo</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="st">'b'</span>}<span class="op">;</span></span>
+<span id="cb681-2"><a href="ch_single-objects.html#cb681-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> updatedObj <span class="op">=</span> {<span class="op">...</span>obj<span class="op">,</span> <span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span>}<span class="op">;</span></span>
+<span id="cb681-3"><a href="ch_single-objects.html#cb681-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(updatedObj<span class="op">,</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="st">'b'</span>})<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Non-destructively updating a property via spreading (fixed key)</strong></p>
+<p><code>exercises/single-objects/update_name_test.mjs</code></p>
+</div>
+<h3 id="methods-and-this">28.4 Methods and the special variable <code>this</code></h3>
+<p><a id="index-entry-323" class="index-entry"></a></p>
+<h4 id="methods-are-properties-whose-values-are-functions">28.4.1 Methods are properties whose values are functions</h4>
+<p>Let’s revisit the example that was used to introduce methods:</p>
+<div class="sourceCode" id="cb682"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb682-1"><a href="ch_single-objects.html#cb682-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb682-2"><a href="ch_single-objects.html#cb682-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb682-3"><a href="ch_single-objects.html#cb682-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">says</span>(text) {</span>
+<span id="cb682-4"><a href="ch_single-objects.html#cb682-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">first</span><span class="sc">}</span><span class="vs"> says “</span><span class="sc">${</span>text<span class="sc">}</span><span class="vs">”`</span><span class="op">;</span></span>
+<span id="cb682-5"><a href="ch_single-objects.html#cb682-5" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb682-6"><a href="ch_single-objects.html#cb682-6" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>Somewhat surprisingly, methods are functions:</p>
+<div class="sourceCode" id="cb683"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb683-1"><a href="ch_single-objects.html#cb683-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">typeof</span> jane<span class="op">.</span><span class="at">says</span><span class="op">,</span> <span class="st">'function'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Why is that? We learned <a href="ch_callables.html#roles-of-ordinary-functions">in the chapter on callable values</a>, that ordinary functions play several roles. <em>Method</em> is one of those roles. Therefore, under the hood, <code>jane</code> roughly looks as follows.</p>
+<div class="sourceCode" id="cb684"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb684-1"><a href="ch_single-objects.html#cb684-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb684-2"><a href="ch_single-objects.html#cb684-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb684-3"><a href="ch_single-objects.html#cb684-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">says</span><span class="op">:</span> <span class="kw">function</span> (text) {</span>
+<span id="cb684-4"><a href="ch_single-objects.html#cb684-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">first</span><span class="sc">}</span><span class="vs"> says “</span><span class="sc">${</span>text<span class="sc">}</span><span class="vs">”`</span><span class="op">;</span></span>
+<span id="cb684-5"><a href="ch_single-objects.html#cb684-5" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb684-6"><a href="ch_single-objects.html#cb684-6" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<h4 id="the-special-variable-this">28.4.2 The special variable <code>this</code></h4>
+<p><a id="index-entry-324" class="index-entry"></a><a id="index-entry-325" class="index-entry"></a></p>
+<p>Consider the following code:</p>
+<div class="sourceCode" id="cb685"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb685-1"><a href="ch_single-objects.html#cb685-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb685-2"><a href="ch_single-objects.html#cb685-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">someMethod</span>(x<span class="op">,</span> y) {</span>
+<span id="cb685-3"><a href="ch_single-objects.html#cb685-3" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">this</span><span class="op">,</span> obj)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb685-4"><a href="ch_single-objects.html#cb685-4" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb685-5"><a href="ch_single-objects.html#cb685-5" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(y<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span>
+<span id="cb685-6"><a href="ch_single-objects.html#cb685-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb685-7"><a href="ch_single-objects.html#cb685-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb685-8"><a href="ch_single-objects.html#cb685-8" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="fu">someMethod</span>(<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span> <span class="co">// (B)</span></span></code></pre></div>
+<p>In line B, <code>obj</code> is the <em>receiver</em> of a method call. It is passed to the function stored in <code>obj.someMethod</code> via the implicit parameter whose name is <code>this</code> (line A).</p>
+<h4 id="methods-call">28.4.3 Methods and <code>.call()</code></h4>
+<p>Recall that methods are function objects that have methods – for example, <a href="ch_callables.html#Function.prototype.call">method <code>.call()</code></a>. In the previous example, there was this method invocation:</p>
+<div class="sourceCode" id="cb686"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb686-1"><a href="ch_single-objects.html#cb686-1" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="fu">someMethod</span>(<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>)</span></code></pre></div>
+<p>This invocation is equivalent to:</p>
+<div class="sourceCode" id="cb687"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb687-1"><a href="ch_single-objects.html#cb687-1" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="at">someMethod</span><span class="op">.</span><span class="fu">call</span>(obj<span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span></code></pre></div>
+<p>As an aside, this means that there are actually two different dot operators:</p>
+<ol type="1">
+<li>One for accessing properties: <code>obj.prop</code></li>
+<li>One for making method calls: <code>obj.prop()</code></li>
+</ol>
+<p>They are different in that (2) is not just (1) followed by the function call operator <code>()</code>. Instead, (2) additionally specifies a value for <code>this</code>.</p>
+<h4 id="methods-bind">28.4.4 Methods and <code>.bind()</code></h4>
+<p><a href="ch_callables.html#Function.prototype.bind"><code>.bind()</code></a> is another method of function objects. In the following code, we use <code>.bind()</code> turn method <code>.says()</code> into the stand-alone function <code>func()</code>:</p>
+<div class="sourceCode" id="cb688"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb688-1"><a href="ch_single-objects.html#cb688-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb688-2"><a href="ch_single-objects.html#cb688-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb688-3"><a href="ch_single-objects.html#cb688-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">says</span>(text) {</span>
+<span id="cb688-4"><a href="ch_single-objects.html#cb688-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">first</span><span class="sc">}</span><span class="vs"> says “</span><span class="sc">${</span>text<span class="sc">}</span><span class="vs">”`</span><span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb688-5"><a href="ch_single-objects.html#cb688-5" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb688-6"><a href="ch_single-objects.html#cb688-6" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb688-7"><a href="ch_single-objects.html#cb688-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb688-8"><a href="ch_single-objects.html#cb688-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func <span class="op">=</span> jane<span class="op">.</span><span class="at">says</span><span class="op">.</span><span class="fu">bind</span>(jane<span class="op">,</span> <span class="st">'hello'</span>)<span class="op">;</span></span>
+<span id="cb688-9"><a href="ch_single-objects.html#cb688-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">func</span>()<span class="op">,</span> <span class="st">'Jane says “hello”'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Setting <code>this</code> to <code>jane</code> via <code>.bind()</code> is crucial here. Otherwise, <code>func()</code> wouldn’t work properly because <code>this</code> is used in line A. In the next section, we’ll explore why that is.</p>
+<h4 id="extracting-methods">28.4.5 <code>this</code> pitfall: extracting methods</h4>
+<p><a id="index-entry-326" class="index-entry"></a><a id="index-entry-327" class="index-entry"></a></p>
+<p>We now know quite a bit about functions and methods and are ready to take a look at the biggest pitfall involving methods and <code>this</code>: function-calling a method extracted from an object can fail if we are not careful.</p>
+<p>In the following example, we fail when we extract method <code>jane.says()</code>, store it in the variable <code>func</code>, and function-call <code>func()</code>.</p>
+<div class="sourceCode" id="cb689"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb689-1"><a href="ch_single-objects.html#cb689-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb689-2"><a href="ch_single-objects.html#cb689-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb689-3"><a href="ch_single-objects.html#cb689-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">says</span>(text) {</span>
+<span id="cb689-4"><a href="ch_single-objects.html#cb689-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">first</span><span class="sc">}</span><span class="vs"> says “</span><span class="sc">${</span>text<span class="sc">}</span><span class="vs">”`</span><span class="op">;</span></span>
+<span id="cb689-5"><a href="ch_single-objects.html#cb689-5" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb689-6"><a href="ch_single-objects.html#cb689-6" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb689-7"><a href="ch_single-objects.html#cb689-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func <span class="op">=</span> jane<span class="op">.</span><span class="at">says</span><span class="op">;</span> <span class="co">// extract the method</span></span>
+<span id="cb689-8"><a href="ch_single-objects.html#cb689-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb689-9"><a href="ch_single-objects.html#cb689-9" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> <span class="fu">func</span>(<span class="st">'hello'</span>)<span class="op">,</span> <span class="co">// (A)</span></span>
+<span id="cb689-10"><a href="ch_single-objects.html#cb689-10" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb689-11"><a href="ch_single-objects.html#cb689-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">'TypeError'</span><span class="op">,</span></span>
+<span id="cb689-12"><a href="ch_single-objects.html#cb689-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">message</span><span class="op">:</span> <span class="st">"Cannot read property 'first' of undefined"</span><span class="op">,</span></span>
+<span id="cb689-13"><a href="ch_single-objects.html#cb689-13" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>The function call in line A is equivalent to:</p>
+<div class="sourceCode" id="cb690"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb690-1"><a href="ch_single-objects.html#cb690-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb690-2"><a href="ch_single-objects.html#cb690-2" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> jane<span class="op">.</span><span class="at">says</span><span class="op">.</span><span class="fu">call</span>(<span class="kw">undefined</span><span class="op">,</span> <span class="st">'hello'</span>)<span class="op">,</span> <span class="co">// `this` is undefined!</span></span>
+<span id="cb690-3"><a href="ch_single-objects.html#cb690-3" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb690-4"><a href="ch_single-objects.html#cb690-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">'TypeError'</span><span class="op">,</span></span>
+<span id="cb690-5"><a href="ch_single-objects.html#cb690-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">message</span><span class="op">:</span> <span class="st">"Cannot read property 'first' of undefined"</span><span class="op">,</span></span>
+<span id="cb690-6"><a href="ch_single-objects.html#cb690-6" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>So how do we fix this? We need to use <code>.bind()</code> to extract method <code>.says()</code>:</p>
+<div class="sourceCode" id="cb691"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb691-1"><a href="ch_single-objects.html#cb691-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func2 <span class="op">=</span> jane<span class="op">.</span><span class="at">says</span><span class="op">.</span><span class="fu">bind</span>(jane)<span class="op">;</span></span>
+<span id="cb691-2"><a href="ch_single-objects.html#cb691-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">func2</span>(<span class="st">'hello'</span>)<span class="op">,</span> <span class="st">'Jane says “hello”'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The <code>.bind()</code> ensures that <code>this</code> is always <code>jane</code> when we call <code>func()</code>.</p>
+<p>We can also use arrow functions to extract methods:</p>
+<div class="sourceCode" id="cb692"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb692-1"><a href="ch_single-objects.html#cb692-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func3 <span class="op">=</span> text <span class="kw">=&gt;</span> jane<span class="op">.</span><span class="fu">says</span>(text)<span class="op">;</span></span>
+<span id="cb692-2"><a href="ch_single-objects.html#cb692-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">func3</span>(<span class="st">'hello'</span>)<span class="op">,</span> <span class="st">'Jane says “hello”'</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="example-extracting-a-method">28.4.5.1 Example: extracting a method</h5>
+<p>The following is a simplified version of code that we may see in actual web development:</p>
+<div class="sourceCode" id="cb693"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb693-1"><a href="ch_single-objects.html#cb693-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ClickHandler {</span>
+<span id="cb693-2"><a href="ch_single-objects.html#cb693-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(id<span class="op">,</span> elem) {</span>
+<span id="cb693-3"><a href="ch_single-objects.html#cb693-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">id</span> <span class="op">=</span> id<span class="op">;</span></span>
+<span id="cb693-4"><a href="ch_single-objects.html#cb693-4" aria-hidden="true" tabindex="-1"></a>    elem<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">'click'</span><span class="op">,</span> <span class="kw">this</span><span class="op">.</span><span class="at">handleClick</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb693-5"><a href="ch_single-objects.html#cb693-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb693-6"><a href="ch_single-objects.html#cb693-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">handleClick</span>(<span class="bu">event</span>) {</span>
+<span id="cb693-7"><a href="ch_single-objects.html#cb693-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">alert</span>(<span class="st">'Clicked '</span> <span class="op">+</span> <span class="kw">this</span><span class="op">.</span><span class="at">id</span>)<span class="op">;</span></span>
+<span id="cb693-8"><a href="ch_single-objects.html#cb693-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb693-9"><a href="ch_single-objects.html#cb693-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>In line A, we don’t extract the method <code>.handleClick()</code> properly. Instead, we should do:</p>
+<div class="sourceCode" id="cb694"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb694-1"><a href="ch_single-objects.html#cb694-1" aria-hidden="true" tabindex="-1"></a>elem<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">'click'</span><span class="op">,</span> <span class="kw">this</span><span class="op">.</span><span class="at">handleClick</span><span class="op">.</span><span class="fu">bind</span>(<span class="kw">this</span>))<span class="op">;</span></span></code></pre></div>
+<h5 id="how-to-avoid-the-pitfall-of-extracting-methods">28.4.5.2 How to avoid the pitfall of extracting methods</h5>
+<p>Alas, there is no simple way around the pitfall of extracting methods: Whenever we extract a method, we have to be careful and do it properly – for example, by binding <code>this</code> or by using an arrow function.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Extracting a method</strong></p>
+<p><code>exercises/single-objects/method_extraction_exrc.mjs</code></p>
+</div>
+<h4 id="shadowing-this">28.4.6 <code>this</code> pitfall: accidentally shadowing <code>this</code></h4>
+<div class="notebox">
+<p><img src="img-book/img/icons/lightbulb-regular.svg" height="24">&nbsp; <strong>Accidentally shadowing <code>this</code> is only an issue with ordinary functions</strong></p>
+<p>Arrow functions don’t shadow <code>this</code>.</p>
+</div>
+<p>Consider the following problem: when we are inside an ordinary function, we can’t access the <code>this</code> of the surrounding scope because the ordinary function has its own <code>this</code>. In other words, a variable in an inner scope hides a variable in an outer scope. That is called <a href="ch_variables-assignment.html#shadowing-variables"><em>shadowing</em></a>. The following code is an example:</p>
+<div class="sourceCode" id="cb695"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb695-1"><a href="ch_single-objects.html#cb695-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> prefixer <span class="op">=</span> {</span>
+<span id="cb695-2"><a href="ch_single-objects.html#cb695-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">prefix</span><span class="op">:</span> <span class="st">'==&gt; '</span><span class="op">,</span></span>
+<span id="cb695-3"><a href="ch_single-objects.html#cb695-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prefixStringArray</span>(stringArray) {</span>
+<span id="cb695-4"><a href="ch_single-objects.html#cb695-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> stringArray<span class="op">.</span><span class="fu">map</span>(</span>
+<span id="cb695-5"><a href="ch_single-objects.html#cb695-5" aria-hidden="true" tabindex="-1"></a>      <span class="kw">function</span> (x) {</span>
+<span id="cb695-6"><a href="ch_single-objects.html#cb695-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span><span class="at">prefix</span> <span class="op">+</span> x<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb695-7"><a href="ch_single-objects.html#cb695-7" aria-hidden="true" tabindex="-1"></a>      })<span class="op">;</span></span>
+<span id="cb695-8"><a href="ch_single-objects.html#cb695-8" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb695-9"><a href="ch_single-objects.html#cb695-9" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb695-10"><a href="ch_single-objects.html#cb695-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb695-11"><a href="ch_single-objects.html#cb695-11" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> prefixer<span class="op">.</span><span class="fu">prefixStringArray</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">,</span></span>
+<span id="cb695-12"><a href="ch_single-objects.html#cb695-12" aria-hidden="true" tabindex="-1"></a>  <span class="ss">/</span><span class="sc">^</span><span class="ss">TypeError: Cannot read property 'prefix' of undefined</span><span class="sc">$</span><span class="ss">/</span>)<span class="op">;</span></span></code></pre></div>
+<p>In line A, we want to access the <code>this</code> of <code>.prefixStringArray()</code>. But we can’t since the surrounding ordinary function has its own <code>this</code> that <em>shadows</em> (blocks access to) the <code>this</code> of the method. The value of the former <code>this</code> is <code>undefined</code> due to the callback being function-called. That explains the error message.</p>
+<p>The simplest way to fix this problem is via an arrow function, which doesn’t have its own <code>this</code> and therefore doesn’t shadow anything:</p>
+<div class="sourceCode" id="cb696"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb696-1"><a href="ch_single-objects.html#cb696-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> prefixer <span class="op">=</span> {</span>
+<span id="cb696-2"><a href="ch_single-objects.html#cb696-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">prefix</span><span class="op">:</span> <span class="st">'==&gt; '</span><span class="op">,</span></span>
+<span id="cb696-3"><a href="ch_single-objects.html#cb696-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prefixStringArray</span>(stringArray) {</span>
+<span id="cb696-4"><a href="ch_single-objects.html#cb696-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> stringArray<span class="op">.</span><span class="fu">map</span>(</span>
+<span id="cb696-5"><a href="ch_single-objects.html#cb696-5" aria-hidden="true" tabindex="-1"></a>      (x) <span class="kw">=&gt;</span> {</span>
+<span id="cb696-6"><a href="ch_single-objects.html#cb696-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span><span class="at">prefix</span> <span class="op">+</span> x<span class="op">;</span></span>
+<span id="cb696-7"><a href="ch_single-objects.html#cb696-7" aria-hidden="true" tabindex="-1"></a>      })<span class="op">;</span></span>
+<span id="cb696-8"><a href="ch_single-objects.html#cb696-8" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb696-9"><a href="ch_single-objects.html#cb696-9" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb696-10"><a href="ch_single-objects.html#cb696-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb696-11"><a href="ch_single-objects.html#cb696-11" aria-hidden="true" tabindex="-1"></a>  prefixer<span class="op">.</span><span class="fu">prefixStringArray</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">,</span></span>
+<span id="cb696-12"><a href="ch_single-objects.html#cb696-12" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'==&gt; a'</span><span class="op">,</span> <span class="st">'==&gt; b'</span>])<span class="op">;</span></span></code></pre></div>
+<p>We can also store <code>this</code> in a different variable (line A), so that it doesn’t get shadowed:</p>
+<div class="sourceCode" id="cb697"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb697-1"><a href="ch_single-objects.html#cb697-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prefixStringArray</span>(stringArray) {</span>
+<span id="cb697-2"><a href="ch_single-objects.html#cb697-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> that <span class="op">=</span> <span class="kw">this</span><span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb697-3"><a href="ch_single-objects.html#cb697-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> stringArray<span class="op">.</span><span class="fu">map</span>(</span>
+<span id="cb697-4"><a href="ch_single-objects.html#cb697-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> (x) {</span>
+<span id="cb697-5"><a href="ch_single-objects.html#cb697-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> that<span class="op">.</span><span class="at">prefix</span> <span class="op">+</span> x<span class="op">;</span></span>
+<span id="cb697-6"><a href="ch_single-objects.html#cb697-6" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb697-7"><a href="ch_single-objects.html#cb697-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">,</span></span></code></pre></div>
+<p>Another option is to specify a fixed <code>this</code> for the callback via <code>.bind()</code> (line A):</p>
+<div class="sourceCode" id="cb698"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb698-1"><a href="ch_single-objects.html#cb698-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prefixStringArray</span>(stringArray) {</span>
+<span id="cb698-2"><a href="ch_single-objects.html#cb698-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> stringArray<span class="op">.</span><span class="fu">map</span>(</span>
+<span id="cb698-3"><a href="ch_single-objects.html#cb698-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> (x) {</span>
+<span id="cb698-4"><a href="ch_single-objects.html#cb698-4" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span><span class="at">prefix</span> <span class="op">+</span> x<span class="op">;</span></span>
+<span id="cb698-5"><a href="ch_single-objects.html#cb698-5" aria-hidden="true" tabindex="-1"></a>    }<span class="op">.</span><span class="fu">bind</span>(<span class="kw">this</span>))<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb698-6"><a href="ch_single-objects.html#cb698-6" aria-hidden="true" tabindex="-1"></a>}<span class="op">,</span></span></code></pre></div>
+<p>Lastly, <code>.map()</code> lets us specify a value for <code>this</code> (line A) that it uses when invoking the callback:</p>
+<div class="sourceCode" id="cb699"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb699-1"><a href="ch_single-objects.html#cb699-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prefixStringArray</span>(stringArray) {</span>
+<span id="cb699-2"><a href="ch_single-objects.html#cb699-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> stringArray<span class="op">.</span><span class="fu">map</span>(</span>
+<span id="cb699-3"><a href="ch_single-objects.html#cb699-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> (x) {</span>
+<span id="cb699-4"><a href="ch_single-objects.html#cb699-4" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span><span class="at">prefix</span> <span class="op">+</span> x<span class="op">;</span></span>
+<span id="cb699-5"><a href="ch_single-objects.html#cb699-5" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb699-6"><a href="ch_single-objects.html#cb699-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb699-7"><a href="ch_single-objects.html#cb699-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">,</span></span></code></pre></div>
+<h5 id="avoiding-the-pitfall-of-accidentally-shadowing-this">28.4.6.1 Avoiding the pitfall of accidentally shadowing <code>this</code></h5>
+<p>If you follow the advice in <a href="ch_callables.html#prefer-specialized-functions">§25.3.4 “Recommendation: prefer specialized functions over ordinary functions”</a>, you can avoid the pitfall of accidentally shadowing <code>this</code>. This is a summary:</p>
+<ul>
+<li><p>Use arrow functions as anonymous inline functions. They don’t have <code>this</code> as an implicit parameter and don’t shadow it.</p></li>
+<li><p>For named stand-alone function declarations you can either use arrow functions or function declarations. If you do the latter, make sure <code>this</code> isn’t mentioned in their bodies.</p></li>
+</ul>
+<h4 id="the-value-of-this-in-various-contexts-advanced">28.4.7 The value of <code>this</code> in various contexts (advanced)</h4>
+<p><a id="index-entry-328" class="index-entry"></a></p>
+<p>What is the value of <code>this</code> in various contexts?</p>
+<p>Inside a callable entity, the value of <code>this</code> depends on how the callable entity is invoked and what kind of callable entity it is:</p>
+<ul>
+<li>Function call:
+<ul>
+<li>Ordinary functions: <code>this === undefined</code> (in <a href="ch_syntax.html#strict-mode">strict mode</a>)</li>
+<li>Arrow functions: <code>this</code> is same as in surrounding scope (lexical <code>this</code>)</li>
+</ul></li>
+<li>Method call: <code>this</code> is receiver of call</li>
+<li><code>new</code>: <code>this</code> refers to newly created instance</li>
+</ul>
+<p>We can also access <code>this</code> in all common top-level scopes:</p>
+<ul>
+<li><code>&lt;script&gt;</code> element: <code>this === globalThis</code></li>
+<li>ECMAScript modules: <code>this === undefined</code></li>
+<li>CommonJS modules: <code>this === module.exports</code></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/lightbulb-regular.svg" height="24">&nbsp; <strong>Tip: pretend that <code>this</code> doesn’t exist in top-level scopes</strong></p>
+<p>I like to do that because top-level <code>this</code> is confusing and rarely useful.</p>
+</div>
+<h3 id="optional-chaining">28.5 Optional chaining for property accesses and method calls [ES2020] (advanced)</h3>
+<p>The following kinds of optional chaining operations exist:</p>
+<div class="sourceCode" id="cb700"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb700-1"><a href="ch_single-objects.html#cb700-1" aria-hidden="true" tabindex="-1"></a>obj<span class="op">?.</span><span class="at">prop</span>     <span class="co">// optional static property access</span></span>
+<span id="cb700-2"><a href="ch_single-objects.html#cb700-2" aria-hidden="true" tabindex="-1"></a>obj<span class="op">?.</span>[«expr»] <span class="co">// optional dynamic property access</span></span>
+<span id="cb700-3"><a href="ch_single-objects.html#cb700-3" aria-hidden="true" tabindex="-1"></a>func<span class="op">?.</span>(«arg0»<span class="op">,</span> «arg1») <span class="co">// optional function or method call</span></span></code></pre></div>
+<p>The rough idea is:</p>
+<ul>
+<li>If the value before the question mark is neither <code>undefined</code> nor <code>null</code>, then perform the operation after the question mark.</li>
+<li>Otherwise, return <code>undefined</code>.</li>
+</ul>
+<h4 id="example-optional-static-property-access">28.5.1 Example: optional static property access</h4>
+<p>Consider the following data:</p>
+<div class="sourceCode" id="cb701"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb701-1"><a href="ch_single-objects.html#cb701-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> persons <span class="op">=</span> [</span>
+<span id="cb701-2"><a href="ch_single-objects.html#cb701-2" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb701-3"><a href="ch_single-objects.html#cb701-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">surname</span><span class="op">:</span> <span class="st">'Zoe'</span><span class="op">,</span></span>
+<span id="cb701-4"><a href="ch_single-objects.html#cb701-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">address</span><span class="op">:</span> {</span>
+<span id="cb701-5"><a href="ch_single-objects.html#cb701-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">street</span><span class="op">:</span> {</span>
+<span id="cb701-6"><a href="ch_single-objects.html#cb701-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">name</span><span class="op">:</span> <span class="st">'Sesame Street'</span><span class="op">,</span></span>
+<span id="cb701-7"><a href="ch_single-objects.html#cb701-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">number</span><span class="op">:</span> <span class="st">'123'</span><span class="op">,</span></span>
+<span id="cb701-8"><a href="ch_single-objects.html#cb701-8" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
+<span id="cb701-9"><a href="ch_single-objects.html#cb701-9" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb701-10"><a href="ch_single-objects.html#cb701-10" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb701-11"><a href="ch_single-objects.html#cb701-11" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb701-12"><a href="ch_single-objects.html#cb701-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">surname</span><span class="op">:</span> <span class="st">'Mariner'</span><span class="op">,</span></span>
+<span id="cb701-13"><a href="ch_single-objects.html#cb701-13" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb701-14"><a href="ch_single-objects.html#cb701-14" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb701-15"><a href="ch_single-objects.html#cb701-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">surname</span><span class="op">:</span> <span class="st">'Carmen'</span><span class="op">,</span></span>
+<span id="cb701-16"><a href="ch_single-objects.html#cb701-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">address</span><span class="op">:</span> {</span>
+<span id="cb701-17"><a href="ch_single-objects.html#cb701-17" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb701-18"><a href="ch_single-objects.html#cb701-18" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb701-19"><a href="ch_single-objects.html#cb701-19" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span></code></pre></div>
+<p>We can use optional chaining to safely extract street names:</p>
+<div class="sourceCode" id="cb702"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb702-1"><a href="ch_single-objects.html#cb702-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> streetNames <span class="op">=</span> persons<span class="op">.</span><span class="fu">map</span>(</span>
+<span id="cb702-2"><a href="ch_single-objects.html#cb702-2" aria-hidden="true" tabindex="-1"></a>  p <span class="kw">=&gt;</span> p<span class="op">.</span><span class="at">address</span><span class="op">?.</span><span class="at">street</span><span class="op">?.</span><span class="at">name</span>)<span class="op">;</span></span>
+<span id="cb702-3"><a href="ch_single-objects.html#cb702-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb702-4"><a href="ch_single-objects.html#cb702-4" aria-hidden="true" tabindex="-1"></a>  streetNames<span class="op">,</span> [<span class="st">'Sesame Street'</span><span class="op">,</span> <span class="kw">undefined</span><span class="op">,</span> <span class="kw">undefined</span>]</span>
+<span id="cb702-5"><a href="ch_single-objects.html#cb702-5" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<h5 id="handling-defaults-via-nullish-coalescing">28.5.1.1 Handling defaults via nullish coalescing</h5>
+<p>The <a href="ch_undefined-null.html#nullish-coalescing-operator">nullish coalescing operator</a> allows us to use the default value <code>'(no street)'</code> instead of <code>undefined</code>:</p>
+<div class="sourceCode" id="cb703"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb703-1"><a href="ch_single-objects.html#cb703-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> streetNames <span class="op">=</span> persons<span class="op">.</span><span class="fu">map</span>(</span>
+<span id="cb703-2"><a href="ch_single-objects.html#cb703-2" aria-hidden="true" tabindex="-1"></a>  p <span class="kw">=&gt;</span> p<span class="op">.</span><span class="at">address</span><span class="op">?.</span><span class="at">street</span><span class="op">?.</span><span class="at">name</span> <span class="op">??</span> <span class="st">'(no name)'</span>)<span class="op">;</span></span>
+<span id="cb703-3"><a href="ch_single-objects.html#cb703-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb703-4"><a href="ch_single-objects.html#cb703-4" aria-hidden="true" tabindex="-1"></a>  streetNames<span class="op">,</span> [<span class="st">'Sesame Street'</span><span class="op">,</span> <span class="st">'(no name)'</span><span class="op">,</span> <span class="st">'(no name)'</span>]</span>
+<span id="cb703-5"><a href="ch_single-objects.html#cb703-5" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<h4 id="the-operators-in-more-detail-advanced">28.5.2 The operators in more detail (advanced)</h4>
+<h5 id="optional-static-property-access">28.5.2.1 Optional static property access</h5>
+<p>The following two expressions are equivalent:</p>
+<div class="sourceCode" id="cb704"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb704-1"><a href="ch_single-objects.html#cb704-1" aria-hidden="true" tabindex="-1"></a>o<span class="op">?.</span><span class="at">prop</span></span>
+<span id="cb704-2"><a href="ch_single-objects.html#cb704-2" aria-hidden="true" tabindex="-1"></a>(o <span class="op">!==</span> <span class="kw">undefined</span> <span class="op">&amp;&amp;</span> o <span class="op">!==</span> <span class="kw">null</span>) <span class="op">?</span> o<span class="op">.</span><span class="at">prop</span> <span class="op">:</span> <span class="kw">undefined</span></span></code></pre></div>
+<p>Examples:</p>
+<div class="sourceCode" id="cb705"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb705-1"><a href="ch_single-objects.html#cb705-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">undefined</span><span class="op">?.</span><span class="at">prop</span><span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span>
+<span id="cb705-2"><a href="ch_single-objects.html#cb705-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">null</span><span class="op">?.</span><span class="at">prop</span><span class="op">,</span>      <span class="kw">undefined</span>)<span class="op">;</span></span>
+<span id="cb705-3"><a href="ch_single-objects.html#cb705-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>({<span class="dt">prop</span><span class="op">:</span><span class="dv">1</span>}<span class="op">?.</span><span class="at">prop</span><span class="op">,</span>  <span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="optional-dynamic-property-access">28.5.2.2 Optional dynamic property access</h5>
+<p>The following two expressions are equivalent:</p>
+<div class="sourceCode" id="cb706"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb706-1"><a href="ch_single-objects.html#cb706-1" aria-hidden="true" tabindex="-1"></a>o<span class="op">?.</span>[«expr»]</span>
+<span id="cb706-2"><a href="ch_single-objects.html#cb706-2" aria-hidden="true" tabindex="-1"></a>(o <span class="op">!==</span> <span class="kw">undefined</span> <span class="op">&amp;&amp;</span> o <span class="op">!==</span> <span class="kw">null</span>) <span class="op">?</span> o[«expr»] <span class="op">:</span> <span class="kw">undefined</span></span></code></pre></div>
+<p>Examples:</p>
+<div class="sourceCode" id="cb707"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb707-1"><a href="ch_single-objects.html#cb707-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> key <span class="op">=</span> <span class="st">'prop'</span><span class="op">;</span></span>
+<span id="cb707-2"><a href="ch_single-objects.html#cb707-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">undefined</span><span class="op">?.</span>[key]<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span>
+<span id="cb707-3"><a href="ch_single-objects.html#cb707-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">null</span><span class="op">?.</span>[key]<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span>
+<span id="cb707-4"><a href="ch_single-objects.html#cb707-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>({<span class="dt">prop</span><span class="op">:</span><span class="dv">1</span>}<span class="op">?.</span>[key]<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="optional-function-or-method-call">28.5.2.3 Optional function or method call</h5>
+<p>The following two expressions are equivalent:</p>
+<div class="sourceCode" id="cb708"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb708-1"><a href="ch_single-objects.html#cb708-1" aria-hidden="true" tabindex="-1"></a>f<span class="op">?.</span>(arg0<span class="op">,</span> arg1)</span>
+<span id="cb708-2"><a href="ch_single-objects.html#cb708-2" aria-hidden="true" tabindex="-1"></a>(f <span class="op">!==</span> <span class="kw">undefined</span> <span class="op">&amp;&amp;</span> f <span class="op">!==</span> <span class="kw">null</span>) <span class="op">?</span> <span class="fu">f</span>(arg0<span class="op">,</span> arg1) <span class="op">:</span> <span class="kw">undefined</span></span></code></pre></div>
+<p>Examples:</p>
+<div class="sourceCode" id="cb709"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb709-1"><a href="ch_single-objects.html#cb709-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">undefined</span><span class="op">?.</span>(<span class="dv">123</span>)<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span>
+<span id="cb709-2"><a href="ch_single-objects.html#cb709-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">null</span><span class="op">?.</span>(<span class="dv">123</span>)<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span>
+<span id="cb709-3"><a href="ch_single-objects.html#cb709-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">String</span><span class="op">?.</span>(<span class="dv">123</span>)<span class="op">,</span> <span class="st">'123'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Note that this operator produces an error if its left-hand side is not callable:</p>
+<div class="sourceCode" id="cb710"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb710-1"><a href="ch_single-objects.html#cb710-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb710-2"><a href="ch_single-objects.html#cb710-2" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> <span class="kw">true</span><span class="op">?.</span>(<span class="dv">123</span>)<span class="op">,</span></span>
+<span id="cb710-3"><a href="ch_single-objects.html#cb710-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">TypeError</span>)<span class="op">;</span></span></code></pre></div>
+<p>Why? The idea is that the operator only tolerates deliberate omissions. An uncallable value (other than <code>undefined</code> and <code>null</code>) is probably an error and should be reported, rather than worked around.</p>
+<h4 id="short-circuiting-advanced">28.5.3 Short-circuiting (advanced)</h4>
+<p>In a chain of property accesses and function/method invocations, evaluation stops once the first optional operator encounters <code>undefined</code> or <code>null</code> at its left-hand side:</p>
+<div class="sourceCode" id="cb711"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb711-1"><a href="ch_single-objects.html#cb711-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">isInvoked</span>(obj) {</span>
+<span id="cb711-2"><a href="ch_single-objects.html#cb711-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> invoked <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb711-3"><a href="ch_single-objects.html#cb711-3" aria-hidden="true" tabindex="-1"></a>  obj<span class="op">?.</span><span class="at">a</span><span class="op">.</span><span class="at">b</span><span class="op">.</span><span class="fu">m</span>(invoked <span class="op">=</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb711-4"><a href="ch_single-objects.html#cb711-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> invoked<span class="op">;</span></span>
+<span id="cb711-5"><a href="ch_single-objects.html#cb711-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb711-6"><a href="ch_single-objects.html#cb711-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb711-7"><a href="ch_single-objects.html#cb711-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb711-8"><a href="ch_single-objects.html#cb711-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">isInvoked</span>({<span class="dt">a</span><span class="op">:</span> {<span class="dt">b</span><span class="op">:</span> {<span class="fu">m</span>() {}}}})<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb711-9"><a href="ch_single-objects.html#cb711-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb711-10"><a href="ch_single-objects.html#cb711-10" aria-hidden="true" tabindex="-1"></a><span class="co">// The left-hand side of ?. is undefined</span></span>
+<span id="cb711-11"><a href="ch_single-objects.html#cb711-11" aria-hidden="true" tabindex="-1"></a><span class="co">// and the assignment is not executed</span></span>
+<span id="cb711-12"><a href="ch_single-objects.html#cb711-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb711-13"><a href="ch_single-objects.html#cb711-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">isInvoked</span>(<span class="kw">undefined</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span></code></pre></div>
+<p>This behavior differs from a normal operator/function where JavaScript always evaluates all operands/arguments before evaluating the operator/function. It is called <em>short-circuiting</em>. Other short-circuiting operators:</p>
+<ul>
+<li><code>a &amp;&amp; b</code></li>
+<li><code>a || b</code></li>
+<li><code>c ? t : e</code></li>
+</ul>
+<h4 id="frequently-asked-questions">28.5.4 Frequently asked questions</h4>
+<h5 id="why-are-there-dots-in-o.x-and-f.">28.5.4.1 Why are there dots in <code>o?.[x]</code> and <code>f?.()</code>?</h5>
+<p>The syntaxes of the following two optional operator are not ideal:</p>
+<div class="sourceCode" id="cb712"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb712-1"><a href="ch_single-objects.html#cb712-1" aria-hidden="true" tabindex="-1"></a>obj<span class="op">?.</span>[«expr»]          <span class="co">// better: obj?[«expr»]</span></span>
+<span id="cb712-2"><a href="ch_single-objects.html#cb712-2" aria-hidden="true" tabindex="-1"></a>func<span class="op">?.</span>(«arg0»<span class="op">,</span> «arg1») <span class="co">// better: func?(«arg0», «arg1»)</span></span></code></pre></div>
+<p>Alas, the less elegant syntax is necessary, because distinguishing the ideal syntax (first expression) from the conditional operator (second expression) is too complicated:</p>
+<div class="sourceCode" id="cb713"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb713-1"><a href="ch_single-objects.html#cb713-1" aria-hidden="true" tabindex="-1"></a>obj<span class="op">?</span>[<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> x<span class="op">+</span>x)</span>
+<span id="cb713-2"><a href="ch_single-objects.html#cb713-2" aria-hidden="true" tabindex="-1"></a>obj <span class="op">?</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> x<span class="op">+</span>x) <span class="op">:</span> []</span></code></pre></div>
+<h5 id="why-does-null.prop-evaluate-to-undefined-and-not-null">28.5.4.2 Why does <code>null?.prop</code> evaluate to <code>undefined</code> and not <code>null</code>?</h5>
+<p>The operator <code>?.</code> is mainly about its right-hand side: Does property <code>.prop</code> exist? If not, stop early. Therefore, keeping information about its left-hand side is rarely useful. However, only having a single “early termination” value does simplify things.</p>
+<h3 id="objects-as-dictionaries-advanced">28.6 Objects as dictionaries (advanced)</h3>
+<p>Objects work best as records. But before ES6, JavaScript did not have a data structure for dictionaries (ES6 brought <a href="ch_maps.html">Maps</a>). Therefore, objects had to be used as dictionaries, which imposed a signficant constraint: keys had to be strings (symbols were also introduced with ES6).</p>
+<p>We first look at features of objects that are related to dictionaries but also useful for objects-as-records. This section concludes with tips for actually using objects as dictionaries (spoiler: use Maps if you can).</p>
+<h4 id="arbitrary-fixed-strings-as-property-keys">28.6.1 Arbitrary fixed strings as property keys</h4>
+<p>So far, we have always used objects as records. Property keys were fixed tokens that had to be valid identifiers and internally became strings:</p>
+<div class="sourceCode" id="cb714"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb714-1"><a href="ch_single-objects.html#cb714-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb714-2"><a href="ch_single-objects.html#cb714-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">mustBeAnIdentifier</span><span class="op">:</span> <span class="dv">123</span><span class="op">,</span></span>
+<span id="cb714-3"><a href="ch_single-objects.html#cb714-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb714-4"><a href="ch_single-objects.html#cb714-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb714-5"><a href="ch_single-objects.html#cb714-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Get property</span></span>
+<span id="cb714-6"><a href="ch_single-objects.html#cb714-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">mustBeAnIdentifier</span><span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb714-7"><a href="ch_single-objects.html#cb714-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb714-8"><a href="ch_single-objects.html#cb714-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Set property</span></span>
+<span id="cb714-9"><a href="ch_single-objects.html#cb714-9" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="at">mustBeAnIdentifier</span> <span class="op">=</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb714-10"><a href="ch_single-objects.html#cb714-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">mustBeAnIdentifier</span><span class="op">,</span> <span class="st">'abc'</span>)<span class="op">;</span></span></code></pre></div>
+<p>As a next step, we’ll go beyond this limitation for property keys: In this section, we’ll use arbitrary fixed strings as keys. In <span data-refcheck="#computed-property-keys">the next subsection</span>, we’ll dynamically compute keys.</p>
+<p>Two techniques allow us to use arbitrary strings as property keys.</p>
+<p><a id="index-entry-329" class="index-entry"></a><a id="index-entry-330" class="index-entry"></a></p>
+<p>First, when creating property keys via object literals, we can quote property keys (with single or double quotes):</p>
+<div class="sourceCode" id="cb715"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb715-1"><a href="ch_single-objects.html#cb715-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb715-2"><a href="ch_single-objects.html#cb715-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Can be any string!'</span><span class="op">:</span> <span class="dv">123</span><span class="op">,</span></span>
+<span id="cb715-3"><a href="ch_single-objects.html#cb715-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>Second, when getting or setting properties, we can use square brackets with strings inside them:</p>
+<div class="sourceCode" id="cb716"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb716-1"><a href="ch_single-objects.html#cb716-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Get property</span></span>
+<span id="cb716-2"><a href="ch_single-objects.html#cb716-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj[<span class="st">'Can be any string!'</span>]<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb716-3"><a href="ch_single-objects.html#cb716-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb716-4"><a href="ch_single-objects.html#cb716-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Set property</span></span>
+<span id="cb716-5"><a href="ch_single-objects.html#cb716-5" aria-hidden="true" tabindex="-1"></a>obj[<span class="st">'Can be any string!'</span>] <span class="op">=</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb716-6"><a href="ch_single-objects.html#cb716-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj[<span class="st">'Can be any string!'</span>]<span class="op">,</span> <span class="st">'abc'</span>)<span class="op">;</span></span></code></pre></div>
+<p>We can also use these techniques for methods:</p>
+<div class="sourceCode" id="cb717"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb717-1"><a href="ch_single-objects.html#cb717-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb717-2"><a href="ch_single-objects.html#cb717-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'A nice method'</span>() {</span>
+<span id="cb717-3"><a href="ch_single-objects.html#cb717-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'Yes!'</span><span class="op">;</span></span>
+<span id="cb717-4"><a href="ch_single-objects.html#cb717-4" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb717-5"><a href="ch_single-objects.html#cb717-5" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb717-6"><a href="ch_single-objects.html#cb717-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb717-7"><a href="ch_single-objects.html#cb717-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj[<span class="st">'A nice method'</span>]()<span class="op">,</span> <span class="st">'Yes!'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="computed-property-keys">28.6.2 Computed property keys</h4>
+<p><a id="index-entry-331" class="index-entry"></a><a id="index-entry-332" class="index-entry"></a></p>
+<p>So far, property keys were always fixed strings inside object literals. In this section we learn how to dynamically compute property keys. That enables us to use either arbitrary strings or symbols.</p>
+<p>The syntax of dynamically computed property keys in object literals is inspired by dynamically accessing properties. That is, we can use square brackets to wrap expressions:</p>
+<div class="sourceCode" id="cb718"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb718-1"><a href="ch_single-objects.html#cb718-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb718-2"><a href="ch_single-objects.html#cb718-2" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'Hello world!'</span>]<span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb718-3"><a href="ch_single-objects.html#cb718-3" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'f'</span><span class="op">+</span><span class="st">'o'</span><span class="op">+</span><span class="st">'o'</span>]<span class="op">:</span> <span class="dv">123</span><span class="op">,</span></span>
+<span id="cb718-4"><a href="ch_single-objects.html#cb718-4" aria-hidden="true" tabindex="-1"></a>  [<span class="bu">Symbol</span><span class="op">.</span><span class="at">toStringTag</span>]<span class="op">:</span> <span class="st">'Goodbye'</span><span class="op">,</span> <span class="co">// (A)</span></span>
+<span id="cb718-5"><a href="ch_single-objects.html#cb718-5" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb718-6"><a href="ch_single-objects.html#cb718-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb718-7"><a href="ch_single-objects.html#cb718-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj[<span class="st">'Hello world!'</span>]<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb718-8"><a href="ch_single-objects.html#cb718-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">foo</span><span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb718-9"><a href="ch_single-objects.html#cb718-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj[<span class="bu">Symbol</span><span class="op">.</span><span class="at">toStringTag</span>]<span class="op">,</span> <span class="st">'Goodbye'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The main use case for computed keys is having symbols as property keys (line A).</p>
+<p>Note that the square brackets operator for getting and setting properties works with arbitrary expressions:</p>
+<div class="sourceCode" id="cb719"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb719-1"><a href="ch_single-objects.html#cb719-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj[<span class="st">'f'</span><span class="op">+</span><span class="st">'o'</span><span class="op">+</span><span class="st">'o'</span>]<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb719-2"><a href="ch_single-objects.html#cb719-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj[<span class="st">'==&gt; foo'</span><span class="op">.</span><span class="fu">slice</span>(<span class="op">-</span><span class="dv">3</span>)]<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span></code></pre></div>
+<p>Methods can have computed property keys, too:</p>
+<div class="sourceCode" id="cb720"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb720-1"><a href="ch_single-objects.html#cb720-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> methodKey <span class="op">=</span> <span class="bu">Symbol</span>()<span class="op">;</span></span>
+<span id="cb720-2"><a href="ch_single-objects.html#cb720-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb720-3"><a href="ch_single-objects.html#cb720-3" aria-hidden="true" tabindex="-1"></a>  [methodKey]() {</span>
+<span id="cb720-4"><a href="ch_single-objects.html#cb720-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'Yes!'</span><span class="op">;</span></span>
+<span id="cb720-5"><a href="ch_single-objects.html#cb720-5" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb720-6"><a href="ch_single-objects.html#cb720-6" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb720-7"><a href="ch_single-objects.html#cb720-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb720-8"><a href="ch_single-objects.html#cb720-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj[methodKey]()<span class="op">,</span> <span class="st">'Yes!'</span>)<span class="op">;</span></span></code></pre></div>
+<p>For the remainder of this chapter, we’ll mostly use fixed property keys again (because they are syntactically more convenient). But all features are also available for arbitrary strings and symbols.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Non-destructively updating a property via spreading (computed key)</strong></p>
+<p><code>exercises/single-objects/update_property_test.mjs</code></p>
+</div>
+<h4 id="in-operator">28.6.3 The <code>in</code> operator: is there a property with a given key?</h4>
+<p><a id="index-entry-333" class="index-entry"></a></p>
+<p>The <code>in</code> operator checks if an object has a property with a given key:</p>
+<div class="sourceCode" id="cb721"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb721-1"><a href="ch_single-objects.html#cb721-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb721-2"><a href="ch_single-objects.html#cb721-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">foo</span><span class="op">:</span> <span class="st">'abc'</span><span class="op">,</span></span>
+<span id="cb721-3"><a href="ch_single-objects.html#cb721-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bar</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb721-4"><a href="ch_single-objects.html#cb721-4" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb721-5"><a href="ch_single-objects.html#cb721-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb721-6"><a href="ch_single-objects.html#cb721-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="st">'foo'</span> <span class="kw">in</span> obj<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb721-7"><a href="ch_single-objects.html#cb721-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="st">'unknownKey'</span> <span class="kw">in</span> obj<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="checking-if-a-property-exists-via-truthiness">28.6.3.1 Checking if a property exists via truthiness</h5>
+<p>We can also use a truthiness check to determine if a property exists:</p>
+<div class="sourceCode" id="cb722"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb722-1"><a href="ch_single-objects.html#cb722-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb722-2"><a href="ch_single-objects.html#cb722-2" aria-hidden="true" tabindex="-1"></a>  obj<span class="op">.</span><span class="at">foo</span> <span class="op">?</span> <span class="st">'exists'</span> <span class="op">:</span> <span class="st">'does not exist'</span><span class="op">,</span></span>
+<span id="cb722-3"><a href="ch_single-objects.html#cb722-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'exists'</span>)<span class="op">;</span></span>
+<span id="cb722-4"><a href="ch_single-objects.html#cb722-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb722-5"><a href="ch_single-objects.html#cb722-5" aria-hidden="true" tabindex="-1"></a>  obj<span class="op">.</span><span class="at">unknownKey</span> <span class="op">?</span> <span class="st">'exists'</span> <span class="op">:</span> <span class="st">'does not exist'</span><span class="op">,</span></span>
+<span id="cb722-6"><a href="ch_single-objects.html#cb722-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">'does not exist'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The previous checks work because <code>obj.foo</code> is truthy and because reading a missing property returns <code>undefined</code> (which is falsy).</p>
+<p>There is, however, one important caveat: truthiness checks fail if the property exists, but has a falsy value (<code>undefined</code>, <code>null</code>, <code>false</code>, <code>0</code>, <code>""</code>, etc.):</p>
+<div class="sourceCode" id="cb723"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb723-1"><a href="ch_single-objects.html#cb723-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb723-2"><a href="ch_single-objects.html#cb723-2" aria-hidden="true" tabindex="-1"></a>  obj<span class="op">.</span><span class="at">bar</span> <span class="op">?</span> <span class="st">'exists'</span> <span class="op">:</span> <span class="st">'does not exist'</span><span class="op">,</span></span>
+<span id="cb723-3"><a href="ch_single-objects.html#cb723-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'does not exist'</span>)<span class="op">;</span> <span class="co">// should be: 'exists'</span></span></code></pre></div>
+<h4 id="deleting-properties">28.6.4 Deleting properties</h4>
+<p><a id="index-entry-334" class="index-entry"></a><a id="index-entry-335" class="index-entry"></a><a id="index-entry-336" class="index-entry"></a></p>
+<p>We can delete properties via the <code>delete</code> operator:</p>
+<div class="sourceCode" id="cb724"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb724-1"><a href="ch_single-objects.html#cb724-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb724-2"><a href="ch_single-objects.html#cb724-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">foo</span><span class="op">:</span> <span class="dv">123</span><span class="op">,</span></span>
+<span id="cb724-3"><a href="ch_single-objects.html#cb724-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb724-4"><a href="ch_single-objects.html#cb724-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(obj)<span class="op">,</span> [<span class="st">'foo'</span>])<span class="op">;</span></span>
+<span id="cb724-5"><a href="ch_single-objects.html#cb724-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb724-6"><a href="ch_single-objects.html#cb724-6" aria-hidden="true" tabindex="-1"></a><span class="kw">delete</span> obj<span class="op">.</span><span class="at">foo</span><span class="op">;</span></span>
+<span id="cb724-7"><a href="ch_single-objects.html#cb724-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb724-8"><a href="ch_single-objects.html#cb724-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(obj)<span class="op">,</span> [])<span class="op">;</span></span></code></pre></div>
+<h4 id="listing-property-keys">28.6.5 Listing property keys</h4>
+<p><a id="index-entry-337" class="index-entry"></a><a id="index-entry-338" class="index-entry"></a> <a id="index-entry-339" class="index-entry"></a><a id="index-entry-340" class="index-entry"></a><a id="index-entry-341" class="index-entry"></a></p>
+<div id="tbl:listing-property-keys">
+<table>
+<caption>Table 19: Standard library methods for listing <em>own</em> (non-inherited) property keys. All of them return Arrays with strings and/or symbols.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">enumerable</th>
+<th style="text-align: left;">non-e.</th>
+<th style="text-align: left;">string</th>
+<th style="text-align: left;">symbol</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>Object.keys()</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Object.getOwnPropertyNames()</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Object.getOwnPropertySymbols()</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>✔</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Reflect.ownKeys()</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+<td style="text-align: left;"><code>✔</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Each of the methods in tbl.&nbsp;<a href="#tbl:listing-property-keys">19</a> returns an Array with the own property keys of the parameter. In the names of the methods, we can see that the following distinction is made:</p>
+<ul>
+<li>A <em>property key</em> can be either a string or a symbol.</li>
+<li>A <em>property name</em> is a property key whose value is a string.</li>
+<li>A <em>property symbol</em> is a property key whose value is a symbol.</li>
+</ul>
+<p>The next section describes the term <em>enumerable</em> and demonstrates each of the methods.</p>
+<h5 id="enumerability">28.6.5.1 Enumerability</h5>
+<p><a id="index-entry-342" class="index-entry"></a> <a id="index-entry-343" class="index-entry"></a></p>
+<p><em>Enumerability</em> is an <a href="ch_single-objects.html#property-attributes"><em>attribute</em></a> of a property. Non-enumerable properties are ignored by some operations – for example, by <code>Object.keys()</code> (see tbl.&nbsp;<a href="#tbl:listing-property-keys">19</a>) and by spread properties. By default, most properties are enumerable. The next example shows how to change that. It also demonstrates the various ways of listing property keys.</p>
+<div class="sourceCode" id="cb725"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb725-1"><a href="ch_single-objects.html#cb725-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> enumerableSymbolKey <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'enumerableSymbolKey'</span>)<span class="op">;</span></span>
+<span id="cb725-2"><a href="ch_single-objects.html#cb725-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> nonEnumSymbolKey <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">'nonEnumSymbolKey'</span>)<span class="op">;</span></span>
+<span id="cb725-3"><a href="ch_single-objects.html#cb725-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb725-4"><a href="ch_single-objects.html#cb725-4" aria-hidden="true" tabindex="-1"></a><span class="co">// We create enumerable properties via an object literal</span></span>
+<span id="cb725-5"><a href="ch_single-objects.html#cb725-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb725-6"><a href="ch_single-objects.html#cb725-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">enumerableStringKey</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb725-7"><a href="ch_single-objects.html#cb725-7" aria-hidden="true" tabindex="-1"></a>  [enumerableSymbolKey]<span class="op">:</span> <span class="dv">2</span><span class="op">,</span></span>
+<span id="cb725-8"><a href="ch_single-objects.html#cb725-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb725-9"><a href="ch_single-objects.html#cb725-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb725-10"><a href="ch_single-objects.html#cb725-10" aria-hidden="true" tabindex="-1"></a><span class="co">// For non-enumerable properties, we need a more powerful tool</span></span>
+<span id="cb725-11"><a href="ch_single-objects.html#cb725-11" aria-hidden="true" tabindex="-1"></a><span class="bu">Object</span><span class="op">.</span><span class="fu">defineProperties</span>(obj<span class="op">,</span> {</span>
+<span id="cb725-12"><a href="ch_single-objects.html#cb725-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">nonEnumStringKey</span><span class="op">:</span> {</span>
+<span id="cb725-13"><a href="ch_single-objects.html#cb725-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">value</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span></span>
+<span id="cb725-14"><a href="ch_single-objects.html#cb725-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">enumerable</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb725-15"><a href="ch_single-objects.html#cb725-15" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb725-16"><a href="ch_single-objects.html#cb725-16" aria-hidden="true" tabindex="-1"></a>  [nonEnumSymbolKey]<span class="op">:</span> {</span>
+<span id="cb725-17"><a href="ch_single-objects.html#cb725-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">value</span><span class="op">:</span> <span class="dv">4</span><span class="op">,</span></span>
+<span id="cb725-18"><a href="ch_single-objects.html#cb725-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">enumerable</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb725-19"><a href="ch_single-objects.html#cb725-19" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb725-20"><a href="ch_single-objects.html#cb725-20" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb725-21"><a href="ch_single-objects.html#cb725-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb725-22"><a href="ch_single-objects.html#cb725-22" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb725-23"><a href="ch_single-objects.html#cb725-23" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(obj)<span class="op">,</span></span>
+<span id="cb725-24"><a href="ch_single-objects.html#cb725-24" aria-hidden="true" tabindex="-1"></a>  [ <span class="st">'enumerableStringKey'</span> ])<span class="op">;</span></span>
+<span id="cb725-25"><a href="ch_single-objects.html#cb725-25" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb725-26"><a href="ch_single-objects.html#cb725-26" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">getOwnPropertyNames</span>(obj)<span class="op">,</span></span>
+<span id="cb725-27"><a href="ch_single-objects.html#cb725-27" aria-hidden="true" tabindex="-1"></a>  [ <span class="st">'enumerableStringKey'</span><span class="op">,</span> <span class="st">'nonEnumStringKey'</span> ])<span class="op">;</span></span>
+<span id="cb725-28"><a href="ch_single-objects.html#cb725-28" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb725-29"><a href="ch_single-objects.html#cb725-29" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">getOwnPropertySymbols</span>(obj)<span class="op">,</span></span>
+<span id="cb725-30"><a href="ch_single-objects.html#cb725-30" aria-hidden="true" tabindex="-1"></a>  [ enumerableSymbolKey<span class="op">,</span> nonEnumSymbolKey ])<span class="op">;</span></span>
+<span id="cb725-31"><a href="ch_single-objects.html#cb725-31" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb725-32"><a href="ch_single-objects.html#cb725-32" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Reflect</span><span class="op">.</span><span class="fu">ownKeys</span>(obj)<span class="op">,</span></span>
+<span id="cb725-33"><a href="ch_single-objects.html#cb725-33" aria-hidden="true" tabindex="-1"></a>  [</span>
+<span id="cb725-34"><a href="ch_single-objects.html#cb725-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">'enumerableStringKey'</span><span class="op">,</span> <span class="st">'nonEnumStringKey'</span><span class="op">,</span></span>
+<span id="cb725-35"><a href="ch_single-objects.html#cb725-35" aria-hidden="true" tabindex="-1"></a>    enumerableSymbolKey<span class="op">,</span> nonEnumSymbolKey<span class="op">,</span></span>
+<span id="cb725-36"><a href="ch_single-objects.html#cb725-36" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">;</span></span></code></pre></div>
+<p><code>Object.defineProperties()</code> is explained <a href="ch_single-objects.html#property-attributes">later in this chapter</a>.</p>
+<h4 id="Object.values">28.6.6 Listing property values via <code>Object.values()</code></h4>
+<p><code>Object.values()</code> lists the values of all enumerable properties of an object:</p>
+<div class="sourceCode" id="cb726"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb726-1"><a href="ch_single-objects.html#cb726-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="dv">2</span>}<span class="op">;</span></span>
+<span id="cb726-2"><a href="ch_single-objects.html#cb726-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb726-3"><a href="ch_single-objects.html#cb726-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">values</span>(obj)<span class="op">,</span></span>
+<span id="cb726-4"><a href="ch_single-objects.html#cb726-4" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="Object.entries">28.6.7 Listing property entries via <code>Object.entries()</code> [ES2017]</h4>
+<p><code>Object.entries()</code> lists key-value pairs of enumerable properties. Each pair is encoded as a two-element Array:</p>
+<div class="sourceCode" id="cb727"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb727-1"><a href="ch_single-objects.html#cb727-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="dv">2</span>}<span class="op">;</span></span>
+<span id="cb727-2"><a href="ch_single-objects.html#cb727-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb727-3"><a href="ch_single-objects.html#cb727-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">entries</span>(obj)<span class="op">,</span></span>
+<span id="cb727-4"><a href="ch_single-objects.html#cb727-4" aria-hidden="true" tabindex="-1"></a>  [</span>
+<span id="cb727-5"><a href="ch_single-objects.html#cb727-5" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'foo'</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb727-6"><a href="ch_single-objects.html#cb727-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'bar'</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb727-7"><a href="ch_single-objects.html#cb727-7" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: <code>Object.entries()</code></strong></p>
+<p><code>exercises/single-objects/find_key_test.mjs</code></p>
+</div>
+<h4 id="order-of-properties">28.6.8 Properties are listed deterministically</h4>
+<p>Own (non-inherited) properties of objects are always listed in the following order:</p>
+<ol type="1">
+<li>Properties with string keys that contain integer indices (that includes <a href="ch_arrays.html#array-indices">Array indices</a>):<br>
+In ascending numeric order</li>
+<li>Remaining properties with string keys:<br>
+In the order in which they were added</li>
+<li>Properties with symbol keys:<br>
+In the order in which they were added</li>
+</ol>
+<p>The following example demonstrates how property keys are sorted according to these rules:</p>
+<div class="sourceCode" id="cb728"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb728-1"><a href="ch_single-objects.html#cb728-1" aria-hidden="true" tabindex="-1"></a>&gt; Object.keys({b:0,a:0, 10:0,2:0})</span>
+<span id="cb728-2"><a href="ch_single-objects.html#cb728-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ '2', '10', 'b', 'a' ]</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>The order of properties</strong></p>
+<p><a href="https://tc39.github.io/ecma262/#sec-ordinaryownpropertykeys">The ECMAScript specification</a> describes in more detail how properties are ordered.</p>
+</div>
+<h4 id="Object.fromEntries">28.6.9 Assembling objects via <code>Object.fromEntries()</code> [ES2019]</h4>
+<p>Given an iterable over [key, value] pairs, <code>Object.fromEntries()</code> creates an object:</p>
+<div class="sourceCode" id="cb729"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb729-1"><a href="ch_single-objects.html#cb729-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb729-2"><a href="ch_single-objects.html#cb729-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>([[<span class="st">'foo'</span><span class="op">,</span><span class="dv">1</span>]<span class="op">,</span> [<span class="st">'bar'</span><span class="op">,</span><span class="dv">2</span>]])<span class="op">,</span></span>
+<span id="cb729-3"><a href="ch_single-objects.html#cb729-3" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb729-4"><a href="ch_single-objects.html#cb729-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb729-5"><a href="ch_single-objects.html#cb729-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bar</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span></span>
+<span id="cb729-6"><a href="ch_single-objects.html#cb729-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb729-7"><a href="ch_single-objects.html#cb729-7" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<p><code>Object.fromEntries()</code> does the opposite of <a href="ch_single-objects.html#Object.entries"><code>Object.entries()</code></a>.</p>
+<p>To demonstrate both, we’ll use them to implement two tool functions from the library <a href="https://underscorejs.org">Underscore</a> in <span data-refcheck="#underscore-pick #underscore-invert">the next subsubsections</span>.</p>
+<h5 id="underscore-pick">28.6.9.1 Example: <code>pick(object, ...keys)</code></h5>
+<p><a href="https://underscorejs.org/#pick"><code>pick</code></a> returns a copy of <code>object</code> that only has those properties whose keys are mentioned as arguments:</p>
+<div class="sourceCode" id="cb730"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb730-1"><a href="ch_single-objects.html#cb730-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> address <span class="op">=</span> {</span>
+<span id="cb730-2"><a href="ch_single-objects.html#cb730-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">street</span><span class="op">:</span> <span class="st">'Evergreen Terrace'</span><span class="op">,</span></span>
+<span id="cb730-3"><a href="ch_single-objects.html#cb730-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">number</span><span class="op">:</span> <span class="st">'742'</span><span class="op">,</span></span>
+<span id="cb730-4"><a href="ch_single-objects.html#cb730-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">city</span><span class="op">:</span> <span class="st">'Springfield'</span><span class="op">,</span></span>
+<span id="cb730-5"><a href="ch_single-objects.html#cb730-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">state</span><span class="op">:</span> <span class="st">'NT'</span><span class="op">,</span></span>
+<span id="cb730-6"><a href="ch_single-objects.html#cb730-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">zip</span><span class="op">:</span> <span class="st">'49007'</span><span class="op">,</span></span>
+<span id="cb730-7"><a href="ch_single-objects.html#cb730-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb730-8"><a href="ch_single-objects.html#cb730-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb730-9"><a href="ch_single-objects.html#cb730-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pick</span>(address<span class="op">,</span> <span class="st">'street'</span><span class="op">,</span> <span class="st">'number'</span>)<span class="op">,</span></span>
+<span id="cb730-10"><a href="ch_single-objects.html#cb730-10" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb730-11"><a href="ch_single-objects.html#cb730-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">street</span><span class="op">:</span> <span class="st">'Evergreen Terrace'</span><span class="op">,</span></span>
+<span id="cb730-12"><a href="ch_single-objects.html#cb730-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">number</span><span class="op">:</span> <span class="st">'742'</span><span class="op">,</span></span>
+<span id="cb730-13"><a href="ch_single-objects.html#cb730-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb730-14"><a href="ch_single-objects.html#cb730-14" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<p>We can implement <code>pick()</code> as follows:</p>
+<div class="sourceCode" id="cb731"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb731-1"><a href="ch_single-objects.html#cb731-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">pick</span>(object<span class="op">,</span> <span class="op">...</span>keys) {</span>
+<span id="cb731-2"><a href="ch_single-objects.html#cb731-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> filteredEntries <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">entries</span>(object)</span>
+<span id="cb731-3"><a href="ch_single-objects.html#cb731-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>(([key<span class="op">,</span> _value]) <span class="kw">=&gt;</span> keys<span class="op">.</span><span class="fu">includes</span>(key))<span class="op">;</span></span>
+<span id="cb731-4"><a href="ch_single-objects.html#cb731-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(filteredEntries)<span class="op">;</span></span>
+<span id="cb731-5"><a href="ch_single-objects.html#cb731-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h5 id="underscore-invert">28.6.9.2 Example: <code>invert(object)</code></h5>
+<p><a href="https://underscorejs.org/#invert"><code>invert</code></a> returns a copy of <code>object</code> where the keys and values of all properties are swapped:</p>
+<div class="sourceCode" id="cb732"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb732-1"><a href="ch_single-objects.html#cb732-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb732-2"><a href="ch_single-objects.html#cb732-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">invert</span>({<span class="dt">a</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">b</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">c</span><span class="op">:</span> <span class="dv">3</span>})<span class="op">,</span></span>
+<span id="cb732-3"><a href="ch_single-objects.html#cb732-3" aria-hidden="true" tabindex="-1"></a>  {<span class="dv">1</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span> <span class="dv">2</span><span class="op">:</span> <span class="st">'b'</span><span class="op">,</span> <span class="dv">3</span><span class="op">:</span> <span class="st">'c'</span>}</span>
+<span id="cb732-4"><a href="ch_single-objects.html#cb732-4" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<p>We can implement <code>invert()</code> like this:</p>
+<div class="sourceCode" id="cb733"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb733-1"><a href="ch_single-objects.html#cb733-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">invert</span>(object) {</span>
+<span id="cb733-2"><a href="ch_single-objects.html#cb733-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> reversedEntries <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">entries</span>(object)</span>
+<span id="cb733-3"><a href="ch_single-objects.html#cb733-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(([key<span class="op">,</span> value]) <span class="kw">=&gt;</span> [value<span class="op">,</span> key])<span class="op">;</span></span>
+<span id="cb733-4"><a href="ch_single-objects.html#cb733-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(reversedEntries)<span class="op">;</span></span>
+<span id="cb733-5"><a href="ch_single-objects.html#cb733-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h5 id="a-simple-implementation-of-object.fromentries">28.6.9.3 A simple implementation of <code>Object.fromEntries()</code></h5>
+<p>The following function is a simplified version of <code>Object.fromEntries()</code>:</p>
+<div class="sourceCode" id="cb734"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb734-1"><a href="ch_single-objects.html#cb734-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">fromEntries</span>(iterable) {</span>
+<span id="cb734-2"><a href="ch_single-objects.html#cb734-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb734-3"><a href="ch_single-objects.html#cb734-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> [key<span class="op">,</span> value] <span class="kw">of</span> iterable) {</span>
+<span id="cb734-4"><a href="ch_single-objects.html#cb734-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> coercedKey<span class="op">;</span></span>
+<span id="cb734-5"><a href="ch_single-objects.html#cb734-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">typeof</span> key <span class="op">===</span> <span class="st">'string'</span> <span class="op">||</span> <span class="kw">typeof</span> key <span class="op">===</span> <span class="st">'symbol'</span>) {</span>
+<span id="cb734-6"><a href="ch_single-objects.html#cb734-6" aria-hidden="true" tabindex="-1"></a>      coercedKey <span class="op">=</span> key<span class="op">;</span></span>
+<span id="cb734-7"><a href="ch_single-objects.html#cb734-7" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb734-8"><a href="ch_single-objects.html#cb734-8" aria-hidden="true" tabindex="-1"></a>      coercedKey <span class="op">=</span> <span class="bu">String</span>(key)<span class="op">;</span></span>
+<span id="cb734-9"><a href="ch_single-objects.html#cb734-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb734-10"><a href="ch_single-objects.html#cb734-10" aria-hidden="true" tabindex="-1"></a>    result[coercedKey] <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb734-11"><a href="ch_single-objects.html#cb734-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb734-12"><a href="ch_single-objects.html#cb734-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb734-13"><a href="ch_single-objects.html#cb734-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: <code>Object.entries()</code> and <code>Object.fromEntries()</code></strong></p>
+<p><code>exercises/single-objects/omit_properties_test.mjs</code></p>
+</div>
+<h4 id="the-pitfalls-of-using-an-object-as-a-dictionary">28.6.10 The pitfalls of using an object as a dictionary</h4>
+<p>If we use plain objects (created via object literals) as dictionaries, we have to look out for two pitfalls.</p>
+<p>The first pitfall is that the <code>in</code> operator also finds inherited properties:</p>
+<div class="sourceCode" id="cb735"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb735-1"><a href="ch_single-objects.html#cb735-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> dict <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb735-2"><a href="ch_single-objects.html#cb735-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="st">'toString'</span> <span class="kw">in</span> dict<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div>
+<p>We want <code>dict</code> to be treated as empty, but the <code>in</code> operator detects the properties it inherits from its prototype, <code>Object.prototype</code>.</p>
+<p>The second pitfall is that we can’t use the property key <code>__proto__</code> because it has special powers (it sets the prototype of the object):</p>
+<div class="sourceCode" id="cb736"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb736-1"><a href="ch_single-objects.html#cb736-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> dict <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb736-2"><a href="ch_single-objects.html#cb736-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb736-3"><a href="ch_single-objects.html#cb736-3" aria-hidden="true" tabindex="-1"></a>dict[<span class="st">'__proto__'</span>] <span class="op">=</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb736-4"><a href="ch_single-objects.html#cb736-4" aria-hidden="true" tabindex="-1"></a><span class="co">// No property was added to dict:</span></span>
+<span id="cb736-5"><a href="ch_single-objects.html#cb736-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(dict)<span class="op">,</span> [])<span class="op">;</span></span></code></pre></div>
+<h5 id="safely-using-objects-as-dictionaries">28.6.10.1 Safely using objects as dictionaries</h5>
+<p>So how do you avoid the two pitfalls?</p>
+<ul>
+<li>Whenever you can, use Maps. They are the best solution for dictionaries.</li>
+<li>If you can’t, use a library for objects-as-dictionaries that does everything safely.</li>
+<li>If you can’t, use an object without a prototype.</li>
+</ul>
+<p>The following code demonstrates using objects without prototypes as dictionaries:</p>
+<div class="sourceCode" id="cb737"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb737-1"><a href="ch_single-objects.html#cb737-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> dict <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">create</span>(<span class="kw">null</span>)<span class="op">;</span> <span class="co">// no prototype</span></span>
+<span id="cb737-2"><a href="ch_single-objects.html#cb737-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb737-3"><a href="ch_single-objects.html#cb737-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="st">'toString'</span> <span class="kw">in</span> dict<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb737-4"><a href="ch_single-objects.html#cb737-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb737-5"><a href="ch_single-objects.html#cb737-5" aria-hidden="true" tabindex="-1"></a>dict[<span class="st">'__proto__'</span>] <span class="op">=</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb737-6"><a href="ch_single-objects.html#cb737-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(dict)<span class="op">,</span> [<span class="st">'__proto__'</span>])<span class="op">;</span></span></code></pre></div>
+<p>We avoided both pitfalls:</p>
+<ul>
+<li>First, a property without a prototype does not inherit any properties (line A).</li>
+<li>Second, in modern JavaScript, <code>__proto__</code> is implemented via <code>Object.prototype</code>. That means that it is switched off if <code>Object.prototype</code> is not in the prototype chain.</li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Using an object as a dictionary</strong></p>
+<p><code>exercises/single-objects/simple_dict_test.mjs</code></p>
+</div>
+<h3 id="standard-methods-advanced">28.7 Standard methods (advanced)</h3>
+<p><code>Object.prototype</code> defines several standard methods that can be overridden to configure how an object is treated by the language. Two important ones are:</p>
+<ul>
+<li><code>.toString()</code></li>
+<li><code>.valueOf()</code></li>
+</ul>
+<h4 id="tostring">28.7.1 <code>.toString()</code></h4>
+<p><code>.toString()</code> determines how objects are converted to strings:</p>
+<div class="sourceCode" id="cb738"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb738-1"><a href="ch_single-objects.html#cb738-1" aria-hidden="true" tabindex="-1"></a>&gt; String({toString() { return 'Hello!' }})</span>
+<span id="cb738-2"><a href="ch_single-objects.html#cb738-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'Hello!'</span></span>
+<span id="cb738-3"><a href="ch_single-objects.html#cb738-3" aria-hidden="true" tabindex="-1"></a>&gt; String({})</span>
+<span id="cb738-4"><a href="ch_single-objects.html#cb738-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'[object Object]'</span></span></code></pre></div>
+<h4 id="valueof">28.7.2 <code>.valueOf()</code></h4>
+<p><code>.valueOf()</code> determines how objects are converted to numbers:</p>
+<div class="sourceCode" id="cb739"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb739-1"><a href="ch_single-objects.html#cb739-1" aria-hidden="true" tabindex="-1"></a>&gt; Number({valueOf() { return 123 }})</span>
+<span id="cb739-2"><a href="ch_single-objects.html#cb739-2" aria-hidden="true" tabindex="-1"></a><span class="kw">123</span></span>
+<span id="cb739-3"><a href="ch_single-objects.html#cb739-3" aria-hidden="true" tabindex="-1"></a>&gt; Number({})</span>
+<span id="cb739-4"><a href="ch_single-objects.html#cb739-4" aria-hidden="true" tabindex="-1"></a><span class="kw">NaN</span></span></code></pre></div>
+<h3 id="advanced-topics">28.8 Advanced topics</h3>
+<p>The following subsections give brief overviews of a few advanced topics.</p>
+<h4 id="object.assign-es6">28.8.1 <code>Object.assign()</code> [ES6]</h4>
+<p><code>Object.assign()</code> is a tool method:</p>
+<div class="sourceCode" id="cb740"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb740-1"><a href="ch_single-objects.html#cb740-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Object</span><span class="op">.</span><span class="fu">assign</span>(target<span class="op">,</span> source_1<span class="op">,</span> source_2<span class="op">,</span> ···)</span></code></pre></div>
+<p>This expression assigns all properties of <code>source_1</code> to <code>target</code>, then all properties of <code>source_2</code>, etc. At the end, it returns <code>target</code> – for example:</p>
+<div class="sourceCode" id="cb741"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb741-1"><a href="ch_single-objects.html#cb741-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> target <span class="op">=</span> { <span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">;</span></span>
+<span id="cb741-2"><a href="ch_single-objects.html#cb741-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb741-3"><a href="ch_single-objects.html#cb741-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> result <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">assign</span>(</span>
+<span id="cb741-4"><a href="ch_single-objects.html#cb741-4" aria-hidden="true" tabindex="-1"></a>  target<span class="op">,</span></span>
+<span id="cb741-5"><a href="ch_single-objects.html#cb741-5" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">bar</span><span class="op">:</span> <span class="dv">2</span>}<span class="op">,</span></span>
+<span id="cb741-6"><a href="ch_single-objects.html#cb741-6" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">baz</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="dv">4</span>})<span class="op">;</span></span>
+<span id="cb741-7"><a href="ch_single-objects.html#cb741-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb741-8"><a href="ch_single-objects.html#cb741-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb741-9"><a href="ch_single-objects.html#cb741-9" aria-hidden="true" tabindex="-1"></a>  result<span class="op">,</span> { <span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="dv">4</span><span class="op">,</span> <span class="dt">baz</span><span class="op">:</span> <span class="dv">3</span> })<span class="op">;</span></span>
+<span id="cb741-10"><a href="ch_single-objects.html#cb741-10" aria-hidden="true" tabindex="-1"></a><span class="co">// target was modified and returned:</span></span>
+<span id="cb741-11"><a href="ch_single-objects.html#cb741-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(result<span class="op">,</span> target)<span class="op">;</span></span></code></pre></div>
+<p>The use cases for <code>Object.assign()</code> are similar to those for spread properties. In a way, it spreads destructively.</p>
+<h4 id="freezing-objects-es5">28.8.2 Freezing objects [ES5]</h4>
+<p><a id="index-entry-344" class="index-entry"></a><a id="index-entry-345" class="index-entry"></a></p>
+<p><code>Object.freeze(obj)</code> makes <code>obj</code> completely immutable: We can’t change properties, add properties, or change its prototype – for example:</p>
+<div class="sourceCode" id="cb742"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb742-1"><a href="ch_single-objects.html#cb742-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> frozen <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">freeze</span>({ <span class="dt">x</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">5</span> })<span class="op">;</span></span>
+<span id="cb742-2"><a href="ch_single-objects.html#cb742-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb742-3"><a href="ch_single-objects.html#cb742-3" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> { frozen<span class="op">.</span><span class="at">x</span> <span class="op">=</span> <span class="dv">7</span> }<span class="op">,</span></span>
+<span id="cb742-4"><a href="ch_single-objects.html#cb742-4" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb742-5"><a href="ch_single-objects.html#cb742-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">'TypeError'</span><span class="op">,</span></span>
+<span id="cb742-6"><a href="ch_single-objects.html#cb742-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">message</span><span class="op">:</span> <span class="ss">/</span><span class="sc">^</span><span class="ss">Cannot assign to read only property 'x'/</span><span class="op">,</span></span>
+<span id="cb742-7"><a href="ch_single-objects.html#cb742-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>There is one caveat: <code>Object.freeze(obj)</code> freezes shallowly. That is, only the properties of <code>obj</code> are frozen but not objects stored in properties.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/external-link-regular.svg" height="24">&nbsp; <strong>More information</strong></p>
+<p>For more information on freezing and other ways of locking down objects, see <a href="https://exploringjs.com/deep-js/ch_protecting-objects.html"><em>Deep JavaScript</em></a>.</p>
+</div>
+<h4 id="property-attributes">28.8.3 Property attributes and property descriptors [ES5]</h4>
+<p><a id="index-entry-346" class="index-entry"></a><a id="index-entry-347" class="index-entry"></a> <a id="index-entry-348" class="index-entry"></a><a id="index-entry-349" class="index-entry"></a></p>
+<p>Just as objects are composed of properties, properties are composed of <em>attributes</em>. The value of a property is only one of several attributes. Others include:</p>
+<ul>
+<li><code>writable</code>: Is it possible to change the value of the property?</li>
+<li><code>enumerable</code>: Is the property considered by <code>Object.keys()</code>, spreading, etc.?</li>
+</ul>
+<p>When we are using one of the operations for handling property attributes, attributes are specified via <em>property descriptors</em>: objects where each property represents one attribute. For example, this is how we read the attributes of a property <code>obj.foo</code>:</p>
+<div class="sourceCode" id="cb743"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb743-1"><a href="ch_single-objects.html#cb743-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> { <span class="dt">foo</span><span class="op">:</span> <span class="dv">123</span> }<span class="op">;</span></span>
+<span id="cb743-2"><a href="ch_single-objects.html#cb743-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb743-3"><a href="ch_single-objects.html#cb743-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">getOwnPropertyDescriptor</span>(obj<span class="op">,</span> <span class="st">'foo'</span>)<span class="op">,</span></span>
+<span id="cb743-4"><a href="ch_single-objects.html#cb743-4" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb743-5"><a href="ch_single-objects.html#cb743-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">value</span><span class="op">:</span> <span class="dv">123</span><span class="op">,</span></span>
+<span id="cb743-6"><a href="ch_single-objects.html#cb743-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">writable</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb743-7"><a href="ch_single-objects.html#cb743-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">enumerable</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb743-8"><a href="ch_single-objects.html#cb743-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">configurable</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb743-9"><a href="ch_single-objects.html#cb743-9" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>And this is how we set the attributes of a property <code>obj.bar</code>:</p>
+<div class="sourceCode" id="cb744"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb744-1"><a href="ch_single-objects.html#cb744-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb744-2"><a href="ch_single-objects.html#cb744-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb744-3"><a href="ch_single-objects.html#cb744-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bar</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span></span>
+<span id="cb744-4"><a href="ch_single-objects.html#cb744-4" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb744-5"><a href="ch_single-objects.html#cb744-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb744-6"><a href="ch_single-objects.html#cb744-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(obj)<span class="op">,</span> [<span class="st">'foo'</span><span class="op">,</span> <span class="st">'bar'</span>])<span class="op">;</span></span>
+<span id="cb744-7"><a href="ch_single-objects.html#cb744-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb744-8"><a href="ch_single-objects.html#cb744-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Hide property `bar` from Object.keys()</span></span>
+<span id="cb744-9"><a href="ch_single-objects.html#cb744-9" aria-hidden="true" tabindex="-1"></a><span class="bu">Object</span><span class="op">.</span><span class="fu">defineProperty</span>(obj<span class="op">,</span> <span class="st">'bar'</span><span class="op">,</span> {</span>
+<span id="cb744-10"><a href="ch_single-objects.html#cb744-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">enumerable</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb744-11"><a href="ch_single-objects.html#cb744-11" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb744-12"><a href="ch_single-objects.html#cb744-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb744-13"><a href="ch_single-objects.html#cb744-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(obj)<span class="op">,</span> [<span class="st">'foo'</span>])<span class="op">;</span></span></code></pre></div>
+<p><strong>Further reading:</strong></p>
+<ul>
+<li>Enumerability is covered in greater detail <a href="ch_single-objects.html#enumerability">earlier in this chapter</a>.</li>
+<li>For more information on property attributes and property descriptors, see <a href="https://exploringjs.com/deep-js/ch_property-attributes-intro.html"><em>Deep JavaScript</em></a>.</li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/18">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_proto-chains-classes.html">29 Prototype chains and classes</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

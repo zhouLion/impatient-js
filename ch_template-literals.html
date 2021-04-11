@@ -1,0 +1,355 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_template-literals">21 Using template literals and tagged templates</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>21.1 <a href="ch_template-literals.html#disambiguation-template">Disambiguation: “template”</a></li>
+<li>21.2 <a href="ch_template-literals.html#template-literals">Template literals</a></li>
+<li>21.3 <a href="ch_template-literals.html#tagged-templates">Tagged templates</a>
+<ul>
+<li>21.3.1 <a href="ch_template-literals.html#template-strings-cooked-vs-raw">Cooked vs.&nbsp;raw template strings (advanced)</a></li>
+</ul></li>
+<li>21.4 <a href="ch_template-literals.html#examples-of-tagged-templates-as-provided-via-libraries">Examples of tagged templates (as provided via libraries)</a>
+<ul>
+<li>21.4.1 <a href="ch_template-literals.html#tag-function-library-lit-html">Tag function library: lit-html</a></li>
+<li>21.4.2 <a href="ch_template-literals.html#tag-function-library-re-template-tag">Tag function library: re-template-tag</a></li>
+<li>21.4.3 <a href="ch_template-literals.html#tag-function-library-graphql-tag">Tag function library: graphql-tag</a></li>
+</ul></li>
+<li>21.5 <a href="ch_template-literals.html#raw-string-literals">Raw string literals</a></li>
+<li>21.6 <a href="ch_template-literals.html#advanced-3">(Advanced)</a></li>
+<li>21.7 <a href="ch_template-literals.html#multiline-template-literals-and-indentation">Multiline template literals and indentation</a>
+<ul>
+<li>21.7.1 <a href="ch_template-literals.html#fix-template-tag-for-dedenting">Fix: template tag for dedenting</a></li>
+<li>21.7.2 <a href="ch_template-literals.html#fix-.trim">Fix: <code>.trim()</code></a></li>
+</ul></li>
+<li>21.8 <a href="ch_template-literals.html#simple-templating-via-template-literals">Simple templating via template literals</a>
+<ul>
+<li>21.8.1 <a href="ch_template-literals.html#a-more-complex-example">A more complex example</a></li>
+<li>21.8.2 <a href="ch_template-literals.html#simple-html-escaping">Simple HTML-escaping</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>Before we dig into the two features <em>template literal</em> and <em>tagged template</em>, let’s first examine the multiple meanings of the term <em>template</em>.</p>
+<h3 id="disambiguation-template">21.1 Disambiguation: “template”</h3>
+<p>The following three things are significantly different despite all having <em>template</em> in their names and despite all of them looking similar:</p>
+<ul>
+<li><p>A <em>text template</em> is a function from data to text. It is frequently used in web development and often defined via text files. For example, the following text defines a template for the library <a href="https://handlebarsjs.com">Handlebars</a>:</p>
+<div class="sourceCode" id="cb435"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb435-1"><a href="ch_template-literals.html#cb435-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">"entry"</span><span class="kw">&gt;</span></span>
+<span id="cb435-2"><a href="ch_template-literals.html#cb435-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h1&gt;</span>{{title}}<span class="kw">&lt;/h1&gt;</span></span>
+<span id="cb435-3"><a href="ch_template-literals.html#cb435-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">"body"</span><span class="kw">&gt;</span></span>
+<span id="cb435-4"><a href="ch_template-literals.html#cb435-4" aria-hidden="true" tabindex="-1"></a>    {{body}}</span>
+<span id="cb435-5"><a href="ch_template-literals.html#cb435-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/div&gt;</span></span>
+<span id="cb435-6"><a href="ch_template-literals.html#cb435-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<p>This template has two blanks to be filled in: <code>title</code> and <code>body</code>. It is used like this:</p>
+<div class="sourceCode" id="cb436"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb436-1"><a href="ch_template-literals.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="co">// First step: retrieve the template text, e.g. from a text file.</span></span>
+<span id="cb436-2"><a href="ch_template-literals.html#cb436-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> tmplFunc <span class="op">=</span> Handlebars<span class="op">.</span><span class="fu">compile</span>(TMPL_TEXT)<span class="op">;</span> <span class="co">// compile string</span></span>
+<span id="cb436-3"><a href="ch_template-literals.html#cb436-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> data <span class="op">=</span> {<span class="dt">title</span><span class="op">:</span> <span class="st">'My page'</span><span class="op">,</span> <span class="dt">body</span><span class="op">:</span> <span class="st">'Welcome to my page!'</span>}<span class="op">;</span></span>
+<span id="cb436-4"><a href="ch_template-literals.html#cb436-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> html <span class="op">=</span> <span class="fu">tmplFunc</span>(data)<span class="op">;</span></span></code></pre></div></li>
+<li><p>A <em>template literal</em> is similar to a string literal, but has additional features – for example, interpolation. It is delimited by backticks:</p>
+<div class="sourceCode" id="cb437"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb437-1"><a href="ch_template-literals.html#cb437-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> num <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb437-2"><a href="ch_template-literals.html#cb437-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="vs">`Count: </span><span class="sc">${</span>num<span class="sc">}</span><span class="vs">!`</span><span class="op">,</span> <span class="st">'Count: 5!'</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p>Syntactically, a <em>tagged template</em> is a template literal that follows a function (or rather, an expression that evaluates to a function). That leads to the function being called. Its arguments are derived from the contents of the template literal.</p>
+<div class="sourceCode" id="cb438"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb438-1"><a href="ch_template-literals.html#cb438-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> getArgs <span class="op">=</span> (<span class="op">...</span>args) <span class="kw">=&gt;</span> args<span class="op">;</span></span>
+<span id="cb438-2"><a href="ch_template-literals.html#cb438-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb438-3"><a href="ch_template-literals.html#cb438-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getArgs</span><span class="vs">`Count: </span><span class="sc">${</span><span class="dv">5</span><span class="sc">}</span><span class="vs">!`</span><span class="op">,</span></span>
+<span id="cb438-4"><a href="ch_template-literals.html#cb438-4" aria-hidden="true" tabindex="-1"></a>  [[<span class="st">'Count: '</span><span class="op">,</span> <span class="st">'!'</span>]<span class="op">,</span> <span class="dv">5</span>] )<span class="op">;</span></span></code></pre></div>
+<p>Note that <code>getArgs()</code> receives both the text of the literal and the data interpolated via <code>${}</code>.</p></li>
+</ul>
+<h3 id="template-literals">21.2 Template literals</h3>
+<p><a id="index-entry-206" class="index-entry"></a></p>
+<p>A template literal has two new features compared to a normal string literal.</p>
+<p>First, it supports <em>string interpolation</em>: if we put a dynamically computed value inside a <code>${}</code>, it is converted to a string and inserted into the string returned by the literal.</p>
+<div class="sourceCode" id="cb439"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb439-1"><a href="ch_template-literals.html#cb439-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> MAX <span class="op">=</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb439-2"><a href="ch_template-literals.html#cb439-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">doSomeWork</span>(x) {</span>
+<span id="cb439-3"><a href="ch_template-literals.html#cb439-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (x <span class="op">&gt;</span> MAX) {</span>
+<span id="cb439-4"><a href="ch_template-literals.html#cb439-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="vs">`At most </span><span class="sc">${</span>MAX<span class="sc">}</span><span class="vs"> allowed: </span><span class="sc">${</span>x<span class="sc">}</span><span class="vs">!`</span>)<span class="op">;</span></span>
+<span id="cb439-5"><a href="ch_template-literals.html#cb439-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb439-6"><a href="ch_template-literals.html#cb439-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb439-7"><a href="ch_template-literals.html#cb439-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb439-8"><a href="ch_template-literals.html#cb439-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb439-9"><a href="ch_template-literals.html#cb439-9" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> <span class="fu">doSomeWork</span>(<span class="dv">101</span>)<span class="op">,</span></span>
+<span id="cb439-10"><a href="ch_template-literals.html#cb439-10" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">message</span><span class="op">:</span> <span class="st">'At most 100 allowed: 101!'</span>})<span class="op">;</span></span></code></pre></div>
+<p>Second, template literals can span multiple lines:</p>
+<div class="sourceCode" id="cb440"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb440-1"><a href="ch_template-literals.html#cb440-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> str <span class="op">=</span> <span class="vs">`this is</span></span>
+<span id="cb440-2"><a href="ch_template-literals.html#cb440-2" aria-hidden="true" tabindex="-1"></a><span class="vs">a text with</span></span>
+<span id="cb440-3"><a href="ch_template-literals.html#cb440-3" aria-hidden="true" tabindex="-1"></a><span class="vs">multiple lines`</span><span class="op">;</span></span></code></pre></div>
+<p>Template literals always produce strings.</p>
+<h3 id="tagged-templates">21.3 Tagged templates</h3>
+<p><a id="index-entry-207" class="index-entry"></a></p>
+<p>The expression in line A is a <em>tagged template</em>. It is equivalent to invoking <code>tagFunc()</code> with the arguments listed in the Array in line B.</p>
+<div class="sourceCode" id="cb441"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb441-1"><a href="ch_template-literals.html#cb441-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">tagFunc</span>(<span class="op">...</span>args) {</span>
+<span id="cb441-2"><a href="ch_template-literals.html#cb441-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> args<span class="op">;</span></span>
+<span id="cb441-3"><a href="ch_template-literals.html#cb441-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb441-4"><a href="ch_template-literals.html#cb441-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb441-5"><a href="ch_template-literals.html#cb441-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> setting <span class="op">=</span> <span class="st">'dark mode'</span><span class="op">;</span></span>
+<span id="cb441-6"><a href="ch_template-literals.html#cb441-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> value <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb441-7"><a href="ch_template-literals.html#cb441-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb441-8"><a href="ch_template-literals.html#cb441-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb441-9"><a href="ch_template-literals.html#cb441-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tagFunc</span><span class="vs">`Setting </span><span class="sc">${</span>setting<span class="sc">}</span><span class="vs"> is </span><span class="sc">${</span>value<span class="sc">}</span><span class="vs">!`</span><span class="op">,</span> <span class="co">// (A)</span></span>
+<span id="cb441-10"><a href="ch_template-literals.html#cb441-10" aria-hidden="true" tabindex="-1"></a>  [[<span class="st">'Setting '</span><span class="op">,</span> <span class="st">' is '</span><span class="op">,</span> <span class="st">'!'</span>]<span class="op">,</span> <span class="st">'dark mode'</span><span class="op">,</span> <span class="kw">true</span>] <span class="co">// (B)</span></span>
+<span id="cb441-11"><a href="ch_template-literals.html#cb441-11" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<p>The function <code>tagFunc</code> before the first backtick is called a <em>tag function</em>. Its arguments are:</p>
+<ul>
+<li><em>Template strings</em> (first argument): an Array with the text fragments surrounding the interpolations <code>${}</code>.
+<ul>
+<li>In the example: <code>['Setting ', ' is ', '!']</code></li>
+</ul></li>
+<li><em>Substitutions</em> (remaining arguments): the interpolated values.
+<ul>
+<li>In the example: <code>'dark mode'</code> and <code>true</code></li>
+</ul></li>
+</ul>
+<p>The static (fixed) parts of the literal (the template strings) are kept separate from the dynamic parts (the substitutions).</p>
+<p>A tag function can return arbitrary values.</p>
+<h4 id="template-strings-cooked-vs-raw">21.3.1 Cooked vs.&nbsp;raw template strings (advanced)</h4>
+<p>So far, we have only seen the <em>cooked interpretation</em> of template strings. But tag functions actually get two interpretations:</p>
+<ul>
+<li><p>A <em>cooked interpretation</em> where backslashes have special meaning. For example, <code>\t</code> produces a tab character. This interpretation of the template strings is stored as an Array in the first argument.</p></li>
+<li><p>A <em>raw interpretation</em> where backslashes do not have special meaning. For example, <code>\t</code> produces two characters – a backslash and a <code>t</code>. This interpretation of the template strings is stored in property <code>.raw</code> of the first argument (an Array).</p></li>
+</ul>
+<p>The raw interpretation enables raw string literals via <code>String.raw</code> <a href="ch_template-literals.html#raw-string-literals">(described later)</a> and similar applications.</p>
+<p>The following tag function <code>cookedRaw</code> uses both interpretations:</p>
+<div class="sourceCode" id="cb442"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb442-1"><a href="ch_template-literals.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">cookedRaw</span>(templateStrings<span class="op">,</span> <span class="op">...</span>substitutions) {</span>
+<span id="cb442-2"><a href="ch_template-literals.html#cb442-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {</span>
+<span id="cb442-3"><a href="ch_template-literals.html#cb442-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">cooked</span><span class="op">:</span> [<span class="op">...</span>templateStrings]<span class="op">,</span> <span class="co">// copy only Array elements</span></span>
+<span id="cb442-4"><a href="ch_template-literals.html#cb442-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">raw</span><span class="op">:</span> templateStrings<span class="op">.</span><span class="at">raw</span><span class="op">,</span></span>
+<span id="cb442-5"><a href="ch_template-literals.html#cb442-5" aria-hidden="true" tabindex="-1"></a>    substitutions<span class="op">,</span></span>
+<span id="cb442-6"><a href="ch_template-literals.html#cb442-6" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb442-7"><a href="ch_template-literals.html#cb442-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb442-8"><a href="ch_template-literals.html#cb442-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb442-9"><a href="ch_template-literals.html#cb442-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cookedRaw</span><span class="vs">`</span><span class="sc">\t</span><span class="vs">ab</span><span class="sc">${</span><span class="st">'subst'</span><span class="sc">}\n</span><span class="vs">ewline</span><span class="sc">\\</span><span class="vs">`</span><span class="op">,</span></span>
+<span id="cb442-10"><a href="ch_template-literals.html#cb442-10" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb442-11"><a href="ch_template-literals.html#cb442-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">cooked</span><span class="op">:</span> [<span class="st">'</span><span class="sc">\t</span><span class="st">ab'</span><span class="op">,</span> <span class="st">'</span><span class="sc">\n</span><span class="st">ewline</span><span class="sc">\\</span><span class="st">'</span>]<span class="op">,</span></span>
+<span id="cb442-12"><a href="ch_template-literals.html#cb442-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">raw</span><span class="op">:</span>    [<span class="st">'</span><span class="sc">\\</span><span class="st">tab'</span><span class="op">,</span> <span class="st">'</span><span class="sc">\\</span><span class="st">newline</span><span class="sc">\\\\</span><span class="st">'</span>]<span class="op">,</span></span>
+<span id="cb442-13"><a href="ch_template-literals.html#cb442-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">substitutions</span><span class="op">:</span> [<span class="st">'subst'</span>]<span class="op">,</span></span>
+<span id="cb442-14"><a href="ch_template-literals.html#cb442-14" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>We can also use Unicode code point escapes (<code>\u{1F642}</code>), Unicode code unit escapes (<code>\u03A9</code>), and ASCII escapes (<code>\x52</code>) in tagged templates:</p>
+<div class="sourceCode" id="cb443"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb443-1"><a href="ch_template-literals.html#cb443-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb443-2"><a href="ch_template-literals.html#cb443-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cookedRaw</span><span class="vs">`</span><span class="sc">\u{54}\u0065\x78</span><span class="vs">t`</span><span class="op">,</span></span>
+<span id="cb443-3"><a href="ch_template-literals.html#cb443-3" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb443-4"><a href="ch_template-literals.html#cb443-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">cooked</span><span class="op">:</span> [<span class="st">'Text'</span>]<span class="op">,</span></span>
+<span id="cb443-5"><a href="ch_template-literals.html#cb443-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">raw</span><span class="op">:</span>    [<span class="st">'</span><span class="sc">\\</span><span class="st">u{54}</span><span class="sc">\\</span><span class="st">u0065</span><span class="sc">\\</span><span class="st">x78t'</span>]<span class="op">,</span></span>
+<span id="cb443-6"><a href="ch_template-literals.html#cb443-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">substitutions</span><span class="op">:</span> []<span class="op">,</span></span>
+<span id="cb443-7"><a href="ch_template-literals.html#cb443-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>If the syntax of one of these escapes isn’t correct, the corresponding cooked template string is <code>undefined</code>, while the raw version is still verbatim:</p>
+<div class="sourceCode" id="cb444"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb444-1"><a href="ch_template-literals.html#cb444-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb444-2"><a href="ch_template-literals.html#cb444-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cookedRaw</span><span class="vs">`</span><span class="er">\u</span><span class="vs">u</span><span class="er">\x</span><span class="vs">x </span><span class="sc">${</span><span class="dv">1</span><span class="sc">}</span><span class="vs"> after`</span><span class="op">,</span></span>
+<span id="cb444-3"><a href="ch_template-literals.html#cb444-3" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb444-4"><a href="ch_template-literals.html#cb444-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">cooked</span><span class="op">:</span> [<span class="kw">undefined</span><span class="op">,</span> <span class="st">' after'</span>]<span class="op">,</span></span>
+<span id="cb444-5"><a href="ch_template-literals.html#cb444-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">raw</span><span class="op">:</span>    [<span class="st">'</span><span class="sc">\\</span><span class="st">uu</span><span class="sc">\\</span><span class="st">xx '</span><span class="op">,</span> <span class="st">' after'</span>]<span class="op">,</span></span>
+<span id="cb444-6"><a href="ch_template-literals.html#cb444-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">substitutions</span><span class="op">:</span> [<span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb444-7"><a href="ch_template-literals.html#cb444-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>Incorrect escapes produce syntax errors in template literals and string literals. Why does JavaScript treat tagged templates differently? It lets us use tagged templates for text that we can’t put inside string literals – for example:</p>
+<pre><code>windowsPath`C:\uuu\xxx\111`
+latex`\unicode`</code></pre>
+<h3 id="examples-of-tagged-templates-as-provided-via-libraries">21.4 Examples of tagged templates (as provided via libraries)</h3>
+<p>Tagged templates are great for supporting small embedded languages (so-called <em>domain-specific languages</em>). We’ll continue with a few examples.</p>
+<h4 id="tag-function-library-lit-html">21.4.1 Tag function library: lit-html</h4>
+<p><a href="https://github.com/Polymer/lit-html">lit-html</a> is a templating library that is based on tagged templates and used by <a href="https://www.polymer-project.org/">the frontend framework Polymer</a>:</p>
+<div class="sourceCode" id="cb446"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb446-1"><a href="ch_template-literals.html#cb446-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {html<span class="op">,</span> render} <span class="im">from</span> <span class="st">'lit-html'</span><span class="op">;</span></span>
+<span id="cb446-2"><a href="ch_template-literals.html#cb446-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb446-3"><a href="ch_template-literals.html#cb446-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> template <span class="op">=</span> (items) <span class="kw">=&gt;</span> <span class="fu">html</span><span class="vs">`</span></span>
+<span id="cb446-4"><a href="ch_template-literals.html#cb446-4" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;ul&gt;</span></span>
+<span id="cb446-5"><a href="ch_template-literals.html#cb446-5" aria-hidden="true" tabindex="-1"></a><span class="vs">    </span><span class="sc">${</span></span>
+<span id="cb446-6"><a href="ch_template-literals.html#cb446-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">repeat</span>(items<span class="op">,</span></span>
+<span id="cb446-7"><a href="ch_template-literals.html#cb446-7" aria-hidden="true" tabindex="-1"></a>        (item) <span class="kw">=&gt;</span> item<span class="op">.</span><span class="at">id</span><span class="op">,</span></span>
+<span id="cb446-8"><a href="ch_template-literals.html#cb446-8" aria-hidden="true" tabindex="-1"></a>        (item<span class="op">,</span> index) <span class="kw">=&gt;</span> <span class="fu">html</span><span class="vs">`&lt;li&gt;</span><span class="sc">${</span>index<span class="sc">}</span><span class="vs">. </span><span class="sc">${</span>item<span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs">&lt;/li&gt;`</span></span>
+<span id="cb446-9"><a href="ch_template-literals.html#cb446-9" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb446-10"><a href="ch_template-literals.html#cb446-10" aria-hidden="true" tabindex="-1"></a>    <span class="sc">}</span></span>
+<span id="cb446-11"><a href="ch_template-literals.html#cb446-11" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;/ul&gt;</span></span>
+<span id="cb446-12"><a href="ch_template-literals.html#cb446-12" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span><span class="op">;</span></span></code></pre></div>
+<p><code>repeat()</code> is a custom function for looping. Its 2nd parameter produces unique keys for the values returned by the 3rd parameter. Note the nested tagged template used by that parameter.</p>
+<h4 id="tag-function-library-re-template-tag">21.4.2 Tag function library: re-template-tag</h4>
+<p><a href="https://github.com/rauschma/re-template-tag">re-template-tag</a> is a simple library for composing regular expressions. Templates tagged with <code>re</code> produce regular expressions. The main benefit is that we can interpolate regular expressions and plain text via <code>${}</code> (line A):</p>
+<div class="sourceCode" id="cb447"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb447-1"><a href="ch_template-literals.html#cb447-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> RE_YEAR <span class="op">=</span> <span class="fu">re</span><span class="vs">`(?&lt;year&gt;[0-9]{4})`</span><span class="op">;</span></span>
+<span id="cb447-2"><a href="ch_template-literals.html#cb447-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> RE_MONTH <span class="op">=</span> <span class="fu">re</span><span class="vs">`(?&lt;month&gt;[0-9]{2})`</span><span class="op">;</span></span>
+<span id="cb447-3"><a href="ch_template-literals.html#cb447-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> RE_DAY <span class="op">=</span> <span class="fu">re</span><span class="vs">`(?&lt;day&gt;[0-9]{2})`</span><span class="op">;</span></span>
+<span id="cb447-4"><a href="ch_template-literals.html#cb447-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> RE_DATE <span class="op">=</span> <span class="fu">re</span><span class="vs">`/</span><span class="sc">${</span>RE_YEAR<span class="sc">}</span><span class="vs">-</span><span class="sc">${</span>RE_MONTH<span class="sc">}</span><span class="vs">-</span><span class="sc">${</span>RE_DAY<span class="sc">}</span><span class="vs">/u`</span><span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb447-5"><a href="ch_template-literals.html#cb447-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb447-6"><a href="ch_template-literals.html#cb447-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> match <span class="op">=</span> RE_DATE<span class="op">.</span><span class="fu">exec</span>(<span class="st">'2017-01-27'</span>)<span class="op">;</span></span>
+<span id="cb447-7"><a href="ch_template-literals.html#cb447-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(match<span class="op">.</span><span class="at">groups</span><span class="op">.</span><span class="at">year</span><span class="op">,</span> <span class="st">'2017'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="tag-function-library-graphql-tag">21.4.3 Tag function library: graphql-tag</h4>
+<p><a href="https://github.com/apollographql/graphql-tag">The library graphql-tag</a> lets us create GraphQL queries via tagged templates:</p>
+<div class="sourceCode" id="cb448"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb448-1"><a href="ch_template-literals.html#cb448-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gql <span class="im">from</span> <span class="st">'graphql-tag'</span><span class="op">;</span></span>
+<span id="cb448-2"><a href="ch_template-literals.html#cb448-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb448-3"><a href="ch_template-literals.html#cb448-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> query <span class="op">=</span> <span class="fu">gql</span><span class="vs">`</span></span>
+<span id="cb448-4"><a href="ch_template-literals.html#cb448-4" aria-hidden="true" tabindex="-1"></a><span class="vs">  {</span></span>
+<span id="cb448-5"><a href="ch_template-literals.html#cb448-5" aria-hidden="true" tabindex="-1"></a><span class="vs">    user(id: 5) {</span></span>
+<span id="cb448-6"><a href="ch_template-literals.html#cb448-6" aria-hidden="true" tabindex="-1"></a><span class="vs">      firstName</span></span>
+<span id="cb448-7"><a href="ch_template-literals.html#cb448-7" aria-hidden="true" tabindex="-1"></a><span class="vs">      lastName</span></span>
+<span id="cb448-8"><a href="ch_template-literals.html#cb448-8" aria-hidden="true" tabindex="-1"></a><span class="vs">    }</span></span>
+<span id="cb448-9"><a href="ch_template-literals.html#cb448-9" aria-hidden="true" tabindex="-1"></a><span class="vs">  }</span></span>
+<span id="cb448-10"><a href="ch_template-literals.html#cb448-10" aria-hidden="true" tabindex="-1"></a><span class="vs">  `</span><span class="op">;</span></span></code></pre></div>
+<p>Additionally, there are plugins for pre-compiling such queries in Babel, TypeScript, etc.</p>
+<h3 id="raw-string-literals">21.5 Raw string literals</h3>
+<p>Raw string literals are implemented via the tag function <code>String.raw</code>. They are string literals where backslashes don’t do anything special (such as escaping characters, etc.):</p>
+<div class="sourceCode" id="cb449"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb449-1"><a href="ch_template-literals.html#cb449-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">String</span><span class="op">.</span><span class="fu">raw</span><span class="vs">`\back`</span><span class="op">,</span> <span class="st">'</span><span class="sc">\\</span><span class="st">back'</span>)<span class="op">;</span></span></code></pre></div>
+<p>This helps whenever data contains backslashes – for example, strings with regular expressions:</p>
+<div class="sourceCode" id="cb450"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb450-1"><a href="ch_template-literals.html#cb450-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> regex1 <span class="op">=</span> <span class="ss">/</span><span class="sc">^\.</span><span class="ss">/</span><span class="op">;</span></span>
+<span id="cb450-2"><a href="ch_template-literals.html#cb450-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> regex2 <span class="op">=</span> <span class="kw">new</span> <span class="bu">RegExp</span>(<span class="st">'^</span><span class="sc">\\</span><span class="st">.'</span>)<span class="op">;</span></span>
+<span id="cb450-3"><a href="ch_template-literals.html#cb450-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> regex3 <span class="op">=</span> <span class="kw">new</span> <span class="bu">RegExp</span>(<span class="bu">String</span><span class="op">.</span><span class="fu">raw</span><span class="vs">`^\.`</span>)<span class="op">;</span></span></code></pre></div>
+<p>All three regular expressions are equivalent. With a normal string literal, we have to write the backslash twice, to escape it for that literal. With a raw string literal, we don’t have to do that.</p>
+<p>Raw string literals are also useful for specifying Windows filename paths:</p>
+<div class="sourceCode" id="cb451"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb451-1"><a href="ch_template-literals.html#cb451-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> WIN_PATH <span class="op">=</span> <span class="bu">String</span><span class="op">.</span><span class="fu">raw</span><span class="vs">`C:\foo\bar`</span><span class="op">;</span></span>
+<span id="cb451-2"><a href="ch_template-literals.html#cb451-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(WIN_PATH<span class="op">,</span> <span class="st">'C:</span><span class="sc">\\</span><span class="st">foo</span><span class="sc">\\</span><span class="st">bar'</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="advanced-3">21.6 (Advanced)</h3>
+<p>All remaining sections are advanced</p>
+<h3 id="multiline-template-literals-and-indentation">21.7 Multiline template literals and indentation</h3>
+<p>If we put multiline text in template literals, two goals are in conflict: On one hand, the template literal should be indented to fit inside the source code. On the other hand, the lines of its content should start in the leftmost column.</p>
+<p>For example:</p>
+<div class="sourceCode" id="cb452"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb452-1"><a href="ch_template-literals.html#cb452-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">div</span>(text) {</span>
+<span id="cb452-2"><a href="ch_template-literals.html#cb452-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="vs">`</span></span>
+<span id="cb452-3"><a href="ch_template-literals.html#cb452-3" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;div&gt;</span></span>
+<span id="cb452-4"><a href="ch_template-literals.html#cb452-4" aria-hidden="true" tabindex="-1"></a><span class="vs">      </span><span class="sc">${</span>text<span class="sc">}</span></span>
+<span id="cb452-5"><a href="ch_template-literals.html#cb452-5" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;</span></span>
+<span id="cb452-6"><a href="ch_template-literals.html#cb452-6" aria-hidden="true" tabindex="-1"></a><span class="vs">  `</span><span class="op">;</span></span>
+<span id="cb452-7"><a href="ch_template-literals.html#cb452-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb452-8"><a href="ch_template-literals.html#cb452-8" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'Output:'</span>)<span class="op">;</span></span>
+<span id="cb452-9"><a href="ch_template-literals.html#cb452-9" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(</span>
+<span id="cb452-10"><a href="ch_template-literals.html#cb452-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">div</span>(<span class="st">'Hello!'</span>)</span>
+<span id="cb452-11"><a href="ch_template-literals.html#cb452-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Replace spaces with mid-dots:</span></span>
+<span id="cb452-12"><a href="ch_template-literals.html#cb452-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">replace</span>(<span class="ss">/ /g</span><span class="op">,</span> <span class="st">'·'</span>)</span>
+<span id="cb452-13"><a href="ch_template-literals.html#cb452-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Replace \n with #\n:</span></span>
+<span id="cb452-14"><a href="ch_template-literals.html#cb452-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">replace</span>(<span class="ss">/</span><span class="sc">\n</span><span class="ss">/g</span><span class="op">,</span> <span class="st">'#</span><span class="sc">\n</span><span class="st">'</span>)</span>
+<span id="cb452-15"><a href="ch_template-literals.html#cb452-15" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<p>Due to the indentation, the template literal fits well into the source code. Alas, the output is also indented. And we don’t want the return at the beginning and the return plus two spaces at the end.</p>
+<div class="sourceCode" id="cb453"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb453-1"><a href="ch_template-literals.html#cb453-1" aria-hidden="true" tabindex="-1"></a>Output:</span>
+<span id="cb453-2"><a href="ch_template-literals.html#cb453-2" aria-hidden="true" tabindex="-1"></a>#</span>
+<span id="cb453-3"><a href="ch_template-literals.html#cb453-3" aria-hidden="true" tabindex="-1"></a>····<span class="kw">&lt;div&gt;</span>#</span>
+<span id="cb453-4"><a href="ch_template-literals.html#cb453-4" aria-hidden="true" tabindex="-1"></a>······Hello!#</span>
+<span id="cb453-5"><a href="ch_template-literals.html#cb453-5" aria-hidden="true" tabindex="-1"></a>····<span class="kw">&lt;/div&gt;</span>#</span>
+<span id="cb453-6"><a href="ch_template-literals.html#cb453-6" aria-hidden="true" tabindex="-1"></a>··</span></code></pre></div>
+<p>There are two ways to fix this: via a tagged template or by trimming the result of the template literal.</p>
+<h4 id="fix-template-tag-for-dedenting">21.7.1 Fix: template tag for dedenting</h4>
+<p>The first fix is to use a custom template tag that removes the unwanted whitespace. It uses the first line after the initial line break to determine in which column the text starts and shortens the indentation everywhere. It also removes the line break at the very beginning and the indentation at the very end. One such template tag is <a href="https://github.com/dmnd/dedent"><code>dedent</code> by Desmond Brand</a>:</p>
+<div class="sourceCode" id="cb454"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb454-1"><a href="ch_template-literals.html#cb454-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dedent <span class="im">from</span> <span class="st">'dedent'</span><span class="op">;</span></span>
+<span id="cb454-2"><a href="ch_template-literals.html#cb454-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">divDedented</span>(text) {</span>
+<span id="cb454-3"><a href="ch_template-literals.html#cb454-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">dedent</span><span class="vs">`</span></span>
+<span id="cb454-4"><a href="ch_template-literals.html#cb454-4" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;div&gt;</span></span>
+<span id="cb454-5"><a href="ch_template-literals.html#cb454-5" aria-hidden="true" tabindex="-1"></a><span class="vs">      </span><span class="sc">${</span>text<span class="sc">}</span></span>
+<span id="cb454-6"><a href="ch_template-literals.html#cb454-6" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;</span></span>
+<span id="cb454-7"><a href="ch_template-literals.html#cb454-7" aria-hidden="true" tabindex="-1"></a><span class="vs">  `</span><span class="op">.</span><span class="fu">replace</span>(<span class="ss">/</span><span class="sc">\n</span><span class="ss">/g</span><span class="op">,</span> <span class="st">'#</span><span class="sc">\n</span><span class="st">'</span>)<span class="op">;</span></span>
+<span id="cb454-8"><a href="ch_template-literals.html#cb454-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb454-9"><a href="ch_template-literals.html#cb454-9" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'Output:'</span>)<span class="op">;</span></span>
+<span id="cb454-10"><a href="ch_template-literals.html#cb454-10" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="fu">divDedented</span>(<span class="st">'Hello!'</span>))<span class="op">;</span></span></code></pre></div>
+<p>This time, the output is not indented:</p>
+<div class="sourceCode" id="cb455"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb455-1"><a href="ch_template-literals.html#cb455-1" aria-hidden="true" tabindex="-1"></a>Output:</span>
+<span id="cb455-2"><a href="ch_template-literals.html#cb455-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div&gt;</span>#</span>
+<span id="cb455-3"><a href="ch_template-literals.html#cb455-3" aria-hidden="true" tabindex="-1"></a>  Hello!#</span>
+<span id="cb455-4"><a href="ch_template-literals.html#cb455-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<h4 id="fix-.trim">21.7.2 Fix: <code>.trim()</code></h4>
+<p>The second fix is quicker, but also dirtier:</p>
+<div class="sourceCode" id="cb456"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb456-1"><a href="ch_template-literals.html#cb456-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">divDedented</span>(text) {</span>
+<span id="cb456-2"><a href="ch_template-literals.html#cb456-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="vs">`</span></span>
+<span id="cb456-3"><a href="ch_template-literals.html#cb456-3" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;div&gt;</span></span>
+<span id="cb456-4"><a href="ch_template-literals.html#cb456-4" aria-hidden="true" tabindex="-1"></a><span class="vs">  </span><span class="sc">${</span>text<span class="sc">}</span></span>
+<span id="cb456-5"><a href="ch_template-literals.html#cb456-5" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/div&gt;</span></span>
+<span id="cb456-6"><a href="ch_template-literals.html#cb456-6" aria-hidden="true" tabindex="-1"></a><span class="vs">  `</span><span class="op">.</span><span class="fu">trim</span>()<span class="op">.</span><span class="fu">replace</span>(<span class="ss">/</span><span class="sc">\n</span><span class="ss">/g</span><span class="op">,</span> <span class="st">'#</span><span class="sc">\n</span><span class="st">'</span>)<span class="op">;</span></span>
+<span id="cb456-7"><a href="ch_template-literals.html#cb456-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb456-8"><a href="ch_template-literals.html#cb456-8" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'Output:'</span>)<span class="op">;</span></span>
+<span id="cb456-9"><a href="ch_template-literals.html#cb456-9" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="fu">divDedented</span>(<span class="st">'Hello!'</span>))<span class="op">;</span></span></code></pre></div>
+<p>The string method <code>.trim()</code> removes the superfluous whitespace at the beginning and at the end, but the content itself must start in the leftmost column. The advantage of this solution is that we don’t need a custom tag function. The downside is that it looks ugly.</p>
+<p>The output is the same as with <code>dedent</code>:</p>
+<div class="sourceCode" id="cb457"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb457-1"><a href="ch_template-literals.html#cb457-1" aria-hidden="true" tabindex="-1"></a>Output:</span>
+<span id="cb457-2"><a href="ch_template-literals.html#cb457-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div&gt;</span>#</span>
+<span id="cb457-3"><a href="ch_template-literals.html#cb457-3" aria-hidden="true" tabindex="-1"></a>  Hello!#</span>
+<span id="cb457-4"><a href="ch_template-literals.html#cb457-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<h3 id="simple-templating-via-template-literals">21.8 Simple templating via template literals</h3>
+<p>While template literals look like text templates, it is not immediately obvious how to use them for (text) templating: A text template gets its data from an object, while a template literal gets its data from variables. The solution is to use a template literal in the body of a function whose parameter receives the templating data – for example:</p>
+<div class="sourceCode" id="cb458"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb458-1"><a href="ch_template-literals.html#cb458-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> tmpl <span class="op">=</span> (data) <span class="kw">=&gt;</span> <span class="vs">`Hello </span><span class="sc">${</span>data<span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs">!`</span><span class="op">;</span></span>
+<span id="cb458-2"><a href="ch_template-literals.html#cb458-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">tmpl</span>({<span class="dt">name</span><span class="op">:</span> <span class="st">'Jane'</span>})<span class="op">,</span> <span class="st">'Hello Jane!'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="a-more-complex-example">21.8.1 A more complex example</h4>
+<p>As a more complex example, we’d like to take an Array of addresses and produce an HTML table. This is the Array:</p>
+<div class="sourceCode" id="cb459"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb459-1"><a href="ch_template-literals.html#cb459-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> addresses <span class="op">=</span> [</span>
+<span id="cb459-2"><a href="ch_template-literals.html#cb459-2" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">first</span><span class="op">:</span> <span class="st">'&lt;Jane&gt;'</span><span class="op">,</span> <span class="dt">last</span><span class="op">:</span> <span class="st">'Bond'</span> }<span class="op">,</span></span>
+<span id="cb459-3"><a href="ch_template-literals.html#cb459-3" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">first</span><span class="op">:</span> <span class="st">'Lars'</span><span class="op">,</span> <span class="dt">last</span><span class="op">:</span> <span class="st">'&lt;Croft&gt;'</span> }<span class="op">,</span></span>
+<span id="cb459-4"><a href="ch_template-literals.html#cb459-4" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span></code></pre></div>
+<p>The function <code>tmpl()</code> that produces the HTML table looks as follows:</p>
+<div class="sourceCode" id="cb460"><pre class="sourceCode numberSource js numberLines"><code class="sourceCode javascript"><span id="cb460-1"><a href="ch_template-literals.html#cb460-1"></a><span class="kw">const</span> tmpl <span class="op">=</span> (addrs) <span class="kw">=&gt;</span> <span class="vs">`</span></span>
+<span id="cb460-2"><a href="ch_template-literals.html#cb460-2"></a><span class="vs">&lt;table&gt;</span></span>
+<span id="cb460-3"><a href="ch_template-literals.html#cb460-3"></a><span class="vs">  </span><span class="sc">${</span>addrs<span class="op">.</span><span class="fu">map</span>(</span>
+<span id="cb460-4"><a href="ch_template-literals.html#cb460-4"></a>    (addr) <span class="kw">=&gt;</span> <span class="vs">`</span></span>
+<span id="cb460-5"><a href="ch_template-literals.html#cb460-5"></a><span class="vs">      &lt;tr&gt;</span></span>
+<span id="cb460-6"><a href="ch_template-literals.html#cb460-6"></a><span class="vs">        &lt;td&gt;</span><span class="sc">${</span><span class="fu">escapeHtml</span>(addr<span class="op">.</span><span class="at">first</span>)<span class="sc">}</span><span class="vs">&lt;/td&gt;</span></span>
+<span id="cb460-7"><a href="ch_template-literals.html#cb460-7"></a><span class="vs">        &lt;td&gt;</span><span class="sc">${</span><span class="fu">escapeHtml</span>(addr<span class="op">.</span><span class="at">last</span>)<span class="sc">}</span><span class="vs">&lt;/td&gt;</span></span>
+<span id="cb460-8"><a href="ch_template-literals.html#cb460-8"></a><span class="vs">      &lt;/tr&gt;</span></span>
+<span id="cb460-9"><a href="ch_template-literals.html#cb460-9"></a><span class="vs">      `</span><span class="op">.</span><span class="fu">trim</span>()</span>
+<span id="cb460-10"><a href="ch_template-literals.html#cb460-10"></a>  )<span class="op">.</span><span class="fu">join</span>(<span class="st">''</span>)<span class="sc">}</span></span>
+<span id="cb460-11"><a href="ch_template-literals.html#cb460-11"></a><span class="vs">&lt;/table&gt;</span></span>
+<span id="cb460-12"><a href="ch_template-literals.html#cb460-12"></a><span class="vs">`</span><span class="op">.</span><span class="fu">trim</span>()<span class="op">;</span></span></code></pre></div>
+<p>This code contains two templating functions:</p>
+<ul>
+<li>The first one (line 1) takes <code>addrs</code>, an Array with addresses, and returns a string with a table.</li>
+<li>The second one (line 4) takes <code>addr</code>, an object containing an address, and returns a string with a table row. Note the <code>.trim()</code> at the end, which removes unnecessary whitespace.</li>
+</ul>
+<p>The first templating function produces its result by wrapping a table element around an Array that it joins into a string (line 10). That Array is produced by mapping the second templating function to each element of <code>addrs</code> (line 3). It therefore contains strings with table rows.</p>
+<p>The helper function <code>escapeHtml()</code> is used to escape special HTML characters (line 6 and line 7). Its implementation is shown in <span data-refcheck="#simple-html-escaping">the next subsection</span>.</p>
+<p>Let us call <code>tmpl()</code> with the addresses and log the result:</p>
+<div class="sourceCode" id="cb461"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb461-1"><a href="ch_template-literals.html#cb461-1" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="fu">tmpl</span>(addresses))<span class="op">;</span></span></code></pre></div>
+<p>The output is:</p>
+<div class="sourceCode" id="cb462"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb462-1"><a href="ch_template-literals.html#cb462-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;table&gt;</span></span>
+<span id="cb462-2"><a href="ch_template-literals.html#cb462-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb462-3"><a href="ch_template-literals.html#cb462-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;td&gt;</span><span class="dv">&amp;lt;</span>Jane<span class="dv">&amp;gt;</span><span class="kw">&lt;/td&gt;</span></span>
+<span id="cb462-4"><a href="ch_template-literals.html#cb462-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;td&gt;</span>Bond<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb462-5"><a href="ch_template-literals.html#cb462-5" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;/tr&gt;&lt;tr&gt;</span></span>
+<span id="cb462-6"><a href="ch_template-literals.html#cb462-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;td&gt;</span>Lars<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb462-7"><a href="ch_template-literals.html#cb462-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;td&gt;</span><span class="dv">&amp;lt;</span>Croft<span class="dv">&amp;gt;</span><span class="kw">&lt;/td&gt;</span></span>
+<span id="cb462-8"><a href="ch_template-literals.html#cb462-8" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb462-9"><a href="ch_template-literals.html#cb462-9" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/table&gt;</span></span></code></pre></div>
+<h4 id="simple-html-escaping">21.8.2 Simple HTML-escaping</h4>
+<p><a id="index-entry-208" class="index-entry"></a></p>
+<p>The following function escapes plain text so that it is displayed verbatim in HTML:</p>
+<div class="sourceCode" id="cb463"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb463-1"><a href="ch_template-literals.html#cb463-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">escapeHtml</span>(str) {</span>
+<span id="cb463-2"><a href="ch_template-literals.html#cb463-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> str</span>
+<span id="cb463-3"><a href="ch_template-literals.html#cb463-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">replace</span>(<span class="ss">/&amp;/g</span><span class="op">,</span> <span class="st">'&amp;amp;'</span>) <span class="co">// first!</span></span>
+<span id="cb463-4"><a href="ch_template-literals.html#cb463-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">replace</span>(<span class="op">/&gt;/</span>g<span class="op">,</span> <span class="st">'&amp;gt;'</span>)</span>
+<span id="cb463-5"><a href="ch_template-literals.html#cb463-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">replace</span>(<span class="ss">/&lt;/g</span><span class="op">,</span> <span class="st">'&amp;lt;'</span>)</span>
+<span id="cb463-6"><a href="ch_template-literals.html#cb463-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">replace</span>(<span class="ss">/"/g</span><span class="op">,</span> <span class="st">'&amp;quot;'</span>)</span>
+<span id="cb463-7"><a href="ch_template-literals.html#cb463-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">replace</span>(<span class="ss">/'/g</span><span class="op">,</span> <span class="st">'&amp;#39;'</span>)</span>
+<span id="cb463-8"><a href="ch_template-literals.html#cb463-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">replace</span>(<span class="ss">/`/g</span><span class="op">,</span> <span class="st">'&amp;#96;'</span>)</span>
+<span id="cb463-9"><a href="ch_template-literals.html#cb463-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">;</span></span>
+<span id="cb463-10"><a href="ch_template-literals.html#cb463-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb463-11"><a href="ch_template-literals.html#cb463-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb463-12"><a href="ch_template-literals.html#cb463-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">escapeHtml</span>(<span class="st">'Rock &amp; Roll'</span>)<span class="op">,</span> <span class="st">'Rock &amp;amp; Roll'</span>)<span class="op">;</span></span>
+<span id="cb463-13"><a href="ch_template-literals.html#cb463-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb463-14"><a href="ch_template-literals.html#cb463-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">escapeHtml</span>(<span class="st">'&lt;blank&gt;'</span>)<span class="op">,</span> <span class="st">'&amp;lt;blank&amp;gt;'</span>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: HTML templating</strong></p>
+<p>Exercise with bonus challenge: <code>exercises/template-literals/templating_test.mjs</code></p>
+</div>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/14">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_symbols.html">22 Symbols</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

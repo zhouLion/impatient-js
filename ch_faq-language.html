@@ -1,0 +1,74 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_faq-language">5 FAQ: JavaScript</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>5.1 <a href="ch_faq-language.html#what-are-good-references-for-javascript">What are good references for JavaScript?</a></li>
+<li>5.2 <a href="ch_faq-language.html#how-do-i-find-out-what-javascript-features-are-supported-where">How do I find out what JavaScript features are supported where?</a></li>
+<li>5.3 <a href="ch_faq-language.html#where-can-i-look-up-what-features-are-planned-for-javascript">Where can I look up what features are planned for JavaScript?</a></li>
+<li>5.4 <a href="ch_faq-language.html#why-does-javascript-fail-silently-so-often">Why does JavaScript fail silently so often?</a></li>
+<li>5.5 <a href="ch_faq-language.html#why-cant-we-clean-up-javascript-by-removing-quirks-and-outdated-features">Why can’t we clean up JavaScript, by removing quirks and outdated features?</a></li>
+<li>5.6 <a href="ch_faq-language.html#how-can-i-quickly-try-out-a-piece-of-javascript-code">How can I quickly try out a piece of JavaScript code?</a></li>
+</ul>
+</div>
+<hr>
+<h3 id="what-are-good-references-for-javascript">5.1 What are good references for JavaScript?</h3>
+<p>Please consult <a href="ch_big-picture.html#javascript-references">§6.3 “JavaScript references”</a>.</p>
+<h3 id="how-do-i-find-out-what-javascript-features-are-supported-where">5.2 How do I find out what JavaScript features are supported where?</h3>
+<p>This book usually mentions if a feature is part of ECMAScript 5 (as required by older browsers) or a newer version. For more detailed information (including pre-ES5 versions), there are several good compatibility tables available online:</p>
+<ul>
+<li><a href="http://kangax.github.io/compat-table/es5/">ECMAScript compatibility tables for various engines</a> (by <a href="https://twitter.com/kangax">kangax</a>, <a href="https://twitter.com/webbedspace">webbedspace</a>, <a href="https://twitter.com/zloirock">zloirock</a>)</li>
+<li><a href="https://node.green">Node.js compatibility tables</a> (by <a href="https://twitter.com/williamkapke">William Kapke</a>)</li>
+<li>Mozilla’s <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">MDN web docs</a> have tables for each feature that describe relevant ECMAScript versions and browser support.</li>
+<li><a href="https://caniuse.com/">“Can I use…”</a> documents what features (including JavaScript language features) are supported by web browsers.</li>
+</ul>
+<h3 id="where-can-i-look-up-what-features-are-planned-for-javascript">5.3 Where can I look up what features are planned for JavaScript?</h3>
+<p>Please consult the following sources:</p>
+<ul>
+<li><a href="ch_history.html#tc39-process">§3.5 “The TC39 process”</a> describes how upcoming features are planned.</li>
+<li><a href="ch_history.html#tc39-process-faq">§3.6 “FAQ: TC39 process”</a> answers various questions regarding upcoming features.</li>
+</ul>
+<h3 id="why-does-javascript-fail-silently-so-often">5.4 Why does JavaScript fail silently so often?</h3>
+<p>JavaScript often fails silently. Let’s look at two examples.</p>
+<p>First example: If the operands of an operator don’t have the appropriate types, they are converted as necessary.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb2-1"><a href="ch_faq-language.html#cb2-1" aria-hidden="true" tabindex="-1"></a>&gt; '3' * '5'</span>
+<span id="cb2-2"><a href="ch_faq-language.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">15</span></span></code></pre></div>
+<p>Second example: If an arithmetic computation fails, you get an error value, not an exception.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb3-1"><a href="ch_faq-language.html#cb3-1" aria-hidden="true" tabindex="-1"></a>&gt; 1 / 0</span>
+<span id="cb3-2"><a href="ch_faq-language.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">Infinity</span></span></code></pre></div>
+<p>The reason for the silent failures is historical: JavaScript did not have exceptions until ECMAScript 3. Since then, its designers have tried to avoid silent failures.</p>
+<h3 id="why-cant-we-clean-up-javascript-by-removing-quirks-and-outdated-features">5.5 Why can’t we clean up JavaScript, by removing quirks and outdated features?</h3>
+<p>This question is answered in <a href="ch_history.html#backward-compatibility">§3.7 “Evolving JavaScript: Don’t break the web”</a>.</p>
+<h3 id="how-can-i-quickly-try-out-a-piece-of-javascript-code">5.6 How can I quickly try out a piece of JavaScript code?</h3>
+<p><a href="ch_console.html#trying-out-code">§8.1 “Trying out JavaScript code”</a> explains how to do that.</p>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/24">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="pt_first-steps.html">II First steps</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

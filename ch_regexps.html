@@ -1,0 +1,1338 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_regexps">43 Regular expressions (<code>RegExp</code>)</h2>
+<p><a id="index-entry-485" class="index-entry"></a><a id="index-entry-486" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>43.1 <a href="ch_regexps.html#creating-regular-expressions">Creating regular expressions</a>
+<ul>
+<li>43.1.1 <a href="ch_regexps.html#literal-vs.-constructor">Literal vs.&nbsp;constructor</a></li>
+<li>43.1.2 <a href="ch_regexps.html#cloning-regexps">Cloning and non-destructively modifying regular expressions</a></li>
+</ul></li>
+<li>43.2 <a href="ch_regexps.html#syntax">Syntax</a>
+<ul>
+<li>43.2.1 <a href="ch_regexps.html#syntax-characters">Syntax characters</a></li>
+<li>43.2.2 <a href="ch_regexps.html#basic-atoms">Basic atoms</a></li>
+<li>43.2.3 <a href="ch_regexps.html#unicode-property-escapes">Unicode property escapes <sup>[ES2018]</sup></a></li>
+<li>43.2.4 <a href="ch_regexps.html#character-classes">Character classes</a></li>
+<li>43.2.5 <a href="ch_regexps.html#groups">Groups</a></li>
+<li>43.2.6 <a href="ch_regexps.html#quantifiers">Quantifiers</a></li>
+<li>43.2.7 <a href="ch_regexps.html#assertions-1">Assertions</a></li>
+<li>43.2.8 <a href="ch_regexps.html#disjunction">Disjunction (<code>|</code>)</a></li>
+</ul></li>
+<li>43.3 <a href="ch_regexps.html#reg-exp-flags">Flags</a>
+<ul>
+<li>43.3.1 <a href="ch_regexps.html#regexp-unicode-mode">Flag: Unicode mode via <code>/u</code></a></li>
+</ul></li>
+<li>43.4 <a href="ch_regexps.html#properties-of-regular-expression-objects">Properties of regular expression objects</a>
+<ul>
+<li>43.4.1 <a href="ch_regexps.html#flags-as-properties">Flags as properties</a></li>
+<li>43.4.2 <a href="ch_regexps.html#other-properties">Other properties</a></li>
+</ul></li>
+<li>43.5 <a href="ch_regexps.html#methods-for-working-with-regular-expressions">Methods for working with regular expressions</a>
+<ul>
+<li>43.5.1 <a href="ch_regexps.html#by-default-regular-expressions-match-anywhere-in-a-string">By default, regular expressions match anywhere in a string</a></li>
+<li>43.5.2 <a href="ch_regexps.html#RegExp.prototype.test"><code>regExp.test(str)</code>: is there a match? <sup>[ES3]</sup></a></li>
+<li>43.5.3 <a href="ch_regexps.html#String.prototype.search"><code>str.search(regExp)</code>: at what index is the match? <sup>[ES3]</sup></a></li>
+<li>43.5.4 <a href="ch_regexps.html#RegExp.prototype.exec"><code>regExp.exec(str)</code>: capturing groups <sup>[ES3]</sup></a></li>
+<li>43.5.5 <a href="ch_regexps.html#String.prototype.match"><code>str.match(regExp)</code>: getting all group 0 captures <sup>[ES3]</sup></a></li>
+<li>43.5.6 <a href="ch_regexps.html#String.prototype.matchAll"><code>str.matchAll(regExp)</code>: getting an iterable over all match objects <sup>[ES2020]</sup></a></li>
+<li>43.5.7 <a href="ch_regexps.html#regexp.exec-vs.-str.match-vs.-str.matchall"><code>regExp.exec()</code> vs.&nbsp;<code>str.match()</code> vs.&nbsp;<code>str.matchAll()</code></a></li>
+<li>43.5.8 <a href="ch_regexps.html#replace-replaceAll">Replacing with <code>str.replace()</code> and <code>str.replaceAll()</code></a></li>
+<li>43.5.9 <a href="ch_regexps.html#other-methods-for-working-with-regular-expressions">Other methods for working with regular expressions</a></li>
+</ul></li>
+<li>43.6 <a href="ch_regexps.html#regexp-flags-gy">The flags <code>/g</code> and <code>/y</code>, and the property <code>.lastIndex</code> (advanced)</a>
+<ul>
+<li>43.6.1 <a href="ch_regexps.html#regexp-flag-g">The flags <code>/g</code> and <code>/y</code></a></li>
+<li>43.6.2 <a href="ch_regexps.html#how-exactly-are-methods-affected-by-g-and-y">How exactly are methods affected by <code>/g</code> and <code>/y</code>?</a></li>
+<li>43.6.3 <a href="ch_regexps.html#four-pitfalls-of-g-and-y-and-how-to-deal-with-them">Four pitfalls of <code>/g</code> and <code>/y</code> and how to deal with them</a></li>
+<li>43.6.4 <a href="ch_regexps.html#use-case-for-.lastindex-starting-matching-at-a-given-index">Use case for <code>.lastIndex</code>: starting matching at a given index</a></li>
+<li>43.6.5 <a href="ch_regexps.html#the-downsides-of-.lastindex">The downsides of <code>.lastIndex</code></a></li>
+<li>43.6.6 <a href="ch_regexps.html#summary-.global-g-and-.sticky-y">Summary: <code>.global</code> (<code>/g</code>) and <code>.sticky</code> (<code>/y</code>)</a></li>
+</ul></li>
+<li>43.7 <a href="ch_regexps.html#techniques-for-working-with-regular-expressions">Techniques for working with regular expressions</a>
+<ul>
+<li>43.7.1 <a href="ch_regexps.html#escapeForRegExp">Escaping arbitrary text for regular expressions</a></li>
+<li>43.7.2 <a href="ch_regexps.html#matching-everything-or-nothing">Matching everything or nothing</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<div class="notebox">
+<p><img src="img-book/img/icons/eye-regular.svg" height="24">&nbsp; <strong>Availability of features</strong></p>
+<p>Unless stated otherwise, each regular expression feature has been available since ES3.</p>
+</div>
+<h3 id="creating-regular-expressions">43.1 Creating regular expressions</h3>
+<h4 id="literal-vs.-constructor">43.1.1 Literal vs.&nbsp;constructor</h4>
+<p><a id="index-entry-487" class="index-entry"></a> <a id="index-entry-488" class="index-entry"></a><a id="index-entry-489" class="index-entry"></a></p>
+<p>The two main ways of creating regular expressions are:</p>
+<ul>
+<li><p>Literal: compiled statically (at load time).</p>
+<div class="sourceCode" id="cb1261"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1261-1"><a href="ch_regexps.html#cb1261-1" aria-hidden="true" tabindex="-1"></a><span class="ss">/abc/ui</span></span></code></pre></div></li>
+<li><p>Constructor: compiled dynamically (at runtime).</p>
+<div class="sourceCode" id="cb1262"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1262-1"><a href="ch_regexps.html#cb1262-1" aria-hidden="true" tabindex="-1"></a><span class="kw">new</span> <span class="bu">RegExp</span>(<span class="st">'abc'</span><span class="op">,</span> <span class="st">'ui'</span>)</span></code></pre></div></li>
+</ul>
+<p>Both regular expressions have the same two parts:</p>
+<ul>
+<li>The <em>body</em> <code>abc</code> – the actual regular expression.</li>
+<li>The <em>flags</em> <code>u</code> and <code>i</code>. Flags configure how the pattern is interpreted. For example, <code>i</code> enables case-insensitive matching. A list of available flags is given <a href="ch_regexps.html#reg-exp-flags">later in this chapter</a>.</li>
+</ul>
+<h4 id="cloning-regexps">43.1.2 Cloning and non-destructively modifying regular expressions</h4>
+<p>There are two variants of the constructor <code>RegExp()</code>:</p>
+<ul>
+<li><p><code>new RegExp(pattern : string, flags = '')</code> <sup>[ES3]</sup></p>
+<p>A new regular expression is created as specified via <code>pattern</code>. If <code>flags</code> is missing, the empty string <code>''</code> is used.</p></li>
+<li><p><code>new RegExp(regExp : RegExp, flags = regExp.flags)</code> <sup>[ES6]</sup></p>
+<p><code>regExp</code> is cloned. If <code>flags</code> is provided, then it determines the flags of the clone.</p></li>
+</ul>
+<p>The second variant is useful for cloning regular expressions, optionally while modifying them. Flags are immutable and this is the only way of changing them – for example:</p>
+<div class="sourceCode" id="cb1263"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1263-1"><a href="ch_regexps.html#cb1263-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">copyAndAddFlags</span>(regExp<span class="op">,</span> flagsToAdd<span class="op">=</span><span class="st">''</span>) {</span>
+<span id="cb1263-2"><a href="ch_regexps.html#cb1263-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// The constructor doesn’t allow duplicate flags;</span></span>
+<span id="cb1263-3"><a href="ch_regexps.html#cb1263-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// make sure there aren’t any:</span></span>
+<span id="cb1263-4"><a href="ch_regexps.html#cb1263-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> newFlags <span class="op">=</span> [<span class="op">...</span><span class="kw">new</span> <span class="bu">Set</span>(regExp<span class="op">.</span><span class="at">flags</span> <span class="op">+</span> flagsToAdd)]<span class="op">.</span><span class="fu">join</span>(<span class="st">''</span>)<span class="op">;</span></span>
+<span id="cb1263-5"><a href="ch_regexps.html#cb1263-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">RegExp</span>(regExp<span class="op">,</span> newFlags)<span class="op">;</span></span>
+<span id="cb1263-6"><a href="ch_regexps.html#cb1263-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1263-7"><a href="ch_regexps.html#cb1263-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="ss">/abc/i</span><span class="op">.</span><span class="at">flags</span><span class="op">,</span> <span class="st">'i'</span>)<span class="op">;</span></span>
+<span id="cb1263-8"><a href="ch_regexps.html#cb1263-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">copyAndAddFlags</span>(<span class="ss">/abc/i</span><span class="op">,</span> <span class="st">'g'</span>)<span class="op">.</span><span class="at">flags</span><span class="op">,</span> <span class="st">'gi'</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="syntax">43.2 Syntax</h3>
+<h4 id="syntax-characters">43.2.1 Syntax characters</h4>
+<p>At the top level of a regular expression, the following <em>syntax characters</em> are special. They are escaped by prefixing a backslash (<code>\</code>).</p>
+<pre><code>\ ^ $ . * + ? ( ) [ ] { } |</code></pre>
+<p>In regular expression literals, we must escape slashs:</p>
+<div class="sourceCode" id="cb1265"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1265-1"><a href="ch_regexps.html#cb1265-1" aria-hidden="true" tabindex="-1"></a>&gt; /\//.test('/')</span>
+<span id="cb1265-2"><a href="ch_regexps.html#cb1265-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>In the argument of <code>new RegExp()</code>, we don’t have to escape slashes:</p>
+<div class="sourceCode" id="cb1266"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1266-1"><a href="ch_regexps.html#cb1266-1" aria-hidden="true" tabindex="-1"></a>&gt; new RegExp('/').test('/')</span>
+<span id="cb1266-2"><a href="ch_regexps.html#cb1266-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h4 id="basic-atoms">43.2.2 Basic atoms</h4>
+<p><em>Atoms</em> are the basic building blocks of regular expressions.</p>
+<ul>
+<li><em>Pattern characters</em> are all characters <em>except</em> syntax characters (<code>^</code>, <code>$</code>, etc.). Pattern characters match themselves. Examples: <code>A b %</code></li>
+<li><code>.</code> matches any character. We can use the flag <code>/s</code> (<code>dotAll</code>) to control if the dot matches line terminators or not (<a href="ch_regexps.html#reg-exp-flags">more below</a>).</li>
+<li><em>Character escapes</em> (each escape matches a single fixed character):
+<ul>
+<li>Control escapes (for a few control characters):
+<ul>
+<li><code>\f</code>: form feed (FF)</li>
+<li><code>\n</code>: line feed (LF)</li>
+<li><code>\r</code>: carriage return (CR)</li>
+<li><code>\t</code>: character tabulation</li>
+<li><code>\v</code>: line tabulation</li>
+</ul></li>
+<li>Arbitrary control characters: <code>\cA</code> (Ctrl-A), …, <code>\cZ</code> (Ctrl-Z)</li>
+<li>Unicode code units: <code>\u00E4</code></li>
+<li>Unicode code points (require flag <code>/u</code>): <code>\u{1F44D}</code></li>
+</ul></li>
+<li><em>Character class escapes</em> (each escape matches one out of a set of characters):
+<ul>
+<li><code>\d</code>: digits (same as <code>[0-9]</code>)
+<ul>
+<li><code>\D</code>: non-digits</li>
+</ul></li>
+<li><code>\w</code>: “word” characters (same as <code>[A-Za-z0-9_]</code>, related to identifiers in programming languages)
+<ul>
+<li><code>\W</code>: non-word characters</li>
+</ul></li>
+<li><code>\s</code>: whitespace (space, tab, line terminators, etc.)
+<ul>
+<li><code>\S</code>: non-whitespace</li>
+</ul></li>
+<li><em>Unicode property escapes</em> <sup>[ES2018]</sup>: <code>\p{White_Space}</code>, <code>\P{White_Space}</code>, etc.
+<ul>
+<li>Require flag <code>/u</code>.</li>
+<li>Described in <span data-refcheck="#unicode-property-escapes">the next subsection</span>.</li>
+</ul></li>
+</ul></li>
+</ul>
+<h4 id="unicode-property-escapes">43.2.3 Unicode property escapes <sup>[ES2018]</sup></h4>
+<h5 id="unicode-character-properties">43.2.3.1 Unicode character properties</h5>
+<p>In the Unicode standard, each character has <em>properties</em> – metadata describing it. Properties play an important role in defining the nature of a character. Quoting <a href="http://www.unicode.org/versions/Unicode9.0.0/ch03.pdf">the Unicode Standard, Sect. 3.3, D3</a>:</p>
+<blockquote>
+<p>The semantics of a character are determined by its identity, normative properties, and behavior.</p>
+</blockquote>
+<p>These are a few examples of properties:</p>
+<ul>
+<li><code>Name</code>: a unique name, composed of uppercase letters, digits, hyphens, and spaces – for example:
+<ul>
+<li>A: <code>Name = LATIN CAPITAL LETTER A</code></li>
+<li><code>🙂</code>: <code>Name = SLIGHTLY SMILING FACE</code></li>
+</ul></li>
+<li><code>General_Category</code>: categorizes characters – for example:
+<ul>
+<li>x: <code>General_Category = Lowercase_Letter</code></li>
+<li>$: <code>General_Category = Currency_Symbol</code></li>
+</ul></li>
+<li><code>White_Space</code>: used for marking invisible spacing characters, such as spaces, tabs and newlines – for example:
+<ul>
+<li>\t: <code>White_Space = True</code></li>
+<li>π: <code>White_Space = False</code></li>
+</ul></li>
+<li><code>Age</code>: version of the Unicode Standard in which a character was introduced – for example: The Euro sign € was added in version 2.1 of the Unicode standard.
+<ul>
+<li>€: <code>Age = 2.1</code></li>
+</ul></li>
+<li><code>Block</code>: a contiguous range of code points. Blocks don’t overlap and their names are unique. For example:
+<ul>
+<li>S: <code>Block = Basic_Latin</code> (range U+0000..U+007F)</li>
+<li><code>🙂</code>: <code>Block = Emoticons</code> (range U+1F600..U+1F64F)</li>
+</ul></li>
+<li><code>Script</code>: is a collection of characters used by one or more writing systems.
+<ul>
+<li>Some scripts support several writing systems. For example, the Latin script supports the writing systems English, French, German, Latin, etc.</li>
+<li>Some languages can be written in multiple alternate writing systems that are supported by multiple scripts. For example, Turkish used the Arabic script before it transitioned to the Latin script in the early 20th century.</li>
+<li>Examples:
+<ul>
+<li>α: <code>Script = Greek</code></li>
+<li>Д: <code>Script = Cyrillic</code></li>
+</ul></li>
+</ul></li>
+</ul>
+<h5 id="unicode-property-escapes-1">43.2.3.2 Unicode property escapes</h5>
+<p>Unicode property escapes look like this:</p>
+<ol type="1">
+<li><code>\p{prop=value}</code>: matches all characters whose property <code>prop</code> has the value <code>value</code>.</li>
+<li><code>\P{prop=value}</code>: matches all characters that do not have a property <code>prop</code> whose value is <code>value</code>.</li>
+<li><code>\p{bin_prop}</code>: matches all characters whose binary property <code>bin_prop</code> is True.</li>
+<li><code>\P{bin_prop}</code>: matches all characters whose binary property <code>bin_prop</code> is False.</li>
+</ol>
+<p>Comments:</p>
+<ul>
+<li><p>We can only use Unicode property escapes if the flag <code>/u</code> is set. Without <code>/u</code>, <code>\p</code> is the same as <code>p</code>.</p></li>
+<li><p>Forms (3) and (4) can be used as abbreviations if the property is <code>General_Category</code>. For example, the following two escapes are equivalent:</p>
+<pre class="text"><code>\p{Lowercase_Letter}
+\p{General_Category=Lowercase_Letter}</code></pre></li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><p>Checking for whitespace:</p>
+<div class="sourceCode" id="cb1268"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1268-1"><a href="ch_regexps.html#cb1268-1" aria-hidden="true" tabindex="-1"></a>&gt; /^\p{White_Space}+$/u.test('\t \n\r')</span>
+<span id="cb1268-2"><a href="ch_regexps.html#cb1268-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div></li>
+<li><p>Checking for Greek letters:</p>
+<div class="sourceCode" id="cb1269"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1269-1"><a href="ch_regexps.html#cb1269-1" aria-hidden="true" tabindex="-1"></a>&gt; /^\p{Script=Greek}+$/u.test('μετά')</span>
+<span id="cb1269-2"><a href="ch_regexps.html#cb1269-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div></li>
+<li><p>Deleting any letters:</p>
+<div class="sourceCode" id="cb1270"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1270-1"><a href="ch_regexps.html#cb1270-1" aria-hidden="true" tabindex="-1"></a>&gt; '1π2ü3é4'.replace(/\p{Letter}/ug, '')</span>
+<span id="cb1270-2"><a href="ch_regexps.html#cb1270-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'1234'</span></span></code></pre></div></li>
+<li><p>Deleting lowercase letters:</p>
+<div class="sourceCode" id="cb1271"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1271-1"><a href="ch_regexps.html#cb1271-1" aria-hidden="true" tabindex="-1"></a>&gt; 'AbCdEf'.replace(/\p{Lowercase_Letter}/ug, '')</span>
+<span id="cb1271-2"><a href="ch_regexps.html#cb1271-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'ACE'</span></span></code></pre></div></li>
+</ul>
+<p>Further reading:</p>
+<ul>
+<li>Lists of Unicode properties and their values: <a href="https://unicode.org/reports/tr44/#Properties">“Unicode Standard Annex #44: Unicode Character Database”</a> (Editors: Mark Davis, Laurențiu Iancu, Ken Whistler)</li>
+</ul>
+<h4 id="character-classes">43.2.4 Character classes</h4>
+<p>A <em>character class</em> wraps <em>class ranges</em> in square brackets. The class ranges specify a set of characters:</p>
+<ul>
+<li><code>[«class ranges»]</code> matches any character in the set.</li>
+<li><code>[^«class ranges»]</code> matches any character not in the set.</li>
+</ul>
+<p>Rules for class ranges:</p>
+<ul>
+<li><p>Non-syntax characters stand for themselves: <code>[abc]</code></p></li>
+<li><p>Only the following four characters are special and must be escaped via slashes:<br>
+<code>^ \ - ]</code></p>
+<ul>
+<li><code>^</code> only has to be escaped if it comes first.</li>
+<li><code>-</code> need not be escaped if it comes first or last.</li>
+</ul></li>
+<li><p>Character escapes (<code>\n</code>, <code>\u{1F44D}</code>, etc.) have the usual meaning.</p>
+<ul>
+<li>Watch out: <code>\b</code> stands for backspace. Elsewhere in a regular expression, it matches word boundaries.</li>
+</ul></li>
+<li><p>Character class escapes (<code>\d</code>, <code>\p{White_Space}</code>, etc.) have the usual meaning.</p></li>
+<li><p>Ranges of characters are specified via dashes: <code>[a-z]</code></p></li>
+</ul>
+<h4 id="groups">43.2.5 Groups</h4>
+<ul>
+<li>Positional capture group: <code>(#+)</code>
+<ul>
+<li>Backreference: <code>\1</code>, <code>\2</code>, etc.</li>
+</ul></li>
+<li>Named capture group <sup>[ES2018]</sup>: <code>(?&lt;hashes&gt;#+)</code>
+<ul>
+<li>Backreference: <code>\k&lt;hashes&gt;</code></li>
+</ul></li>
+<li>Noncapturing group: <code>(?:#+)</code></li>
+</ul>
+<h4 id="quantifiers">43.2.6 Quantifiers</h4>
+<p>By default, all of the following quantifiers are <em>greedy</em> (they match as many characters as possible):</p>
+<ul>
+<li><code>?</code>: match never or once</li>
+<li><code>*</code>: match zero or more times</li>
+<li><code>+</code>: match one or more times</li>
+<li><code>{n}</code>: match <code>n</code> times</li>
+<li><code>{n,}</code>: match <code>n</code> or more times</li>
+<li><code>{n,m}</code>: match at least <code>n</code> times, at most <code>m</code> times.</li>
+</ul>
+<p>To make them <em>reluctant</em> (so that they match as few characters as possible), put question marks (<code>?</code>) after them:</p>
+<div class="sourceCode" id="cb1272"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1272-1"><a href="ch_regexps.html#cb1272-1" aria-hidden="true" tabindex="-1"></a>&gt; /".*"/.exec('"abc"def"')[0]  // greedy</span>
+<span id="cb1272-2"><a href="ch_regexps.html#cb1272-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'"abc"def"'</span></span>
+<span id="cb1272-3"><a href="ch_regexps.html#cb1272-3" aria-hidden="true" tabindex="-1"></a>&gt; /".*?"/.exec('"abc"def"')[0] // reluctant</span>
+<span id="cb1272-4"><a href="ch_regexps.html#cb1272-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'"abc"'</span></span></code></pre></div>
+<h4 id="assertions-1">43.2.7 Assertions</h4>
+<ul>
+<li><code>^</code> matches only at the beginning of the input</li>
+<li><code>$</code> matches only at the end of the input</li>
+<li><code>\b</code> matches only at a word boundary
+<ul>
+<li><code>\B</code> matches only when not at a word boundary</li>
+</ul></li>
+</ul>
+<h5 id="regexp-lookahead-assertions">43.2.7.1 Lookahead assertions</h5>
+<p><strong>Positive lookahead:</strong> <code>(?=«pattern»)</code> matches if <code>pattern</code> matches what comes next.</p>
+<p>Example: sequences of lowercase letters that are followed by an <code>X</code>.</p>
+<div class="sourceCode" id="cb1273"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1273-1"><a href="ch_regexps.html#cb1273-1" aria-hidden="true" tabindex="-1"></a>&gt; 'abcX def'.match(/[a-z]+(?=X)/g)</span>
+<span id="cb1273-2"><a href="ch_regexps.html#cb1273-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'abc' ]</span></span></code></pre></div>
+<p>Note that the <code>X</code> itself is not part of the matched substring.</p>
+<p><strong>Negative lookahead:</strong> <code>(?!«pattern»)</code> matches if <code>pattern</code> does not match what comes next.</p>
+<p>Example: sequences of lowercase letters that are not followed by an <code>X</code>.</p>
+<div class="sourceCode" id="cb1274"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1274-1"><a href="ch_regexps.html#cb1274-1" aria-hidden="true" tabindex="-1"></a>&gt; 'abcX def'.match(/[a-z]+(?!X)/g)</span>
+<span id="cb1274-2"><a href="ch_regexps.html#cb1274-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'ab', 'def' ]</span></span></code></pre></div>
+<h5 id="regexp-lookbehind-assertions">43.2.7.2 Lookbehind assertions <sup>[ES2018]</sup></h5>
+<p><strong>Positive lookbehind:</strong> <code>(?&lt;=«pattern»)</code> matches if <code>pattern</code> matches what came before.</p>
+<p>Example: sequences of lowercase letters that are preceded by an <code>X</code>.</p>
+<div class="sourceCode" id="cb1275"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1275-1"><a href="ch_regexps.html#cb1275-1" aria-hidden="true" tabindex="-1"></a>&gt; 'Xabc def'.match(/(?&lt;=X)[a-z]+/g)</span>
+<span id="cb1275-2"><a href="ch_regexps.html#cb1275-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'abc' ]</span></span></code></pre></div>
+<p><strong>Negative lookbehind:</strong> <code>(?&lt;!«pattern»)</code> matches if <code>pattern</code> does not match what came before.</p>
+<p>Example: sequences of lowercase letters that are not preceded by an <code>X</code>.</p>
+<div class="sourceCode" id="cb1276"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1276-1"><a href="ch_regexps.html#cb1276-1" aria-hidden="true" tabindex="-1"></a>&gt; 'Xabc def'.match(/(?&lt;!X)[a-z]+/g)</span>
+<span id="cb1276-2"><a href="ch_regexps.html#cb1276-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'bc', 'def' ]</span></span></code></pre></div>
+<p>Example: replace “.js” with “.html”, but not in “Node.js”.</p>
+<div class="sourceCode" id="cb1277"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1277-1"><a href="ch_regexps.html#cb1277-1" aria-hidden="true" tabindex="-1"></a>&gt; 'Node.js: index.js and main.js'.replace(/(?&lt;!Node)\.js/g, '.html')</span>
+<span id="cb1277-2"><a href="ch_regexps.html#cb1277-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'Node.js: index.html and main.html'</span></span></code></pre></div>
+<h4 id="disjunction">43.2.8 Disjunction (<code>|</code>)</h4>
+<p>Caveat: this operator has low precedence. Use groups if necessary:</p>
+<ul>
+<li><code>^aa|zz$</code> matches all strings that start with <code>aa</code> and/or end with <code>zz</code>. Note that <code>|</code> has a lower precedence than <code>^</code> and <code>$</code>.</li>
+<li><code>^(aa|zz)$</code> matches the two strings <code>'aa'</code> and <code>'zz'</code>.</li>
+<li><code>^a(a|z)z$</code> matches the two strings <code>'aaz'</code> and <code>'azz'</code>.</li>
+</ul>
+<h3 id="reg-exp-flags">43.3 Flags</h3>
+<div id="tbl:reg-exp-flags-table">
+<table>
+<caption>Table 21: These are the regular expression flags supported by JavaScript.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Literal flag</th>
+<th style="text-align: left;">Property name</th>
+<th style="text-align: left;">ES</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>g</code></td>
+<td style="text-align: left;"><code>global</code></td>
+<td style="text-align: left;">ES3</td>
+<td style="text-align: left;">Match multiple times</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>i</code></td>
+<td style="text-align: left;"><code>ignoreCase</code></td>
+<td style="text-align: left;">ES3</td>
+<td style="text-align: left;">Match case-insensitively</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>m</code></td>
+<td style="text-align: left;"><code>multiline</code></td>
+<td style="text-align: left;">ES3</td>
+<td style="text-align: left;"><code>^</code> and <code>$</code> match per line</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>s</code></td>
+<td style="text-align: left;"><code>dotAll</code></td>
+<td style="text-align: left;">ES2018</td>
+<td style="text-align: left;">Dot matches line terminators</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>u</code></td>
+<td style="text-align: left;"><code>unicode</code></td>
+<td style="text-align: left;">ES6</td>
+<td style="text-align: left;">Unicode mode (recommended)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>y</code></td>
+<td style="text-align: left;"><code>sticky</code></td>
+<td style="text-align: left;">ES6</td>
+<td style="text-align: left;">No characters between matches</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The following regular expression flags are available in JavaScript (tbl.&nbsp;<a href="#tbl:reg-exp-flags-table">21</a> provides a compact overview):</p>
+<ul>
+<li><p><code>/g</code> (<code>.global</code>): fundamentally changes how the following methods work.</p>
+<ul>
+<li><code>RegExp.prototype.test()</code></li>
+<li><code>RegExp.prototype.exec()</code></li>
+<li><code>String.prototype.match()</code></li>
+</ul>
+<p>How, is explained in <a href="ch_regexps.html#regexp-flag-g">§43.6.1 “The flags <code>/g</code> and <code>/y</code>”</a>. In a nutshell, without <code>/g</code>, the methods only consider the first match for a regular expression in an input string. With <code>/g</code>, they consider all matches.</p></li>
+<li><p><code>/i</code> (<code>.ignoreCase</code>): switches on case-insensitive matching:</p>
+<div class="sourceCode" id="cb1278"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1278-1"><a href="ch_regexps.html#cb1278-1" aria-hidden="true" tabindex="-1"></a>&gt; /a/.test('A')</span>
+<span id="cb1278-2"><a href="ch_regexps.html#cb1278-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb1278-3"><a href="ch_regexps.html#cb1278-3" aria-hidden="true" tabindex="-1"></a>&gt; /a/i.test('A')</span>
+<span id="cb1278-4"><a href="ch_regexps.html#cb1278-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div></li>
+<li><p><code>/m</code> (<code>.multiline</code>): If this flag is on, <code>^</code> matches the beginning of each line and <code>$</code> matches the end of each line. If it is off, <code>^</code> matches the beginning of the whole input string and <code>$</code> matches the end of the whole input string.</p>
+<div class="sourceCode" id="cb1279"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1279-1"><a href="ch_regexps.html#cb1279-1" aria-hidden="true" tabindex="-1"></a>&gt; 'a1\na2\na3'.match(/^a./gm)</span>
+<span id="cb1279-2"><a href="ch_regexps.html#cb1279-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a1', 'a2', 'a3' ]</span></span>
+<span id="cb1279-3"><a href="ch_regexps.html#cb1279-3" aria-hidden="true" tabindex="-1"></a>&gt; 'a1\na2\na3'.match(/^a./g)</span>
+<span id="cb1279-4"><a href="ch_regexps.html#cb1279-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a1' ]</span></span></code></pre></div></li>
+<li><p><code>/u</code> (<code>.unicode</code>): This flag switches on the Unicode mode for a regular expression. That mode is explained in <span data-refcheck="#regexp-unicode-mode">the next subsection</span>.</p></li>
+<li><p><code>/y</code> (<code>.sticky</code>): This flag mainly makes sense in conjunction with <code>/g</code>. When both are switched on, any match must directly follow the previous one (that is, it must start at index <code>.lastIndex</code> of the regular expression object). Therefore, the first match must be at index 0.</p>
+<div class="sourceCode" id="cb1280"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1280-1"><a href="ch_regexps.html#cb1280-1" aria-hidden="true" tabindex="-1"></a>&gt; 'a1a2 a3'.match(/a./gy)</span>
+<span id="cb1280-2"><a href="ch_regexps.html#cb1280-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a1', 'a2' ]</span></span>
+<span id="cb1280-3"><a href="ch_regexps.html#cb1280-3" aria-hidden="true" tabindex="-1"></a>&gt; '_a1a2 a3'.match(/a./gy) // first match must be at index 0</span>
+<span id="cb1280-4"><a href="ch_regexps.html#cb1280-4" aria-hidden="true" tabindex="-1"></a><span class="kw">null</span></span>
+<span id="cb1280-5"><a href="ch_regexps.html#cb1280-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1280-6"><a href="ch_regexps.html#cb1280-6" aria-hidden="true" tabindex="-1"></a>&gt; 'a1a2 a3'.match(/a./g)</span>
+<span id="cb1280-7"><a href="ch_regexps.html#cb1280-7" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a1', 'a2', 'a3' ]</span></span>
+<span id="cb1280-8"><a href="ch_regexps.html#cb1280-8" aria-hidden="true" tabindex="-1"></a>&gt; '_a1a2 a3'.match(/a./g)</span>
+<span id="cb1280-9"><a href="ch_regexps.html#cb1280-9" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a1', 'a2', 'a3' ]</span></span></code></pre></div>
+<p>The main use case for <code>/y</code> is tokenization (during parsing).</p></li>
+<li><p><span id="regexp-dotAll-flag" class="texlabel"><code>/s</code> (<code>.dotAll</code>)</span>: By default, the dot does not match line terminators. With this flag, it does:</p>
+<div class="sourceCode" id="cb1281"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1281-1"><a href="ch_regexps.html#cb1281-1" aria-hidden="true" tabindex="-1"></a>&gt; /./.test('\n')</span>
+<span id="cb1281-2"><a href="ch_regexps.html#cb1281-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb1281-3"><a href="ch_regexps.html#cb1281-3" aria-hidden="true" tabindex="-1"></a>&gt; /./s.test('\n')</span>
+<span id="cb1281-4"><a href="ch_regexps.html#cb1281-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Workaround if <code>/s</code> isn’t supported: Use <code>[^]</code> instead of a dot.</p>
+<div class="sourceCode" id="cb1282"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1282-1"><a href="ch_regexps.html#cb1282-1" aria-hidden="true" tabindex="-1"></a>&gt; /[^]/.test('\n')</span>
+<span id="cb1282-2"><a href="ch_regexps.html#cb1282-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div></li>
+</ul>
+<h4 id="regexp-unicode-mode">43.3.1 Flag: Unicode mode via <code>/u</code></h4>
+<p>The flag <code>/u</code> switches on a special Unicode mode for regular expressions. That mode enables several features:</p>
+<ul>
+<li><p>In patterns, we can use Unicode code point escapes such as <code>\u{1F42A}</code> to specify characters. Code unit escapes such as <code>\u03B1</code> only have a range of four hexadecimal digits (which corresponds to the basic multilingual plane).</p></li>
+<li><p>In patterns, we can use Unicode property escapes such as <code>\p{White_Space}</code>.</p></li>
+<li><p>Many escapes are now forbidden. For example: <code>\a \- \:</code></p>
+<p>Pattern characters always match themselves:</p>
+<div class="sourceCode" id="cb1283"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1283-1"><a href="ch_regexps.html#cb1283-1" aria-hidden="true" tabindex="-1"></a>&gt; /pa-:/.test('pa-:')</span>
+<span id="cb1283-2"><a href="ch_regexps.html#cb1283-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Without <code>/u</code>, there are some pattern characters that still match themselves if we escape them with backslashes:</p>
+<div class="sourceCode" id="cb1284"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1284-1"><a href="ch_regexps.html#cb1284-1" aria-hidden="true" tabindex="-1"></a>&gt; /\p\a\-\:/.test('pa-:')</span>
+<span id="cb1284-2"><a href="ch_regexps.html#cb1284-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>With <code>/u</code>:</p>
+<ul>
+<li><code>\p</code> starts a Unicode property escape.</li>
+<li>The remaining “self-matching” escapes are forbidden. As a consequence, they can now be used for new features in the future.</li>
+</ul></li>
+<li><p>The atomic units for matching are Unicode characters (code points), not JavaScript characters (code units).</p></li>
+</ul>
+<p>The following subsections explain the last item in more detail. They use the following Unicode character to explain when the atomic units are Unicode characters and when they are JavaScript characters:</p>
+<div class="sourceCode" id="cb1285"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1285-1"><a href="ch_regexps.html#cb1285-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> codePoint <span class="op">=</span> <span class="st">'🙂'</span><span class="op">;</span></span>
+<span id="cb1285-2"><a href="ch_regexps.html#cb1285-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> codeUnits <span class="op">=</span> <span class="st">'</span><span class="sc">\uD83D\uDE42</span><span class="st">'</span><span class="op">;</span> <span class="co">// UTF-16</span></span>
+<span id="cb1285-3"><a href="ch_regexps.html#cb1285-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1285-4"><a href="ch_regexps.html#cb1285-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(codePoint<span class="op">,</span> codeUnits)<span class="op">;</span> <span class="co">// same string!</span></span></code></pre></div>
+<p>I’m only switching between <code>🙂</code> and <code>\uD83D\uDE42</code>, to illustrate how JavaScript sees things. Both are equivalent and can be used interchangeably in strings and regular expressions.</p>
+<h5 id="consequence-we-can-put-unicode-characters-in-character-classes">43.3.1.1 Consequence: we can put Unicode characters in character classes</h5>
+<p>With <code>/u</code>, the two code units of <code>🙂</code> are treated as a single character:</p>
+<div class="sourceCode" id="cb1286"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1286-1"><a href="ch_regexps.html#cb1286-1" aria-hidden="true" tabindex="-1"></a>&gt; /^[🙂]$/u.test('🙂')</span>
+<span id="cb1286-2"><a href="ch_regexps.html#cb1286-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Without <code>/u</code>, <code>🙂</code> is treated as two characters:</p>
+<div class="sourceCode" id="cb1287"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1287-1"><a href="ch_regexps.html#cb1287-1" aria-hidden="true" tabindex="-1"></a>&gt; /^[\uD83D\uDE42]$/.test('\uD83D\uDE42')</span>
+<span id="cb1287-2"><a href="ch_regexps.html#cb1287-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb1287-3"><a href="ch_regexps.html#cb1287-3" aria-hidden="true" tabindex="-1"></a>&gt; /^[\uD83D\uDE42]$/.test('\uDE42')</span>
+<span id="cb1287-4"><a href="ch_regexps.html#cb1287-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Note that <code>^</code> and <code>$</code> demand that the input string have a single character. That’s why the first result is <code>false</code>.</p>
+<h5 id="consequence-the-dot-operator-.-matches-unicode-characters-not-javascript-characters">43.3.1.2 Consequence: the dot operator (<code>.</code>) matches Unicode characters, not JavaScript characters</h5>
+<p>With <code>/u</code>, the dot operator matches Unicode characters:</p>
+<div class="sourceCode" id="cb1288"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1288-1"><a href="ch_regexps.html#cb1288-1" aria-hidden="true" tabindex="-1"></a>&gt; '🙂'.match(/./gu).length</span>
+<span id="cb1288-2"><a href="ch_regexps.html#cb1288-2" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span></code></pre></div>
+<p><code>.match()</code> plus <code>/g</code> returns an Array with all the matches of a regular expression.</p>
+<p>Without <code>/u</code>, the dot operator matches JavaScript characters:</p>
+<div class="sourceCode" id="cb1289"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1289-1"><a href="ch_regexps.html#cb1289-1" aria-hidden="true" tabindex="-1"></a>&gt; '\uD83D\uDE80'.match(/./g).length</span>
+<span id="cb1289-2"><a href="ch_regexps.html#cb1289-2" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span></code></pre></div>
+<h5 id="consequence-quantifiers-apply-to-unicode-characters-not-javascript-characters">43.3.1.3 Consequence: quantifiers apply to Unicode characters, not JavaScript characters</h5>
+<p>With <code>/u</code>, a quantifier applies to the whole preceding Unicode character:</p>
+<div class="sourceCode" id="cb1290"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1290-1"><a href="ch_regexps.html#cb1290-1" aria-hidden="true" tabindex="-1"></a>&gt; /^🙂{3}$/u.test('🙂🙂🙂')</span>
+<span id="cb1290-2"><a href="ch_regexps.html#cb1290-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Without <code>/u</code>, a quantifier only applies to the preceding JavaScript character:</p>
+<div class="sourceCode" id="cb1291"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1291-1"><a href="ch_regexps.html#cb1291-1" aria-hidden="true" tabindex="-1"></a>&gt; /^\uD83D\uDE80{3}$/.test('\uD83D\uDE80\uDE80\uDE80')</span>
+<span id="cb1291-2"><a href="ch_regexps.html#cb1291-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h3 id="properties-of-regular-expression-objects">43.4 Properties of regular expression objects</h3>
+<p>Noteworthy:</p>
+<ul>
+<li>Strictly speaking, only <code>.lastIndex</code> is a real instance property. All other properties are implemented via getters.</li>
+<li>Accordingly, <code>.lastIndex</code> is the only mutable property. All other properties are read-only. If we want to change them, we need to copy the regular expression (consult <a href="ch_regexps.html#cloning-regexps">§43.1.2 “Cloning and non-destructively modifying regular expressions”</a> for details).</li>
+</ul>
+<h4 id="flags-as-properties">43.4.1 Flags as properties</h4>
+<p>Each regular expression flag exists as a property with a longer, more descriptive name:</p>
+<div class="sourceCode" id="cb1292"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1292-1"><a href="ch_regexps.html#cb1292-1" aria-hidden="true" tabindex="-1"></a>&gt; /a/i.ignoreCase</span>
+<span id="cb1292-2"><a href="ch_regexps.html#cb1292-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb1292-3"><a href="ch_regexps.html#cb1292-3" aria-hidden="true" tabindex="-1"></a>&gt; /a/.ignoreCase</span>
+<span id="cb1292-4"><a href="ch_regexps.html#cb1292-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<p>This is the complete list of flag properties:</p>
+<ul>
+<li><code>.dotAll</code> (<code>/s</code>)</li>
+<li><code>.global</code> (<code>/g</code>)</li>
+<li><code>.ignoreCase</code> (<code>/i</code>)</li>
+<li><code>.multiline</code> (<code>/m</code>)</li>
+<li><code>.sticky</code> (<code>/y</code>)</li>
+<li><code>.unicode</code> (<code>/u</code>)</li>
+</ul>
+<h4 id="other-properties">43.4.2 Other properties</h4>
+<p>Each regular expression also has the following properties:</p>
+<ul>
+<li><p><code>.source</code> <sup>[ES3]</sup>: The regular expression pattern</p>
+<div class="sourceCode" id="cb1293"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1293-1"><a href="ch_regexps.html#cb1293-1" aria-hidden="true" tabindex="-1"></a>&gt; /abc/ig.source</span>
+<span id="cb1293-2"><a href="ch_regexps.html#cb1293-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'abc'</span></span></code></pre></div></li>
+<li><p><code>.flags</code> <sup>[ES6]</sup>: The flags of the regular expression</p>
+<div class="sourceCode" id="cb1294"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1294-1"><a href="ch_regexps.html#cb1294-1" aria-hidden="true" tabindex="-1"></a>&gt; /abc/ig.flags</span>
+<span id="cb1294-2"><a href="ch_regexps.html#cb1294-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'gi'</span></span></code></pre></div></li>
+<li><p><code>.lastIndex</code> <sup>[ES3]</sup>: Used when flag <code>/g</code> is switched on. Consult <a href="ch_regexps.html#regexp-flag-g">§43.6.1 “The flags <code>/g</code> and <code>/y</code>”</a> for details.</p></li>
+</ul>
+<h3 id="methods-for-working-with-regular-expressions">43.5 Methods for working with regular expressions</h3>
+<h4 id="by-default-regular-expressions-match-anywhere-in-a-string">43.5.1 By default, regular expressions match anywhere in a string</h4>
+<p>By default, regular expressions match anywhere in a string:</p>
+<div class="sourceCode" id="cb1295"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1295-1"><a href="ch_regexps.html#cb1295-1" aria-hidden="true" tabindex="-1"></a>&gt; /a/.test('__a__')</span>
+<span id="cb1295-2"><a href="ch_regexps.html#cb1295-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>We can change that by using assertions such as <code>^</code> or by using the flag <code>/y</code>:</p>
+<div class="sourceCode" id="cb1296"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1296-1"><a href="ch_regexps.html#cb1296-1" aria-hidden="true" tabindex="-1"></a>&gt; /^a/.test('__a__')</span>
+<span id="cb1296-2"><a href="ch_regexps.html#cb1296-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb1296-3"><a href="ch_regexps.html#cb1296-3" aria-hidden="true" tabindex="-1"></a>&gt; /^a/.test('a__')</span>
+<span id="cb1296-4"><a href="ch_regexps.html#cb1296-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h4 id="RegExp.prototype.test">43.5.2 <code>regExp.test(str)</code>: is there a match? <sup>[ES3]</sup></h4>
+<p>The regular expression method <code>.test()</code> returns <code>true</code> if <code>regExp</code> matches <code>str</code>:</p>
+<div class="sourceCode" id="cb1297"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1297-1"><a href="ch_regexps.html#cb1297-1" aria-hidden="true" tabindex="-1"></a>&gt; /bc/.test('ABCD')</span>
+<span id="cb1297-2"><a href="ch_regexps.html#cb1297-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb1297-3"><a href="ch_regexps.html#cb1297-3" aria-hidden="true" tabindex="-1"></a>&gt; /bc/i.test('ABCD')</span>
+<span id="cb1297-4"><a href="ch_regexps.html#cb1297-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb1297-5"><a href="ch_regexps.html#cb1297-5" aria-hidden="true" tabindex="-1"></a>&gt; /\.mjs$/.test('main.mjs')</span>
+<span id="cb1297-6"><a href="ch_regexps.html#cb1297-6" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>With <code>.test()</code> we should normally avoid the <code>/g</code> flag. If we use it, we generally don’t get the same result every time we call the method:</p>
+<div class="sourceCode" id="cb1298"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1298-1"><a href="ch_regexps.html#cb1298-1" aria-hidden="true" tabindex="-1"></a>&gt; const r = /a/g;</span>
+<span id="cb1298-2"><a href="ch_regexps.html#cb1298-2" aria-hidden="true" tabindex="-1"></a>&gt; r.test('aab')</span>
+<span id="cb1298-3"><a href="ch_regexps.html#cb1298-3" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb1298-4"><a href="ch_regexps.html#cb1298-4" aria-hidden="true" tabindex="-1"></a>&gt; r.test('aab')</span>
+<span id="cb1298-5"><a href="ch_regexps.html#cb1298-5" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb1298-6"><a href="ch_regexps.html#cb1298-6" aria-hidden="true" tabindex="-1"></a>&gt; r.test('aab')</span>
+<span id="cb1298-7"><a href="ch_regexps.html#cb1298-7" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<p>The results are due to <code>/a/</code> having two matches in the string. After all of those were found, <code>.test()</code> returns <code>false</code>.</p>
+<h4 id="String.prototype.search">43.5.3 <code>str.search(regExp)</code>: at what index is the match? <sup>[ES3]</sup></h4>
+<p>The string method <code>.search()</code> returns the first index of <code>str</code> at which there is a match for <code>regExp</code>:</p>
+<div class="sourceCode" id="cb1299"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1299-1"><a href="ch_regexps.html#cb1299-1" aria-hidden="true" tabindex="-1"></a>&gt; '_abc_'.search(/abc/)</span>
+<span id="cb1299-2"><a href="ch_regexps.html#cb1299-2" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span>
+<span id="cb1299-3"><a href="ch_regexps.html#cb1299-3" aria-hidden="true" tabindex="-1"></a>&gt; 'main.mjs'.search(/\.mjs$/)</span>
+<span id="cb1299-4"><a href="ch_regexps.html#cb1299-4" aria-hidden="true" tabindex="-1"></a><span class="kw">4</span></span></code></pre></div>
+<h4 id="RegExp.prototype.exec">43.5.4 <code>regExp.exec(str)</code>: capturing groups <sup>[ES3]</sup></h4>
+<h5 id="getting-a-match-object-for-the-first-match">43.5.4.1 Getting a match object for the first match</h5>
+<p>Without the flag <code>/g</code>, <code>.exec()</code> returns the captures of the first match for <code>regExp</code> in <code>str</code>:</p>
+<div class="sourceCode" id="cb1300"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1300-1"><a href="ch_regexps.html#cb1300-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1300-2"><a href="ch_regexps.html#cb1300-2" aria-hidden="true" tabindex="-1"></a>  <span class="ss">/</span><span class="sc">(</span><span class="ss">a</span><span class="sc">+)</span><span class="ss">b/</span><span class="op">.</span><span class="fu">exec</span>(<span class="st">'ab aab'</span>)<span class="op">,</span></span>
+<span id="cb1300-3"><a href="ch_regexps.html#cb1300-3" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb1300-4"><a href="ch_regexps.html#cb1300-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span><span class="op">:</span> <span class="st">'ab'</span><span class="op">,</span></span>
+<span id="cb1300-5"><a href="ch_regexps.html#cb1300-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span></span>
+<span id="cb1300-6"><a href="ch_regexps.html#cb1300-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">index</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb1300-7"><a href="ch_regexps.html#cb1300-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span><span class="op">:</span> <span class="st">'ab aab'</span><span class="op">,</span></span>
+<span id="cb1300-8"><a href="ch_regexps.html#cb1300-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">groups</span><span class="op">:</span> <span class="kw">undefined</span><span class="op">,</span></span>
+<span id="cb1300-9"><a href="ch_regexps.html#cb1300-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1300-10"><a href="ch_regexps.html#cb1300-10" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<p>The result is a <em>match object</em> with the following properties:</p>
+<ul>
+<li><code>[0]</code>: the complete substring matched by the regular expression</li>
+<li><code>[1]</code>: capture of positional group 1 (etc.)</li>
+<li><code>.index</code>: where did the match occur?</li>
+<li><code>.input</code>: the string that was matched against</li>
+<li><code>.groups</code>: captures of named groups</li>
+</ul>
+<h5 id="named-capture-groups">43.5.4.2 Named capture groups <sup>[ES2018]</sup></h5>
+<p>The previous example contained a single positional group. The following example demonstrates named groups:</p>
+<div class="sourceCode" id="cb1301"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1301-1"><a href="ch_regexps.html#cb1301-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1301-2"><a href="ch_regexps.html#cb1301-2" aria-hidden="true" tabindex="-1"></a>  <span class="ss">/</span><span class="sc">(?</span><span class="ss">&lt;as&gt;a</span><span class="sc">+)</span><span class="ss">b/</span><span class="op">.</span><span class="fu">exec</span>(<span class="st">'ab aab'</span>)<span class="op">,</span></span>
+<span id="cb1301-3"><a href="ch_regexps.html#cb1301-3" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb1301-4"><a href="ch_regexps.html#cb1301-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span><span class="op">:</span> <span class="st">'ab'</span><span class="op">,</span></span>
+<span id="cb1301-5"><a href="ch_regexps.html#cb1301-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span></span>
+<span id="cb1301-6"><a href="ch_regexps.html#cb1301-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">index</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb1301-7"><a href="ch_regexps.html#cb1301-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span><span class="op">:</span> <span class="st">'ab aab'</span><span class="op">,</span></span>
+<span id="cb1301-8"><a href="ch_regexps.html#cb1301-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">groups</span><span class="op">:</span> { <span class="dt">as</span><span class="op">:</span> <span class="st">'a'</span> }<span class="op">,</span></span>
+<span id="cb1301-9"><a href="ch_regexps.html#cb1301-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1301-10"><a href="ch_regexps.html#cb1301-10" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<p>In the result of <code>.exec()</code>, we can see that a named group is also a positional group – its capture exists twice:</p>
+<ul>
+<li>Once as a positional capture (property <code>'1'</code>).</li>
+<li>Once as a named capture (property <code>groups.as</code>).</li>
+</ul>
+<h5 id="looping-over-all-matches">43.5.4.3 Looping over all matches</h5>
+<div class="notebox">
+<p><img src="img-book/img/icons/lightbulb-regular.svg" height="24">&nbsp; <strong>Better alternative for retrieving all matches: <code>str.matchAll(regExp)</code> [ES2020]</strong></p>
+<p>Since ECMAScript 2020, JavaScript has another method for retrieving all matches: <a href="ch_regexps.html#String.prototype.matchAll"><code>str.matchAll(regExp)</code></a>. This method is easier to use and has fewer caveats.</p>
+</div>
+<p>If we want to retrieve all matches of a regular expression (not just the first one), we need to switch on the flag <code>/g</code>. Then we can call <code>.exec()</code> multiple times and get one match each time. After the last match, <code>.exec()</code> returns <code>null</code>.</p>
+<div class="sourceCode" id="cb1302"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1302-1"><a href="ch_regexps.html#cb1302-1" aria-hidden="true" tabindex="-1"></a>&gt; const regExp = /(a+)b/g;</span>
+<span id="cb1302-2"><a href="ch_regexps.html#cb1302-2" aria-hidden="true" tabindex="-1"></a>&gt; regExp.exec('ab aab')</span>
+<span id="cb1302-3"><a href="ch_regexps.html#cb1302-3" aria-hidden="true" tabindex="-1"></a><span class="kw">{ 0: 'ab', 1: 'a', index: 0, input: 'ab aab', groups: undefined }</span></span>
+<span id="cb1302-4"><a href="ch_regexps.html#cb1302-4" aria-hidden="true" tabindex="-1"></a>&gt; regExp.exec('ab aab')</span>
+<span id="cb1302-5"><a href="ch_regexps.html#cb1302-5" aria-hidden="true" tabindex="-1"></a><span class="kw">{ 0: 'aab', 1: 'aa', index: 3, input: 'ab aab', groups: undefined }</span></span>
+<span id="cb1302-6"><a href="ch_regexps.html#cb1302-6" aria-hidden="true" tabindex="-1"></a>&gt; regExp.exec('ab aab')</span>
+<span id="cb1302-7"><a href="ch_regexps.html#cb1302-7" aria-hidden="true" tabindex="-1"></a><span class="kw">null</span></span></code></pre></div>
+<p>Therefore, we can loop over all matches as follows:</p>
+<div class="sourceCode" id="cb1303"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1303-1"><a href="ch_regexps.html#cb1303-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> regExp <span class="op">=</span> <span class="ss">/</span><span class="sc">(</span><span class="ss">a</span><span class="sc">+)</span><span class="ss">b/g</span><span class="op">;</span></span>
+<span id="cb1303-2"><a href="ch_regexps.html#cb1303-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> str <span class="op">=</span> <span class="st">'ab aab'</span><span class="op">;</span></span>
+<span id="cb1303-3"><a href="ch_regexps.html#cb1303-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1303-4"><a href="ch_regexps.html#cb1303-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> match<span class="op">;</span></span>
+<span id="cb1303-5"><a href="ch_regexps.html#cb1303-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Check for null via truthiness</span></span>
+<span id="cb1303-6"><a href="ch_regexps.html#cb1303-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Alternative: while ((match = regExp.exec(str)) !== null)</span></span>
+<span id="cb1303-7"><a href="ch_regexps.html#cb1303-7" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (match <span class="op">=</span> regExp<span class="op">.</span><span class="fu">exec</span>(str)) {</span>
+<span id="cb1303-8"><a href="ch_regexps.html#cb1303-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(match[<span class="dv">1</span>])<span class="op">;</span></span>
+<span id="cb1303-9"><a href="ch_regexps.html#cb1303-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1303-10"><a href="ch_regexps.html#cb1303-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1303-11"><a href="ch_regexps.html#cb1303-11" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb1303-12"><a href="ch_regexps.html#cb1303-12" aria-hidden="true" tabindex="-1"></a><span class="co">// 'aa'</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/exclamation-triangle-regular.svg" height="24">&nbsp; <strong>Be careful when sharing regular expressions with <code>/g</code>!</strong></p>
+<p>Sharing regular expressions with <code>/g</code> has a few pitfalls, which are explained <a href="ch_regexps.html#regexp-flag-g">later</a>.</p>
+</div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Extracting quoted text via <code>.exec()</code></strong></p>
+<p><code>exercises/regexps/extract_quoted_test.mjs</code></p>
+</div>
+<h4 id="String.prototype.match">43.5.5 <code>str.match(regExp)</code>: getting all group 0 captures <sup>[ES3]</sup></h4>
+<p>Without <code>/g</code>, <code>.match()</code> works like <code>.exec()</code> – it returns a single match object.</p>
+<p>With <code>/g</code>, <code>.match()</code> returns all substrings of <code>str</code> that match <code>regExp</code>:</p>
+<div class="sourceCode" id="cb1304"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1304-1"><a href="ch_regexps.html#cb1304-1" aria-hidden="true" tabindex="-1"></a>&gt; 'ab aab'.match(/(a+)b/g)</span>
+<span id="cb1304-2"><a href="ch_regexps.html#cb1304-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'ab', 'aab' ]</span></span></code></pre></div>
+<p>If there is no match, <code>.match()</code> returns <code>null</code>:</p>
+<div class="sourceCode" id="cb1305"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1305-1"><a href="ch_regexps.html#cb1305-1" aria-hidden="true" tabindex="-1"></a>&gt; 'xyz'.match(/(a+)b/g)</span>
+<span id="cb1305-2"><a href="ch_regexps.html#cb1305-2" aria-hidden="true" tabindex="-1"></a><span class="kw">null</span></span></code></pre></div>
+<p>We can use <a href="ch_undefined-null.html#nullish-coalescing-operator">the nullish coalescing operator (<code>??</code>)</a> to protect ourselves against <code>null</code>:</p>
+<div class="sourceCode" id="cb1306"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1306-1"><a href="ch_regexps.html#cb1306-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> numberOfMatches <span class="op">=</span> (str<span class="op">.</span><span class="fu">match</span>(regExp) <span class="op">??</span> [])<span class="op">.</span><span class="at">length</span><span class="op">;</span></span></code></pre></div>
+<h4 id="String.prototype.matchAll">43.5.6 <code>str.matchAll(regExp)</code>: getting an iterable over all match objects <sup>[ES2020]</sup></h4>
+<p>This is how <code>.matchAll()</code> is invoked:</p>
+<pre><code>const matchIterable = str.matchAll(regExp);</code></pre>
+<p>Given a string and a regular expression, <code>.matchAll()</code> returns an iterable over the match objects of all matches.</p>
+<p>We can also use the spread operator (<code>...</code>) to convert the iterable to an Array:</p>
+<div class="sourceCode" id="cb1308"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1308-1"><a href="ch_regexps.html#cb1308-1" aria-hidden="true" tabindex="-1"></a>&gt; [...'-a-a-a'.matchAll(/-(a)/ug)]</span>
+<span id="cb1308-2"><a href="ch_regexps.html#cb1308-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[</span></span>
+<span id="cb1308-3"><a href="ch_regexps.html#cb1308-3" aria-hidden="true" tabindex="-1"></a><span class="kw">  { 0:'-a', 1:'a', index: 0, input: '-a-a-a', groups: undefined },</span></span>
+<span id="cb1308-4"><a href="ch_regexps.html#cb1308-4" aria-hidden="true" tabindex="-1"></a><span class="kw">  { 0:'-a', 1:'a', index: 2, input: '-a-a-a', groups: undefined },</span></span>
+<span id="cb1308-5"><a href="ch_regexps.html#cb1308-5" aria-hidden="true" tabindex="-1"></a><span class="kw">  { 0:'-a', 1:'a', index: 4, input: '-a-a-a', groups: undefined },</span></span>
+<span id="cb1308-6"><a href="ch_regexps.html#cb1308-6" aria-hidden="true" tabindex="-1"></a><span class="kw">]</span></span></code></pre></div>
+<p>Flag <code>/g</code> must be set:</p>
+<div class="sourceCode" id="cb1309"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1309-1"><a href="ch_regexps.html#cb1309-1" aria-hidden="true" tabindex="-1"></a>&gt; [...'-a-a-a'.matchAll(/-(a)/u)]</span>
+<span id="cb1309-2"><a href="ch_regexps.html#cb1309-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: String.prototype.matchAll called with a non-global</span></span>
+<span id="cb1309-3"><a href="ch_regexps.html#cb1309-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RegExp argument</span></span></code></pre></div>
+<p><code>.matchAll()</code> isn’t affected by <code>regExp.lastIndex</code> and doesn’t change it.</p>
+<h5 id="implementing-.matchall">43.5.6.1 Implementing <code>.matchAll()</code></h5>
+<p><code>.matchAll()</code> could be implemented via <code>.exec()</code> as follows:</p>
+<div class="sourceCode" id="cb1310"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1310-1"><a href="ch_regexps.html#cb1310-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">matchAll</span>(str<span class="op">,</span> regExp) {</span>
+<span id="cb1310-2"><a href="ch_regexps.html#cb1310-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>regExp<span class="op">.</span><span class="at">global</span>) {</span>
+<span id="cb1310-3"><a href="ch_regexps.html#cb1310-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">TypeError</span>(<span class="st">'Flag /g must be set!'</span>)<span class="op">;</span></span>
+<span id="cb1310-4"><a href="ch_regexps.html#cb1310-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1310-5"><a href="ch_regexps.html#cb1310-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> localCopy <span class="op">=</span> <span class="kw">new</span> <span class="bu">RegExp</span>(regExp<span class="op">,</span> regExp<span class="op">.</span><span class="at">flags</span>)<span class="op">;</span></span>
+<span id="cb1310-6"><a href="ch_regexps.html#cb1310-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> match<span class="op">;</span></span>
+<span id="cb1310-7"><a href="ch_regexps.html#cb1310-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (match <span class="op">=</span> localCopy<span class="op">.</span><span class="fu">exec</span>(str)) {</span>
+<span id="cb1310-8"><a href="ch_regexps.html#cb1310-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">yield</span> match<span class="op">;</span></span>
+<span id="cb1310-9"><a href="ch_regexps.html#cb1310-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1310-10"><a href="ch_regexps.html#cb1310-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Making a local copy ensures two things:</p>
+<ul>
+<li><code>regex.lastIndex</code> isn’t changed.</li>
+<li><code>localCopy.lastIndex</code> is zero.</li>
+</ul>
+<p>Using <code>matchAll()</code>:</p>
+<div class="sourceCode" id="cb1311"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1311-1"><a href="ch_regexps.html#cb1311-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> str <span class="op">=</span> <span class="st">'"fee" "fi" "fo" "fum"'</span><span class="op">;</span></span>
+<span id="cb1311-2"><a href="ch_regexps.html#cb1311-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> regex <span class="op">=</span> <span class="ss">/"</span><span class="sc">([^"]*)</span><span class="ss">"/g</span><span class="op">;</span></span>
+<span id="cb1311-3"><a href="ch_regexps.html#cb1311-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1311-4"><a href="ch_regexps.html#cb1311-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> match <span class="kw">of</span> <span class="fu">matchAll</span>(str<span class="op">,</span> regex)) {</span>
+<span id="cb1311-5"><a href="ch_regexps.html#cb1311-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(match[<span class="dv">1</span>])<span class="op">;</span></span>
+<span id="cb1311-6"><a href="ch_regexps.html#cb1311-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1311-7"><a href="ch_regexps.html#cb1311-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1311-8"><a href="ch_regexps.html#cb1311-8" aria-hidden="true" tabindex="-1"></a><span class="co">// 'fee'</span></span>
+<span id="cb1311-9"><a href="ch_regexps.html#cb1311-9" aria-hidden="true" tabindex="-1"></a><span class="co">// 'fi'</span></span>
+<span id="cb1311-10"><a href="ch_regexps.html#cb1311-10" aria-hidden="true" tabindex="-1"></a><span class="co">// 'fo'</span></span>
+<span id="cb1311-11"><a href="ch_regexps.html#cb1311-11" aria-hidden="true" tabindex="-1"></a><span class="co">// 'fum'</span></span></code></pre></div>
+<h4 id="regexp.exec-vs.-str.match-vs.-str.matchall">43.5.7 <code>regExp.exec()</code> vs.&nbsp;<code>str.match()</code> vs.&nbsp;<code>str.matchAll()</code></h4>
+<p>The following table summarizes the differences between three methods:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Without <code>/g</code></th>
+<th>With <code>/g</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>regExp.exec(str)</code></td>
+<td>First match object</td>
+<td>Next match object or <code>null</code></td>
+</tr>
+<tr class="even">
+<td><code>str.match(regExp)</code></td>
+<td>First match object</td>
+<td>Array of group 0 captures</td>
+</tr>
+<tr class="odd">
+<td><code>str.matchAll(regExp)</code></td>
+<td><code>TypeError</code></td>
+<td>Iterable over match objects</td>
+</tr>
+</tbody>
+</table>
+<h4 id="replace-replaceAll">43.5.8 Replacing with <code>str.replace()</code> and <code>str.replaceAll()</code></h4>
+<p>Both replacing methods have two parameters:</p>
+<ul>
+<li><code>str.replace(searchValue, replacementValue)</code></li>
+<li><code>str.replaceAll(searchValue, replacementValue)</code></li>
+</ul>
+<p><code>searchValue</code> can be:</p>
+<ul>
+<li>A string</li>
+<li>A regular expression</li>
+</ul>
+<p><code>replacementValue</code> can be:</p>
+<ul>
+<li>String: Replace matches with this string. The character <code>$</code> has special meaning and lets us insert captures of groups and more (details are explained later).</li>
+<li>Function: Compute strings that replace matches via this function.</li>
+</ul>
+<p>The two methods differ as follows:</p>
+<ul>
+<li><code>.replace()</code> replaces the first occurrence of a string or a regular expression without <code>/g</code>.</li>
+<li><code>.replaceAll()</code> replaces all occurrences of a string or a regular expression with <code>/g</code>.</li>
+</ul>
+<p>This table summarizes how that works:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Search for: <code>→</code></th>
+<th>string</th>
+<th>RegExp w/o <code>\g</code></th>
+<th>RegExp with <code>/g</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>.replace</code></td>
+<td>First occurrence</td>
+<td>First occurrence</td>
+<td>(All occurrences)</td>
+</tr>
+<tr class="even">
+<td><code>.replaceAll</code></td>
+<td>All occurrences</td>
+<td><code>TypeError</code></td>
+<td>All occurrences</td>
+</tr>
+</tbody>
+</table>
+<p>The last column of <code>.replace()</code> is in parentheses because this method existed long before <code>.replaceAll()</code> and therefore supports functionality that now should be handled via the latter method. If we could change that, <code>.replace()</code> would throw a <code>TypeError</code> here.</p>
+<p>We first explore how <code>.replace()</code> and <code>.replaceAll()</code> work individually when <code>replacementValue</code> is a simple string (without the character <code>$</code>). Then we examine how both are affected by more complicated replacement values.</p>
+<h5 id="String.prototype.replace">43.5.8.1 <code>str.replace(searchValue, replacementValue)</code> <sup>[ES3]</sup></h5>
+<p>How <code>.replace()</code> operates is influenced by its first parameter <code>searchValue</code>:</p>
+<ul>
+<li><p>Regular expression without <code>/g</code>: Replace first match of this regular expression.</p>
+<div class="sourceCode" id="cb1312"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1312-1"><a href="ch_regexps.html#cb1312-1" aria-hidden="true" tabindex="-1"></a>&gt; 'aaa'.replace(/a/, 'x')</span>
+<span id="cb1312-2"><a href="ch_regexps.html#cb1312-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'xaa'</span></span></code></pre></div></li>
+<li><p>String: Replace first occurrence of this string (the string is interpreted verbatim, not as a regular expression).</p>
+<div class="sourceCode" id="cb1313"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1313-1"><a href="ch_regexps.html#cb1313-1" aria-hidden="true" tabindex="-1"></a>&gt; 'aaa'.replace('a', 'x')</span>
+<span id="cb1313-2"><a href="ch_regexps.html#cb1313-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'xaa'</span></span></code></pre></div></li>
+<li><p>Regular expression with <code>/g</code>: Replace all matches of this regular expression.</p>
+<div class="sourceCode" id="cb1314"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1314-1"><a href="ch_regexps.html#cb1314-1" aria-hidden="true" tabindex="-1"></a>&gt; 'aaa'.replace(/a/g, 'x')</span>
+<span id="cb1314-2"><a href="ch_regexps.html#cb1314-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'xxx'</span></span></code></pre></div>
+<p>Recommendation: If <code>.replaceAll()</code> is available, it’s better to use that method in this case – its purpose is to replace multiple occurrences.</p></li>
+</ul>
+<p>If we want to replace every occurrence of a string, we have two options:</p>
+<ul>
+<li><p>We can use <code>.replaceAll()</code> (which was introduced in ES2021).</p></li>
+<li><p>Later in this chapter, we will encounter [the tool function <code>escapeForRegExp()</code>) which will help us convert a string into a regular expression that matches that string multiple times (e.g., <code>'*'</code> becomes <code>/\*/g</code>).</p></li>
+</ul>
+<h5 id="String.prototype.replaceAll">43.5.8.2 <code>str.replaceAll(searchValue, replacementValue)</code> <sup>[ES2021]</sup></h5>
+<p>How <code>.replaceAll()</code> operates is influenced by its first parameter <code>searchValue</code>:</p>
+<ul>
+<li><p>Regular expression with <code>/g</code>: Replace all matches of this regular expression.</p>
+<div class="sourceCode" id="cb1315"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1315-1"><a href="ch_regexps.html#cb1315-1" aria-hidden="true" tabindex="-1"></a>&gt; 'aaa'.replaceAll(/a/g, 'x')</span>
+<span id="cb1315-2"><a href="ch_regexps.html#cb1315-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'xxx'</span></span></code></pre></div></li>
+<li><p>String: Replace all occurrences of this string (the string is interpreted verbatim, not as a regular expression).</p>
+<div class="sourceCode" id="cb1316"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1316-1"><a href="ch_regexps.html#cb1316-1" aria-hidden="true" tabindex="-1"></a>&gt; 'aaa'.replaceAll('a', 'x')</span>
+<span id="cb1316-2"><a href="ch_regexps.html#cb1316-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'xxx'</span></span></code></pre></div></li>
+<li><p>Regular expression without <code>/g</code>: A <code>TypeError</code> is thrown (because the purpose of <code>.replaceAll()</code> is to replace multiple occurrences).</p>
+<div class="sourceCode" id="cb1317"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1317-1"><a href="ch_regexps.html#cb1317-1" aria-hidden="true" tabindex="-1"></a>&gt; 'aaa'.replaceAll(/a/, 'x')</span>
+<span id="cb1317-2"><a href="ch_regexps.html#cb1317-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: String.prototype.replaceAll called with</span></span>
+<span id="cb1317-3"><a href="ch_regexps.html#cb1317-3" aria-hidden="true" tabindex="-1"></a><span class="kw">a non-global RegExp argument</span></span></code></pre></div></li>
+</ul>
+<h5 id="the-parameter-replacementvalue-of-.replace-and-.replaceall">43.5.8.3 The parameter <code>replacementValue</code> of <code>.replace()</code> and <code>.replaceAll()</code></h5>
+<p>So far, we have only used the parameter <code>replacementValue</code> with simple strings, but it can do more. If its value is:</p>
+<ul>
+<li><p>A string, then matches are replaced with this string. The character <code>$</code> has special meaning and lets us insert captures of groups and more (read on for details).</p></li>
+<li><p>A function, then matches are replaced by strings that are computed via this function.</p></li>
+</ul>
+<h5 id="replacementvalue-is-a-string">43.5.8.4 <code>replacementValue</code> is a string</h5>
+<p>If the replacement value is a string, the dollar sign has special meaning – it inserts text matched by the regular expression:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Text</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>$$</code></td>
+<td>single <code>$</code></td>
+</tr>
+<tr class="even">
+<td><code>$&amp;</code></td>
+<td>complete match</td>
+</tr>
+<tr class="odd">
+<td><code>$`</code></td>
+<td>text before match</td>
+</tr>
+<tr class="even">
+<td><code>$'</code></td>
+<td>text after match</td>
+</tr>
+<tr class="odd">
+<td><code>$n</code></td>
+<td>capture of positional group <code>n</code> (<code>n</code> &gt; 0)</td>
+</tr>
+<tr class="even">
+<td><code>$&lt;name&gt;</code></td>
+<td>capture of named group <code>name</code> <sup>[ES2018]</sup></td>
+</tr>
+</tbody>
+</table>
+<p>Example: Inserting the text before, inside, and after the matched substring.</p>
+<div class="sourceCode" id="cb1318"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1318-1"><a href="ch_regexps.html#cb1318-1" aria-hidden="true" tabindex="-1"></a>&gt; 'a1 a2'.replaceAll(/a/g, "($`|$&amp;|$')")</span>
+<span id="cb1318-2"><a href="ch_regexps.html#cb1318-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'(|a|1 a2)1 (a1 |a|2)2'</span></span></code></pre></div>
+<p>Example: Inserting the captures of positional groups.</p>
+<div class="sourceCode" id="cb1319"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1319-1"><a href="ch_regexps.html#cb1319-1" aria-hidden="true" tabindex="-1"></a>&gt; const regExp = /^([A-Za-z]+): (.*)$/ug;</span>
+<span id="cb1319-2"><a href="ch_regexps.html#cb1319-2" aria-hidden="true" tabindex="-1"></a>&gt; 'first: Jane'.replaceAll(regExp, 'KEY: $1, VALUE: $2')</span>
+<span id="cb1319-3"><a href="ch_regexps.html#cb1319-3" aria-hidden="true" tabindex="-1"></a><span class="kw">'KEY: first, VALUE: Jane'</span></span></code></pre></div>
+<p>Example: Inserting the captures of named groups.</p>
+<div class="sourceCode" id="cb1320"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1320-1"><a href="ch_regexps.html#cb1320-1" aria-hidden="true" tabindex="-1"></a>&gt; const regExp = /^(?&lt;key&gt;[A-Za-z]+): (?&lt;value&gt;.*)$/ug;</span>
+<span id="cb1320-2"><a href="ch_regexps.html#cb1320-2" aria-hidden="true" tabindex="-1"></a>&gt; 'first: Jane'.replaceAll(regExp, 'KEY: $&lt;key&gt;, VALUE: $&lt;value&gt;')</span>
+<span id="cb1320-3"><a href="ch_regexps.html#cb1320-3" aria-hidden="true" tabindex="-1"></a><span class="kw">'KEY: first, VALUE: Jane'</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Change quotes via <code>.replace()</code> and a named group</strong></p>
+<p><code>exercises/regexps/change_quotes_test.mjs</code></p>
+</div>
+<h5 id="replacementvalue-is-a-function">43.5.8.5 <code>replacementValue</code> is a function</h5>
+<p>If the replacement value is a function, we can compute each replacement. In the following example, we multiply each non-negative integer that we find by two.</p>
+<div class="sourceCode" id="cb1321"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1321-1"><a href="ch_regexps.html#cb1321-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1321-2"><a href="ch_regexps.html#cb1321-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'3 cats and 4 dogs'</span><span class="op">.</span><span class="fu">replaceAll</span>(<span class="ss">/</span><span class="sc">[0-9]+</span><span class="ss">/g</span><span class="op">,</span> (all) <span class="kw">=&gt;</span> <span class="dv">2</span> <span class="op">*</span> <span class="bu">Number</span>(all))<span class="op">,</span></span>
+<span id="cb1321-3"><a href="ch_regexps.html#cb1321-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'6 cats and 8 dogs'</span></span>
+<span id="cb1321-4"><a href="ch_regexps.html#cb1321-4" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<p>The replacement function gets the following parameters. Note how similar they are to match objects. These parameters are all positional, but I’ve included how one might name them:</p>
+<ul>
+<li><code>all</code>: complete match</li>
+<li><code>g1</code>: capture of positional group 1</li>
+<li>Etc.</li>
+<li><code>index</code>: where did the match occur?</li>
+<li><code>input</code>: the string in which we are replacing</li>
+<li><code>groups</code> <sup>[ES2018]</sup>: captures of named groups (an object)</li>
+</ul>
+<h4 id="other-methods-for-working-with-regular-expressions">43.5.9 Other methods for working with regular expressions</h4>
+<p><code>String.prototype.split()</code> is described <a href="ch_strings.html#string-api-extracting">in the chapter on strings</a>. Its first parameter of <code>String.prototype.split()</code> is either a string or a regular expression. If it is the latter, then captures of groups appear in the result:</p>
+<div class="sourceCode" id="cb1322"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1322-1"><a href="ch_regexps.html#cb1322-1" aria-hidden="true" tabindex="-1"></a>&gt; 'a:b : c'.split(':')</span>
+<span id="cb1322-2"><a href="ch_regexps.html#cb1322-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b ', ' c' ]</span></span>
+<span id="cb1322-3"><a href="ch_regexps.html#cb1322-3" aria-hidden="true" tabindex="-1"></a>&gt; 'a:b : c'.split(/ *: */)</span>
+<span id="cb1322-4"><a href="ch_regexps.html#cb1322-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b', 'c' ]</span></span>
+<span id="cb1322-5"><a href="ch_regexps.html#cb1322-5" aria-hidden="true" tabindex="-1"></a>&gt; 'a:b : c'.split(/( *):( *)/)</span>
+<span id="cb1322-6"><a href="ch_regexps.html#cb1322-6" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', '', '', 'b', ' ', ' ', 'c' ]</span></span></code></pre></div>
+<h3 id="regexp-flags-gy">43.6 The flags <code>/g</code> and <code>/y</code>, and the property <code>.lastIndex</code> (advanced)</h3>
+<p>In this section, we examine how the RegExp flags <code>/g</code> and <code>/y</code> work and how they depend on the RegExp property <code>.lastIndex</code>. We’ll also discover an interesting use case for <code>.lastIndex</code> that you may find surprising.</p>
+<h4 id="regexp-flag-g">43.6.1 The flags <code>/g</code> and <code>/y</code></h4>
+<p>Every method reacts differently to <code>/g</code> and <code>/y</code>; this gives us a rough general idea:</p>
+<ul>
+<li><code>/g</code> (<code>.global</code>, ES3): The regular expression should match multiple times, anywhere in a string.</li>
+<li><code>/y</code> (<code>.sticky</code>, ES6): Any match inside a string should immediately follow a previous match (the matches “stick”&nbsp;together).</li>
+</ul>
+<p>If a regular expression has neither the flag <code>/g</code> nor the flag <code>/y</code>, matching happens once and starts at the beginning.</p>
+<p>With either <code>/g</code> or <code>/y</code>, matching is performed relative to a “current position” inside the input string. That position is stored in the regular expression property <code>.lastIndex</code>.</p>
+<p>There are three groups of regular-expression-related methods:</p>
+<ol type="1">
+<li><p>The string methods <code>.search(regExp)</code> and <code>.split(regExp)</code> completely ignore <code>/g</code> and <code>/y</code> (and therefore also <code>.lastIndex</code>).</p></li>
+<li><p>The <code>RegExp</code> methods <code>.exec(str)</code> and <code>.test(str)</code> change in two ways if either <code>/g</code> or <code>/y</code> is set.</p>
+<p>First, we get multiple matches, by calling one method repeatedly. Each time, it returns either another result (a match object or <code>true</code>) or an “end of results” value (<code>null</code> or <code>false</code>).</p>
+<p>Second, the regular expression property <code>.lastIndex</code> is used to step through the input string. On one hand, <code>.lastIndex</code> determines where matching starts:</p>
+<ul>
+<li><p><code>/g</code> means that a match must begin at <code>.lastIndex</code> or later.</p></li>
+<li><p><code>/y</code> means that a match must begin at <code>.lastIndex</code>. That is, the beginning of the regular expression is anchored to <code>.lastIndex</code>.</p>
+<p>Note that <code>^</code> and <code>$</code> continue to work as usually: They anchor matches to the beginning or end of the input string, unless <code>.multiline</code> is set. Then they anchor to the beginnings or ends of lines.</p></li>
+</ul>
+<p>On the other hand, <code>.lastIndex</code> is set to one plus the last index of the previous match.</p></li>
+<li><p>All other methods are affected as follows:</p>
+<ul>
+<li><code>/g</code> leads to multiple matches.</li>
+<li><code>/y</code> leads to a single match that must start at <code>.lastIndex</code>.</li>
+<li><code>/yg</code> leads to multiple matches without gaps.</li>
+</ul></li>
+</ol>
+<p>This was a first overview. The next sections get into more details.</p>
+<h4 id="how-exactly-are-methods-affected-by-g-and-y">43.6.2 How exactly are methods affected by <code>/g</code> and <code>/y</code>?</h4>
+<h5 id="regexp.execstr-es3">43.6.2.1 <code>regExp.exec(str)</code> [ES3]</h5>
+<p>Without <code>/g</code> and <code>/y</code>, <code>.exec()</code> ignores <code>.lastIndex</code> and always returns a match object for the first match:</p>
+<div class="sourceCode" id="cb1323"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1323-1"><a href="ch_regexps.html#cb1323-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/; re.lastIndex = 1;</span>
+<span id="cb1323-2"><a href="ch_regexps.html#cb1323-2" aria-hidden="true" tabindex="-1"></a>&gt; [re.exec('##-#'), re.lastIndex]</span>
+<span id="cb1323-3"><a href="ch_regexps.html#cb1323-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[{ 0: '#', index: 0, input: '##-#' }, 1]</span></span>
+<span id="cb1323-4"><a href="ch_regexps.html#cb1323-4" aria-hidden="true" tabindex="-1"></a>&gt; [re.exec('##-#'), re.lastIndex]</span>
+<span id="cb1323-5"><a href="ch_regexps.html#cb1323-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[{ 0: '#', index: 0, input: '##-#' }, 1]</span></span></code></pre></div>
+<p>With <code>/g</code>, the match must start at <code>.lastIndex</code> or later. <code>.lastIndex</code> is updated. If there is no match, <code>null</code> is returned.</p>
+<div class="sourceCode" id="cb1324"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1324-1"><a href="ch_regexps.html#cb1324-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/g; re.lastIndex = 1;</span>
+<span id="cb1324-2"><a href="ch_regexps.html#cb1324-2" aria-hidden="true" tabindex="-1"></a>&gt; [re.exec('##-#'), re.lastIndex]</span>
+<span id="cb1324-3"><a href="ch_regexps.html#cb1324-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[{ 0: '#', index: 1, input: '##-#' }, 2]</span></span>
+<span id="cb1324-4"><a href="ch_regexps.html#cb1324-4" aria-hidden="true" tabindex="-1"></a>&gt; [re.exec('##-#'), re.lastIndex]</span>
+<span id="cb1324-5"><a href="ch_regexps.html#cb1324-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[{ 0: '#', index: 3, input: '##-#' }, 4]</span></span>
+<span id="cb1324-6"><a href="ch_regexps.html#cb1324-6" aria-hidden="true" tabindex="-1"></a>&gt; [re.exec('##-#'), re.lastIndex]</span>
+<span id="cb1324-7"><a href="ch_regexps.html#cb1324-7" aria-hidden="true" tabindex="-1"></a><span class="kw">[null, 0]</span></span></code></pre></div>
+<p>With <code>/y</code>, the match must start at exactly <code>.lastIndex</code>. <code>.lastIndex</code> is updated. If there is no match, <code>null</code> is returned.</p>
+<div class="sourceCode" id="cb1325"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1325-1"><a href="ch_regexps.html#cb1325-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/y; re.lastIndex = 1;</span>
+<span id="cb1325-2"><a href="ch_regexps.html#cb1325-2" aria-hidden="true" tabindex="-1"></a>&gt; [re.exec('##-#'), re.lastIndex]</span>
+<span id="cb1325-3"><a href="ch_regexps.html#cb1325-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[{ 0: '#', index: 1, input: '##-#' }, 2]</span></span>
+<span id="cb1325-4"><a href="ch_regexps.html#cb1325-4" aria-hidden="true" tabindex="-1"></a>&gt; [re.exec('##-#'), re.lastIndex]</span>
+<span id="cb1325-5"><a href="ch_regexps.html#cb1325-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[null, 0]</span></span></code></pre></div>
+<p>With <code>/yg</code>, <code>.exec()</code> behaves the same as with <code>/y</code>.</p>
+<h5 id="regexp.teststr-es3">43.6.2.2 <code>regExp.test(str)</code> [ES3]</h5>
+<p>This method behaves the same same as <code>.exec()</code>, but instead of returning a match object, it returns <code>true</code>, and instead of returning <code>null</code>, it returns <code>false</code>.</p>
+<p>For example, without either <code>/g</code> or <code>/y</code>, the result is always <code>true</code>:</p>
+<div class="sourceCode" id="cb1326"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1326-1"><a href="ch_regexps.html#cb1326-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/; re.lastIndex = 1;</span>
+<span id="cb1326-2"><a href="ch_regexps.html#cb1326-2" aria-hidden="true" tabindex="-1"></a>&gt; [re.test('##-#'), re.lastIndex]</span>
+<span id="cb1326-3"><a href="ch_regexps.html#cb1326-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[true, 1]</span></span>
+<span id="cb1326-4"><a href="ch_regexps.html#cb1326-4" aria-hidden="true" tabindex="-1"></a>&gt; [re.test('##-#'), re.lastIndex]</span>
+<span id="cb1326-5"><a href="ch_regexps.html#cb1326-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[true, 1]</span></span></code></pre></div>
+<p>With <code>/g</code>, there are two matches:</p>
+<div class="sourceCode" id="cb1327"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1327-1"><a href="ch_regexps.html#cb1327-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/g; re.lastIndex = 1;</span>
+<span id="cb1327-2"><a href="ch_regexps.html#cb1327-2" aria-hidden="true" tabindex="-1"></a>&gt; [re.test('##-#'), re.lastIndex]</span>
+<span id="cb1327-3"><a href="ch_regexps.html#cb1327-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[true, 2]</span></span>
+<span id="cb1327-4"><a href="ch_regexps.html#cb1327-4" aria-hidden="true" tabindex="-1"></a>&gt; [re.test('##-#'), re.lastIndex]</span>
+<span id="cb1327-5"><a href="ch_regexps.html#cb1327-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[true, 4]</span></span>
+<span id="cb1327-6"><a href="ch_regexps.html#cb1327-6" aria-hidden="true" tabindex="-1"></a>&gt; [re.test('##-#'), re.lastIndex]</span>
+<span id="cb1327-7"><a href="ch_regexps.html#cb1327-7" aria-hidden="true" tabindex="-1"></a><span class="kw">[false, 0]</span></span></code></pre></div>
+<p>With <code>/y</code>, there is only one match:</p>
+<div class="sourceCode" id="cb1328"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1328-1"><a href="ch_regexps.html#cb1328-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/y; re.lastIndex = 1;</span>
+<span id="cb1328-2"><a href="ch_regexps.html#cb1328-2" aria-hidden="true" tabindex="-1"></a>&gt; [re.test('##-#'), re.lastIndex]</span>
+<span id="cb1328-3"><a href="ch_regexps.html#cb1328-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[true, 2]</span></span>
+<span id="cb1328-4"><a href="ch_regexps.html#cb1328-4" aria-hidden="true" tabindex="-1"></a>&gt; [re.test('##-#'), re.lastIndex]</span>
+<span id="cb1328-5"><a href="ch_regexps.html#cb1328-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[false, 0]</span></span></code></pre></div>
+<p>With <code>/yg</code>, <code>.test()</code> behaves the same as with <code>/y</code>.</p>
+<h5 id="str.matchregexp-es3">43.6.2.3 <code>str.match(regExp)</code> [ES3]</h5>
+<p>Without <code>/g</code>, <code>.match()</code> works like <code>.exec()</code>. Either without <code>/y</code>:</p>
+<div class="sourceCode" id="cb1329"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1329-1"><a href="ch_regexps.html#cb1329-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/; re.lastIndex = 1;</span>
+<span id="cb1329-2"><a href="ch_regexps.html#cb1329-2" aria-hidden="true" tabindex="-1"></a>&gt; ['##-#'.match(re), re.lastIndex]</span>
+<span id="cb1329-3"><a href="ch_regexps.html#cb1329-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[{ 0: '#', index: 0, input: '##-#' }, 1]</span></span>
+<span id="cb1329-4"><a href="ch_regexps.html#cb1329-4" aria-hidden="true" tabindex="-1"></a>&gt; ['##-#'.match(re), re.lastIndex]</span>
+<span id="cb1329-5"><a href="ch_regexps.html#cb1329-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[{ 0: '#', index: 0, input: '##-#' }, 1]</span></span></code></pre></div>
+<p>Or with <code>/y</code>:</p>
+<div class="sourceCode" id="cb1330"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1330-1"><a href="ch_regexps.html#cb1330-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/y; re.lastIndex = 1;</span>
+<span id="cb1330-2"><a href="ch_regexps.html#cb1330-2" aria-hidden="true" tabindex="-1"></a>&gt; ['##-#'.match(re), re.lastIndex]</span>
+<span id="cb1330-3"><a href="ch_regexps.html#cb1330-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[{ 0: '#', index: 1, input: '##-#' }, 2]</span></span>
+<span id="cb1330-4"><a href="ch_regexps.html#cb1330-4" aria-hidden="true" tabindex="-1"></a>&gt; ['##-#'.match(re), re.lastIndex]</span>
+<span id="cb1330-5"><a href="ch_regexps.html#cb1330-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[null, 0]</span></span></code></pre></div>
+<p>With <code>/g</code>, we get all matches (group 0) in an Array. <code>.lastIndex</code> is ignored and reset to zero.</p>
+<div class="sourceCode" id="cb1331"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1331-1"><a href="ch_regexps.html#cb1331-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/g; re.lastIndex = 1;</span>
+<span id="cb1331-2"><a href="ch_regexps.html#cb1331-2" aria-hidden="true" tabindex="-1"></a>&gt; '##-#'.match(re)</span>
+<span id="cb1331-3"><a href="ch_regexps.html#cb1331-3" aria-hidden="true" tabindex="-1"></a><span class="kw">['#', '#', '#']</span></span>
+<span id="cb1331-4"><a href="ch_regexps.html#cb1331-4" aria-hidden="true" tabindex="-1"></a>&gt; re.lastIndex</span>
+<span id="cb1331-5"><a href="ch_regexps.html#cb1331-5" aria-hidden="true" tabindex="-1"></a><span class="kw">0</span></span></code></pre></div>
+<p><code>/yg</code> works like <code>/g</code>, but there are no gaps between matches:</p>
+<div class="sourceCode" id="cb1332"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1332-1"><a href="ch_regexps.html#cb1332-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/yg; re.lastIndex = 1;</span>
+<span id="cb1332-2"><a href="ch_regexps.html#cb1332-2" aria-hidden="true" tabindex="-1"></a>&gt; '##-#'.match(re)</span>
+<span id="cb1332-3"><a href="ch_regexps.html#cb1332-3" aria-hidden="true" tabindex="-1"></a><span class="kw">['#', '#']</span></span>
+<span id="cb1332-4"><a href="ch_regexps.html#cb1332-4" aria-hidden="true" tabindex="-1"></a>&gt; re.lastIndex</span>
+<span id="cb1332-5"><a href="ch_regexps.html#cb1332-5" aria-hidden="true" tabindex="-1"></a><span class="kw">0</span></span></code></pre></div>
+<h5 id="str.matchallregexp-es2020">43.6.2.4 <code>str.matchAll(regExp)</code> [ES2020]</h5>
+<p>If <code>/g</code> is not set, <code>.matchAll()</code> throws an exception:</p>
+<div class="sourceCode" id="cb1333"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1333-1"><a href="ch_regexps.html#cb1333-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/y; re.lastIndex = 1;</span>
+<span id="cb1333-2"><a href="ch_regexps.html#cb1333-2" aria-hidden="true" tabindex="-1"></a>&gt; '##-#'.matchAll(re)</span>
+<span id="cb1333-3"><a href="ch_regexps.html#cb1333-3" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: String.prototype.matchAll called with</span></span>
+<span id="cb1333-4"><a href="ch_regexps.html#cb1333-4" aria-hidden="true" tabindex="-1"></a><span class="kw">a non-global RegExp argument</span></span></code></pre></div>
+<p>If <code>/g</code> is set, matching starts at <code>.lastIndex</code> and that property isn’t changed:</p>
+<div class="sourceCode" id="cb1334"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1334-1"><a href="ch_regexps.html#cb1334-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/g; re.lastIndex = 1;</span>
+<span id="cb1334-2"><a href="ch_regexps.html#cb1334-2" aria-hidden="true" tabindex="-1"></a>&gt; [...'##-#'.matchAll(re)]</span>
+<span id="cb1334-3"><a href="ch_regexps.html#cb1334-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[</span></span>
+<span id="cb1334-4"><a href="ch_regexps.html#cb1334-4" aria-hidden="true" tabindex="-1"></a><span class="kw">  { 0: '#', index: 1, input: '##-#' },</span></span>
+<span id="cb1334-5"><a href="ch_regexps.html#cb1334-5" aria-hidden="true" tabindex="-1"></a><span class="kw">  { 0: '#', index: 3, input: '##-#' },</span></span>
+<span id="cb1334-6"><a href="ch_regexps.html#cb1334-6" aria-hidden="true" tabindex="-1"></a><span class="kw">]</span></span>
+<span id="cb1334-7"><a href="ch_regexps.html#cb1334-7" aria-hidden="true" tabindex="-1"></a>&gt; re.lastIndex</span>
+<span id="cb1334-8"><a href="ch_regexps.html#cb1334-8" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span></code></pre></div>
+<p>If <code>/yg</code> is set, the behavior is the same as with <code>/g</code>, but there are no gaps between matches:</p>
+<div class="sourceCode" id="cb1335"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1335-1"><a href="ch_regexps.html#cb1335-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/yg; re.lastIndex = 1;</span>
+<span id="cb1335-2"><a href="ch_regexps.html#cb1335-2" aria-hidden="true" tabindex="-1"></a>&gt; [...'##-#'.matchAll(re)]</span>
+<span id="cb1335-3"><a href="ch_regexps.html#cb1335-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[</span></span>
+<span id="cb1335-4"><a href="ch_regexps.html#cb1335-4" aria-hidden="true" tabindex="-1"></a><span class="kw">  { 0: '#', index: 1, input: '##-#' },</span></span>
+<span id="cb1335-5"><a href="ch_regexps.html#cb1335-5" aria-hidden="true" tabindex="-1"></a><span class="kw">]</span></span>
+<span id="cb1335-6"><a href="ch_regexps.html#cb1335-6" aria-hidden="true" tabindex="-1"></a>&gt; re.lastIndex</span>
+<span id="cb1335-7"><a href="ch_regexps.html#cb1335-7" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span></code></pre></div>
+<h5 id="str.replaceregexp-str-es3">43.6.2.5 <code>str.replace(regExp, str)</code> [ES3]</h5>
+<p>Without <code>/g</code> and <code>/y</code>, only the first occurrence is replaced:</p>
+<div class="sourceCode" id="cb1336"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1336-1"><a href="ch_regexps.html#cb1336-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/; re.lastIndex = 1;</span>
+<span id="cb1336-2"><a href="ch_regexps.html#cb1336-2" aria-hidden="true" tabindex="-1"></a>&gt; '##-#'.replace(re, 'x')</span>
+<span id="cb1336-3"><a href="ch_regexps.html#cb1336-3" aria-hidden="true" tabindex="-1"></a><span class="kw">'x#-#'</span></span>
+<span id="cb1336-4"><a href="ch_regexps.html#cb1336-4" aria-hidden="true" tabindex="-1"></a>&gt; re.lastIndex</span>
+<span id="cb1336-5"><a href="ch_regexps.html#cb1336-5" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span></code></pre></div>
+<p>With <code>/g</code>, all occurrences are replaced. <code>.lastIndex</code> is ignored but reset to zero.</p>
+<div class="sourceCode" id="cb1337"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1337-1"><a href="ch_regexps.html#cb1337-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/g; re.lastIndex = 1;</span>
+<span id="cb1337-2"><a href="ch_regexps.html#cb1337-2" aria-hidden="true" tabindex="-1"></a>&gt; '##-#'.replace(re, 'x')</span>
+<span id="cb1337-3"><a href="ch_regexps.html#cb1337-3" aria-hidden="true" tabindex="-1"></a><span class="kw">'xx-x'</span></span>
+<span id="cb1337-4"><a href="ch_regexps.html#cb1337-4" aria-hidden="true" tabindex="-1"></a>&gt; re.lastIndex</span>
+<span id="cb1337-5"><a href="ch_regexps.html#cb1337-5" aria-hidden="true" tabindex="-1"></a><span class="kw">0</span></span></code></pre></div>
+<p>With <code>/y</code>, only the (first) occurrence at <code>.lastIndex</code> is replaced. <code>.lastIndex</code> is updated.</p>
+<div class="sourceCode" id="cb1338"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1338-1"><a href="ch_regexps.html#cb1338-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/y; re.lastIndex = 1;</span>
+<span id="cb1338-2"><a href="ch_regexps.html#cb1338-2" aria-hidden="true" tabindex="-1"></a>&gt; '##-#'.replace(re, 'x')</span>
+<span id="cb1338-3"><a href="ch_regexps.html#cb1338-3" aria-hidden="true" tabindex="-1"></a><span class="kw">'#x-#'</span></span>
+<span id="cb1338-4"><a href="ch_regexps.html#cb1338-4" aria-hidden="true" tabindex="-1"></a>&gt; re.lastIndex</span>
+<span id="cb1338-5"><a href="ch_regexps.html#cb1338-5" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span></code></pre></div>
+<p><code>/yg</code> works like <code>/g</code>, but gaps between matches are not allowed:</p>
+<div class="sourceCode" id="cb1339"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1339-1"><a href="ch_regexps.html#cb1339-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/yg; re.lastIndex = 1;</span>
+<span id="cb1339-2"><a href="ch_regexps.html#cb1339-2" aria-hidden="true" tabindex="-1"></a>&gt; '##-#'.replace(re, 'x')</span>
+<span id="cb1339-3"><a href="ch_regexps.html#cb1339-3" aria-hidden="true" tabindex="-1"></a><span class="kw">'xx-#'</span></span>
+<span id="cb1339-4"><a href="ch_regexps.html#cb1339-4" aria-hidden="true" tabindex="-1"></a>&gt; re.lastIndex</span>
+<span id="cb1339-5"><a href="ch_regexps.html#cb1339-5" aria-hidden="true" tabindex="-1"></a><span class="kw">0</span></span></code></pre></div>
+<h5 id="str.replaceallregexp-str-es2021">43.6.2.6 <code>str.replaceAll(regExp, str)</code> [ES2021]</h5>
+<p><code>.replaceAll()</code> works like <code>.replace()</code> but throws an exception if <code>/g</code> is not set:</p>
+<div class="sourceCode" id="cb1340"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1340-1"><a href="ch_regexps.html#cb1340-1" aria-hidden="true" tabindex="-1"></a>&gt; const re = /#/y; re.lastIndex = 1;</span>
+<span id="cb1340-2"><a href="ch_regexps.html#cb1340-2" aria-hidden="true" tabindex="-1"></a>&gt; '##-#'.replaceAll(re, 'x')</span>
+<span id="cb1340-3"><a href="ch_regexps.html#cb1340-3" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: String.prototype.replaceAll called</span></span>
+<span id="cb1340-4"><a href="ch_regexps.html#cb1340-4" aria-hidden="true" tabindex="-1"></a><span class="kw">with a non-global RegExp argument</span></span></code></pre></div>
+<h4 id="four-pitfalls-of-g-and-y-and-how-to-deal-with-them">43.6.3 Four pitfalls of <code>/g</code> and <code>/y</code> and how to deal with them</h4>
+<p>We will first look at four pitfalls of <code>/g</code> and <code>/y</code> and then at ways of dealing with those pitfalls.</p>
+<h5 id="pitfall-1-we-cant-inline-a-regular-expression-with-g-or-y">43.6.3.1 Pitfall 1: We can’t inline a regular expression with <code>/g</code> or <code>/y</code></h5>
+<p>A regular expression with <code>/g</code> can’t be inlined. For example, in the following <code>while</code> loop, the regular expression is created fresh, every time the condition is checked. Therefore, its <code>.lastIndex</code> is always zero and the loop never terminates.</p>
+<div class="sourceCode" id="cb1341"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1341-1"><a href="ch_regexps.html#cb1341-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> matchObj<span class="op">;</span></span>
+<span id="cb1341-2"><a href="ch_regexps.html#cb1341-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Infinite loop</span></span>
+<span id="cb1341-3"><a href="ch_regexps.html#cb1341-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (matchObj <span class="op">=</span> <span class="ss">/a</span><span class="sc">+</span><span class="ss">/g</span><span class="op">.</span><span class="fu">exec</span>(<span class="st">'bbbaabaaa'</span>)) {</span>
+<span id="cb1341-4"><a href="ch_regexps.html#cb1341-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(matchObj[<span class="dv">0</span>])<span class="op">;</span></span>
+<span id="cb1341-5"><a href="ch_regexps.html#cb1341-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>With <code>/y</code>, the problem is the same.</p>
+<h5 id="pitfall-2-removing-g-or-y-can-break-code">43.6.3.2 Pitfall 2: Removing <code>/g</code> or <code>/y</code> can break code</h5>
+<p>If code expects a regular expression with <code>/g</code> and has a loop over the results of <code>.exec()</code> or <code>.test()</code>, then a regular expression without <code>/g</code> can cause an infinite loop:</p>
+<div class="sourceCode" id="cb1342"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1342-1"><a href="ch_regexps.html#cb1342-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">collectMatches</span>(regExp<span class="op">,</span> str) {</span>
+<span id="cb1342-2"><a href="ch_regexps.html#cb1342-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> matches <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb1342-3"><a href="ch_regexps.html#cb1342-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> matchObj<span class="op">;</span></span>
+<span id="cb1342-4"><a href="ch_regexps.html#cb1342-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Infinite loop</span></span>
+<span id="cb1342-5"><a href="ch_regexps.html#cb1342-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (matchObj <span class="op">=</span> regExp<span class="op">.</span><span class="fu">exec</span>(str)) {</span>
+<span id="cb1342-6"><a href="ch_regexps.html#cb1342-6" aria-hidden="true" tabindex="-1"></a>    matches<span class="op">.</span><span class="fu">push</span>(matchObj[<span class="dv">0</span>])<span class="op">;</span></span>
+<span id="cb1342-7"><a href="ch_regexps.html#cb1342-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1342-8"><a href="ch_regexps.html#cb1342-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> matches<span class="op">;</span></span>
+<span id="cb1342-9"><a href="ch_regexps.html#cb1342-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1342-10"><a href="ch_regexps.html#cb1342-10" aria-hidden="true" tabindex="-1"></a><span class="fu">collectMatches</span>(<span class="ss">/a</span><span class="sc">+</span><span class="ss">/</span><span class="op">,</span> <span class="st">'bbbaabaaa'</span>)<span class="op">;</span> <span class="co">// Missing: flag /g</span></span></code></pre></div>
+<p>Why is there an infinity loop? Because <code>.exec()</code> always returns the first result, a match object, and never <code>null</code>.</p>
+<p>With <code>/y</code>, the problem is the same.</p>
+<h5 id="pitfall-3-adding-g-or-y-can-break-code">43.6.3.3 Pitfall 3: Adding <code>/g</code> or <code>/y</code> can break code</h5>
+<p>With <code>.test()</code>, there is another caveat: It is affected by <code>.lastIndex</code>. Therefore, if we want to check exactly once if a regular expression matches a string, then the regular expression must not have <code>/g</code>. Otherwise, we generally get a different result every time we call <code>.test()</code>:</p>
+<div class="sourceCode" id="cb1343"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1343-1"><a href="ch_regexps.html#cb1343-1" aria-hidden="true" tabindex="-1"></a>&gt; const regExp = /^X/g;</span>
+<span id="cb1343-2"><a href="ch_regexps.html#cb1343-2" aria-hidden="true" tabindex="-1"></a>&gt; [regExp.test('Xa'), regExp.lastIndex]</span>
+<span id="cb1343-3"><a href="ch_regexps.html#cb1343-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[ true, 1 ]</span></span>
+<span id="cb1343-4"><a href="ch_regexps.html#cb1343-4" aria-hidden="true" tabindex="-1"></a>&gt; [regExp.test('Xa'), regExp.lastIndex]</span>
+<span id="cb1343-5"><a href="ch_regexps.html#cb1343-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[ false, 0 ]</span></span>
+<span id="cb1343-6"><a href="ch_regexps.html#cb1343-6" aria-hidden="true" tabindex="-1"></a>&gt; [regExp.test('Xa'), regExp.lastIndex]</span>
+<span id="cb1343-7"><a href="ch_regexps.html#cb1343-7" aria-hidden="true" tabindex="-1"></a><span class="kw">[ true, 1 ]</span></span></code></pre></div>
+<p>The first invocation produces a match and updates <code>.lastIndex</code>. The second invocation does not find a match and resets <code>.lastIndex</code> to zero.</p>
+<p>If we create a regular expression specifically for <code>.test()</code>, then we probably won’t add <code>/g</code>. However, the likeliness of encountering <code>/g</code> increases if we use the same regular expression for replacing and for testing.</p>
+<p>Once again, this problem also exists with <code>/y</code>:</p>
+<div class="sourceCode" id="cb1344"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1344-1"><a href="ch_regexps.html#cb1344-1" aria-hidden="true" tabindex="-1"></a>&gt; const regExp = /^X/y;</span>
+<span id="cb1344-2"><a href="ch_regexps.html#cb1344-2" aria-hidden="true" tabindex="-1"></a>&gt; regExp.test('Xa')</span>
+<span id="cb1344-3"><a href="ch_regexps.html#cb1344-3" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb1344-4"><a href="ch_regexps.html#cb1344-4" aria-hidden="true" tabindex="-1"></a>&gt; regExp.test('Xa')</span>
+<span id="cb1344-5"><a href="ch_regexps.html#cb1344-5" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb1344-6"><a href="ch_regexps.html#cb1344-6" aria-hidden="true" tabindex="-1"></a>&gt; regExp.test('Xa')</span>
+<span id="cb1344-7"><a href="ch_regexps.html#cb1344-7" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h5 id="pitfall-4-code-can-produce-unexpected-results-if-.lastindex-isnt-zero">43.6.3.4 Pitfall 4: Code can produce unexpected results if <code>.lastIndex</code> isn’t zero</h5>
+<p>Given all the regular expression operations that are affected by <code>.lastIndex</code>, we must be careful with many algorithms that <code>.lastIndex</code> is zero at the beginning. Otherwise, we may get unexpected results:</p>
+<div class="sourceCode" id="cb1345"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1345-1"><a href="ch_regexps.html#cb1345-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">countMatches</span>(regExp<span class="op">,</span> str) {</span>
+<span id="cb1345-2"><a href="ch_regexps.html#cb1345-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1345-3"><a href="ch_regexps.html#cb1345-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (regExp<span class="op">.</span><span class="fu">test</span>(str)) {</span>
+<span id="cb1345-4"><a href="ch_regexps.html#cb1345-4" aria-hidden="true" tabindex="-1"></a>    count<span class="op">++;</span></span>
+<span id="cb1345-5"><a href="ch_regexps.html#cb1345-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1345-6"><a href="ch_regexps.html#cb1345-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> count<span class="op">;</span></span>
+<span id="cb1345-7"><a href="ch_regexps.html#cb1345-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1345-8"><a href="ch_regexps.html#cb1345-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1345-9"><a href="ch_regexps.html#cb1345-9" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> myRegExp <span class="op">=</span> <span class="ss">/a/g</span><span class="op">;</span></span>
+<span id="cb1345-10"><a href="ch_regexps.html#cb1345-10" aria-hidden="true" tabindex="-1"></a>myRegExp<span class="op">.</span><span class="at">lastIndex</span> <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb1345-11"><a href="ch_regexps.html#cb1345-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1345-12"><a href="ch_regexps.html#cb1345-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">countMatches</span>(myRegExp<span class="op">,</span> <span class="st">'babaa'</span>)<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span> <span class="co">// should be 3</span></span></code></pre></div>
+<p>Normally, <code>.lastIndex</code> is zero in newly created regular expressions and we won’t change it explicitly like we did in the example. But <code>.lastIndex</code> can still end up not being zero if we use the regular expression multiple times.</p>
+<h5 id="how-to-avoid-the-pitfalls-of-g-and-y">43.6.3.5 How to avoid the pitfalls of <code>/g</code> and <code>/y</code></h5>
+<p>As an example of dealing with <code>/g</code> and <code>.lastIndex</code>, we revisit <code>countMatches()</code> from the previous example. How do we prevent a wrong regular expression from breaking our code? Let’s look at three approaches.</p>
+<h6 id="throwing-exceptions">43.6.3.5.1 Throwing exceptions</h6>
+<p>First, we can throw an exception if <code>/g</code> isn’t set or <code>.lastIndex</code> isn’t zero:</p>
+<div class="sourceCode" id="cb1346"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1346-1"><a href="ch_regexps.html#cb1346-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">countMatches</span>(regExp<span class="op">,</span> str) {</span>
+<span id="cb1346-2"><a href="ch_regexps.html#cb1346-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>regExp<span class="op">.</span><span class="at">global</span>) {</span>
+<span id="cb1346-3"><a href="ch_regexps.html#cb1346-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Flag /g of regExp must be set'</span>)<span class="op">;</span></span>
+<span id="cb1346-4"><a href="ch_regexps.html#cb1346-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1346-5"><a href="ch_regexps.html#cb1346-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (regExp<span class="op">.</span><span class="at">lastIndex</span> <span class="op">!==</span> <span class="dv">0</span>) {</span>
+<span id="cb1346-6"><a href="ch_regexps.html#cb1346-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'regExp.lastIndex must be zero'</span>)<span class="op">;</span></span>
+<span id="cb1346-7"><a href="ch_regexps.html#cb1346-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1346-8"><a href="ch_regexps.html#cb1346-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1346-9"><a href="ch_regexps.html#cb1346-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1346-10"><a href="ch_regexps.html#cb1346-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (regExp<span class="op">.</span><span class="fu">test</span>(str)) {</span>
+<span id="cb1346-11"><a href="ch_regexps.html#cb1346-11" aria-hidden="true" tabindex="-1"></a>    count<span class="op">++;</span></span>
+<span id="cb1346-12"><a href="ch_regexps.html#cb1346-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1346-13"><a href="ch_regexps.html#cb1346-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> count<span class="op">;</span></span>
+<span id="cb1346-14"><a href="ch_regexps.html#cb1346-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h6 id="cloning-regular-expressions">43.6.3.5.2 Cloning regular expressions</h6>
+<p>Second, we can clone the parameter. That has the added benefit that <code>regExp</code> won’t be changed.</p>
+<div class="sourceCode" id="cb1347"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1347-1"><a href="ch_regexps.html#cb1347-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">countMatches</span>(regExp<span class="op">,</span> str) {</span>
+<span id="cb1347-2"><a href="ch_regexps.html#cb1347-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> cloneFlags <span class="op">=</span> regExp<span class="op">.</span><span class="at">flags</span> <span class="op">+</span> (regExp<span class="op">.</span><span class="at">global</span> <span class="op">?</span> <span class="st">''</span> <span class="op">:</span> <span class="st">'g'</span>)<span class="op">;</span></span>
+<span id="cb1347-3"><a href="ch_regexps.html#cb1347-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> clone <span class="op">=</span> <span class="kw">new</span> <span class="bu">RegExp</span>(regExp<span class="op">,</span> cloneFlags)<span class="op">;</span></span>
+<span id="cb1347-4"><a href="ch_regexps.html#cb1347-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1347-5"><a href="ch_regexps.html#cb1347-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1347-6"><a href="ch_regexps.html#cb1347-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (clone<span class="op">.</span><span class="fu">test</span>(str)) {</span>
+<span id="cb1347-7"><a href="ch_regexps.html#cb1347-7" aria-hidden="true" tabindex="-1"></a>    count<span class="op">++;</span></span>
+<span id="cb1347-8"><a href="ch_regexps.html#cb1347-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1347-9"><a href="ch_regexps.html#cb1347-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> count<span class="op">;</span></span>
+<span id="cb1347-10"><a href="ch_regexps.html#cb1347-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h6 id="using-an-operation-that-isnt-affected-by-.lastindex-or-flags">43.6.3.5.3 Using an operation that isn’t affected by <code>.lastIndex</code> or flags</h6>
+<p>Several regular expression operations are not affected by <code>.lastIndex</code> or by flags. For example, <code>.match()</code> ignores <code>.lastIndex</code> if <code>/g</code> is present:</p>
+<div class="sourceCode" id="cb1348"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1348-1"><a href="ch_regexps.html#cb1348-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">countMatches</span>(regExp<span class="op">,</span> str) {</span>
+<span id="cb1348-2"><a href="ch_regexps.html#cb1348-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>regExp<span class="op">.</span><span class="at">global</span>) {</span>
+<span id="cb1348-3"><a href="ch_regexps.html#cb1348-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Flag /g of regExp must be set'</span>)<span class="op">;</span></span>
+<span id="cb1348-4"><a href="ch_regexps.html#cb1348-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1348-5"><a href="ch_regexps.html#cb1348-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (str<span class="op">.</span><span class="fu">match</span>(regExp) <span class="op">??</span> [])<span class="op">.</span><span class="at">length</span><span class="op">;</span></span>
+<span id="cb1348-6"><a href="ch_regexps.html#cb1348-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1348-7"><a href="ch_regexps.html#cb1348-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1348-8"><a href="ch_regexps.html#cb1348-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> myRegExp <span class="op">=</span> <span class="ss">/a/g</span><span class="op">;</span></span>
+<span id="cb1348-9"><a href="ch_regexps.html#cb1348-9" aria-hidden="true" tabindex="-1"></a>myRegExp<span class="op">.</span><span class="at">lastIndex</span> <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb1348-10"><a href="ch_regexps.html#cb1348-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">countMatches</span>(myRegExp<span class="op">,</span> <span class="st">'babaa'</span>)<span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span> <span class="co">// OK!</span></span></code></pre></div>
+<p>Here, <code>countMatches()</code> works even though we didn’t check or fix <code>.lastIndex</code>.</p>
+<h4 id="use-case-for-.lastindex-starting-matching-at-a-given-index">43.6.4 Use case for <code>.lastIndex</code>: starting matching at a given index</h4>
+<p>Apart from storing state, <code>.lastIndex</code> can also be used to start matching at a given index. This section describes how.</p>
+<h5 id="example-checking-if-a-regular-expression-matches-at-a-given-index">43.6.4.1 Example: Checking if a regular expression matches at a given index</h5>
+<p>Given that <code>.test()</code> is affected by <code>/y</code> and <code>.lastIndex</code>, we can use it to check if a regular expression <code>regExp</code> matches a string <code>str</code> at a given <code>index</code>:</p>
+<div class="sourceCode" id="cb1349"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1349-1"><a href="ch_regexps.html#cb1349-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">matchesStringAt</span>(regExp<span class="op">,</span> str<span class="op">,</span> index) {</span>
+<span id="cb1349-2"><a href="ch_regexps.html#cb1349-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>regExp<span class="op">.</span><span class="at">sticky</span>) {</span>
+<span id="cb1349-3"><a href="ch_regexps.html#cb1349-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Flag /y of regExp must be set'</span>)<span class="op">;</span></span>
+<span id="cb1349-4"><a href="ch_regexps.html#cb1349-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1349-5"><a href="ch_regexps.html#cb1349-5" aria-hidden="true" tabindex="-1"></a>  regExp<span class="op">.</span><span class="at">lastIndex</span> <span class="op">=</span> index<span class="op">;</span></span>
+<span id="cb1349-6"><a href="ch_regexps.html#cb1349-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> regExp<span class="op">.</span><span class="fu">test</span>(str)<span class="op">;</span></span>
+<span id="cb1349-7"><a href="ch_regexps.html#cb1349-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1349-8"><a href="ch_regexps.html#cb1349-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1349-9"><a href="ch_regexps.html#cb1349-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matchesStringAt</span>(<span class="ss">/x</span><span class="sc">+</span><span class="ss">/y</span><span class="op">,</span> <span class="st">'aaxxx'</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span>
+<span id="cb1349-10"><a href="ch_regexps.html#cb1349-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1349-11"><a href="ch_regexps.html#cb1349-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matchesStringAt</span>(<span class="ss">/x</span><span class="sc">+</span><span class="ss">/y</span><span class="op">,</span> <span class="st">'aaxxx'</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>regExp</code> is anchored to <code>.lastIndex</code> due to <code>/y</code>.</p>
+<p>Note that we must not use the assertion <code>^</code> which would anchor <code>regExp</code> to the beginning of the input string.</p>
+<h5 id="example-finding-the-location-of-a-match-starting-at-a-given-index">43.6.4.2 Example: Finding the location of a match, starting at a given index</h5>
+<p><code>.search()</code> lets us find the location where a regular expression matches:</p>
+<div class="sourceCode" id="cb1350"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1350-1"><a href="ch_regexps.html#cb1350-1" aria-hidden="true" tabindex="-1"></a>&gt; '#--#'.search(/#/)</span>
+<span id="cb1350-2"><a href="ch_regexps.html#cb1350-2" aria-hidden="true" tabindex="-1"></a><span class="kw">0</span></span></code></pre></div>
+<p>Alas, we can’t change where <code>.search()</code> starts looking for matches. As a work-around, we can use <code>.exec()</code> for searching:</p>
+<div class="sourceCode" id="cb1351"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1351-1"><a href="ch_regexps.html#cb1351-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">searchAt</span>(regExp<span class="op">,</span> str<span class="op">,</span> index) {</span>
+<span id="cb1351-2"><a href="ch_regexps.html#cb1351-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>regExp<span class="op">.</span><span class="at">global</span> <span class="op">&amp;&amp;</span> <span class="op">!</span>regExp<span class="op">.</span><span class="at">sticky</span>) {</span>
+<span id="cb1351-3"><a href="ch_regexps.html#cb1351-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Either flag /g or flag /y of regExp must be set'</span>)<span class="op">;</span></span>
+<span id="cb1351-4"><a href="ch_regexps.html#cb1351-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1351-5"><a href="ch_regexps.html#cb1351-5" aria-hidden="true" tabindex="-1"></a>  regExp<span class="op">.</span><span class="at">lastIndex</span> <span class="op">=</span> index<span class="op">;</span></span>
+<span id="cb1351-6"><a href="ch_regexps.html#cb1351-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> match <span class="op">=</span> regExp<span class="op">.</span><span class="fu">exec</span>(str)<span class="op">;</span></span>
+<span id="cb1351-7"><a href="ch_regexps.html#cb1351-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (match) {</span>
+<span id="cb1351-8"><a href="ch_regexps.html#cb1351-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> match<span class="op">.</span><span class="at">index</span><span class="op">;</span></span>
+<span id="cb1351-9"><a href="ch_regexps.html#cb1351-9" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb1351-10"><a href="ch_regexps.html#cb1351-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1351-11"><a href="ch_regexps.html#cb1351-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1351-12"><a href="ch_regexps.html#cb1351-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1351-13"><a href="ch_regexps.html#cb1351-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1351-14"><a href="ch_regexps.html#cb1351-14" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1351-15"><a href="ch_regexps.html#cb1351-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">searchAt</span>(<span class="ss">/#/g</span><span class="op">,</span> <span class="st">'#--#'</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb1351-16"><a href="ch_regexps.html#cb1351-16" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1351-17"><a href="ch_regexps.html#cb1351-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">searchAt</span>(<span class="ss">/#/g</span><span class="op">,</span> <span class="st">'#--#'</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="example-replacing-an-occurrence-at-a-given-index">43.6.4.3 Example: Replacing an occurrence at a given index</h5>
+<p>When used without <code>/g</code> and with <code>/y</code>, <code>.replace()</code> makes one replacement – if there is a match at <code>.lastIndex</code>:</p>
+<div class="sourceCode" id="cb1352"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1352-1"><a href="ch_regexps.html#cb1352-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">replaceOnceAt</span>(str<span class="op">,</span> regExp<span class="op">,</span> replacement<span class="op">,</span> index) {</span>
+<span id="cb1352-2"><a href="ch_regexps.html#cb1352-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>(regExp<span class="op">.</span><span class="at">sticky</span> <span class="op">&amp;&amp;</span> <span class="op">!</span>regExp<span class="op">.</span><span class="at">global</span>)) {</span>
+<span id="cb1352-3"><a href="ch_regexps.html#cb1352-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Flag /y must be set, flag /g must not be set'</span>)<span class="op">;</span></span>
+<span id="cb1352-4"><a href="ch_regexps.html#cb1352-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1352-5"><a href="ch_regexps.html#cb1352-5" aria-hidden="true" tabindex="-1"></a>  regExp<span class="op">.</span><span class="at">lastIndex</span> <span class="op">=</span> index<span class="op">;</span></span>
+<span id="cb1352-6"><a href="ch_regexps.html#cb1352-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> str<span class="op">.</span><span class="fu">replace</span>(regExp<span class="op">,</span> replacement)<span class="op">;</span></span>
+<span id="cb1352-7"><a href="ch_regexps.html#cb1352-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1352-8"><a href="ch_regexps.html#cb1352-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1352-9"><a href="ch_regexps.html#cb1352-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replaceOnceAt</span>(<span class="st">'aa aaaa a'</span><span class="op">,</span> <span class="ss">/a</span><span class="sc">+</span><span class="ss">/y</span><span class="op">,</span> <span class="st">'X'</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">,</span> <span class="st">'X aaaa a'</span>)<span class="op">;</span></span>
+<span id="cb1352-10"><a href="ch_regexps.html#cb1352-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1352-11"><a href="ch_regexps.html#cb1352-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replaceOnceAt</span>(<span class="st">'aa aaaa a'</span><span class="op">,</span> <span class="ss">/a</span><span class="sc">+</span><span class="ss">/y</span><span class="op">,</span> <span class="st">'X'</span><span class="op">,</span> <span class="dv">3</span>)<span class="op">,</span> <span class="st">'aa X a'</span>)<span class="op">;</span></span>
+<span id="cb1352-12"><a href="ch_regexps.html#cb1352-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1352-13"><a href="ch_regexps.html#cb1352-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replaceOnceAt</span>(<span class="st">'aa aaaa a'</span><span class="op">,</span> <span class="ss">/a</span><span class="sc">+</span><span class="ss">/y</span><span class="op">,</span> <span class="st">'X'</span><span class="op">,</span> <span class="dv">8</span>)<span class="op">,</span> <span class="st">'aa aaaa X'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="the-downsides-of-.lastindex">43.6.5 The downsides of <code>.lastIndex</code></h4>
+<p>The regular expression property <code>.lastIndex</code> has two significant downsides:</p>
+<ul>
+<li>It makes regular expressions stateful:
+<ul>
+<li>We now have to be mindful of the states of regular expressions and how we share them.</li>
+<li>For many use cases, we can’t make them immutable via freezing, either.</li>
+</ul></li>
+<li>Support for <code>.lastIndex</code> is inconsistent among regular expression operations.</li>
+</ul>
+<p>On the upside, <code>.lastIndex</code> also gives us additional useful functionality: We can dictate where matching should begin (for some operations).</p>
+<h4 id="summary-.global-g-and-.sticky-y">43.6.6 Summary: <code>.global</code> (<code>/g</code>) and <code>.sticky</code> (<code>/y</code>)</h4>
+<p>The following two methods are completely unaffected by <code>/g</code> and <code>/y</code>:</p>
+<ul>
+<li><code>String.prototype.search()</code></li>
+<li><code>String.prototype.split()</code></li>
+</ul>
+<p>This table explains how the remaining regular-expression-related methods are affected by these two flags:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th><code>/</code></th>
+<th><code>/g</code></th>
+<th><code>/y</code></th>
+<th><code>/yg</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>r.exec(s)</code></td>
+<td><code>{i:0}</code></td>
+<td><code>{i:1}</code></td>
+<td><code>{i:1}</code></td>
+<td><code>{i:1}</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><code>.lI</code> unch</td>
+<td><code>.lI</code> upd</td>
+<td><code>.lI</code> upd</td>
+<td><code>.lI</code> upd</td>
+</tr>
+<tr class="odd">
+<td><code>r.test(s)</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><code>.lI</code> unch</td>
+<td><code>.lI</code> upd</td>
+<td><code>.lI</code> upd</td>
+<td><code>.lI</code> upd</td>
+</tr>
+<tr class="odd">
+<td><code>s.match(r)</code></td>
+<td><code>{i:0}</code></td>
+<td><code>["#","#","#"]</code></td>
+<td><code>{i:1}</code></td>
+<td><code>["#","#"]</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><code>.lI</code> unch</td>
+<td><code>.lI</code> reset</td>
+<td><code>.lI</code> upd</td>
+<td><code>.lI</code> reset</td>
+</tr>
+<tr class="odd">
+<td><code>s.matchAll(r)</code></td>
+<td><code>TypeError</code></td>
+<td><code>[{i:1}, {i:3}]</code></td>
+<td><code>TypeError</code></td>
+<td><code>[{i:1}]</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td><code>.lI</code> unch</td>
+<td></td>
+<td><code>.lI</code> unch</td>
+</tr>
+<tr class="odd">
+<td><code>s.replace(r, 'x')</code></td>
+<td><code>"x#-#"</code></td>
+<td><code>"xx-x"</code></td>
+<td><code>"#x-#"</code></td>
+<td><code>"xx-#"</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><code>.lI</code> unch</td>
+<td><code>.lI</code> reset</td>
+<td><code>.lI</code> upd</td>
+<td><code>.lI</code> reset</td>
+</tr>
+<tr class="odd">
+<td><code>s.replaceAll(r, 'x')</code></td>
+<td><code>TypeError</code></td>
+<td><code>"xx-x"</code></td>
+<td><code>TypeError</code></td>
+<td><code>"xx-#"</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td><code>.lI</code> reset</td>
+<td></td>
+<td><code>.lI</code> reset</td>
+</tr>
+</tbody>
+</table>
+<p>Variables:</p>
+<div class="sourceCode" id="cb1353"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1353-1"><a href="ch_regexps.html#cb1353-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> r <span class="op">=</span> <span class="ss">/#/</span><span class="op">;</span> r<span class="op">.</span><span class="at">lastIndex</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1353-2"><a href="ch_regexps.html#cb1353-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> s <span class="op">=</span> <span class="st">'##-#'</span><span class="op">;</span></span></code></pre></div>
+<p>Abbreviations:</p>
+<ul>
+<li><code>{i:2}</code>: match object whose property <code>.index</code> has the value <code>2</code></li>
+<li><code>.lI</code> upd: <code>.lastIndex</code> is updated</li>
+<li><code>.lI</code> reset: <code>.lastIndex</code> is reset to zero</li>
+<li><code>.lI</code> unch: <code>.lastIndex</code> is unchanged</li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/external-link-regular.svg" height="24">&nbsp; <strong>The Node.js script that generated the previous table</strong></p>
+<p>The previous table was generated via <a href="https://gist.github.com/rauschma/5c90e6c19923611521a61e199d8cb15b">a Node.js script</a>.</p>
+</div>
+<h3 id="techniques-for-working-with-regular-expressions">43.7 Techniques for working with regular expressions</h3>
+<h4 id="escapeForRegExp">43.7.1 Escaping arbitrary text for regular expressions</h4>
+<p>The following function escapes an arbitrary text so that it is matched verbatim if we put it inside a regular expression:</p>
+<div class="sourceCode" id="cb1354"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1354-1"><a href="ch_regexps.html#cb1354-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">escapeForRegExp</span>(str) {</span>
+<span id="cb1354-2"><a href="ch_regexps.html#cb1354-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> str<span class="op">.</span><span class="fu">replace</span>(<span class="ss">/</span><span class="sc">[\\^$.*+?()[\]{}|]</span><span class="ss">/g</span><span class="op">,</span> <span class="st">'</span><span class="sc">\\</span><span class="st">$&amp;'</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1354-3"><a href="ch_regexps.html#cb1354-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1354-4"><a href="ch_regexps.html#cb1354-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">escapeForRegExp</span>(<span class="st">'[yes?]'</span>)<span class="op">,</span> <span class="bu">String</span><span class="op">.</span><span class="fu">raw</span><span class="vs">`\[yes\?\]`</span>)<span class="op">;</span></span>
+<span id="cb1354-5"><a href="ch_regexps.html#cb1354-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">escapeForRegExp</span>(<span class="st">'_g_'</span>)<span class="op">,</span> <span class="bu">String</span><span class="op">.</span><span class="fu">raw</span><span class="vs">`_g_`</span>)<span class="op">;</span></span></code></pre></div>
+<p>In line A, we escape all syntax characters. We have to be selective because the regular expression flag <code>/u</code> forbids many escapes – for example: <code>\a \: \-</code></p>
+<p><code>escapeForRegExp()</code> has two use cases:</p>
+<ul>
+<li>We want to insert plain text into a regular expression that we create dynamically via <code>new RegExp()</code>.</li>
+<li>We want to replace all occurrences of a plain text string via the regular expression method <code>.replace()</code> (and can’t use <code>.replaceAll()</code>).</li>
+</ul>
+<p><code>.replace()</code> only lets us replace plain text once. With <code>escapeForRegExp()</code>, we can work around that limitation:</p>
+<div class="sourceCode" id="cb1355"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1355-1"><a href="ch_regexps.html#cb1355-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> plainText <span class="op">=</span> <span class="st">':-)'</span><span class="op">;</span></span>
+<span id="cb1355-2"><a href="ch_regexps.html#cb1355-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> regExp <span class="op">=</span> <span class="kw">new</span> <span class="bu">RegExp</span>(<span class="fu">escapeForRegExp</span>(plainText)<span class="op">,</span> <span class="st">'ug'</span>)<span class="op">;</span></span>
+<span id="cb1355-3"><a href="ch_regexps.html#cb1355-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1355-4"><a href="ch_regexps.html#cb1355-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">':-) :-) :-)'</span><span class="op">.</span><span class="fu">replace</span>(regExp<span class="op">,</span> <span class="st">'🙂'</span>)<span class="op">,</span> <span class="st">'🙂 🙂 🙂'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="matching-everything-or-nothing">43.7.2 Matching everything or nothing</h4>
+<p>Sometimes, we may need a regular expression that matches everything or nothing – for example, as a default value.</p>
+<ul>
+<li><p>Match everything: <code>/(?:)/</code></p>
+<p>The empty group <code>()</code> matches everything. We make it non-capturing (via <code>?:</code>), to avoid unnecessary work.</p>
+<div class="sourceCode" id="cb1356"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1356-1"><a href="ch_regexps.html#cb1356-1" aria-hidden="true" tabindex="-1"></a>&gt; /(?:)/.test('')</span>
+<span id="cb1356-2"><a href="ch_regexps.html#cb1356-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb1356-3"><a href="ch_regexps.html#cb1356-3" aria-hidden="true" tabindex="-1"></a>&gt; /(?:)/.test('abc')</span>
+<span id="cb1356-4"><a href="ch_regexps.html#cb1356-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div></li>
+<li><p>Match nothing: <code>/.^/</code></p>
+<p><code>^</code> only matches at the beginning of a string. The dot moves matching beyond the first character and now <code>^</code> doesn’t match anymore.</p>
+<div class="sourceCode" id="cb1357"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1357-1"><a href="ch_regexps.html#cb1357-1" aria-hidden="true" tabindex="-1"></a>&gt; /.^/.test('')</span>
+<span id="cb1357-2"><a href="ch_regexps.html#cb1357-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb1357-3"><a href="ch_regexps.html#cb1357-3" aria-hidden="true" tabindex="-1"></a>&gt; /.^/.test('abc')</span>
+<span id="cb1357-4"><a href="ch_regexps.html#cb1357-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div></li>
+</ul>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/34">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_dates.html">44 Dates (<code>Date</code>)</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

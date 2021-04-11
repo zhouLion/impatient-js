@@ -1,0 +1,436 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_maps">33 Maps (<code>Map</code>)</h2>
+<p><a id="index-entry-418" class="index-entry"></a><a id="index-entry-419" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>33.1 <a href="ch_maps.html#using-maps">Using Maps</a>
+<ul>
+<li>33.1.1 <a href="ch_maps.html#creating-maps">Creating Maps</a></li>
+<li>33.1.2 <a href="ch_maps.html#copying-maps">Copying Maps</a></li>
+<li>33.1.3 <a href="ch_maps.html#working-with-single-entries">Working with single entries</a></li>
+<li>33.1.4 <a href="ch_maps.html#determining-the-size-of-a-map-and-clearing-it">Determining the size of a Map and clearing it</a></li>
+<li>33.1.5 <a href="ch_maps.html#getting-the-keys-and-values-of-a-map">Getting the keys and values of a Map</a></li>
+<li>33.1.6 <a href="ch_maps.html#getting-the-entries-of-a-map">Getting the entries of a Map</a></li>
+<li>33.1.7 <a href="ch_maps.html#listed-in-insertion-order-entries-keys-values">Listed in insertion order: entries, keys, values</a></li>
+<li>33.1.8 <a href="ch_maps.html#converting-maps-objects">Converting between Maps and Objects</a></li>
+</ul></li>
+<li>33.2 <a href="ch_maps.html#example-counting-characters">Example: Counting characters</a></li>
+<li>33.3 <a href="ch_maps.html#a-few-more-details-about-the-keys-of-maps-advanced">A few more details about the keys of Maps (advanced)</a>
+<ul>
+<li>33.3.1 <a href="ch_maps.html#what-keys-are-considered-equal">What keys are considered equal?</a></li>
+</ul></li>
+<li>33.4 <a href="ch_maps.html#missing-map-operations">Missing Map operations</a>
+<ul>
+<li>33.4.1 <a href="ch_maps.html#mapping-and-filtering-maps">Mapping and filtering Maps</a></li>
+<li>33.4.2 <a href="ch_maps.html#combining-maps">Combining Maps</a></li>
+</ul></li>
+<li>33.5 <a href="ch_maps.html#quickref-maps">Quick reference: <code>Map&lt;K,V&gt;</code></a>
+<ul>
+<li>33.5.1 <a href="ch_maps.html#constructor">Constructor</a></li>
+<li>33.5.2 <a href="ch_maps.html#mapkv.prototype-handling-single-entries"><code>Map&lt;K,V&gt;.prototype</code>: handling single entries</a></li>
+<li>33.5.3 <a href="ch_maps.html#mapkv.prototype-handling-all-entries"><code>Map&lt;K,V&gt;.prototype</code>: handling all entries</a></li>
+<li>33.5.4 <a href="ch_maps.html#mapkv.prototype-iterating-and-looping"><code>Map&lt;K,V&gt;.prototype</code>: iterating and looping</a></li>
+<li>33.5.5 <a href="ch_maps.html#sources-of-this-section-1">Sources of this section</a></li>
+</ul></li>
+<li>33.6 <a href="ch_maps.html#faq-maps">FAQ: Maps</a>
+<ul>
+<li>33.6.1 <a href="ch_maps.html#when-should-i-use-a-map-and-when-should-i-use-an-object">When should I use a Map, and when should I use an object?</a></li>
+<li>33.6.2 <a href="ch_maps.html#when-would-i-use-an-object-as-a-key-in-a-map">When would I use an object as a key in a Map?</a></li>
+<li>33.6.3 <a href="ch_maps.html#why-do-maps-preserve-the-insertion-order-of-entries">Why do Maps preserve the insertion order of entries?</a></li>
+<li>33.6.4 <a href="ch_maps.html#collection-size-vs-length">Why do Maps have a <code>.size</code>, while Arrays have a <code>.length</code>?</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>Before ES6, JavaScript didn’t have a data structure for dictionaries and (ab)used objects as dictionaries from strings to arbitrary values. ES6 brought Maps, which are dictionaries from arbitrary values to arbitrary values.</p>
+<h3 id="using-maps">33.1 Using Maps</h3>
+<p>An instance of <code>Map</code> maps keys to values. A single key-value mapping is called an <em>entry</em>.</p>
+<h4 id="creating-maps">33.1.1 Creating Maps</h4>
+<p>There are three common ways of creating Maps.</p>
+<p>First, you can use the constructor without any parameters to create an empty Map:</p>
+<div class="sourceCode" id="cb973"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb973-1"><a href="ch_maps.html#cb973-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> emptyMap <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">;</span></span>
+<span id="cb973-2"><a href="ch_maps.html#cb973-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(emptyMap<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span></code></pre></div>
+<p>Second, you can pass an iterable (e.g., an Array) over key-value “pairs” (Arrays with two elements) to the constructor:</p>
+<div class="sourceCode" id="cb974"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb974-1"><a href="ch_maps.html#cb974-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([</span>
+<span id="cb974-2"><a href="ch_maps.html#cb974-2" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span></span>
+<span id="cb974-3"><a href="ch_maps.html#cb974-3" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]<span class="op">,</span></span>
+<span id="cb974-4"><a href="ch_maps.html#cb974-4" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">3</span><span class="op">,</span> <span class="st">'three'</span>]<span class="op">,</span> <span class="co">// trailing comma is ignored</span></span>
+<span id="cb974-5"><a href="ch_maps.html#cb974-5" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span></code></pre></div>
+<p>Third, the <code>.set()</code> method adds entries to a Map and is chainable:</p>
+<div class="sourceCode" id="cb975"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb975-1"><a href="ch_maps.html#cb975-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()</span>
+<span id="cb975-2"><a href="ch_maps.html#cb975-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>)</span>
+<span id="cb975-3"><a href="ch_maps.html#cb975-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>)</span>
+<span id="cb975-4"><a href="ch_maps.html#cb975-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="dv">3</span><span class="op">,</span> <span class="st">'three'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="copying-maps">33.1.2 Copying Maps</h4>
+<p>As we’ll see later, Maps are also iterables over key-value pairs. Therefore, you can use the constructor to create a copy of a Map. That copy is <em>shallow</em>: keys and values are the same; they are not duplicated.</p>
+<div class="sourceCode" id="cb976"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb976-1"><a href="ch_maps.html#cb976-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> original <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()</span>
+<span id="cb976-2"><a href="ch_maps.html#cb976-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="kw">false</span><span class="op">,</span> <span class="st">'no'</span>)</span>
+<span id="cb976-3"><a href="ch_maps.html#cb976-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="kw">true</span><span class="op">,</span> <span class="st">'yes'</span>)<span class="op">;</span></span>
+<span id="cb976-4"><a href="ch_maps.html#cb976-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb976-5"><a href="ch_maps.html#cb976-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> copy <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>(original)<span class="op">;</span></span>
+<span id="cb976-6"><a href="ch_maps.html#cb976-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(original<span class="op">,</span> copy)<span class="op">;</span></span></code></pre></div>
+<h4 id="working-with-single-entries">33.1.3 Working with single entries</h4>
+<p><code>.set()</code> and <code>.get()</code> are for writing and reading values (given keys).</p>
+<div class="sourceCode" id="cb977"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb977-1"><a href="ch_maps.html#cb977-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">;</span></span>
+<span id="cb977-2"><a href="ch_maps.html#cb977-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb977-3"><a href="ch_maps.html#cb977-3" aria-hidden="true" tabindex="-1"></a>map<span class="op">.</span><span class="fu">set</span>(<span class="st">'foo'</span><span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb977-4"><a href="ch_maps.html#cb977-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb977-5"><a href="ch_maps.html#cb977-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">get</span>(<span class="st">'foo'</span>)<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb977-6"><a href="ch_maps.html#cb977-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Unknown key:</span></span>
+<span id="cb977-7"><a href="ch_maps.html#cb977-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">get</span>(<span class="st">'bar'</span>)<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span>
+<span id="cb977-8"><a href="ch_maps.html#cb977-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Use the default value '' if an entry is missing:</span></span>
+<span id="cb977-9"><a href="ch_maps.html#cb977-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">get</span>(<span class="st">'bar'</span>) <span class="op">??</span> <span class="st">''</span><span class="op">,</span> <span class="st">''</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>.has()</code> checks if a Map has an entry with a given key. <code>.delete()</code> removes entries.</p>
+<div class="sourceCode" id="cb978"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb978-1"><a href="ch_maps.html#cb978-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="st">'foo'</span><span class="op">,</span> <span class="dv">123</span>]])<span class="op">;</span></span>
+<span id="cb978-2"><a href="ch_maps.html#cb978-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb978-3"><a href="ch_maps.html#cb978-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">has</span>(<span class="st">'foo'</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb978-4"><a href="ch_maps.html#cb978-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">delete</span>(<span class="st">'foo'</span>)<span class="op">,</span> <span class="kw">true</span>)</span>
+<span id="cb978-5"><a href="ch_maps.html#cb978-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">has</span>(<span class="st">'foo'</span>)<span class="op">,</span> <span class="kw">false</span>)</span></code></pre></div>
+<h4 id="determining-the-size-of-a-map-and-clearing-it">33.1.4 Determining the size of a Map and clearing it</h4>
+<p><code>.size</code> contains the number of entries in a Map. <code>.clear()</code> removes all entries of a Map.</p>
+<div class="sourceCode" id="cb979"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb979-1"><a href="ch_maps.html#cb979-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()</span>
+<span id="cb979-2"><a href="ch_maps.html#cb979-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="st">'foo'</span><span class="op">,</span> <span class="kw">true</span>)</span>
+<span id="cb979-3"><a href="ch_maps.html#cb979-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="st">'bar'</span><span class="op">,</span> <span class="kw">false</span>)</span>
+<span id="cb979-4"><a href="ch_maps.html#cb979-4" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span>
+<span id="cb979-5"><a href="ch_maps.html#cb979-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb979-6"><a href="ch_maps.html#cb979-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">2</span>)</span>
+<span id="cb979-7"><a href="ch_maps.html#cb979-7" aria-hidden="true" tabindex="-1"></a>map<span class="op">.</span><span class="fu">clear</span>()<span class="op">;</span></span>
+<span id="cb979-8"><a href="ch_maps.html#cb979-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">0</span>)</span></code></pre></div>
+<h4 id="getting-the-keys-and-values-of-a-map">33.1.5 Getting the keys and values of a Map</h4>
+<p><code>.keys()</code> returns an iterable over the keys of a Map:</p>
+<div class="sourceCode" id="cb980"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb980-1"><a href="ch_maps.html#cb980-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()</span>
+<span id="cb980-2"><a href="ch_maps.html#cb980-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="kw">false</span><span class="op">,</span> <span class="st">'no'</span>)</span>
+<span id="cb980-3"><a href="ch_maps.html#cb980-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="kw">true</span><span class="op">,</span> <span class="st">'yes'</span>)</span>
+<span id="cb980-4"><a href="ch_maps.html#cb980-4" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span>
+<span id="cb980-5"><a href="ch_maps.html#cb980-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb980-6"><a href="ch_maps.html#cb980-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> key <span class="kw">of</span> map<span class="op">.</span><span class="fu">keys</span>()) {</span>
+<span id="cb980-7"><a href="ch_maps.html#cb980-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(key)<span class="op">;</span></span>
+<span id="cb980-8"><a href="ch_maps.html#cb980-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb980-9"><a href="ch_maps.html#cb980-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb980-10"><a href="ch_maps.html#cb980-10" aria-hidden="true" tabindex="-1"></a><span class="co">// false</span></span>
+<span id="cb980-11"><a href="ch_maps.html#cb980-11" aria-hidden="true" tabindex="-1"></a><span class="co">// true</span></span></code></pre></div>
+<p>We can use <a href="ch_arrays.html#spreading-into-array-literals">spreading (<code>...</code>)</a> to convert the iterable returned by <code>.keys()</code> to an Array:</p>
+<div class="sourceCode" id="cb981"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb981-1"><a href="ch_maps.html#cb981-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb981-2"><a href="ch_maps.html#cb981-2" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>map<span class="op">.</span><span class="fu">keys</span>()]<span class="op">,</span> </span>
+<span id="cb981-3"><a href="ch_maps.html#cb981-3" aria-hidden="true" tabindex="-1"></a>  [<span class="kw">false</span><span class="op">,</span> <span class="kw">true</span>])<span class="op">;</span></span></code></pre></div>
+<p><code>.values()</code> works like <code>.keys()</code>, but for values instead of keys.</p>
+<h4 id="getting-the-entries-of-a-map">33.1.6 Getting the entries of a Map</h4>
+<p><code>.entries()</code> returns an iterable over the entries of a Map:</p>
+<div class="sourceCode" id="cb982"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb982-1"><a href="ch_maps.html#cb982-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()</span>
+<span id="cb982-2"><a href="ch_maps.html#cb982-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="kw">false</span><span class="op">,</span> <span class="st">'no'</span>)</span>
+<span id="cb982-3"><a href="ch_maps.html#cb982-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="kw">true</span><span class="op">,</span> <span class="st">'yes'</span>)</span>
+<span id="cb982-4"><a href="ch_maps.html#cb982-4" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span>
+<span id="cb982-5"><a href="ch_maps.html#cb982-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb982-6"><a href="ch_maps.html#cb982-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> entry <span class="kw">of</span> map<span class="op">.</span><span class="fu">entries</span>()) {</span>
+<span id="cb982-7"><a href="ch_maps.html#cb982-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(entry)<span class="op">;</span></span>
+<span id="cb982-8"><a href="ch_maps.html#cb982-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb982-9"><a href="ch_maps.html#cb982-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb982-10"><a href="ch_maps.html#cb982-10" aria-hidden="true" tabindex="-1"></a><span class="co">// [false, 'no']</span></span>
+<span id="cb982-11"><a href="ch_maps.html#cb982-11" aria-hidden="true" tabindex="-1"></a><span class="co">// [true, 'yes']</span></span></code></pre></div>
+<p><a href="ch_arrays.html#spreading-into-array-literals">Spreading (<code>...</code>)</a> converts the iterable returned by <code>.entries()</code> to an Array:</p>
+<div class="sourceCode" id="cb983"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb983-1"><a href="ch_maps.html#cb983-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb983-2"><a href="ch_maps.html#cb983-2" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>map<span class="op">.</span><span class="fu">entries</span>()]<span class="op">,</span> </span>
+<span id="cb983-3"><a href="ch_maps.html#cb983-3" aria-hidden="true" tabindex="-1"></a>  [[<span class="kw">false</span><span class="op">,</span> <span class="st">'no'</span>]<span class="op">,</span> [<span class="kw">true</span><span class="op">,</span> <span class="st">'yes'</span>]])<span class="op">;</span></span></code></pre></div>
+<p>Map instances are also iterables over entries. In the following code, we use <a href="ch_destructuring.html">destructuring</a> to access the keys and values of <code>map</code>:</p>
+<div class="sourceCode" id="cb984"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb984-1"><a href="ch_maps.html#cb984-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> [key<span class="op">,</span> value] <span class="kw">of</span> map) {</span>
+<span id="cb984-2"><a href="ch_maps.html#cb984-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(key<span class="op">,</span> value)<span class="op">;</span></span>
+<span id="cb984-3"><a href="ch_maps.html#cb984-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb984-4"><a href="ch_maps.html#cb984-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb984-5"><a href="ch_maps.html#cb984-5" aria-hidden="true" tabindex="-1"></a><span class="co">// false, 'no'</span></span>
+<span id="cb984-6"><a href="ch_maps.html#cb984-6" aria-hidden="true" tabindex="-1"></a><span class="co">// true, 'yes'</span></span></code></pre></div>
+<h4 id="listed-in-insertion-order-entries-keys-values">33.1.7 Listed in insertion order: entries, keys, values</h4>
+<p>Maps record in which order entries were created and honor that order when listing entries, keys, or values:</p>
+<div class="sourceCode" id="cb985"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb985-1"><a href="ch_maps.html#cb985-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map1 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([</span>
+<span id="cb985-2"><a href="ch_maps.html#cb985-2" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'a'</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb985-3"><a href="ch_maps.html#cb985-3" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'b'</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb985-4"><a href="ch_maps.html#cb985-4" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span>
+<span id="cb985-5"><a href="ch_maps.html#cb985-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb985-6"><a href="ch_maps.html#cb985-6" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>map1<span class="op">.</span><span class="fu">keys</span>()]<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span>
+<span id="cb985-7"><a href="ch_maps.html#cb985-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb985-8"><a href="ch_maps.html#cb985-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map2 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([</span>
+<span id="cb985-9"><a href="ch_maps.html#cb985-9" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'b'</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb985-10"><a href="ch_maps.html#cb985-10" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'a'</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb985-11"><a href="ch_maps.html#cb985-11" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span>
+<span id="cb985-12"><a href="ch_maps.html#cb985-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb985-13"><a href="ch_maps.html#cb985-13" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>map2<span class="op">.</span><span class="fu">keys</span>()]<span class="op">,</span> [<span class="st">'b'</span><span class="op">,</span> <span class="st">'a'</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="converting-maps-objects">33.1.8 Converting between Maps and Objects</h4>
+<p>As long as a Map only uses strings and symbols as keys, you can convert it to an object (via <a href="ch_single-objects.html#Object.fromEntries"><code>Object.fromEntries()</code></a>):</p>
+<div class="sourceCode" id="cb986"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb986-1"><a href="ch_maps.html#cb986-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([</span>
+<span id="cb986-2"><a href="ch_maps.html#cb986-2" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'a'</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb986-3"><a href="ch_maps.html#cb986-3" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'b'</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb986-4"><a href="ch_maps.html#cb986-4" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span>
+<span id="cb986-5"><a href="ch_maps.html#cb986-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(map)<span class="op">;</span></span>
+<span id="cb986-6"><a href="ch_maps.html#cb986-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb986-7"><a href="ch_maps.html#cb986-7" aria-hidden="true" tabindex="-1"></a>  obj<span class="op">,</span> {<span class="dt">a</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">b</span><span class="op">:</span> <span class="dv">2</span>})<span class="op">;</span></span></code></pre></div>
+<p>You can also convert an object to a Map with string or symbol keys (via <a href="ch_single-objects.html#Object.entries"><code>Object.entries()</code></a>):</p>
+<div class="sourceCode" id="cb987"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb987-1"><a href="ch_maps.html#cb987-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb987-2"><a href="ch_maps.html#cb987-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">a</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb987-3"><a href="ch_maps.html#cb987-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">b</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span></span>
+<span id="cb987-4"><a href="ch_maps.html#cb987-4" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb987-5"><a href="ch_maps.html#cb987-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">entries</span>(obj))<span class="op">;</span></span>
+<span id="cb987-6"><a href="ch_maps.html#cb987-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb987-7"><a href="ch_maps.html#cb987-7" aria-hidden="true" tabindex="-1"></a>  map<span class="op">,</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="st">'a'</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> [<span class="st">'b'</span><span class="op">,</span> <span class="dv">2</span>]]))<span class="op">;</span></span></code></pre></div>
+<h3 id="example-counting-characters">33.2 Example: Counting characters</h3>
+<p><code>countChars()</code> returns a Map that maps characters to numbers of occurrences.</p>
+<div class="sourceCode" id="cb988"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb988-1"><a href="ch_maps.html#cb988-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">countChars</span>(chars) {</span>
+<span id="cb988-2"><a href="ch_maps.html#cb988-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> charCounts <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">;</span></span>
+<span id="cb988-3"><a href="ch_maps.html#cb988-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> ch <span class="kw">of</span> chars) {</span>
+<span id="cb988-4"><a href="ch_maps.html#cb988-4" aria-hidden="true" tabindex="-1"></a>    ch <span class="op">=</span> ch<span class="op">.</span><span class="fu">toLowerCase</span>()<span class="op">;</span></span>
+<span id="cb988-5"><a href="ch_maps.html#cb988-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> prevCount <span class="op">=</span> charCounts<span class="op">.</span><span class="fu">get</span>(ch) <span class="op">??</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb988-6"><a href="ch_maps.html#cb988-6" aria-hidden="true" tabindex="-1"></a>    charCounts<span class="op">.</span><span class="fu">set</span>(ch<span class="op">,</span> prevCount<span class="op">+</span><span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb988-7"><a href="ch_maps.html#cb988-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb988-8"><a href="ch_maps.html#cb988-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> charCounts<span class="op">;</span></span>
+<span id="cb988-9"><a href="ch_maps.html#cb988-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb988-10"><a href="ch_maps.html#cb988-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb988-11"><a href="ch_maps.html#cb988-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> result <span class="op">=</span> <span class="fu">countChars</span>(<span class="st">'AaBccc'</span>)<span class="op">;</span></span>
+<span id="cb988-12"><a href="ch_maps.html#cb988-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb988-13"><a href="ch_maps.html#cb988-13" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>result]<span class="op">,</span></span>
+<span id="cb988-14"><a href="ch_maps.html#cb988-14" aria-hidden="true" tabindex="-1"></a>  [</span>
+<span id="cb988-15"><a href="ch_maps.html#cb988-15" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'a'</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb988-16"><a href="ch_maps.html#cb988-16" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'b'</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb988-17"><a href="ch_maps.html#cb988-17" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'c'</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">,</span></span>
+<span id="cb988-18"><a href="ch_maps.html#cb988-18" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb988-19"><a href="ch_maps.html#cb988-19" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<h3 id="a-few-more-details-about-the-keys-of-maps-advanced">33.3 A few more details about the keys of Maps (advanced)</h3>
+<p>Any value can be a key, even an object:</p>
+<div class="sourceCode" id="cb989"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb989-1"><a href="ch_maps.html#cb989-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">;</span></span>
+<span id="cb989-2"><a href="ch_maps.html#cb989-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb989-3"><a href="ch_maps.html#cb989-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> KEY1 <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb989-4"><a href="ch_maps.html#cb989-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> KEY2 <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb989-5"><a href="ch_maps.html#cb989-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb989-6"><a href="ch_maps.html#cb989-6" aria-hidden="true" tabindex="-1"></a>map<span class="op">.</span><span class="fu">set</span>(KEY1<span class="op">,</span> <span class="st">'hello'</span>)<span class="op">;</span></span>
+<span id="cb989-7"><a href="ch_maps.html#cb989-7" aria-hidden="true" tabindex="-1"></a>map<span class="op">.</span><span class="fu">set</span>(KEY2<span class="op">,</span> <span class="st">'world'</span>)<span class="op">;</span></span>
+<span id="cb989-8"><a href="ch_maps.html#cb989-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb989-9"><a href="ch_maps.html#cb989-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">get</span>(KEY1)<span class="op">,</span> <span class="st">'hello'</span>)<span class="op">;</span></span>
+<span id="cb989-10"><a href="ch_maps.html#cb989-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">get</span>(KEY2)<span class="op">,</span> <span class="st">'world'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="what-keys-are-considered-equal">33.3.1 What keys are considered equal?</h4>
+<p>Most Map operations need to check whether a value is equal to one of the keys. They do so via the internal operation <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-samevaluezero">SameValueZero</a>, which works like <code>===</code> but considers <code>NaN</code> to be equal to itself.</p>
+<p>As a consequence, you can use <code>NaN</code> as a key in Maps, just like any other value:</p>
+<div class="sourceCode" id="cb990"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb990-1"><a href="ch_maps.html#cb990-1" aria-hidden="true" tabindex="-1"></a>&gt; const map = new Map();</span>
+<span id="cb990-2"><a href="ch_maps.html#cb990-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb990-3"><a href="ch_maps.html#cb990-3" aria-hidden="true" tabindex="-1"></a>&gt; map.set(NaN, 123);</span>
+<span id="cb990-4"><a href="ch_maps.html#cb990-4" aria-hidden="true" tabindex="-1"></a>&gt; map.get(NaN)</span>
+<span id="cb990-5"><a href="ch_maps.html#cb990-5" aria-hidden="true" tabindex="-1"></a><span class="kw">123</span></span></code></pre></div>
+<p>Different objects are always considered to be different. That is something that can’t be changed (yet – configuring key equality is on TC39’s long-term roadmap).</p>
+<div class="sourceCode" id="cb991"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb991-1"><a href="ch_maps.html#cb991-1" aria-hidden="true" tabindex="-1"></a>&gt; new Map().set({}, 1).set({}, 2).size</span>
+<span id="cb991-2"><a href="ch_maps.html#cb991-2" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span></code></pre></div>
+<h3 id="missing-map-operations">33.4 Missing Map operations</h3>
+<h4 id="mapping-and-filtering-maps">33.4.1 Mapping and filtering Maps</h4>
+<p>You can <code>.map()</code> and <code>.filter()</code> an Array, but there are no such operations for a Map. The solution is:</p>
+<ol type="1">
+<li>Convert the Map into an Array of [key, value] pairs.</li>
+<li>Map or filter the Array.</li>
+<li>Convert the result back to a Map.</li>
+</ol>
+<p>I’ll use the following Map to demonstrate how that works.</p>
+<div class="sourceCode" id="cb992"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb992-1"><a href="ch_maps.html#cb992-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> originalMap <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()</span>
+<span id="cb992-2"><a href="ch_maps.html#cb992-2" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">set</span>(<span class="dv">1</span><span class="op">,</span> <span class="st">'a'</span>)</span>
+<span id="cb992-3"><a href="ch_maps.html#cb992-3" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">set</span>(<span class="dv">2</span><span class="op">,</span> <span class="st">'b'</span>)</span>
+<span id="cb992-4"><a href="ch_maps.html#cb992-4" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">set</span>(<span class="dv">3</span><span class="op">,</span> <span class="st">'c'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Mapping <code>originalMap</code>:</p>
+<div class="sourceCode" id="cb993"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb993-1"><a href="ch_maps.html#cb993-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> mappedMap <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>( <span class="co">// step 3</span></span>
+<span id="cb993-2"><a href="ch_maps.html#cb993-2" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>originalMap] <span class="co">// step 1</span></span>
+<span id="cb993-3"><a href="ch_maps.html#cb993-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">map</span>(([k<span class="op">,</span> v]) <span class="kw">=&gt;</span> [k <span class="op">*</span> <span class="dv">2</span><span class="op">,</span> <span class="st">'_'</span> <span class="op">+</span> v]) <span class="co">// step 2</span></span>
+<span id="cb993-4"><a href="ch_maps.html#cb993-4" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb993-5"><a href="ch_maps.html#cb993-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span>mappedMap]<span class="op">,</span></span>
+<span id="cb993-6"><a href="ch_maps.html#cb993-6" aria-hidden="true" tabindex="-1"></a>  [[<span class="dv">2</span><span class="op">,</span><span class="st">'_a'</span>]<span class="op">,</span> [<span class="dv">4</span><span class="op">,</span><span class="st">'_b'</span>]<span class="op">,</span> [<span class="dv">6</span><span class="op">,</span><span class="st">'_c'</span>]])<span class="op">;</span></span></code></pre></div>
+<p>Filtering <code>originalMap</code>:</p>
+<div class="sourceCode" id="cb994"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb994-1"><a href="ch_maps.html#cb994-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> filteredMap <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>( <span class="co">// step 3</span></span>
+<span id="cb994-2"><a href="ch_maps.html#cb994-2" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>originalMap] <span class="co">// step 1</span></span>
+<span id="cb994-3"><a href="ch_maps.html#cb994-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filter</span>(([k<span class="op">,</span> v]) <span class="kw">=&gt;</span> k <span class="op">&lt;</span> <span class="dv">3</span>) <span class="co">// step 2</span></span>
+<span id="cb994-4"><a href="ch_maps.html#cb994-4" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb994-5"><a href="ch_maps.html#cb994-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span>filteredMap]<span class="op">,</span></span>
+<span id="cb994-6"><a href="ch_maps.html#cb994-6" aria-hidden="true" tabindex="-1"></a>  [[<span class="dv">1</span><span class="op">,</span><span class="st">'a'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span><span class="st">'b'</span>]])<span class="op">;</span></span></code></pre></div>
+<p>Step 1 is performed by spreading (<code>...</code>) in the Array literal.</p>
+<h4 id="combining-maps">33.4.2 Combining Maps</h4>
+<p>There are no methods for combining Maps, which is why we must use a workaround that is similar to the one from the previous section.</p>
+<p>Let’s combine the following two Maps:</p>
+<div class="sourceCode" id="cb995"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb995-1"><a href="ch_maps.html#cb995-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map1 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()</span>
+<span id="cb995-2"><a href="ch_maps.html#cb995-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="dv">1</span><span class="op">,</span> <span class="st">'1a'</span>)</span>
+<span id="cb995-3"><a href="ch_maps.html#cb995-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="dv">2</span><span class="op">,</span> <span class="st">'1b'</span>)</span>
+<span id="cb995-4"><a href="ch_maps.html#cb995-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="dv">3</span><span class="op">,</span> <span class="st">'1c'</span>)</span>
+<span id="cb995-5"><a href="ch_maps.html#cb995-5" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span>
+<span id="cb995-6"><a href="ch_maps.html#cb995-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb995-7"><a href="ch_maps.html#cb995-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map2 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()</span>
+<span id="cb995-8"><a href="ch_maps.html#cb995-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="dv">2</span><span class="op">,</span> <span class="st">'2b'</span>)</span>
+<span id="cb995-9"><a href="ch_maps.html#cb995-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="dv">3</span><span class="op">,</span> <span class="st">'2c'</span>)</span>
+<span id="cb995-10"><a href="ch_maps.html#cb995-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">set</span>(<span class="dv">4</span><span class="op">,</span> <span class="st">'2d'</span>)</span>
+<span id="cb995-11"><a href="ch_maps.html#cb995-11" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span></code></pre></div>
+<p>To combine <code>map1</code> and <code>map2</code>, we turn them into Arrays via spreading (<code>...</code>) and concatenate those Arrays. Afterward, we convert the result back to a Map. All of that is done in line A.</p>
+<div class="sourceCode" id="cb996"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb996-1"><a href="ch_maps.html#cb996-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> combinedMap <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([<span class="op">...</span>map1<span class="op">,</span> <span class="op">...</span>map2])<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb996-2"><a href="ch_maps.html#cb996-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb996-3"><a href="ch_maps.html#cb996-3" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>combinedMap]<span class="op">,</span> <span class="co">// convert to Array for comparison</span></span>
+<span id="cb996-4"><a href="ch_maps.html#cb996-4" aria-hidden="true" tabindex="-1"></a>  [ [ <span class="dv">1</span><span class="op">,</span> <span class="st">'1a'</span> ]<span class="op">,</span></span>
+<span id="cb996-5"><a href="ch_maps.html#cb996-5" aria-hidden="true" tabindex="-1"></a>    [ <span class="dv">2</span><span class="op">,</span> <span class="st">'2b'</span> ]<span class="op">,</span></span>
+<span id="cb996-6"><a href="ch_maps.html#cb996-6" aria-hidden="true" tabindex="-1"></a>    [ <span class="dv">3</span><span class="op">,</span> <span class="st">'2c'</span> ]<span class="op">,</span></span>
+<span id="cb996-7"><a href="ch_maps.html#cb996-7" aria-hidden="true" tabindex="-1"></a>    [ <span class="dv">4</span><span class="op">,</span> <span class="st">'2d'</span> ] ]</span>
+<span id="cb996-8"><a href="ch_maps.html#cb996-8" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Combining two&nbsp;Maps</strong></p>
+<p><code>exercises/maps/combine_maps_test.mjs</code></p>
+</div>
+<h3 id="quickref-maps">33.5 Quick reference: <code>Map&lt;K,V&gt;</code></h3>
+<p>Note: For the sake of conciseness, I’m pretending that all keys have the same type <code>K</code> and that all values have the same type <code>V</code>.</p>
+<h4 id="constructor">33.5.1 Constructor</h4>
+<ul>
+<li><p><code>new Map&lt;K, V&gt;(entries?: Iterable&lt;[K, V]&gt;)</code> <sup>[ES6]</sup></p>
+<p>If you don’t provide the parameter <code>entries</code>, then an empty Map is created. If you do provide an iterable over [key, value] pairs, then those pairs are added as entries to the Map. For example:</p>
+<div class="sourceCode" id="cb997"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb997-1"><a href="ch_maps.html#cb997-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([</span>
+<span id="cb997-2"><a href="ch_maps.html#cb997-2" aria-hidden="true" tabindex="-1"></a>  [ <span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span> ]<span class="op">,</span></span>
+<span id="cb997-3"><a href="ch_maps.html#cb997-3" aria-hidden="true" tabindex="-1"></a>  [ <span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span> ]<span class="op">,</span></span>
+<span id="cb997-4"><a href="ch_maps.html#cb997-4" aria-hidden="true" tabindex="-1"></a>  [ <span class="dv">3</span><span class="op">,</span> <span class="st">'three'</span> ]<span class="op">,</span> <span class="co">// trailing comma is ignored</span></span>
+<span id="cb997-5"><a href="ch_maps.html#cb997-5" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="mapkv.prototype-handling-single-entries">33.5.2 <code>Map&lt;K,V&gt;.prototype</code>: handling single entries</h4>
+<ul>
+<li><p><code>.get(key: K): V</code> <sup>[ES6]</sup></p>
+<p>Returns the <code>value</code> that <code>key</code> is mapped to in this Map. If there is no key <code>key</code> in this Map, <code>undefined</code> is returned.</p>
+<div class="sourceCode" id="cb998"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb998-1"><a href="ch_maps.html#cb998-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span>
+<span id="cb998-2"><a href="ch_maps.html#cb998-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">get</span>(<span class="dv">1</span>)<span class="op">,</span> <span class="st">'one'</span>)<span class="op">;</span></span>
+<span id="cb998-3"><a href="ch_maps.html#cb998-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">get</span>(<span class="dv">5</span>)<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>.set(key: K, value: V): this</code> <sup>[ES6]</sup></p>
+<p>Maps the given key to the given value. If there is already an entry whose key is <code>key</code>, it is updated. Otherwise, a new entry is created. This method returns <code>this</code>, which means that you can chain it.</p>
+<div class="sourceCode" id="cb999"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb999-1"><a href="ch_maps.html#cb999-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span>
+<span id="cb999-2"><a href="ch_maps.html#cb999-2" aria-hidden="true" tabindex="-1"></a>map<span class="op">.</span><span class="fu">set</span>(<span class="dv">1</span><span class="op">,</span> <span class="st">'ONE!'</span>)</span>
+<span id="cb999-3"><a href="ch_maps.html#cb999-3" aria-hidden="true" tabindex="-1"></a>   <span class="op">.</span><span class="fu">set</span>(<span class="dv">3</span><span class="op">,</span> <span class="st">'THREE!'</span>)<span class="op">;</span></span>
+<span id="cb999-4"><a href="ch_maps.html#cb999-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb999-5"><a href="ch_maps.html#cb999-5" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>map<span class="op">.</span><span class="fu">entries</span>()]<span class="op">,</span></span>
+<span id="cb999-6"><a href="ch_maps.html#cb999-6" aria-hidden="true" tabindex="-1"></a>  [[<span class="dv">1</span><span class="op">,</span> <span class="st">'ONE!'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]<span class="op">,</span> [<span class="dv">3</span><span class="op">,</span> <span class="st">'THREE!'</span>]])<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>.has(key: K): boolean</code> <sup>[ES6]</sup></p>
+<p>Returns whether the given key exists in this Map.</p>
+<div class="sourceCode" id="cb1000"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1000-1"><a href="ch_maps.html#cb1000-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span>
+<span id="cb1000-2"><a href="ch_maps.html#cb1000-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">has</span>(<span class="dv">1</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span> <span class="co">// key exists</span></span>
+<span id="cb1000-3"><a href="ch_maps.html#cb1000-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">has</span>(<span class="dv">5</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span> <span class="co">// key does not exist</span></span></code></pre></div></li>
+<li><p><code>.delete(key: K): boolean</code> <sup>[ES6]</sup></p>
+<p>If there is an entry whose key is <code>key</code>, it is removed and <code>true</code> is returned. Otherwise, nothing happens and <code>false</code> is returned.</p>
+<div class="sourceCode" id="cb1001"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1001-1"><a href="ch_maps.html#cb1001-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span>
+<span id="cb1001-2"><a href="ch_maps.html#cb1001-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">delete</span>(<span class="dv">1</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb1001-3"><a href="ch_maps.html#cb1001-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="fu">delete</span>(<span class="dv">5</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span> <span class="co">// nothing happens</span></span>
+<span id="cb1001-4"><a href="ch_maps.html#cb1001-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1001-5"><a href="ch_maps.html#cb1001-5" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>map<span class="op">.</span><span class="fu">entries</span>()]<span class="op">,</span></span>
+<span id="cb1001-6"><a href="ch_maps.html#cb1001-6" aria-hidden="true" tabindex="-1"></a>  [[<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="mapkv.prototype-handling-all-entries">33.5.3 <code>Map&lt;K,V&gt;.prototype</code>: handling all entries</h4>
+<ul>
+<li><p><code>get .size: number</code> <sup>[ES6]</sup></p>
+<p>Returns how many entries this Map has.</p>
+<div class="sourceCode" id="cb1002"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1002-1"><a href="ch_maps.html#cb1002-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span>
+<span id="cb1002-2"><a href="ch_maps.html#cb1002-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>.clear(): void</code> <sup>[ES6]</sup></p>
+<p>Removes all entries from this Map.</p>
+<div class="sourceCode" id="cb1003"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1003-1"><a href="ch_maps.html#cb1003-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span>
+<span id="cb1003-2"><a href="ch_maps.html#cb1003-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb1003-3"><a href="ch_maps.html#cb1003-3" aria-hidden="true" tabindex="-1"></a>map<span class="op">.</span><span class="fu">clear</span>()<span class="op">;</span></span>
+<span id="cb1003-4"><a href="ch_maps.html#cb1003-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(map<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="mapkv.prototype-iterating-and-looping">33.5.4 <code>Map&lt;K,V&gt;.prototype</code>: iterating and looping</h4>
+<p>Both iterating and looping happen in the order in which entries were added to a Map.</p>
+<ul>
+<li><p><code>.entries(): Iterable&lt;[K,V]&gt;</code> <sup>[ES6]</sup></p>
+<p>Returns an iterable with one [key, value] pair for each entry in this Map. The pairs are Arrays of length 2.</p>
+<div class="sourceCode" id="cb1004"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1004-1"><a href="ch_maps.html#cb1004-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span>
+<span id="cb1004-2"><a href="ch_maps.html#cb1004-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> entry <span class="kw">of</span> map<span class="op">.</span><span class="fu">entries</span>()) {</span>
+<span id="cb1004-3"><a href="ch_maps.html#cb1004-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(entry)<span class="op">;</span></span>
+<span id="cb1004-4"><a href="ch_maps.html#cb1004-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1004-5"><a href="ch_maps.html#cb1004-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1004-6"><a href="ch_maps.html#cb1004-6" aria-hidden="true" tabindex="-1"></a><span class="co">// [1, 'one']</span></span>
+<span id="cb1004-7"><a href="ch_maps.html#cb1004-7" aria-hidden="true" tabindex="-1"></a><span class="co">// [2, 'two']</span></span></code></pre></div></li>
+<li><p><code>.forEach(callback: (value: V, key: K, theMap: Map&lt;K,V&gt;) =&gt; void, thisArg?: any): void</code> <sup>[ES6]</sup></p>
+<p>The first parameter is a callback that is invoked once for each entry in this Map. If <code>thisArg</code> is provided, <code>this</code> is set to it for each invocation. Otherwise, <code>this</code> is set to <code>undefined</code>.</p>
+<div class="sourceCode" id="cb1005"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1005-1"><a href="ch_maps.html#cb1005-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span>
+<span id="cb1005-2"><a href="ch_maps.html#cb1005-2" aria-hidden="true" tabindex="-1"></a>map<span class="op">.</span><span class="fu">forEach</span>((value<span class="op">,</span> key) <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(value<span class="op">,</span> key))<span class="op">;</span></span>
+<span id="cb1005-3"><a href="ch_maps.html#cb1005-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1005-4"><a href="ch_maps.html#cb1005-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 'one', 1</span></span>
+<span id="cb1005-5"><a href="ch_maps.html#cb1005-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 'two', 2</span></span></code></pre></div></li>
+<li><p><code>.keys(): Iterable&lt;K&gt;</code> <sup>[ES6]</sup></p>
+<p>Returns an iterable over all keys in this Map.</p>
+<div class="sourceCode" id="cb1006"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1006-1"><a href="ch_maps.html#cb1006-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span>
+<span id="cb1006-2"><a href="ch_maps.html#cb1006-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> key <span class="kw">of</span> map<span class="op">.</span><span class="fu">keys</span>()) {</span>
+<span id="cb1006-3"><a href="ch_maps.html#cb1006-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(key)<span class="op">;</span></span>
+<span id="cb1006-4"><a href="ch_maps.html#cb1006-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1006-5"><a href="ch_maps.html#cb1006-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1006-6"><a href="ch_maps.html#cb1006-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 1</span></span>
+<span id="cb1006-7"><a href="ch_maps.html#cb1006-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 2</span></span></code></pre></div></li>
+<li><p><code>.values(): Iterable&lt;V&gt;</code> <sup>[ES6]</sup></p>
+<p>Returns an iterable over all values in this Map.</p>
+<div class="sourceCode" id="cb1007"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1007-1"><a href="ch_maps.html#cb1007-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span>
+<span id="cb1007-2"><a href="ch_maps.html#cb1007-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> value <span class="kw">of</span> map<span class="op">.</span><span class="fu">values</span>()) {</span>
+<span id="cb1007-3"><a href="ch_maps.html#cb1007-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(value)<span class="op">;</span></span>
+<span id="cb1007-4"><a href="ch_maps.html#cb1007-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1007-5"><a href="ch_maps.html#cb1007-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1007-6"><a href="ch_maps.html#cb1007-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'one'</span></span>
+<span id="cb1007-7"><a href="ch_maps.html#cb1007-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'two'</span></span></code></pre></div></li>
+<li><p><code>[Symbol.iterator](): Iterable&lt;[K,V]&gt;</code> <sup>[ES6]</sup></p>
+<p>The default way of iterating over Maps. Same as <code>.entries()</code>.</p>
+<div class="sourceCode" id="cb1008"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1008-1"><a href="ch_maps.html#cb1008-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>([[<span class="dv">1</span><span class="op">,</span> <span class="st">'one'</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="st">'two'</span>]])<span class="op">;</span></span>
+<span id="cb1008-2"><a href="ch_maps.html#cb1008-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> [key<span class="op">,</span> value] <span class="kw">of</span> map) {</span>
+<span id="cb1008-3"><a href="ch_maps.html#cb1008-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(key<span class="op">,</span> value)<span class="op">;</span></span>
+<span id="cb1008-4"><a href="ch_maps.html#cb1008-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1008-5"><a href="ch_maps.html#cb1008-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1008-6"><a href="ch_maps.html#cb1008-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 1, 'one'</span></span>
+<span id="cb1008-7"><a href="ch_maps.html#cb1008-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 2, 'two'</span></span></code></pre></div></li>
+</ul>
+<h4 id="sources-of-this-section-1">33.5.5 Sources of this section</h4>
+<ul>
+<li><a href="https://github.com/Microsoft/TypeScript/blob/master/lib/">TypeScript’s built-in typings</a></li>
+</ul>
+<h3 id="faq-maps">33.6 FAQ: Maps</h3>
+<h4 id="when-should-i-use-a-map-and-when-should-i-use-an-object">33.6.1 When should I use a Map, and when should I use an object?</h4>
+<p><a id="index-entry-420" class="index-entry"></a><a id="index-entry-421" class="index-entry"></a></p>
+<p>If you need a dictionary-like data structure with keys that are neither strings nor symbols, you have no choice: you must use a Map.</p>
+<p>If, however, your keys are either strings or symbols, you must decide whether or not to use an object. A rough general guideline is:</p>
+<ul>
+<li><p>Is there a fixed set of keys (known at development time)?</p>
+<p>Then use an object <code>obj</code> and access the values via fixed keys: </p>
+<div class="sourceCode" id="cb1009"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1009-1"><a href="ch_maps.html#cb1009-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> value <span class="op">=</span> obj<span class="op">.</span><span class="at">key</span><span class="op">;</span></span></code></pre></div></li>
+<li><p>Can the set of keys change at runtime?</p>
+<p>Then use a Map <code>map</code> and access the values via keys stored in variables: </p>
+<div class="sourceCode" id="cb1010"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1010-1"><a href="ch_maps.html#cb1010-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> theKey <span class="op">=</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb1010-2"><a href="ch_maps.html#cb1010-2" aria-hidden="true" tabindex="-1"></a>map<span class="op">.</span><span class="fu">get</span>(theKey)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="when-would-i-use-an-object-as-a-key-in-a-map">33.6.2 When would I use an object as a key in a Map?</h4>
+<p>You normally want Map keys to be compared by value (two keys are considered equal if they have the same content). That excludes objects. However, there is one use case for objects as keys: externally attaching data to objects. But that use case is served better by WeakMaps, where entries don’t prevent keys from being garbage-collected (for details, consult <a href="ch_weakmaps.html">the next chapter</a>).</p>
+<h4 id="why-do-maps-preserve-the-insertion-order-of-entries">33.6.3 Why do Maps preserve the insertion order of entries?</h4>
+<p>In principle, Maps are unordered. The main reason for ordering entries is so that operations that list entries, keys, or values are deterministic. That helps, for example, with testing.</p>
+<h4 id="collection-size-vs-length">33.6.4 Why do Maps have a <code>.size</code>, while Arrays have a <code>.length</code>?</h4>
+<p>In JavaScript, indexable sequences (such as Arrays and strings) have a <code>.length</code>, while unindexed collections (such as Maps and Sets) have a <code>.size</code>:</p>
+<ul>
+<li><code>.length</code> is based on indices; it is always the highest index plus one.</li>
+<li><code>.size</code> counts the number of elements in a collection.</li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/35">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_weakmaps.html">34 WeakMaps (<code>WeakMap</code>) (advanced)</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

@@ -1,0 +1,507 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_bigints">18 Bigints – arbitrary-precision integers [ES2020] (advanced)</h2>
+<p><a id="index-entry-187" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>18.1 <a href="ch_bigints.html#why-bigints">Why bigints?</a></li>
+<li>18.2 <a href="ch_bigints.html#bigints">Bigints</a>
+<ul>
+<li>18.2.1 <a href="ch_bigints.html#going-beyond-53-bits-for-integers">Going beyond 53 bits for integers</a></li>
+<li>18.2.2 <a href="ch_bigints.html#example-using-bigints">Example: using bigints</a></li>
+</ul></li>
+<li>18.3 <a href="ch_bigints.html#bigint-literals">Bigint literals</a>
+<ul>
+<li>18.3.1 <a href="ch_bigints.html#numeric-separator-bigint-literals">Underscores (<code>_</code>) as separators in bigint literals [ES2021]</a></li>
+</ul></li>
+<li>18.4 <a href="ch_bigints.html#reusing-number-operators-for-bigints-overloading">Reusing number operators for bigints (overloading)</a>
+<ul>
+<li>18.4.1 <a href="ch_bigints.html#arithmetic-operators-1">Arithmetic operators</a></li>
+<li>18.4.2 <a href="ch_bigints.html#ordering-operators-1">Ordering operators</a></li>
+<li>18.4.3 <a href="ch_bigints.html#bitwise-operators-1">Bitwise operators</a></li>
+<li>18.4.4 <a href="ch_bigints.html#loose-equality-and-inequality">Loose equality (<code>==</code>) and inequality (<code>!=</code>)</a></li>
+<li>18.4.5 <a href="ch_bigints.html#strict-equality-and-inequality">Strict equality (<code>===</code>) and inequality (<code>!==</code>)</a></li>
+</ul></li>
+<li>18.5 <a href="ch_bigints.html#the-wrapper-constructor-bigint">The wrapper constructor <code>BigInt</code></a>
+<ul>
+<li>18.5.1 <a href="ch_bigints.html#bigint-as-a-constructor-and-as-a-function"><code>BigInt</code> as a constructor and as a function</a></li>
+<li>18.5.2 <a href="ch_bigints.html#bigint.prototype.-methods"><code>BigInt.prototype.*</code> methods</a></li>
+<li>18.5.3 <a href="ch_bigints.html#bigint.-methods"><code>BigInt.*</code> methods</a></li>
+<li>18.5.4 <a href="ch_bigints.html#casting-and-64-bit-integers">Casting and 64-bit integers</a></li>
+</ul></li>
+<li>18.6 <a href="ch_bigints.html#coercing-bigints-to-other-primitive-types">Coercing bigints to other primitive types</a></li>
+<li>18.7 <a href="ch_bigints.html#typedarrays-and-dataview-operations-for-64-bit-values">TypedArrays and DataView operations for 64-bit values</a></li>
+<li>18.8 <a href="ch_bigints.html#bigints-and-json">Bigints and JSON</a>
+<ul>
+<li>18.8.1 <a href="ch_bigints.html#stringifying-bigints">Stringifying bigints</a></li>
+<li>18.8.2 <a href="ch_bigints.html#parsing-bigints">Parsing bigints</a></li>
+</ul></li>
+<li>18.9 <a href="ch_bigints.html#faq-bigints">FAQ: Bigints</a>
+<ul>
+<li>18.9.1 <a href="ch_bigints.html#how-do-i-decide-when-to-use-numbers-and-when-to-use-bigints">How do I decide when to use numbers and when to use bigints?</a></li>
+<li>18.9.2 <a href="ch_bigints.html#why-not-just-increase-the-precision-of-numbers-in-the-same-manner-as-is-done-for-bigints">Why not just increase the precision of numbers in the same manner as is done for bigints?</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>In this chapter, we take a look at <em>bigints</em>, JavaScript’s integers whose storage space grows and shrinks as needed.</p>
+<h3 id="why-bigints">18.1 Why bigints?</h3>
+<p>Before ECMAScript 2020, JavaScript handled integers as follows:</p>
+<ul>
+<li><p>There only was a single type for floating point numbers and integers: 64-bit floating point numbers (IEEE 754 double precision).</p></li>
+<li><p>Under the hood, most JavaScript engines transparently supported integers: If a number has no decimal digits and is within a certain range, it can internally be stored as a genuine integer. This representation is called <em>small integer</em> and usually fits into 32 bits. For example, the range of small integers on the 64-bit version of the V8 engine is from −2<sup>31</sup> to 2<sup>31</sup>−1 (<a href="">source</a>).</p></li>
+<li><p>JavaScript numbers could also represent integers beyond the small integer range, as floating point numbers. Here, the safe range is plus/minus 53 bits. For more information on this topic, see <a href="ch_numbers.html#safe-integers">§16.9.3 “Safe integers”</a>.</p></li>
+</ul>
+<p>Sometimes, we need more than signed 53 bits – for example:</p>
+<ul>
+<li>Twitter uses 64-bit integers as IDs for tweets (<a href="https://dev.twitter.com/overview/api/twitter-ids-json-and-snowflake">source</a>). In JavaScript, these IDs had to be stored in strings.</li>
+<li>Financial technology uses so-called <em>big integers</em> (integers with arbitrary precision) to represent amounts of money. Internally, the amounts are multiplied so that the decimal numbers disappear. For example, USD amounts are multiplied by 100 so that the cents disappear.</li>
+</ul>
+<h3 id="bigints">18.2 Bigints</h3>
+<p><em>Bigint</em> is a new primitive data type for integers. Bigints don’t have a fixed storage size in bits; their sizes adapt to the integers they represent:</p>
+<ul>
+<li>Small integers are represented with fewer bits than large integers.</li>
+<li>There is no negative lower limit or positive upper limit for the integers that can be represented.</li>
+</ul>
+<p>A bigint literal is a sequence of one or more digits, suffixed with an <code>n</code> – for example:</p>
+<div class="sourceCode" id="cb336"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb336-1"><a href="ch_bigints.html#cb336-1" aria-hidden="true" tabindex="-1"></a>123n</span></code></pre></div>
+<p>Operators such as <code>-</code> and <code>*</code> are overloaded and work with bigints:</p>
+<div class="sourceCode" id="cb337"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb337-1"><a href="ch_bigints.html#cb337-1" aria-hidden="true" tabindex="-1"></a>&gt; 123n * 456n</span>
+<span id="cb337-2"><a href="ch_bigints.html#cb337-2" aria-hidden="true" tabindex="-1"></a><span class="kw">56088n</span></span></code></pre></div>
+<p>Bigints are primitive values. <code>typeof</code> returns a new result for them:</p>
+<div class="sourceCode" id="cb338"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb338-1"><a href="ch_bigints.html#cb338-1" aria-hidden="true" tabindex="-1"></a>&gt; typeof 123n</span>
+<span id="cb338-2"><a href="ch_bigints.html#cb338-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'bigint'</span></span></code></pre></div>
+<h4 id="going-beyond-53-bits-for-integers">18.2.1 Going beyond 53 bits for integers</h4>
+<p>JavaScript numbers are internally represented as a fraction multiplied by an exponent (see <a href="ch_numbers.html#background-floating-point-precision">§16.8 “Background: floating point precision”</a> for details). As a consequence, if we go beyond the highest <a href="ch_numbers.html#safe-integers"><em>safe integer</em></a> 2<sup>53</sup>−1, there are still <em>some</em> integers that can be represented, but with gaps between them:</p>
+<div class="sourceCode" id="cb339"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb339-1"><a href="ch_bigints.html#cb339-1" aria-hidden="true" tabindex="-1"></a>&gt; 2**53 - 2 // safe</span>
+<span id="cb339-2"><a href="ch_bigints.html#cb339-2" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740990</span></span>
+<span id="cb339-3"><a href="ch_bigints.html#cb339-3" aria-hidden="true" tabindex="-1"></a>&gt; 2**53 - 1 // safe</span>
+<span id="cb339-4"><a href="ch_bigints.html#cb339-4" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740991</span></span>
+<span id="cb339-5"><a href="ch_bigints.html#cb339-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb339-6"><a href="ch_bigints.html#cb339-6" aria-hidden="true" tabindex="-1"></a>&gt; 2**53 // unsafe, same as next integer</span>
+<span id="cb339-7"><a href="ch_bigints.html#cb339-7" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740992</span></span>
+<span id="cb339-8"><a href="ch_bigints.html#cb339-8" aria-hidden="true" tabindex="-1"></a>&gt; 2**53 + 1</span>
+<span id="cb339-9"><a href="ch_bigints.html#cb339-9" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740992</span></span>
+<span id="cb339-10"><a href="ch_bigints.html#cb339-10" aria-hidden="true" tabindex="-1"></a>&gt; 2**53 + 2</span>
+<span id="cb339-11"><a href="ch_bigints.html#cb339-11" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740994</span></span>
+<span id="cb339-12"><a href="ch_bigints.html#cb339-12" aria-hidden="true" tabindex="-1"></a>&gt; 2**53 + 3</span>
+<span id="cb339-13"><a href="ch_bigints.html#cb339-13" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740996</span></span>
+<span id="cb339-14"><a href="ch_bigints.html#cb339-14" aria-hidden="true" tabindex="-1"></a>&gt; 2**53 + 4</span>
+<span id="cb339-15"><a href="ch_bigints.html#cb339-15" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740996</span></span>
+<span id="cb339-16"><a href="ch_bigints.html#cb339-16" aria-hidden="true" tabindex="-1"></a>&gt; 2**53 + 5</span>
+<span id="cb339-17"><a href="ch_bigints.html#cb339-17" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740996</span></span></code></pre></div>
+<p>Bigints enable us to go beyond 53 bits:</p>
+<div class="sourceCode" id="cb340"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb340-1"><a href="ch_bigints.html#cb340-1" aria-hidden="true" tabindex="-1"></a>&gt; 2n**53n</span>
+<span id="cb340-2"><a href="ch_bigints.html#cb340-2" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740992n</span></span>
+<span id="cb340-3"><a href="ch_bigints.html#cb340-3" aria-hidden="true" tabindex="-1"></a>&gt; 2n**53n + 1n</span>
+<span id="cb340-4"><a href="ch_bigints.html#cb340-4" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740993n</span></span>
+<span id="cb340-5"><a href="ch_bigints.html#cb340-5" aria-hidden="true" tabindex="-1"></a>&gt; 2n**53n + 2n</span>
+<span id="cb340-6"><a href="ch_bigints.html#cb340-6" aria-hidden="true" tabindex="-1"></a><span class="kw">9007199254740994n</span></span></code></pre></div>
+<h4 id="example-using-bigints">18.2.2 Example: using bigints</h4>
+<p>This is what using bigints looks like (code based on an example in the proposal):</p>
+<div class="sourceCode" id="cb341"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb341-1"><a href="ch_bigints.html#cb341-1" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb341-2"><a href="ch_bigints.html#cb341-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Takes a bigint as an argument and returns a bigint</span></span>
+<span id="cb341-3"><a href="ch_bigints.html#cb341-3" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb341-4"><a href="ch_bigints.html#cb341-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">nthPrime</span>(nth) {</span>
+<span id="cb341-5"><a href="ch_bigints.html#cb341-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="kw">typeof</span> nth <span class="op">!==</span> <span class="st">'bigint'</span>) {</span>
+<span id="cb341-6"><a href="ch_bigints.html#cb341-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">TypeError</span>()<span class="op">;</span></span>
+<span id="cb341-7"><a href="ch_bigints.html#cb341-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb341-8"><a href="ch_bigints.html#cb341-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">isPrime</span>(p) {</span>
+<span id="cb341-9"><a href="ch_bigints.html#cb341-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> 2n<span class="op">;</span> i <span class="op">&lt;</span> p<span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb341-10"><a href="ch_bigints.html#cb341-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (p <span class="op">%</span> i <span class="op">===</span> 0n) <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb341-11"><a href="ch_bigints.html#cb341-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb341-12"><a href="ch_bigints.html#cb341-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb341-13"><a href="ch_bigints.html#cb341-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb341-14"><a href="ch_bigints.html#cb341-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> 2n<span class="op">;</span> <span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb341-15"><a href="ch_bigints.html#cb341-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">isPrime</span>(i)) {</span>
+<span id="cb341-16"><a href="ch_bigints.html#cb341-16" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="op">--</span>nth <span class="op">===</span> 0n) <span class="cf">return</span> i<span class="op">;</span></span>
+<span id="cb341-17"><a href="ch_bigints.html#cb341-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb341-18"><a href="ch_bigints.html#cb341-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb341-19"><a href="ch_bigints.html#cb341-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb341-20"><a href="ch_bigints.html#cb341-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb341-21"><a href="ch_bigints.html#cb341-21" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb341-22"><a href="ch_bigints.html#cb341-22" aria-hidden="true" tabindex="-1"></a>  [1n<span class="op">,</span> 2n<span class="op">,</span> 3n<span class="op">,</span> 4n<span class="op">,</span> 5n]<span class="op">.</span><span class="fu">map</span>(nth <span class="kw">=&gt;</span> <span class="fu">nthPrime</span>(nth))<span class="op">,</span></span>
+<span id="cb341-23"><a href="ch_bigints.html#cb341-23" aria-hidden="true" tabindex="-1"></a>  [2n<span class="op">,</span> 3n<span class="op">,</span> 5n<span class="op">,</span> 7n<span class="op">,</span> 11n]</span>
+<span id="cb341-24"><a href="ch_bigints.html#cb341-24" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<h3 id="bigint-literals">18.3 Bigint literals</h3>
+<p>Like number literals, bigint literals support several bases:</p>
+<ul>
+<li>Decimal: <code>123n</code></li>
+<li>Hexadecimal: <code>0xFFn</code></li>
+<li>Binary: <code>0b1101n</code></li>
+<li>Octal: <code>0o777n</code></li>
+</ul>
+<p>Negative bigints are produced by prefixing the unary minus operator: <code>-0123n</code></p>
+<h4 id="numeric-separator-bigint-literals">18.3.1 Underscores (<code>_</code>) as separators in bigint literals [ES2021]</h4>
+<p><a href="ch_numbers.html#numeric-separator-number-literals">Just like in number literals</a>, we can use underscores (<code>_</code>) as separators in bigint literals:</p>
+<div class="sourceCode" id="cb342"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb342-1"><a href="ch_bigints.html#cb342-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> massOfEarthInKg <span class="op">=</span> 6_000_000_000_000_000_000_000_000n<span class="op">;</span></span></code></pre></div>
+<p>Bigints are often used to represent money in the financial technical sector. Separators can help here, too:</p>
+<div class="sourceCode" id="cb343"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb343-1"><a href="ch_bigints.html#cb343-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> priceInCents <span class="op">=</span> 123_000_00<span class="op">;</span> <span class="co">// 123 thousand dollars</span></span></code></pre></div>
+<p>As with number literals, two restrictions apply:</p>
+<ul>
+<li>We can only put an underscore between two digits.</li>
+<li>We can use at most one underscore in a row.</li>
+</ul>
+<h3 id="reusing-number-operators-for-bigints-overloading">18.4 Reusing number operators for bigints (overloading)</h3>
+<p>With most operators, we are not allowed to mix bigints and numbers. If we do, exceptions are thrown:</p>
+<div class="sourceCode" id="cb344"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb344-1"><a href="ch_bigints.html#cb344-1" aria-hidden="true" tabindex="-1"></a>&gt; 2n + 1</span>
+<span id="cb344-2"><a href="ch_bigints.html#cb344-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Cannot mix BigInt and other types, use explicit conversions</span></span></code></pre></div>
+<p>The reason for this rule is that there is no general way of coercing a number and a bigint to a common type: numbers can’t represent bigints beyond 53 bits, bigints can’t represent fractions. Therefore, the exceptions warn us about typos that may lead to unexpected results.</p>
+<p>For example, should the result of the following expression be <code>9007199254740993n</code> or <code>9007199254740992</code>?</p>
+<div class="sourceCode" id="cb345"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb345-1"><a href="ch_bigints.html#cb345-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="op">**</span><span class="dv">53</span> <span class="op">+</span> 1n</span></code></pre></div>
+<p>It is also not clear what the result of the following expression should be:</p>
+<div class="sourceCode" id="cb346"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb346-1"><a href="ch_bigints.html#cb346-1" aria-hidden="true" tabindex="-1"></a>2n<span class="op">**</span>53n <span class="op">*</span> <span class="fl">3.3</span></span></code></pre></div>
+<h4 id="arithmetic-operators-1">18.4.1 Arithmetic operators</h4>
+<p>Binary <code>+</code>, binary <code>-</code>, <code>*</code>, <code>**</code> work as expected:</p>
+<div class="sourceCode" id="cb347"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb347-1"><a href="ch_bigints.html#cb347-1" aria-hidden="true" tabindex="-1"></a>&gt; 7n * 3n</span>
+<span id="cb347-2"><a href="ch_bigints.html#cb347-2" aria-hidden="true" tabindex="-1"></a><span class="kw">21n</span></span></code></pre></div>
+<p>It is OK to mix bigints and strings:</p>
+<div class="sourceCode" id="cb348"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb348-1"><a href="ch_bigints.html#cb348-1" aria-hidden="true" tabindex="-1"></a>&gt; 6n + ' apples'</span>
+<span id="cb348-2"><a href="ch_bigints.html#cb348-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'6 apples'</span></span></code></pre></div>
+<p><code>/</code>, <code>%</code> round towards zero (like <code>Math.trunc()</code>):</p>
+<div class="sourceCode" id="cb349"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb349-1"><a href="ch_bigints.html#cb349-1" aria-hidden="true" tabindex="-1"></a>&gt; 1n / 2n</span>
+<span id="cb349-2"><a href="ch_bigints.html#cb349-2" aria-hidden="true" tabindex="-1"></a><span class="kw">0n</span></span></code></pre></div>
+<p>Unary <code>-</code> works as expected:</p>
+<div class="sourceCode" id="cb350"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb350-1"><a href="ch_bigints.html#cb350-1" aria-hidden="true" tabindex="-1"></a>&gt; -(-64n)</span>
+<span id="cb350-2"><a href="ch_bigints.html#cb350-2" aria-hidden="true" tabindex="-1"></a><span class="kw">64n</span></span></code></pre></div>
+<p>Unary <code>+</code> is not supported for bigints because much code relies on it coercing its operand to number:</p>
+<div class="sourceCode" id="cb351"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb351-1"><a href="ch_bigints.html#cb351-1" aria-hidden="true" tabindex="-1"></a>&gt; +23n</span>
+<span id="cb351-2"><a href="ch_bigints.html#cb351-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Cannot convert a BigInt value to a number</span></span></code></pre></div>
+<h4 id="ordering-operators-1">18.4.2 Ordering operators</h4>
+<p>Ordering operators <code>&lt;</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;=</code> work as expected:</p>
+<div class="sourceCode" id="cb352"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb352-1"><a href="ch_bigints.html#cb352-1" aria-hidden="true" tabindex="-1"></a>&gt; 17n &lt;= 17n</span>
+<span id="cb352-2"><a href="ch_bigints.html#cb352-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb352-3"><a href="ch_bigints.html#cb352-3" aria-hidden="true" tabindex="-1"></a>&gt; 3n &gt; -1n</span>
+<span id="cb352-4"><a href="ch_bigints.html#cb352-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Comparing bigints and numbers does not pose any risks. Therefore, we can mix bigints and numbers:</p>
+<div class="sourceCode" id="cb353"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb353-1"><a href="ch_bigints.html#cb353-1" aria-hidden="true" tabindex="-1"></a>&gt; 3n &gt; -1</span>
+<span id="cb353-2"><a href="ch_bigints.html#cb353-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h4 id="bitwise-operators-1">18.4.3 Bitwise operators</h4>
+<h5 id="bitwise-operators-for-numbers">18.4.3.1 Bitwise operators for numbers</h5>
+<p>Bitwise operators interpret numbers as 32-bit integers. These integers are either unsigned or signed. If they are signed, the negative of an integer is its <em>two’s complement</em> (adding an integer to its two’s complement – while ignoring overflow – produces zero):</p>
+<div class="sourceCode" id="cb354"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb354-1"><a href="ch_bigints.html#cb354-1" aria-hidden="true" tabindex="-1"></a>&gt; 2**32-1 &gt;&gt; 0</span>
+<span id="cb354-2"><a href="ch_bigints.html#cb354-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-1</span></span></code></pre></div>
+<p>Due to these integers having a fixed size, their highest bits indicate their signs:</p>
+<div class="sourceCode" id="cb355"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb355-1"><a href="ch_bigints.html#cb355-1" aria-hidden="true" tabindex="-1"></a>&gt; 2**31 &gt;&gt; 0 // highest bit is 1</span>
+<span id="cb355-2"><a href="ch_bigints.html#cb355-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-2147483648</span></span>
+<span id="cb355-3"><a href="ch_bigints.html#cb355-3" aria-hidden="true" tabindex="-1"></a>&gt; 2**31 - 1 &gt;&gt; 0 // highest bit is 0</span>
+<span id="cb355-4"><a href="ch_bigints.html#cb355-4" aria-hidden="true" tabindex="-1"></a><span class="kw">2147483647</span></span></code></pre></div>
+<h5 id="bitwise-operators-for-bigints">18.4.3.2 Bitwise operators for bigints</h5>
+<p>For bigints, bitwise operators interpret a negative sign as an infinite two’s complement – for example:</p>
+<ul>
+<li><code>-1</code> is <code>···111111</code> (ones extend infinitely to the left)</li>
+<li><code>-2</code> is <code>···111110</code></li>
+<li><code>-3</code> is <code>···111101</code></li>
+<li><code>-4</code> is <code>···111100</code></li>
+</ul>
+<p>That is, a negative sign is more of an external flag and not represented as an actual bit.</p>
+<h5 id="bitwise-not-1">18.4.3.3 Bitwise Not (<code>~</code>)</h5>
+<p>Bitwise Not (<code>~</code>) inverts all bits:</p>
+<div class="sourceCode" id="cb356"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb356-1"><a href="ch_bigints.html#cb356-1" aria-hidden="true" tabindex="-1"></a>&gt; ~0b10n</span>
+<span id="cb356-2"><a href="ch_bigints.html#cb356-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-3n</span></span>
+<span id="cb356-3"><a href="ch_bigints.html#cb356-3" aria-hidden="true" tabindex="-1"></a>&gt; ~0n</span>
+<span id="cb356-4"><a href="ch_bigints.html#cb356-4" aria-hidden="true" tabindex="-1"></a><span class="kw">-1n</span></span>
+<span id="cb356-5"><a href="ch_bigints.html#cb356-5" aria-hidden="true" tabindex="-1"></a>&gt; ~-2n</span>
+<span id="cb356-6"><a href="ch_bigints.html#cb356-6" aria-hidden="true" tabindex="-1"></a><span class="kw">1n</span></span></code></pre></div>
+<h5 id="binary-bitwise-operators-1">18.4.3.4 Binary bitwise operators (<code>&amp;</code>, <code>|</code>, <code>^</code>)</h5>
+<p>Applying binary bitwise operators to bigints works analogously to applying them to numbers:</p>
+<div class="sourceCode" id="cb357"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb357-1"><a href="ch_bigints.html#cb357-1" aria-hidden="true" tabindex="-1"></a>&gt; (0b1010n |  0b0111n).toString(2)</span>
+<span id="cb357-2"><a href="ch_bigints.html#cb357-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'1111'</span></span>
+<span id="cb357-3"><a href="ch_bigints.html#cb357-3" aria-hidden="true" tabindex="-1"></a>&gt; (0b1010n &amp;  0b0111n).toString(2)</span>
+<span id="cb357-4"><a href="ch_bigints.html#cb357-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'10'</span></span>
+<span id="cb357-5"><a href="ch_bigints.html#cb357-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb357-6"><a href="ch_bigints.html#cb357-6" aria-hidden="true" tabindex="-1"></a>&gt; (0b1010n | -1n).toString(2)</span>
+<span id="cb357-7"><a href="ch_bigints.html#cb357-7" aria-hidden="true" tabindex="-1"></a><span class="kw">'-1'</span></span>
+<span id="cb357-8"><a href="ch_bigints.html#cb357-8" aria-hidden="true" tabindex="-1"></a>&gt; (0b1010n &amp; -1n).toString(2)</span>
+<span id="cb357-9"><a href="ch_bigints.html#cb357-9" aria-hidden="true" tabindex="-1"></a><span class="kw">'1010'</span></span></code></pre></div>
+<h5 id="bitwise-signed-shift-operators-and">18.4.3.5 Bitwise signed shift operators (<code>&lt;&lt;</code> and <code>&gt;&gt;</code>)</h5>
+<p>The signed shift operators for bigints preserve the sign of a number:</p>
+<div class="sourceCode" id="cb358"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb358-1"><a href="ch_bigints.html#cb358-1" aria-hidden="true" tabindex="-1"></a>&gt; 2n &lt;&lt; 1n</span>
+<span id="cb358-2"><a href="ch_bigints.html#cb358-2" aria-hidden="true" tabindex="-1"></a><span class="kw">4n</span></span>
+<span id="cb358-3"><a href="ch_bigints.html#cb358-3" aria-hidden="true" tabindex="-1"></a>&gt; -2n &lt;&lt; 1n</span>
+<span id="cb358-4"><a href="ch_bigints.html#cb358-4" aria-hidden="true" tabindex="-1"></a><span class="kw">-4n</span></span>
+<span id="cb358-5"><a href="ch_bigints.html#cb358-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb358-6"><a href="ch_bigints.html#cb358-6" aria-hidden="true" tabindex="-1"></a>&gt; 2n &gt;&gt; 1n</span>
+<span id="cb358-7"><a href="ch_bigints.html#cb358-7" aria-hidden="true" tabindex="-1"></a><span class="kw">1n</span></span>
+<span id="cb358-8"><a href="ch_bigints.html#cb358-8" aria-hidden="true" tabindex="-1"></a>&gt; -2n &gt;&gt; 1n</span>
+<span id="cb358-9"><a href="ch_bigints.html#cb358-9" aria-hidden="true" tabindex="-1"></a><span class="kw">-1n</span></span></code></pre></div>
+<p>Recall that <code>-1n</code> is a sequence of ones that extends infinitely to the left. That’s why shifting it left doesn’t change it:</p>
+<div class="sourceCode" id="cb359"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb359-1"><a href="ch_bigints.html#cb359-1" aria-hidden="true" tabindex="-1"></a>&gt; -1n &gt;&gt; 20n</span>
+<span id="cb359-2"><a href="ch_bigints.html#cb359-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-1n</span></span></code></pre></div>
+<h5 id="bitwise-unsigned-right-shift-operator">18.4.3.6 Bitwise unsigned right shift operator (<code>&gt;&gt;&gt;</code>)</h5>
+<p>There is no unsigned right shift operator for bigints:</p>
+<div class="sourceCode" id="cb360"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb360-1"><a href="ch_bigints.html#cb360-1" aria-hidden="true" tabindex="-1"></a>&gt; 2n &gt;&gt;&gt; 1n</span>
+<span id="cb360-2"><a href="ch_bigints.html#cb360-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: BigInts have no unsigned right shift, use </span>&gt;&gt; instead</span></code></pre></div>
+<p>Why? The idea behind unsigned right shifting is that a zero is shifted in “from the left”. In other words, the assumption is that there is a finite amount of binary digits.</p>
+<p>However, with bigints, there is no “left”, their binary digits extend infinitely. This is especially important with negative numbers.</p>
+<p>Signed right shift works even with an infinite number of digits because the highest digit is preserved. Therefore, it can be adapted to bigints.</p>
+<h4 id="loose-equality-and-inequality">18.4.4 Loose equality (<code>==</code>) and inequality (<code>!=</code>)</h4>
+<p>Loose equality (<code>==</code>) and inequality (<code>!=</code>) coerce values:</p>
+<div class="sourceCode" id="cb361"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb361-1"><a href="ch_bigints.html#cb361-1" aria-hidden="true" tabindex="-1"></a>&gt; 0n == false</span>
+<span id="cb361-2"><a href="ch_bigints.html#cb361-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb361-3"><a href="ch_bigints.html#cb361-3" aria-hidden="true" tabindex="-1"></a>&gt; 1n == true</span>
+<span id="cb361-4"><a href="ch_bigints.html#cb361-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb361-5"><a href="ch_bigints.html#cb361-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb361-6"><a href="ch_bigints.html#cb361-6" aria-hidden="true" tabindex="-1"></a>&gt; 123n == 123</span>
+<span id="cb361-7"><a href="ch_bigints.html#cb361-7" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb361-8"><a href="ch_bigints.html#cb361-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb361-9"><a href="ch_bigints.html#cb361-9" aria-hidden="true" tabindex="-1"></a>&gt; 123n == '123'</span>
+<span id="cb361-10"><a href="ch_bigints.html#cb361-10" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h4 id="strict-equality-and-inequality">18.4.5 Strict equality (<code>===</code>) and inequality (<code>!==</code>)</h4>
+<p>Strict equality (<code>===</code>) and inequality (<code>!==</code>) only consider values to be equal if they have the same type:</p>
+<div class="sourceCode" id="cb362"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb362-1"><a href="ch_bigints.html#cb362-1" aria-hidden="true" tabindex="-1"></a>&gt; 123n === 123</span>
+<span id="cb362-2"><a href="ch_bigints.html#cb362-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb362-3"><a href="ch_bigints.html#cb362-3" aria-hidden="true" tabindex="-1"></a>&gt; 123n === 123n</span>
+<span id="cb362-4"><a href="ch_bigints.html#cb362-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h3 id="the-wrapper-constructor-bigint">18.5 The wrapper constructor <code>BigInt</code></h3>
+<p>Analogously to numbers, bigints have the associated wrapper constructor <code>BigInt</code>.</p>
+<h4 id="bigint-as-a-constructor-and-as-a-function">18.5.1 <code>BigInt</code> as a constructor and as a function</h4>
+<ul>
+<li><p><code>new BigInt()</code>: throws a <code>TypeError</code>.</p></li>
+<li><p><code>BigInt(x)</code> converts arbitrary values <code>x</code> to bigint. This works similarly to <code>Number()</code>, with several differences which are summarized in tbl.&nbsp;<a href="#tbl:converting-values-to-bigints">13</a> and explained in more detail in the following subsections.</p></li>
+</ul>
+<div id="tbl:converting-values-to-bigints">
+<table>
+<caption>Table 13: Converting values to bigints.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><code>x</code></th>
+<th style="text-align: left;"><code>BigInt(x)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>undefined</code></td>
+<td style="text-align: left;">Throws <code>TypeError</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>null</code></td>
+<td style="text-align: left;">Throws <code>TypeError</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;"><code>false</code> <code>→</code> <code>0n</code>, <code>true</code> <code>→</code> <code>1n</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">number</td>
+<td style="text-align: left;">Example: <code>123</code> <code>→</code> <code>123n</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Non-integer <code>→</code> throws <code>RangeError</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bigint</td>
+<td style="text-align: left;"><code>x</code> (no change)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">Example: <code>'123'</code> <code>→</code> <code>123n</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unparsable <code>→</code> throws <code>SyntaxError</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">symbol</td>
+<td style="text-align: left;">Throws <code>TypeError</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">Configurable (e.g.&nbsp;via <code>.valueOf()</code>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="converting-undefined-and-null">18.5.1.1 Converting <code>undefined</code> and <code>null</code></h5>
+<p>A <code>TypeError</code> is thrown if <code>x</code> is either <code>undefined</code> or <code>null</code>:</p>
+<div class="sourceCode" id="cb363"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb363-1"><a href="ch_bigints.html#cb363-1" aria-hidden="true" tabindex="-1"></a>&gt; BigInt(undefined)</span>
+<span id="cb363-2"><a href="ch_bigints.html#cb363-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Cannot convert undefined to a BigInt</span></span>
+<span id="cb363-3"><a href="ch_bigints.html#cb363-3" aria-hidden="true" tabindex="-1"></a>&gt; BigInt(null)</span>
+<span id="cb363-4"><a href="ch_bigints.html#cb363-4" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Cannot convert null to a BigInt</span></span></code></pre></div>
+<h5 id="converting-strings">18.5.1.2 Converting strings</h5>
+<p>If a string does not represent an integer, <code>BigInt()</code> throws a <code>SyntaxError</code> (whereas <code>Number()</code> returns the error value <code>NaN</code>):</p>
+<div class="sourceCode" id="cb364"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb364-1"><a href="ch_bigints.html#cb364-1" aria-hidden="true" tabindex="-1"></a>&gt; BigInt('abc')</span>
+<span id="cb364-2"><a href="ch_bigints.html#cb364-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SyntaxError: Cannot convert abc to a BigInt</span></span></code></pre></div>
+<p>The suffix <code>'n'</code> is not allowed:</p>
+<div class="sourceCode" id="cb365"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb365-1"><a href="ch_bigints.html#cb365-1" aria-hidden="true" tabindex="-1"></a>&gt; BigInt('123n')</span>
+<span id="cb365-2"><a href="ch_bigints.html#cb365-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SyntaxError: Cannot convert 123n to a BigInt</span></span></code></pre></div>
+<p>All bases of bigint literals are allowed:</p>
+<div class="sourceCode" id="cb366"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb366-1"><a href="ch_bigints.html#cb366-1" aria-hidden="true" tabindex="-1"></a>&gt; BigInt('123')</span>
+<span id="cb366-2"><a href="ch_bigints.html#cb366-2" aria-hidden="true" tabindex="-1"></a><span class="kw">123n</span></span>
+<span id="cb366-3"><a href="ch_bigints.html#cb366-3" aria-hidden="true" tabindex="-1"></a>&gt; BigInt('0xFF')</span>
+<span id="cb366-4"><a href="ch_bigints.html#cb366-4" aria-hidden="true" tabindex="-1"></a><span class="kw">255n</span></span>
+<span id="cb366-5"><a href="ch_bigints.html#cb366-5" aria-hidden="true" tabindex="-1"></a>&gt; BigInt('0b1101')</span>
+<span id="cb366-6"><a href="ch_bigints.html#cb366-6" aria-hidden="true" tabindex="-1"></a><span class="kw">13n</span></span>
+<span id="cb366-7"><a href="ch_bigints.html#cb366-7" aria-hidden="true" tabindex="-1"></a>&gt; BigInt('0o777')</span>
+<span id="cb366-8"><a href="ch_bigints.html#cb366-8" aria-hidden="true" tabindex="-1"></a><span class="kw">511n</span></span></code></pre></div>
+<h5 id="non-integer-numbers-produce-exceptions">18.5.1.3 Non-integer numbers produce exceptions</h5>
+<div class="sourceCode" id="cb367"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb367-1"><a href="ch_bigints.html#cb367-1" aria-hidden="true" tabindex="-1"></a>&gt; BigInt(123.45)</span>
+<span id="cb367-2"><a href="ch_bigints.html#cb367-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RangeError: The number 123.45 cannot be converted to a BigInt because</span></span>
+<span id="cb367-3"><a href="ch_bigints.html#cb367-3" aria-hidden="true" tabindex="-1"></a><span class="kw">it is not an integer</span></span>
+<span id="cb367-4"><a href="ch_bigints.html#cb367-4" aria-hidden="true" tabindex="-1"></a>&gt; BigInt(123)</span>
+<span id="cb367-5"><a href="ch_bigints.html#cb367-5" aria-hidden="true" tabindex="-1"></a><span class="kw">123n</span></span></code></pre></div>
+<h5 id="converting-objects">18.5.1.4 Converting objects</h5>
+<p>How objects are converted to bigints can be configured – for example, by overriding <code>.valueOf()</code>:</p>
+<div class="sourceCode" id="cb368"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb368-1"><a href="ch_bigints.html#cb368-1" aria-hidden="true" tabindex="-1"></a>&gt; BigInt({valueOf() {return 123n}})</span>
+<span id="cb368-2"><a href="ch_bigints.html#cb368-2" aria-hidden="true" tabindex="-1"></a><span class="kw">123n</span></span></code></pre></div>
+<h4 id="bigint.prototype.-methods">18.5.2 <code>BigInt.prototype.*</code> methods</h4>
+<p><code>BigInt.prototype</code> holds the methods “inherited” by primitive bigints:</p>
+<ul>
+<li><code>BigInt.prototype.toLocaleString(reserved1?, reserved2?)</code></li>
+<li><code>BigInt.prototype.toString(radix?)</code></li>
+<li><code>BigInt.prototype.valueOf()</code></li>
+</ul>
+<h4 id="bigint.-methods">18.5.3 <code>BigInt.*</code> methods</h4>
+<ul>
+<li><p><code>BigInt.asIntN(width, theInt)</code><br>
+Casts <code>theInt</code> to <code>width</code> bits (signed). This influences how the value is represented internally.</p></li>
+<li><p><code>BigInt.asUintN(width, theInt)</code><br>
+Casts <code>theInt</code> to <code>width</code> bits (unsigned).</p></li>
+</ul>
+<h4 id="casting-and-64-bit-integers">18.5.4 Casting and 64-bit integers</h4>
+<p>Casting allows us to create integer values with a specific number of bits. If we want to restrict ourselves to just 64-bit integers, we have to always cast:</p>
+<div class="sourceCode" id="cb369"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb369-1"><a href="ch_bigints.html#cb369-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> uint64a <span class="op">=</span> <span class="bu">BigInt</span><span class="op">.</span><span class="fu">asUintN</span>(<span class="dv">64</span><span class="op">,</span> 12345n)<span class="op">;</span></span>
+<span id="cb369-2"><a href="ch_bigints.html#cb369-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> uint64b <span class="op">=</span> <span class="bu">BigInt</span><span class="op">.</span><span class="fu">asUintN</span>(<span class="dv">64</span><span class="op">,</span> 67890n)<span class="op">;</span></span>
+<span id="cb369-3"><a href="ch_bigints.html#cb369-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> result <span class="op">=</span> <span class="bu">BigInt</span><span class="op">.</span><span class="fu">asUintN</span>(<span class="dv">64</span><span class="op">,</span> uint64a <span class="op">*</span> uint64b)<span class="op">;</span></span></code></pre></div>
+<h3 id="coercing-bigints-to-other-primitive-types">18.6 Coercing bigints to other primitive types</h3>
+<p>This table show what happens if we convert bigints to other primitive types:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Convert to</th>
+<th style="text-align: left;">Explicit conversion</th>
+<th style="text-align: left;">Coercion (implicit conversion)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;"><code>Boolean(0n)</code> <code>→</code> <code>false</code></td>
+<td style="text-align: left;"><code>!0n</code> <code>→</code> <code>true</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Boolean(int)</code> <code>→</code> <code>true</code></td>
+<td style="text-align: left;"><code>!int</code> <code>→</code> <code>false</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">number</td>
+<td style="text-align: left;"><code>Number(7n)</code> <code>→</code> <code>7</code> (example)</td>
+<td style="text-align: left;"><code>+int</code> <code>→</code> <code>TypeError</code> (1)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><code>String(7n)</code> <code>→</code> <code>'7'</code> (example)</td>
+<td style="text-align: left;"><code>''+7n</code> <code>→</code> <code>'7'</code> (example)</td>
+</tr>
+</tbody>
+</table>
+<p>Footnote:</p>
+<ul>
+<li>(1) Unary <code>+</code> is not supported for bigints, because much code relies on it coercing its operand to number.</li>
+</ul>
+<h3 id="typedarrays-and-dataview-operations-for-64-bit-values">18.7 TypedArrays and DataView operations for 64-bit values</h3>
+<p>Thanks to bigints, Typed Arrays and DataViews can support 64-bit values:</p>
+<ul>
+<li>Typed Array constructors:
+<ul>
+<li><code>BigInt64Array</code></li>
+<li><code>BigUint64Array</code></li>
+</ul></li>
+<li>DataView methods:
+<ul>
+<li><code>DataView.prototype.getBigInt64()</code></li>
+<li><code>DataView.prototype.setBigInt64()</code></li>
+<li><code>DataView.prototype.getBigUint64()</code></li>
+<li><code>DataView.prototype.setBigUint64()</code></li>
+</ul></li>
+</ul>
+<h3 id="bigints-and-json">18.8 Bigints and JSON</h3>
+<p>The JSON standard is fixed and won’t change. The upside is that old JSON parsing code will never be outdated. The downside is that JSON can’t be extended to contain bigints.</p>
+<p>Stringifying bigints throws exceptions:</p>
+<div class="sourceCode" id="cb370"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb370-1"><a href="ch_bigints.html#cb370-1" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify(123n)</span>
+<span id="cb370-2"><a href="ch_bigints.html#cb370-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Do not know how to serialize a BigInt</span></span>
+<span id="cb370-3"><a href="ch_bigints.html#cb370-3" aria-hidden="true" tabindex="-1"></a>&gt; JSON.stringify([123n])</span>
+<span id="cb370-4"><a href="ch_bigints.html#cb370-4" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Do not know how to serialize a BigInt</span></span></code></pre></div>
+<h4 id="stringifying-bigints">18.8.1 Stringifying bigints</h4>
+<p>Therefore, our best option is to store bigints in strings:</p>
+<div class="sourceCode" id="cb371"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb371-1"><a href="ch_bigints.html#cb371-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> bigintPrefix <span class="op">=</span> <span class="st">'[[bigint]]'</span><span class="op">;</span></span>
+<span id="cb371-2"><a href="ch_bigints.html#cb371-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb371-3"><a href="ch_bigints.html#cb371-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">bigintReplacer</span>(_key<span class="op">,</span> value) {</span>
+<span id="cb371-4"><a href="ch_bigints.html#cb371-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="kw">typeof</span> value <span class="op">===</span> <span class="st">'bigint'</span>) {</span>
+<span id="cb371-5"><a href="ch_bigints.html#cb371-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bigintPrefix <span class="op">+</span> value<span class="op">;</span></span>
+<span id="cb371-6"><a href="ch_bigints.html#cb371-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb371-7"><a href="ch_bigints.html#cb371-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> value<span class="op">;</span></span>
+<span id="cb371-8"><a href="ch_bigints.html#cb371-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb371-9"><a href="ch_bigints.html#cb371-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb371-10"><a href="ch_bigints.html#cb371-10" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> data <span class="op">=</span> { <span class="dt">value</span><span class="op">:</span> 9007199254740993n }<span class="op">;</span></span>
+<span id="cb371-11"><a href="ch_bigints.html#cb371-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb371-12"><a href="ch_bigints.html#cb371-12" aria-hidden="true" tabindex="-1"></a>  <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(data<span class="op">,</span> bigintReplacer)<span class="op">,</span></span>
+<span id="cb371-13"><a href="ch_bigints.html#cb371-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">'{"value":"[[bigint]]9007199254740993"}'</span></span>
+<span id="cb371-14"><a href="ch_bigints.html#cb371-14" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<h4 id="parsing-bigints">18.8.2 Parsing bigints</h4>
+<p>The following code shows how to parse strings such as the one that we have produced in the previous example.</p>
+<div class="sourceCode" id="cb372"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb372-1"><a href="ch_bigints.html#cb372-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">bigintReviver</span>(_key<span class="op">,</span> value) {</span>
+<span id="cb372-2"><a href="ch_bigints.html#cb372-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="kw">typeof</span> value <span class="op">===</span> <span class="st">'string'</span> <span class="op">&amp;&amp;</span> value<span class="op">.</span><span class="fu">startsWith</span>(bigintPrefix)) {</span>
+<span id="cb372-3"><a href="ch_bigints.html#cb372-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">BigInt</span>(value<span class="op">.</span><span class="fu">slice</span>(bigintPrefix<span class="op">.</span><span class="at">length</span>))<span class="op">;</span></span>
+<span id="cb372-4"><a href="ch_bigints.html#cb372-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb372-5"><a href="ch_bigints.html#cb372-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> value<span class="op">;</span></span>
+<span id="cb372-6"><a href="ch_bigints.html#cb372-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb372-7"><a href="ch_bigints.html#cb372-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb372-8"><a href="ch_bigints.html#cb372-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> str <span class="op">=</span> <span class="st">'{"value":"[[bigint]]9007199254740993"}'</span><span class="op">;</span></span>
+<span id="cb372-9"><a href="ch_bigints.html#cb372-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb372-10"><a href="ch_bigints.html#cb372-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(str<span class="op">,</span> bigintReviver)<span class="op">,</span></span>
+<span id="cb372-11"><a href="ch_bigints.html#cb372-11" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">value</span><span class="op">:</span> 9007199254740993n }</span>
+<span id="cb372-12"><a href="ch_bigints.html#cb372-12" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<h3 id="faq-bigints">18.9 FAQ: Bigints</h3>
+<h4 id="how-do-i-decide-when-to-use-numbers-and-when-to-use-bigints">18.9.1 How do I decide when to use numbers and when to use bigints?</h4>
+<p>My recommendations:</p>
+<ul>
+<li>Use numbers for up to 53 bits and for Array indices. Rationale: They already appear everywhere and are handled efficiently by most engines (especially if they fit into 31 bits). Appearances include:
+<ul>
+<li><code>Array.prototype.forEach()</code></li>
+<li><code>Array.prototype.entries()</code></li>
+</ul></li>
+<li>Use bigints for large numeric values: If your fraction-less values don’t fit into 53 bits, you have no choice but to move to bigints.</li>
+</ul>
+<p>All existing web APIs return and accept only numbers and will only upgrade to bigint on a case-by-case basis.</p>
+<h4 id="why-not-just-increase-the-precision-of-numbers-in-the-same-manner-as-is-done-for-bigints">18.9.2 Why not just increase the precision of numbers in the same manner as is done for bigints?</h4>
+<p>One could conceivably split <code>number</code> into <code>integer</code> and <code>double</code>, but that would add many new complexities to the language (several integer-only operators etc.). I’ve sketched the consequences in <a href="https://gist.github.com/rauschma/13d48d1c49615ce2396ce7c9e45d4cd1">a Gist</a>.</p>
+<hr>
+<p><strong>Acknowledgements:</strong></p>
+<ul>
+<li>Thanks to Daniel Ehrenberg for reviewing an earlier version of this content.</li>
+<li>Thanks to Dan Callahan for reviewing an earlier version of this content.</li>
+</ul>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/50">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_unicode.html">19 Unicode – a brief introduction (advanced)</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

@@ -1,0 +1,282 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_sets">35 Sets (<code>Set</code>)</h2>
+<p><a id="index-entry-424" class="index-entry"></a><a id="index-entry-425" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>35.1 <a href="ch_sets.html#using-sets">Using Sets</a>
+<ul>
+<li>35.1.1 <a href="ch_sets.html#creating-sets">Creating Sets</a></li>
+<li>35.1.2 <a href="ch_sets.html#adding-removing-checking-membership">Adding, removing, checking membership</a></li>
+<li>35.1.3 <a href="ch_sets.html#determining-the-size-of-a-set-and-clearing-it">Determining the size of a Set and clearing it</a></li>
+<li>35.1.4 <a href="ch_sets.html#iterating-over-sets-1">Iterating over Sets</a></li>
+</ul></li>
+<li>35.2 <a href="ch_sets.html#examples-of-using-sets">Examples of using Sets</a>
+<ul>
+<li>35.2.1 <a href="ch_sets.html#removing-duplicates-from-an-array">Removing duplicates from an Array</a></li>
+<li>35.2.2 <a href="ch_sets.html#creating-a-set-of-unicode-characters-code-points">Creating a set of Unicode characters (code points)</a></li>
+</ul></li>
+<li>35.3 <a href="ch_sets.html#what-set-elements-are-considered-equal">What Set elements are considered equal?</a></li>
+<li>35.4 <a href="ch_sets.html#missing-set-operations">Missing Set operations</a>
+<ul>
+<li>35.4.1 <a href="ch_sets.html#union-a-b">Union (<code>a</code> ∪ <code>b</code>)</a></li>
+<li>35.4.2 <a href="ch_sets.html#intersection-a-b">Intersection (<code>a</code> ∩ <code>b</code>)</a></li>
+<li>35.4.3 <a href="ch_sets.html#difference-a-b">Difference (<code>a</code> \ <code>b</code>)</a></li>
+<li>35.4.4 <a href="ch_sets.html#mapping-over-sets">Mapping over Sets</a></li>
+<li>35.4.5 <a href="ch_sets.html#filtering-sets">Filtering Sets</a></li>
+</ul></li>
+<li>35.5 <a href="ch_sets.html#quickref-sets">Quick reference: <code>Set&lt;T&gt;</code></a>
+<ul>
+<li>35.5.1 <a href="ch_sets.html#constructor-1">Constructor</a></li>
+<li>35.5.2 <a href="ch_sets.html#sett.prototype-single-set-elements"><code>Set&lt;T&gt;.prototype</code>: single Set elements</a></li>
+<li>35.5.3 <a href="ch_sets.html#sett.prototype-all-set-elements"><code>Set&lt;T&gt;.prototype</code>: all Set elements</a></li>
+<li>35.5.4 <a href="ch_sets.html#sett.prototype-iterating-and-looping"><code>Set&lt;T&gt;.prototype</code>: iterating and looping</a></li>
+<li>35.5.5 <a href="ch_sets.html#symmetry-with-map">Symmetry with <code>Map</code></a></li>
+</ul></li>
+<li>35.6 <a href="ch_sets.html#faq-sets">FAQ: Sets</a>
+<ul>
+<li>35.6.1 <a href="ch_sets.html#why-do-sets-have-a-.size-while-arrays-have-a-.length">Why do Sets have a <code>.size</code>, while Arrays have a <code>.length</code>?</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>Before ES6, JavaScript didn’t have a data structure for sets. Instead, two workarounds were used:</p>
+<ul>
+<li>The keys of an object were used as a set of strings.</li>
+<li>Arrays were used as sets of arbitrary values. The downside is that checking <em>membership</em> (if an Array contains a value) is slower.</li>
+</ul>
+<p>Since ES6, JavaScript has the data structure <code>Set</code>, which can contain arbitrary values and performs membership checks quickly.</p>
+<h3 id="using-sets">35.1 Using Sets</h3>
+<h4 id="creating-sets">35.1.1 Creating Sets</h4>
+<p>There are three common ways of creating Sets.</p>
+<p>First, you can use the constructor without any parameters to create an empty Set:</p>
+<div class="sourceCode" id="cb1018"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1018-1"><a href="ch_sets.html#cb1018-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> emptySet <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span></span>
+<span id="cb1018-2"><a href="ch_sets.html#cb1018-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(emptySet<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span></code></pre></div>
+<p>Second, you can pass an iterable (e.g., an Array) to the constructor. The iterated values become elements of the new Set:</p>
+<div class="sourceCode" id="cb1019"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1019-1"><a href="ch_sets.html#cb1019-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span><span class="op">,</span> <span class="st">'blue'</span>])<span class="op">;</span></span></code></pre></div>
+<p>Third, the <code>.add()</code> method adds elements to a Set and is chainable:</p>
+<div class="sourceCode" id="cb1020"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1020-1"><a href="ch_sets.html#cb1020-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()</span>
+<span id="cb1020-2"><a href="ch_sets.html#cb1020-2" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">add</span>(<span class="st">'red'</span>)</span>
+<span id="cb1020-3"><a href="ch_sets.html#cb1020-3" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">add</span>(<span class="st">'green'</span>)</span>
+<span id="cb1020-4"><a href="ch_sets.html#cb1020-4" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">add</span>(<span class="st">'blue'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="adding-removing-checking-membership">35.1.2 Adding, removing, checking membership</h4>
+<p><code>.add()</code> adds an element to a Set.</p>
+<div class="sourceCode" id="cb1021"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1021-1"><a href="ch_sets.html#cb1021-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">;</span></span>
+<span id="cb1021-2"><a href="ch_sets.html#cb1021-2" aria-hidden="true" tabindex="-1"></a>set<span class="op">.</span><span class="fu">add</span>(<span class="st">'red'</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>.has()</code> checks if an element is a member of a Set.</p>
+<div class="sourceCode" id="cb1022"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1022-1"><a href="ch_sets.html#cb1022-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(set<span class="op">.</span><span class="fu">has</span>(<span class="st">'red'</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>.delete()</code> removes an element from a Set.</p>
+<div class="sourceCode" id="cb1023"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1023-1"><a href="ch_sets.html#cb1023-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(set<span class="op">.</span><span class="fu">delete</span>(<span class="st">'red'</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span> <span class="co">// there was a deletion</span></span>
+<span id="cb1023-2"><a href="ch_sets.html#cb1023-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(set<span class="op">.</span><span class="fu">has</span>(<span class="st">'red'</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="determining-the-size-of-a-set-and-clearing-it">35.1.3 Determining the size of a Set and clearing it</h4>
+<p><code>.size</code> contains the number of elements in a Set.</p>
+<div class="sourceCode" id="cb1024"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1024-1"><a href="ch_sets.html#cb1024-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()</span>
+<span id="cb1024-2"><a href="ch_sets.html#cb1024-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">add</span>(<span class="st">'foo'</span>)</span>
+<span id="cb1024-3"><a href="ch_sets.html#cb1024-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">add</span>(<span class="st">'bar'</span>)<span class="op">;</span></span>
+<span id="cb1024-4"><a href="ch_sets.html#cb1024-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(set<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><code>.clear()</code> removes all elements of a Set.</p>
+<div class="sourceCode" id="cb1025"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1025-1"><a href="ch_sets.html#cb1025-1" aria-hidden="true" tabindex="-1"></a>set<span class="op">.</span><span class="fu">clear</span>()<span class="op">;</span></span>
+<span id="cb1025-2"><a href="ch_sets.html#cb1025-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(set<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">0</span>)</span></code></pre></div>
+<h4 id="iterating-over-sets-1">35.1.4 Iterating over Sets</h4>
+<p>Sets are iterable and the <code>for-of</code> loop works as you’d expect:</p>
+<div class="sourceCode" id="cb1026"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1026-1"><a href="ch_sets.html#cb1026-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span><span class="op">,</span> <span class="st">'blue'</span>])<span class="op">;</span></span>
+<span id="cb1026-2"><a href="ch_sets.html#cb1026-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> set) {</span>
+<span id="cb1026-3"><a href="ch_sets.html#cb1026-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb1026-4"><a href="ch_sets.html#cb1026-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1026-5"><a href="ch_sets.html#cb1026-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1026-6"><a href="ch_sets.html#cb1026-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'red'</span></span>
+<span id="cb1026-7"><a href="ch_sets.html#cb1026-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'green'</span></span>
+<span id="cb1026-8"><a href="ch_sets.html#cb1026-8" aria-hidden="true" tabindex="-1"></a><span class="co">// 'blue'</span></span></code></pre></div>
+<p>As you can see, Sets preserve <em>insertion order</em>. That is, elements are always iterated over in the order in which they were added.</p>
+<p>Given that Sets are iterable, you can use <a href="ch_arrays.html#spreading-into-array-literals">spreading (<code>...</code>)</a> to convert them to Arrays:</p>
+<div class="sourceCode" id="cb1027"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1027-1"><a href="ch_sets.html#cb1027-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span><span class="op">,</span> <span class="st">'blue'</span>])<span class="op">;</span></span>
+<span id="cb1027-2"><a href="ch_sets.html#cb1027-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="op">...</span>set]<span class="op">;</span> <span class="co">// ['red', 'green', 'blue']</span></span></code></pre></div>
+<h3 id="examples-of-using-sets">35.2 Examples of using Sets</h3>
+<h4 id="removing-duplicates-from-an-array">35.2.1 Removing duplicates from an Array</h4>
+<p>Converting an Array to a Set and back, removes duplicates from the Array:</p>
+<div class="sourceCode" id="cb1028"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1028-1"><a href="ch_sets.html#cb1028-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1028-2"><a href="ch_sets.html#cb1028-2" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span><span class="kw">new</span> <span class="bu">Set</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">3</span>])]<span class="op">,</span></span>
+<span id="cb1028-3"><a href="ch_sets.html#cb1028-3" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="creating-a-set-of-unicode-characters-code-points">35.2.2 Creating a set of Unicode characters (code points)</h4>
+<p>Strings are iterable and can therefore be used as parameters for <code>new Set()</code>:</p>
+<div class="sourceCode" id="cb1029"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1029-1"><a href="ch_sets.html#cb1029-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1029-2"><a href="ch_sets.html#cb1029-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="bu">Set</span>(<span class="st">'abc'</span>)<span class="op">,</span></span>
+<span id="cb1029-3"><a href="ch_sets.html#cb1029-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]))<span class="op">;</span></span></code></pre></div>
+<h3 id="what-set-elements-are-considered-equal">35.3 What Set elements are considered equal?</h3>
+<p>As with Map keys, Set elements are compared similarly to <code>===</code>, with the exception of <code>NaN</code> being equal to itself.</p>
+<div class="sourceCode" id="cb1030"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1030-1"><a href="ch_sets.html#cb1030-1" aria-hidden="true" tabindex="-1"></a>&gt; const set = new Set([NaN, NaN, NaN]);</span>
+<span id="cb1030-2"><a href="ch_sets.html#cb1030-2" aria-hidden="true" tabindex="-1"></a>&gt; set.size</span>
+<span id="cb1030-3"><a href="ch_sets.html#cb1030-3" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span>
+<span id="cb1030-4"><a href="ch_sets.html#cb1030-4" aria-hidden="true" tabindex="-1"></a>&gt; set.has(NaN)</span>
+<span id="cb1030-5"><a href="ch_sets.html#cb1030-5" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>As with <code>===</code>, two different objects are never considered equal (and there is no way to change that at the moment):</p>
+<div class="sourceCode" id="cb1031"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1031-1"><a href="ch_sets.html#cb1031-1" aria-hidden="true" tabindex="-1"></a>&gt; const set = new Set();</span>
+<span id="cb1031-2"><a href="ch_sets.html#cb1031-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1031-3"><a href="ch_sets.html#cb1031-3" aria-hidden="true" tabindex="-1"></a>&gt; set.add({});</span>
+<span id="cb1031-4"><a href="ch_sets.html#cb1031-4" aria-hidden="true" tabindex="-1"></a>&gt; set.size</span>
+<span id="cb1031-5"><a href="ch_sets.html#cb1031-5" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span>
+<span id="cb1031-6"><a href="ch_sets.html#cb1031-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1031-7"><a href="ch_sets.html#cb1031-7" aria-hidden="true" tabindex="-1"></a>&gt; set.add({});</span>
+<span id="cb1031-8"><a href="ch_sets.html#cb1031-8" aria-hidden="true" tabindex="-1"></a>&gt; set.size</span>
+<span id="cb1031-9"><a href="ch_sets.html#cb1031-9" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span></code></pre></div>
+<h3 id="missing-set-operations">35.4 Missing Set operations</h3>
+<p>Sets are missing several common operations. Such an operation can usually be implemented by:</p>
+<ul>
+<li>Converting the input Sets to Arrays by <a href="ch_arrays.html#spreading-into-array-literals">spreading into Array literals</a>.</li>
+<li>Performing the operation on Arrays.</li>
+<li>Converting the result to a Set and returning it.</li>
+</ul>
+<h4 id="union-a-b">35.4.1 Union (<code>a</code> ∪ <code>b</code>)</h4>
+<p>Computing the union of two Sets <code>a</code> and <code>b</code> means creating a Set that contains the elements of both <code>a</code> and <code>b</code>.</p>
+<div class="sourceCode" id="cb1032"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1032-1"><a href="ch_sets.html#cb1032-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> a <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>])<span class="op">;</span></span>
+<span id="cb1032-2"><a href="ch_sets.html#cb1032-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> b <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="dv">4</span><span class="op">,</span><span class="dv">3</span><span class="op">,</span><span class="dv">2</span>])<span class="op">;</span></span>
+<span id="cb1032-3"><a href="ch_sets.html#cb1032-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Use spreading to concatenate two iterables</span></span>
+<span id="cb1032-4"><a href="ch_sets.html#cb1032-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> union <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="op">...</span>a<span class="op">,</span> <span class="op">...</span>b])<span class="op">;</span></span>
+<span id="cb1032-5"><a href="ch_sets.html#cb1032-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1032-6"><a href="ch_sets.html#cb1032-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span>union]<span class="op">,</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="intersection-a-b">35.4.2 Intersection (<code>a</code> ∩ <code>b</code>)</h4>
+<p>Computing the intersection of two Sets <code>a</code> and <code>b</code> means creating a Set that contains those elements of <code>a</code> that are also in <code>b</code>.</p>
+<div class="sourceCode" id="cb1033"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1033-1"><a href="ch_sets.html#cb1033-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> a <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>])<span class="op">;</span></span>
+<span id="cb1033-2"><a href="ch_sets.html#cb1033-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> b <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="dv">4</span><span class="op">,</span><span class="dv">3</span><span class="op">,</span><span class="dv">2</span>])<span class="op">;</span></span>
+<span id="cb1033-3"><a href="ch_sets.html#cb1033-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> intersection <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>(</span>
+<span id="cb1033-4"><a href="ch_sets.html#cb1033-4" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>a]<span class="op">.</span><span class="fu">filter</span>(x <span class="kw">=&gt;</span> b<span class="op">.</span><span class="fu">has</span>(x)))<span class="op">;</span></span>
+<span id="cb1033-5"><a href="ch_sets.html#cb1033-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1033-6"><a href="ch_sets.html#cb1033-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span>intersection]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="difference-a-b">35.4.3 Difference (<code>a</code> \ <code>b</code>)</h4>
+<p>Computing the difference between two Sets <code>a</code> and <code>b</code> means creating a Set that contains those elements of <code>a</code> that are not in <code>b</code>. This operation is also sometimes called <em>minus</em> (−).</p>
+<div class="sourceCode" id="cb1034"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1034-1"><a href="ch_sets.html#cb1034-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> a <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>])<span class="op">;</span></span>
+<span id="cb1034-2"><a href="ch_sets.html#cb1034-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> b <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="dv">4</span><span class="op">,</span><span class="dv">3</span><span class="op">,</span><span class="dv">2</span>])<span class="op">;</span></span>
+<span id="cb1034-3"><a href="ch_sets.html#cb1034-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> difference <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>(</span>
+<span id="cb1034-4"><a href="ch_sets.html#cb1034-4" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>a]<span class="op">.</span><span class="fu">filter</span>(x <span class="kw">=&gt;</span> <span class="op">!</span>b<span class="op">.</span><span class="fu">has</span>(x)))<span class="op">;</span></span>
+<span id="cb1034-5"><a href="ch_sets.html#cb1034-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1034-6"><a href="ch_sets.html#cb1034-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span>difference]<span class="op">,</span> [<span class="dv">1</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="mapping-over-sets">35.4.4 Mapping over Sets</h4>
+<p>Sets don’t have a method <code>.map()</code>. But we can borrow the one that Arrays have:</p>
+<div class="sourceCode" id="cb1035"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1035-1"><a href="ch_sets.html#cb1035-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>])<span class="op">;</span></span>
+<span id="cb1035-2"><a href="ch_sets.html#cb1035-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> mappedSet <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="op">...</span>set]<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> x <span class="op">*</span> <span class="dv">2</span>))<span class="op">;</span></span>
+<span id="cb1035-3"><a href="ch_sets.html#cb1035-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1035-4"><a href="ch_sets.html#cb1035-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Convert mappedSet to an Array to check what’s inside it</span></span>
+<span id="cb1035-5"><a href="ch_sets.html#cb1035-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span>mappedSet]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">6</span>])<span class="op">;</span></span></code></pre></div>
+<h4 id="filtering-sets">35.4.5 Filtering Sets</h4>
+<p>We can’t directly <code>.filter()</code> Sets, so we need to use the corresponding Array method:</p>
+<div class="sourceCode" id="cb1036"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1036-1"><a href="ch_sets.html#cb1036-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span>])<span class="op">;</span></span>
+<span id="cb1036-2"><a href="ch_sets.html#cb1036-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> filteredSet <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="op">...</span>set]<span class="op">.</span><span class="fu">filter</span>(x <span class="kw">=&gt;</span> (x <span class="op">%</span> <span class="dv">2</span>) <span class="op">===</span> <span class="dv">0</span>))<span class="op">;</span></span>
+<span id="cb1036-3"><a href="ch_sets.html#cb1036-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1036-4"><a href="ch_sets.html#cb1036-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span>filteredSet]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="dv">4</span>])<span class="op">;</span></span></code></pre></div>
+<h3 id="quickref-sets">35.5 Quick reference: <code>Set&lt;T&gt;</code></h3>
+<h4 id="constructor-1">35.5.1 Constructor</h4>
+<ul>
+<li><p><code>new Set&lt;T&gt;(values?: Iterable&lt;T&gt;)</code> <sup>[ES6]</sup></p>
+<p>If you don’t provide the parameter <code>values</code>, then an empty Set is created. If you do, then the iterated values are added as elements to the Set. For example:</p>
+<div class="sourceCode" id="cb1037"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1037-1"><a href="ch_sets.html#cb1037-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span><span class="op">,</span> <span class="st">'blue'</span>])<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="sett.prototype-single-set-elements">35.5.2 <code>Set&lt;T&gt;.prototype</code>: single Set elements</h4>
+<ul>
+<li><p><code>.add(value: T): this</code> <sup>[ES6]</sup></p>
+<p>Adds <code>value</code> to this Set. This method returns <code>this</code>, which means that it can be chained.</p>
+<div class="sourceCode" id="cb1038"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1038-1"><a href="ch_sets.html#cb1038-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span>])<span class="op">;</span></span>
+<span id="cb1038-2"><a href="ch_sets.html#cb1038-2" aria-hidden="true" tabindex="-1"></a>set<span class="op">.</span><span class="fu">add</span>(<span class="st">'green'</span>)<span class="op">.</span><span class="fu">add</span>(<span class="st">'blue'</span>)<span class="op">;</span></span>
+<span id="cb1038-3"><a href="ch_sets.html#cb1038-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span>set]<span class="op">,</span> [<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span><span class="op">,</span> <span class="st">'blue'</span>])<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>.delete(value: T): boolean</code> <sup>[ES6]</sup></p>
+<p>Removes <code>value</code> from this Set. Returns <code>true</code> if something was deleted and <code>false</code>, otherwise.</p>
+<div class="sourceCode" id="cb1039"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1039-1"><a href="ch_sets.html#cb1039-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span><span class="op">,</span> <span class="st">'blue'</span>])<span class="op">;</span></span>
+<span id="cb1039-2"><a href="ch_sets.html#cb1039-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(set<span class="op">.</span><span class="fu">delete</span>(<span class="st">'red'</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span> <span class="co">// there was a deletion</span></span>
+<span id="cb1039-3"><a href="ch_sets.html#cb1039-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="op">...</span>set]<span class="op">,</span> [<span class="st">'green'</span><span class="op">,</span> <span class="st">'blue'</span>])<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>.has(value: T): boolean</code> <sup>[ES6]</sup></p>
+<p>Checks whether <code>value</code> is in this Set.</p>
+<div class="sourceCode" id="cb1040"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1040-1"><a href="ch_sets.html#cb1040-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span>])<span class="op">;</span></span>
+<span id="cb1040-2"><a href="ch_sets.html#cb1040-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(set<span class="op">.</span><span class="fu">has</span>(<span class="st">'red'</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb1040-3"><a href="ch_sets.html#cb1040-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(set<span class="op">.</span><span class="fu">has</span>(<span class="st">'blue'</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="sett.prototype-all-set-elements">35.5.3 <code>Set&lt;T&gt;.prototype</code>: all Set elements</h4>
+<ul>
+<li><p><code>get .size: number</code> <sup>[ES6]</sup></p>
+<p>Returns how many elements there are in this Set.</p>
+<div class="sourceCode" id="cb1041"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1041-1"><a href="ch_sets.html#cb1041-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span><span class="op">,</span> <span class="st">'blue'</span>])<span class="op">;</span></span>
+<span id="cb1041-2"><a href="ch_sets.html#cb1041-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(set<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>.clear(): void</code> <sup>[ES6]</sup></p>
+<p>Removes all elements from this Set.</p>
+<div class="sourceCode" id="cb1042"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1042-1"><a href="ch_sets.html#cb1042-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span><span class="op">,</span> <span class="st">'blue'</span>])<span class="op">;</span></span>
+<span id="cb1042-2"><a href="ch_sets.html#cb1042-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(set<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span>
+<span id="cb1042-3"><a href="ch_sets.html#cb1042-3" aria-hidden="true" tabindex="-1"></a>set<span class="op">.</span><span class="fu">clear</span>()<span class="op">;</span></span>
+<span id="cb1042-4"><a href="ch_sets.html#cb1042-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(set<span class="op">.</span><span class="at">size</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="sett.prototype-iterating-and-looping">35.5.4 <code>Set&lt;T&gt;.prototype</code>: iterating and looping</h4>
+<ul>
+<li><p><code>.values(): Iterable&lt;T&gt;</code> <sup>[ES6]</sup></p>
+<p>Returns an iterable over all elements of this Set.</p>
+<div class="sourceCode" id="cb1043"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1043-1"><a href="ch_sets.html#cb1043-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span>])<span class="op">;</span></span>
+<span id="cb1043-2"><a href="ch_sets.html#cb1043-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> set<span class="op">.</span><span class="fu">values</span>()) {</span>
+<span id="cb1043-3"><a href="ch_sets.html#cb1043-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb1043-4"><a href="ch_sets.html#cb1043-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1043-5"><a href="ch_sets.html#cb1043-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1043-6"><a href="ch_sets.html#cb1043-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'red'</span></span>
+<span id="cb1043-7"><a href="ch_sets.html#cb1043-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'green'</span></span></code></pre></div></li>
+<li><p><code>[Symbol.iterator](): Iterable&lt;T&gt;</code> <sup>[ES6]</sup></p>
+<p>Default way of iterating over Sets. Same as <code>.values()</code>.</p>
+<div class="sourceCode" id="cb1044"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1044-1"><a href="ch_sets.html#cb1044-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span>])<span class="op">;</span></span>
+<span id="cb1044-2"><a href="ch_sets.html#cb1044-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> set) {</span>
+<span id="cb1044-3"><a href="ch_sets.html#cb1044-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb1044-4"><a href="ch_sets.html#cb1044-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1044-5"><a href="ch_sets.html#cb1044-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1044-6"><a href="ch_sets.html#cb1044-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'red'</span></span>
+<span id="cb1044-7"><a href="ch_sets.html#cb1044-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'green'</span></span></code></pre></div></li>
+<li><p><code>.forEach(callback: (value: T, key: T, theSet: Set&lt;T&gt;) =&gt; void, thisArg?: any): void</code> <sup>[ES6]</sup></p>
+<p>Feeds each element of this Set to <code>callback()</code>. <code>value</code> and <code>key</code> both contain the current element. This redundancy was introduced so that this <code>callback</code> has the same type signature as the <code>callback</code> of <code>Map.prototype.forEach()</code>.</p>
+<p>You can specify the <code>this</code> of <code>callback</code> via <code>thisArg</code>. If you omit it, <code>this</code> is <code>undefined</code>.</p>
+<div class="sourceCode" id="cb1045"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1045-1"><a href="ch_sets.html#cb1045-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'red'</span><span class="op">,</span> <span class="st">'green'</span>])<span class="op">;</span></span>
+<span id="cb1045-2"><a href="ch_sets.html#cb1045-2" aria-hidden="true" tabindex="-1"></a>set<span class="op">.</span><span class="fu">forEach</span>(x <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x))<span class="op">;</span></span>
+<span id="cb1045-3"><a href="ch_sets.html#cb1045-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1045-4"><a href="ch_sets.html#cb1045-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 'red'</span></span>
+<span id="cb1045-5"><a href="ch_sets.html#cb1045-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 'green'</span></span></code></pre></div></li>
+</ul>
+<h4 id="symmetry-with-map">35.5.5 Symmetry with <code>Map</code></h4>
+<p>The following two methods mainly exist so that Sets and Maps have similar interfaces. Each Set element is handled as if it were a Map entry whose key and value are both the element.</p>
+<ul>
+<li><code>Set.prototype.entries(): Iterable&lt;[T,T]&gt;</code> <sup>[ES6]</sup></li>
+<li><code>Set.prototype.keys(): Iterable&lt;T&gt;</code> <sup>[ES6]</sup></li>
+</ul>
+<p><code>.entries()</code> enables you to convert a Set to a Map:</p>
+<div class="sourceCode" id="cb1046"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1046-1"><a href="ch_sets.html#cb1046-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>])<span class="op">;</span></span>
+<span id="cb1046-2"><a href="ch_sets.html#cb1046-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> map <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>(set<span class="op">.</span><span class="fu">entries</span>())<span class="op">;</span></span>
+<span id="cb1046-3"><a href="ch_sets.html#cb1046-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1046-4"><a href="ch_sets.html#cb1046-4" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>map<span class="op">.</span><span class="fu">entries</span>()]<span class="op">,</span></span>
+<span id="cb1046-5"><a href="ch_sets.html#cb1046-5" aria-hidden="true" tabindex="-1"></a>  [[<span class="st">'a'</span><span class="op">,</span><span class="st">'a'</span>]<span class="op">,</span> [<span class="st">'b'</span><span class="op">,</span><span class="st">'b'</span>]<span class="op">,</span> [<span class="st">'c'</span><span class="op">,</span><span class="st">'c'</span>]])<span class="op">;</span></span></code></pre></div>
+<h3 id="faq-sets">35.6 FAQ: Sets</h3>
+<h4 id="why-do-sets-have-a-.size-while-arrays-have-a-.length">35.6.1 Why do Sets have a <code>.size</code>, while Arrays have a <code>.length</code>?</h4>
+<p>The answer to this question is given in <a href="ch_maps.html#collection-size-vs-length">§33.6.4 “Why do Maps have a <code>.size</code>, while Arrays have a <code>.length</code>?”</a>.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/37">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_weaksets.html">36 WeakSets (<code>WeakSet</code>) (advanced)</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

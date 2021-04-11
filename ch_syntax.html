@@ -1,0 +1,687 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_syntax">7 Syntax</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>7.1 <a href="ch_syntax.html#an-overview-of-javascripts-syntax">An overview of JavaScript’s syntax</a>
+<ul>
+<li>7.1.1 <a href="ch_syntax.html#basic-constructs">Basic constructs</a></li>
+<li>7.1.2 <a href="ch_syntax.html#modules">Modules</a></li>
+<li>7.1.3 <a href="ch_proto-chains-classes.html#classes">Classes</a></li>
+<li>7.1.4 <a href="ch_syntax.html#exception-handling">Exception handling</a></li>
+<li>7.1.5 <a href="ch_syntax.html#legal-variable-and-property-names">Legal variable and property names</a></li>
+<li>7.1.6 <a href="ch_syntax.html#casing-styles">Casing styles</a></li>
+<li>7.1.7 <a href="ch_syntax.html#capitalization-of-names">Capitalization of names</a></li>
+<li>7.1.8 <a href="ch_syntax.html#more-naming-conventions">More naming conventions</a></li>
+<li>7.1.9 <a href="ch_syntax.html#where-to-put-semicolons">Where to put semicolons?</a></li>
+</ul></li>
+<li>7.2 <a href="ch_syntax.html#advanced">(Advanced)</a></li>
+<li>7.3 <a href="ch_syntax.html#identifiers">Identifiers</a>
+<ul>
+<li>7.3.1 <a href="ch_syntax.html#valid-identifiers-variable-names-etc.">Valid identifiers (variable names, etc.)</a></li>
+<li>7.3.2 <a href="ch_syntax.html#reserved-words">Reserved words</a></li>
+</ul></li>
+<li>7.4 <a href="ch_syntax.html#statement-vs-expression">Statement vs.&nbsp;expression</a>
+<ul>
+<li>7.4.1 <a href="ch_syntax.html#statements">Statements</a></li>
+<li>7.4.2 <a href="ch_syntax.html#expressions">Expressions</a></li>
+<li>7.4.3 <a href="ch_syntax.html#what-is-allowed-where">What is allowed where?</a></li>
+</ul></li>
+<li>7.5 <a href="ch_syntax.html#ambiguous-syntax">Ambiguous syntax</a>
+<ul>
+<li>7.5.1 <a href="ch_syntax.html#same-syntax-function-declaration-and-function-expression">Same syntax: function declaration and function expression</a></li>
+<li>7.5.2 <a href="ch_syntax.html#same-syntax-object-literal-and-block">Same syntax: object literal and block</a></li>
+<li>7.5.3 <a href="ch_syntax.html#disambiguation">Disambiguation</a></li>
+</ul></li>
+<li>7.6 <a href="ch_syntax.html#semicolons">Semicolons</a>
+<ul>
+<li>7.6.1 <a href="ch_syntax.html#rule-of-thumb-for-semicolons">Rule of thumb for semicolons</a></li>
+<li>7.6.2 <a href="ch_syntax.html#semicolons-control-statements">Semicolons: control statements</a></li>
+</ul></li>
+<li>7.7 <a href="ch_syntax.html#automatic-semicolon-insertion-asi">Automatic semicolon insertion (ASI)</a>
+<ul>
+<li>7.7.1 <a href="ch_syntax.html#asi-triggered-unexpectedly">ASI triggered unexpectedly</a></li>
+<li>7.7.2 <a href="ch_syntax.html#asi-unexpectedly-not-triggered">ASI unexpectedly not triggered</a></li>
+</ul></li>
+<li>7.8 <a href="ch_syntax.html#semicolons-best-practices">Semicolons: best practices</a></li>
+<li>7.9 <a href="ch_syntax.html#strict-mode">Strict mode vs.&nbsp;sloppy mode</a>
+<ul>
+<li>7.9.1 <a href="ch_syntax.html#switching-on-strict-mode">Switching on strict mode</a></li>
+<li>7.9.2 <a href="ch_syntax.html#improvements-in-strict-mode">Improvements in strict mode</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<h3 id="an-overview-of-javascripts-syntax">7.1 An overview of JavaScript’s syntax</h3>
+<p><a id="index-entry-9" class="index-entry"></a></p>
+<p>This is a very first look at JavaScript’s syntax. Don’t worry if some things don’t make sense, yet. They will all be explained in more detail later in this book.</p>
+<p>This overview is not exhaustive, either. It focuses on the essentials.</p>
+<h4 id="basic-constructs">7.1.1 Basic constructs</h4>
+<h5 id="comments">7.1.1.1 Comments</h5>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb4-1"><a href="ch_syntax.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// single-line comment</span></span>
+<span id="cb4-2"><a href="ch_syntax.html#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="ch_syntax.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb4-4"><a href="ch_syntax.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">Comment with</span></span>
+<span id="cb4-5"><a href="ch_syntax.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">multiple lines</span></span>
+<span id="cb4-6"><a href="ch_syntax.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<h5 id="primitive-atomic-values">7.1.1.2 <em>Primitive</em> (atomic) values</h5>
+<p><strong>Booleans:</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb5-1"><a href="ch_syntax.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb5-2"><a href="ch_syntax.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<p><strong>Numbers:</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb6-1"><a href="ch_syntax.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.141</span></span>
+<span id="cb6-2"><a href="ch_syntax.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">-</span><span class="dv">123</span></span></code></pre></div>
+<p>The basic number type is used for both floating point numbers (doubles) and integers.</p>
+<p><strong>Bigints:</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="ch_syntax.html#cb7-1" aria-hidden="true" tabindex="-1"></a>17n</span>
+<span id="cb7-2"><a href="ch_syntax.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">-</span>49n</span></code></pre></div>
+<p>The basic number type can only properly represent integers within a range of 53 bits plus sign. Bigints can grow arbitrarily large in size.</p>
+<p><strong>Strings:</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb8-1"><a href="ch_syntax.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="st">'abc'</span></span>
+<span id="cb8-2"><a href="ch_syntax.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="st">"abc"</span></span>
+<span id="cb8-3"><a href="ch_syntax.html#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="vs">`String with interpolated values: </span><span class="sc">${</span><span class="dv">256</span><span class="sc">}</span><span class="vs"> and </span><span class="sc">${</span><span class="kw">true</span><span class="sc">}</span><span class="vs">`</span></span></code></pre></div>
+<p>JavaScript has no extra type for characters. It uses strings to represent them.</p>
+<h5 id="assertions">7.1.1.3 Assertions</h5>
+<p>An <em>assertion</em> describes what the result of a computation is expected to look like and throws an exception if those expectations aren’t correct. For example, the following assertion states that the result of the computation 7 plus 1 must be 8:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb9-1"><a href="ch_syntax.html#cb9-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">7</span> <span class="op">+</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">8</span>)<span class="op">;</span></span></code></pre></div>
+<p><code>assert.equal()</code> is a method call (the object is <code>assert</code>, the method is <code>.equal()</code>) with two arguments: the actual result and the expected result. It is part of a Node.js assertion API that is explained <a href="ch_assertion-api.html">later in this book</a>.</p>
+<p>There is also <code>assert.deepEqual()</code> that compares objects deeply.</p>
+<h5 id="logging-to-the-console">7.1.1.4 Logging to the console</h5>
+<p>Logging to <a href="ch_console.html#browser-consoles">the console</a> of a browser or Node.js:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb10-1"><a href="ch_syntax.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Printing a value to standard out (another method call)</span></span>
+<span id="cb10-2"><a href="ch_syntax.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'Hello!'</span>)<span class="op">;</span></span>
+<span id="cb10-3"><a href="ch_syntax.html#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="ch_syntax.html#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Printing error information to standard error</span></span>
+<span id="cb10-5"><a href="ch_syntax.html#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">'Something went wrong!'</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="operators">7.1.1.5 Operators</h5>
+<div class="sourceCode" id="cb11"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb11-1"><a href="ch_syntax.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Operators for booleans</span></span>
+<span id="cb11-2"><a href="ch_syntax.html#cb11-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">true</span> <span class="op">&amp;&amp;</span> <span class="kw">false</span><span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span> <span class="co">// And</span></span>
+<span id="cb11-3"><a href="ch_syntax.html#cb11-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">true</span> <span class="op">||</span> <span class="kw">false</span><span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span> <span class="co">// Or</span></span>
+<span id="cb11-4"><a href="ch_syntax.html#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="ch_syntax.html#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Operators for numbers</span></span>
+<span id="cb11-6"><a href="ch_syntax.html#cb11-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">7</span>)<span class="op">;</span></span>
+<span id="cb11-7"><a href="ch_syntax.html#cb11-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">5</span> <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb11-8"><a href="ch_syntax.html#cb11-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">3</span> <span class="op">*</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">12</span>)<span class="op">;</span></span>
+<span id="cb11-9"><a href="ch_syntax.html#cb11-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">10</span> <span class="op">/</span> <span class="dv">4</span><span class="op">,</span> <span class="fl">2.5</span>)<span class="op">;</span></span>
+<span id="cb11-10"><a href="ch_syntax.html#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="ch_syntax.html#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Operators for bigints</span></span>
+<span id="cb11-12"><a href="ch_syntax.html#cb11-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(3n <span class="op">+</span> 4n<span class="op">,</span> 7n)<span class="op">;</span></span>
+<span id="cb11-13"><a href="ch_syntax.html#cb11-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(5n <span class="op">-</span> 1n<span class="op">,</span> 4n)<span class="op">;</span></span>
+<span id="cb11-14"><a href="ch_syntax.html#cb11-14" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(3n <span class="op">*</span> 4n<span class="op">,</span> 12n)<span class="op">;</span></span>
+<span id="cb11-15"><a href="ch_syntax.html#cb11-15" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(10n <span class="ss">/ 4n, 2n</span><span class="sc">)</span><span class="ss">;</span></span>
+<span id="cb11-16"><a href="ch_syntax.html#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="ch_syntax.html#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="ss">// Operators for strings</span></span>
+<span id="cb11-18"><a href="ch_syntax.html#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="ss">assert.equal</span><span class="sc">(</span><span class="ss">'a' </span><span class="sc">+</span><span class="ss"> 'b', 'ab'</span><span class="sc">)</span><span class="ss">;</span></span>
+<span id="cb11-19"><a href="ch_syntax.html#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="ss">assert.equal</span><span class="sc">(</span><span class="ss">'I see ' </span><span class="sc">+</span><span class="ss"> 3 </span><span class="sc">+</span><span class="ss"> ' monkeys', 'I see 3 monkeys'</span><span class="sc">)</span><span class="ss">;</span></span>
+<span id="cb11-20"><a href="ch_syntax.html#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="ch_syntax.html#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="ss">// Comparison operators</span></span>
+<span id="cb11-22"><a href="ch_syntax.html#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="ss">assert.equal</span><span class="sc">(</span><span class="ss">3 &lt; 4, true</span><span class="sc">)</span><span class="ss">;</span></span>
+<span id="cb11-23"><a href="ch_syntax.html#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="ss">assert.equal</span><span class="sc">(</span><span class="ss">3 &lt;= 4, true</span><span class="sc">)</span><span class="ss">;</span></span>
+<span id="cb11-24"><a href="ch_syntax.html#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="ss">assert.equal</span><span class="sc">(</span><span class="ss">'abc' === 'abc', true</span><span class="sc">)</span><span class="ss">;</span></span>
+<span id="cb11-25"><a href="ch_syntax.html#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="ss">assert.equal</span><span class="sc">(</span><span class="ss">'abc' !== 'def', true</span><span class="sc">)</span><span class="ss">;</span></span></code></pre></div>
+<p>JavaScript also has a <code>==</code> comparison operator. I recommend to avoid it – why is explained in <a href="ch_operators.html#recommendation-always-strict-equality">§13.4.3 “Recommendation: always use strict equality”</a>.</p>
+<h5 id="declaring-variables">7.1.1.6 Declaring variables</h5>
+<p><code>const</code> creates <em>immutable variable bindings</em>: Each variable must be initialized immediately and we can’t assign a different value later. However, the value itself may be mutable and we may be able to change its contents. In other words: <code>const</code> does not make values immutable.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb12-1"><a href="ch_syntax.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Declaring and initializing x (immutable binding):</span></span>
+<span id="cb12-2"><a href="ch_syntax.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> <span class="dv">8</span><span class="op">;</span></span>
+<span id="cb12-3"><a href="ch_syntax.html#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="ch_syntax.html#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Would cause a TypeError:</span></span>
+<span id="cb12-5"><a href="ch_syntax.html#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">// x = 9;</span></span></code></pre></div>
+<p><code>let</code> creates <em>mutable variable bindings</em>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb13-1"><a href="ch_syntax.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Declaring y (mutable binding):</span></span>
+<span id="cb13-2"><a href="ch_syntax.html#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> y<span class="op">;</span></span>
+<span id="cb13-3"><a href="ch_syntax.html#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="ch_syntax.html#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">// We can assign a different value to y:</span></span>
+<span id="cb13-5"><a href="ch_syntax.html#cb13-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">3</span> <span class="op">*</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb13-6"><a href="ch_syntax.html#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="ch_syntax.html#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Declaring and initializing z:</span></span>
+<span id="cb13-8"><a href="ch_syntax.html#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> z <span class="op">=</span> <span class="dv">3</span> <span class="op">*</span> <span class="dv">5</span><span class="op">;</span></span></code></pre></div>
+<h5 id="ordinary-function-declarations">7.1.1.7 Ordinary function declarations</h5>
+<div class="sourceCode" id="cb14"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb14-1"><a href="ch_syntax.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// add1() has the parameters a and b</span></span>
+<span id="cb14-2"><a href="ch_syntax.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">add1</span>(a<span class="op">,</span> b) {</span>
+<span id="cb14-3"><a href="ch_syntax.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb14-4"><a href="ch_syntax.html#cb14-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-5"><a href="ch_syntax.html#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Calling function add1()</span></span>
+<span id="cb14-6"><a href="ch_syntax.html#cb14-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">add1</span>(<span class="dv">5</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">,</span> <span class="dv">7</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="arrow-function-expressions">7.1.1.8 Arrow function expressions</h5>
+<p>Arrow function expressions are used especially as arguments of function calls and method calls:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb15-1"><a href="ch_syntax.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> add2 <span class="op">=</span> (a<span class="op">,</span> b) <span class="kw">=&gt;</span> { <span class="cf">return</span> a <span class="op">+</span> b }<span class="op">;</span></span>
+<span id="cb15-2"><a href="ch_syntax.html#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Calling function add2()</span></span>
+<span id="cb15-3"><a href="ch_syntax.html#cb15-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">add2</span>(<span class="dv">5</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">,</span> <span class="dv">7</span>)<span class="op">;</span></span>
+<span id="cb15-4"><a href="ch_syntax.html#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="ch_syntax.html#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Equivalent to add2:</span></span>
+<span id="cb15-6"><a href="ch_syntax.html#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> add3 <span class="op">=</span> (a<span class="op">,</span> b) <span class="kw">=&gt;</span> a <span class="op">+</span> b<span class="op">;</span></span></code></pre></div>
+<p>The previous code contains the following two arrow functions (the terms <em>expression</em> and <em>statement</em> are explained <a href="ch_syntax.html#statement-vs-expression">later in this chapter</a>):</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb16-1"><a href="ch_syntax.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">// An arrow function whose body is a code block</span></span>
+<span id="cb16-2"><a href="ch_syntax.html#cb16-2" aria-hidden="true" tabindex="-1"></a>(a<span class="op">,</span> b) <span class="kw">=&gt;</span> { <span class="cf">return</span> a <span class="op">+</span> b }</span>
+<span id="cb16-3"><a href="ch_syntax.html#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="ch_syntax.html#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">// An arrow function whose body is an expression</span></span>
+<span id="cb16-5"><a href="ch_syntax.html#cb16-5" aria-hidden="true" tabindex="-1"></a>(a<span class="op">,</span> b) <span class="kw">=&gt;</span> a <span class="op">+</span> b</span></code></pre></div>
+<h5 id="plain-objects">7.1.1.9 Plain objects</h5>
+<div class="sourceCode" id="cb17"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb17-1"><a href="ch_syntax.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Creating a plain object via an object literal</span></span>
+<span id="cb17-2"><a href="ch_syntax.html#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb17-3"><a href="ch_syntax.html#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span> <span class="co">// property</span></span>
+<span id="cb17-4"><a href="ch_syntax.html#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span><span class="op">,</span> <span class="co">// property</span></span>
+<span id="cb17-5"><a href="ch_syntax.html#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getFullName</span>() { <span class="co">// property (method)</span></span>
+<span id="cb17-6"><a href="ch_syntax.html#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span><span class="at">first</span> <span class="op">+</span> <span class="st">' '</span> <span class="op">+</span> <span class="kw">this</span><span class="op">.</span><span class="at">last</span><span class="op">;</span></span>
+<span id="cb17-7"><a href="ch_syntax.html#cb17-7" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb17-8"><a href="ch_syntax.html#cb17-8" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb17-9"><a href="ch_syntax.html#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="ch_syntax.html#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Getting a property value</span></span>
+<span id="cb17-11"><a href="ch_syntax.html#cb17-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="at">first</span><span class="op">,</span> <span class="st">'Jane'</span>)<span class="op">;</span></span>
+<span id="cb17-12"><a href="ch_syntax.html#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">// Setting a property value</span></span>
+<span id="cb17-13"><a href="ch_syntax.html#cb17-13" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="at">first</span> <span class="op">=</span> <span class="st">'Janey'</span><span class="op">;</span></span>
+<span id="cb17-14"><a href="ch_syntax.html#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="ch_syntax.html#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">// Calling the method</span></span>
+<span id="cb17-16"><a href="ch_syntax.html#cb17-16" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj<span class="op">.</span><span class="fu">getFullName</span>()<span class="op">,</span> <span class="st">'Janey Doe'</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="arrays">7.1.1.10 Arrays</h5>
+<div class="sourceCode" id="cb18"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb18-1"><a href="ch_syntax.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Creating an Array via an Array literal</span></span>
+<span id="cb18-2"><a href="ch_syntax.html#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb18-3"><a href="ch_syntax.html#cb18-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(arr<span class="op">.</span><span class="at">length</span><span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span>
+<span id="cb18-4"><a href="ch_syntax.html#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="ch_syntax.html#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Getting an Array element</span></span>
+<span id="cb18-6"><a href="ch_syntax.html#cb18-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(arr[<span class="dv">1</span>]<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span>
+<span id="cb18-7"><a href="ch_syntax.html#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Setting an Array element</span></span>
+<span id="cb18-8"><a href="ch_syntax.html#cb18-8" aria-hidden="true" tabindex="-1"></a>arr[<span class="dv">1</span>] <span class="op">=</span> <span class="st">'β'</span><span class="op">;</span></span>
+<span id="cb18-9"><a href="ch_syntax.html#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="ch_syntax.html#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Adding an element to an Array:</span></span>
+<span id="cb18-11"><a href="ch_syntax.html#cb18-11" aria-hidden="true" tabindex="-1"></a>arr<span class="op">.</span><span class="fu">push</span>(<span class="st">'d'</span>)<span class="op">;</span></span>
+<span id="cb18-12"><a href="ch_syntax.html#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="ch_syntax.html#cb18-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb18-14"><a href="ch_syntax.html#cb18-14" aria-hidden="true" tabindex="-1"></a>  arr<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'β'</span><span class="op">,</span> <span class="st">'c'</span><span class="op">,</span> <span class="st">'d'</span>])<span class="op">;</span></span></code></pre></div>
+<h5 id="control-flow-statements">7.1.1.11 Control flow statements</h5>
+<p>Conditional statement:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb19-1"><a href="ch_syntax.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">&lt;</span> <span class="dv">0</span>) {</span>
+<span id="cb19-2"><a href="ch_syntax.html#cb19-2" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> <span class="op">-</span>x<span class="op">;</span></span>
+<span id="cb19-3"><a href="ch_syntax.html#cb19-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>for-of</code> loop:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb20-1"><a href="ch_syntax.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb20-2"><a href="ch_syntax.html#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> element <span class="kw">of</span> arr) {</span>
+<span id="cb20-3"><a href="ch_syntax.html#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(element)<span class="op">;</span></span>
+<span id="cb20-4"><a href="ch_syntax.html#cb20-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-5"><a href="ch_syntax.html#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb20-6"><a href="ch_syntax.html#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb20-7"><a href="ch_syntax.html#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div>
+<h4 id="modules">7.1.2 Modules</h4>
+<p>Each module is a single file. Consider, for example, the following two files with modules in them:</p>
+<pre class="text"><code>file-tools.mjs
+main.mjs</code></pre>
+<p>The module in <code>file-tools.mjs</code> exports its function <code>isTextFilePath()</code>:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb22-1"><a href="ch_syntax.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">isTextFilePath</span>(filePath) {</span>
+<span id="cb22-2"><a href="ch_syntax.html#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> filePath<span class="op">.</span><span class="fu">endsWith</span>(<span class="st">'.txt'</span>)<span class="op">;</span></span>
+<span id="cb22-3"><a href="ch_syntax.html#cb22-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The module in <code>main.mjs</code> imports the whole module <code>path</code> and the function <code>isTextFilePath()</code>:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb23-1"><a href="ch_syntax.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Import whole module as namespace object `path`</span></span>
+<span id="cb23-2"><a href="ch_syntax.html#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> path <span class="im">from</span> <span class="st">'path'</span><span class="op">;</span></span>
+<span id="cb23-3"><a href="ch_syntax.html#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Import a single export of module file-tools.mjs</span></span>
+<span id="cb23-4"><a href="ch_syntax.html#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {isTextFilePath} <span class="im">from</span> <span class="st">'./file-tools.mjs'</span><span class="op">;</span></span></code></pre></div>
+<h4 id="classes">7.1.3 Classes</h4>
+<div class="sourceCode" id="cb24"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb24-1"><a href="ch_syntax.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Person {</span>
+<span id="cb24-2"><a href="ch_syntax.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(name) {</span>
+<span id="cb24-3"><a href="ch_syntax.html#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">name</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb24-4"><a href="ch_syntax.html#cb24-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb24-5"><a href="ch_syntax.html#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>() {</span>
+<span id="cb24-6"><a href="ch_syntax.html#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`Person named </span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs">`</span><span class="op">;</span></span>
+<span id="cb24-7"><a href="ch_syntax.html#cb24-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb24-8"><a href="ch_syntax.html#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">static</span> <span class="fu">logNames</span>(persons) {</span>
+<span id="cb24-9"><a href="ch_syntax.html#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> person <span class="kw">of</span> persons) {</span>
+<span id="cb24-10"><a href="ch_syntax.html#cb24-10" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(person<span class="op">.</span><span class="at">name</span>)<span class="op">;</span></span>
+<span id="cb24-11"><a href="ch_syntax.html#cb24-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb24-12"><a href="ch_syntax.html#cb24-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb24-13"><a href="ch_syntax.html#cb24-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-14"><a href="ch_syntax.html#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-15"><a href="ch_syntax.html#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Employee <span class="kw">extends</span> Person {</span>
+<span id="cb24-16"><a href="ch_syntax.html#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(name<span class="op">,</span> title) {</span>
+<span id="cb24-17"><a href="ch_syntax.html#cb24-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">super</span>(name)<span class="op">;</span></span>
+<span id="cb24-18"><a href="ch_syntax.html#cb24-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">title</span> <span class="op">=</span> title<span class="op">;</span></span>
+<span id="cb24-19"><a href="ch_syntax.html#cb24-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb24-20"><a href="ch_syntax.html#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>() {</span>
+<span id="cb24-21"><a href="ch_syntax.html#cb24-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">super</span><span class="op">.</span><span class="fu">describe</span>() <span class="op">+</span></span>
+<span id="cb24-22"><a href="ch_syntax.html#cb24-22" aria-hidden="true" tabindex="-1"></a>      <span class="vs">` (</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">title</span><span class="sc">}</span><span class="vs">)`</span><span class="op">;</span></span>
+<span id="cb24-23"><a href="ch_syntax.html#cb24-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb24-24"><a href="ch_syntax.html#cb24-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-25"><a href="ch_syntax.html#cb24-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-26"><a href="ch_syntax.html#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> <span class="kw">new</span> <span class="fu">Employee</span>(<span class="st">'Jane'</span><span class="op">,</span> <span class="st">'CTO'</span>)<span class="op">;</span></span>
+<span id="cb24-27"><a href="ch_syntax.html#cb24-27" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb24-28"><a href="ch_syntax.html#cb24-28" aria-hidden="true" tabindex="-1"></a>  jane<span class="op">.</span><span class="fu">describe</span>()<span class="op">,</span></span>
+<span id="cb24-29"><a href="ch_syntax.html#cb24-29" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Person named Jane (CTO)'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="exception-handling">7.1.4 Exception handling</h4>
+<div class="sourceCode" id="cb25"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb25-1"><a href="ch_syntax.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">throwsException</span>() {</span>
+<span id="cb25-2"><a href="ch_syntax.html#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Problem!'</span>)<span class="op">;</span></span>
+<span id="cb25-3"><a href="ch_syntax.html#cb25-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-4"><a href="ch_syntax.html#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="ch_syntax.html#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">catchesException</span>() {</span>
+<span id="cb25-6"><a href="ch_syntax.html#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb25-7"><a href="ch_syntax.html#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">throwsException</span>()<span class="op">;</span></span>
+<span id="cb25-8"><a href="ch_syntax.html#cb25-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">catch</span> (err) {</span>
+<span id="cb25-9"><a href="ch_syntax.html#cb25-9" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">ok</span>(err <span class="kw">instanceof</span> <span class="bu">Error</span>)<span class="op">;</span></span>
+<span id="cb25-10"><a href="ch_syntax.html#cb25-10" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(err<span class="op">.</span><span class="at">message</span><span class="op">,</span> <span class="st">'Problem!'</span>)<span class="op">;</span></span>
+<span id="cb25-11"><a href="ch_syntax.html#cb25-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb25-12"><a href="ch_syntax.html#cb25-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Note:</p>
+<ul>
+<li><code>try-finally</code> and <code>try-catch-finally</code> are also supported.</li>
+<li>We can throw any value, but features such as stack traces are only supported by <code>Error</code> and its subclasses.</li>
+</ul>
+<h4 id="legal-variable-and-property-names">7.1.5 Legal variable and property names</h4>
+<p><a id="index-entry-10" class="index-entry"></a></p>
+<p>The grammatical category of variable names and property names is called <em>identifier</em>.</p>
+<p>Identifiers are allowed to have the following characters:</p>
+<ul>
+<li>Unicode letters: <code>A</code>–<code>Z</code>, <code>a</code>–<code>z</code> (etc.)</li>
+<li><code>$</code>, <code>_</code></li>
+<li>Unicode digits: <code>0</code>–<code>9</code> (etc.)
+<ul>
+<li>Variable names can’t start with a digit</li>
+</ul></li>
+</ul>
+<p>Some words have special meaning in JavaScript and are called <em>reserved</em>. Examples include: <code>if</code>, <code>true</code>, <code>const</code>.</p>
+<p>Reserved words can’t be used as variable names:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb26-1"><a href="ch_syntax.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> <span class="cf">if</span> <span class="op">=</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb26-2"><a href="ch_syntax.html#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// SyntaxError: Unexpected token if</span></span></code></pre></div>
+<p>But they are allowed as names of properties:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb27-1"><a href="ch_syntax.html#cb27-1" aria-hidden="true" tabindex="-1"></a>&gt; const obj = { if: 123 };</span>
+<span id="cb27-2"><a href="ch_syntax.html#cb27-2" aria-hidden="true" tabindex="-1"></a>&gt; obj.if</span>
+<span id="cb27-3"><a href="ch_syntax.html#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="kw">123</span></span></code></pre></div>
+<h4 id="casing-styles">7.1.6 Casing styles</h4>
+<p><a id="index-entry-11" class="index-entry"></a><a id="index-entry-12" class="index-entry"></a> <a id="index-entry-13" class="index-entry"></a><a id="index-entry-14" class="index-entry"></a> <a id="index-entry-15" class="index-entry"></a><a id="index-entry-16" class="index-entry"></a> <a id="index-entry-17" class="index-entry"></a><a id="index-entry-18" class="index-entry"></a> <a id="index-entry-19" class="index-entry"></a><a id="index-entry-20" class="index-entry"></a></p>
+<p>Common casing styles for concatenating words are:</p>
+<ul>
+<li>Camel case: <code>threeConcatenatedWords</code> <a id="index-entry-21" class="index-entry"></a></li>
+<li>Underscore case (also called <em>snake case</em>): <code>three_concatenated_words</code> <a id="index-entry-22" class="index-entry"></a><a id="index-entry-23" class="index-entry"></a></li>
+<li>Dash case (also called <em>kebab case</em>): <code>three-concatenated-words</code> <a id="index-entry-24" class="index-entry"></a><a id="index-entry-25" class="index-entry"></a></li>
+</ul>
+<h4 id="capitalization-of-names">7.1.7 Capitalization of names</h4>
+<p>In general, JavaScript uses camel case, except for constants.</p>
+<p>Lowercase:</p>
+<ul>
+<li>Functions, variables: <code>myFunction</code></li>
+<li>Methods: <code>obj.myMethod</code></li>
+<li>CSS:
+<ul>
+<li>CSS entity: <code>special-class</code></li>
+<li>Corresponding JavaScript variable: <code>specialClass</code></li>
+</ul></li>
+</ul>
+<p>Uppercase:</p>
+<ul>
+<li>Classes: <code>MyClass</code></li>
+<li>Constants: <code>MY_CONSTANT</code>
+<ul>
+<li>Constants are also often written in camel case: <code>myConstant</code></li>
+</ul></li>
+</ul>
+<h4 id="more-naming-conventions">7.1.8 More naming conventions</h4>
+<p>The following naming conventions are popular in JavaScript.</p>
+<p>If the name of a parameter starts with an underscore (or is an underscore) it means that this parameter is not used – for example:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb28-1"><a href="ch_syntax.html#cb28-1" aria-hidden="true" tabindex="-1"></a>arr<span class="op">.</span><span class="fu">map</span>((_x<span class="op">,</span> i) <span class="kw">=&gt;</span> i)</span></code></pre></div>
+<p>If the name of a property of an object starts with an underscore then that property is considered private:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb29-1"><a href="ch_syntax.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ValueWrapper {</span>
+<span id="cb29-2"><a href="ch_syntax.html#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(value) {</span>
+<span id="cb29-3"><a href="ch_syntax.html#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">_value</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb29-4"><a href="ch_syntax.html#cb29-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb29-5"><a href="ch_syntax.html#cb29-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="where-to-put-semicolons">7.1.9 Where to put semicolons?</h4>
+<p>At the end of a statement:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb30-1"><a href="ch_syntax.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb30-2"><a href="ch_syntax.html#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">func</span>()<span class="op">;</span></span></code></pre></div>
+<p>But not if that statement ends with a curly brace:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb31-1"><a href="ch_syntax.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="kw">false</span>) {</span>
+<span id="cb31-2"><a href="ch_syntax.html#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb31-3"><a href="ch_syntax.html#cb31-3" aria-hidden="true" tabindex="-1"></a>} <span class="co">// no semicolon</span></span>
+<span id="cb31-4"><a href="ch_syntax.html#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="ch_syntax.html#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>() {</span>
+<span id="cb31-6"><a href="ch_syntax.html#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb31-7"><a href="ch_syntax.html#cb31-7" aria-hidden="true" tabindex="-1"></a>} <span class="co">// no semicolon</span></span></code></pre></div>
+<p>However, adding a semicolon after such a statement is not a syntax error – it is interpreted as an empty statement:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb32-1"><a href="ch_syntax.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Function declaration followed by empty statement:</span></span>
+<span id="cb32-2"><a href="ch_syntax.html#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>() {</span>
+<span id="cb32-3"><a href="ch_syntax.html#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb32-4"><a href="ch_syntax.html#cb32-4" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz: basic</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+<h3 id="advanced">7.2 (Advanced)</h3>
+<p>All remaining sections of this chapter are advanced.</p>
+<h3 id="identifiers">7.3 Identifiers</h3>
+<h4 id="valid-identifiers-variable-names-etc.">7.3.1 Valid identifiers (variable names, etc.)</h4>
+<p>First character:</p>
+<ul>
+<li>Unicode letter (including accented characters such as <code>é</code> and <code>ü</code> and characters from non-latin alphabets, such as <code>α</code>)</li>
+<li><code>$</code></li>
+<li><code>_</code></li>
+</ul>
+<p>Subsequent characters:</p>
+<ul>
+<li>Legal first characters</li>
+<li>Unicode digits (including Eastern Arabic numerals)</li>
+<li>Some other Unicode marks and punctuations</li>
+</ul>
+<p>Examples:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb33-1"><a href="ch_syntax.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ε <span class="op">=</span> <span class="fl">0.0001</span><span class="op">;</span></span>
+<span id="cb33-2"><a href="ch_syntax.html#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> строка <span class="op">=</span> <span class="st">''</span><span class="op">;</span></span>
+<span id="cb33-3"><a href="ch_syntax.html#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> _tmp <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb33-4"><a href="ch_syntax.html#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> $foo2 <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span></code></pre></div>
+<h4 id="reserved-words">7.3.2 Reserved words</h4>
+<p><a id="index-entry-26" class="index-entry"></a></p>
+<p>Reserved words can’t be variable names, but they can be property names.</p>
+<p>All JavaScript <em>keywords</em> are reserved words: <a id="index-entry-27" class="index-entry"></a></p>
+<blockquote>
+<p><code>await</code> <code>break</code> <code>case</code> <code>catch</code> <code>class</code> <code>const</code> <code>continue</code> <code>debugger</code> <code>default</code> <code>delete</code> <code>do</code> <code>else</code> <code>export</code> <code>extends</code> <code>finally</code> <code>for</code> <code>function</code> <code>if</code> <code>import</code> <code>in</code> <code>instanceof</code> <code>let</code> <code>new</code> <code>return</code> <code>static</code> <code>super</code> <code>switch</code> <code>this</code> <code>throw</code> <code>try</code> <code>typeof</code> <code>var</code> <code>void</code> <code>while</code> <code>with</code> <code>yield</code></p>
+</blockquote>
+<p>The following tokens are also keywords, but currently not used in the language:</p>
+<blockquote>
+<p><code>enum</code> <code>implements</code> <code>package</code> <code>protected</code> <code>interface</code> <code>private</code> <code>public</code></p>
+</blockquote>
+<p>The following literals are reserved words:</p>
+<blockquote>
+<p><code>true</code> <code>false</code> <code>null</code></p>
+</blockquote>
+<p>Technically, these words are not reserved, but you should avoid them, too, because they effectively are keywords:</p>
+<blockquote>
+<p><code>Infinity</code> <code>NaN</code> <code>undefined</code> <code>async</code></p>
+</blockquote>
+<p>You shouldn’t use the names of global variables (<code>String</code>, <code>Math</code>, etc.) for your own variables and parameters, either.</p>
+<h3 id="statement-vs-expression">7.4 Statement vs.&nbsp;expression</h3>
+<p>In this section, we explore how JavaScript distinguishes two kinds of syntactic constructs: <em>statements</em> and <em>expressions</em>. Afterward, we’ll see that that can cause problems because the same syntax can mean different things, depending on where it is used.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>We pretend there are only statements and expressions</strong></p>
+<p>For the sake of simplicity, we pretend that there are only statements and expressions in JavaScript.</p>
+</div>
+<h4 id="statements">7.4.1 Statements</h4>
+<p><a id="index-entry-28" class="index-entry"></a></p>
+<p>A <em>statement</em> is a piece of code that can be executed and performs some kind of action. For example, <code>if</code> is a statement:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb34-1"><a href="ch_syntax.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> myStr<span class="op">;</span></span>
+<span id="cb34-2"><a href="ch_syntax.html#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (myBool) {</span>
+<span id="cb34-3"><a href="ch_syntax.html#cb34-3" aria-hidden="true" tabindex="-1"></a>  myStr <span class="op">=</span> <span class="st">'Yes'</span><span class="op">;</span></span>
+<span id="cb34-4"><a href="ch_syntax.html#cb34-4" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb34-5"><a href="ch_syntax.html#cb34-5" aria-hidden="true" tabindex="-1"></a>  myStr <span class="op">=</span> <span class="st">'No'</span><span class="op">;</span></span>
+<span id="cb34-6"><a href="ch_syntax.html#cb34-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>One more example of a statement: a function declaration.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb35-1"><a href="ch_syntax.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">twice</span>(x) {</span>
+<span id="cb35-2"><a href="ch_syntax.html#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x <span class="op">+</span> x<span class="op">;</span></span>
+<span id="cb35-3"><a href="ch_syntax.html#cb35-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="expressions">7.4.2 Expressions</h4>
+<p><a id="index-entry-29" class="index-entry"></a><a id="index-entry-30" class="index-entry"></a></p>
+<p>An <em>expression</em> is a piece of code that can be <em>evaluated</em> to produce a value. For example, the code between the parentheses is an expression:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb36-1"><a href="ch_syntax.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> myStr <span class="op">=</span> (myBool <span class="op">?</span> <span class="st">'Yes'</span> <span class="op">:</span> <span class="st">'No'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The operator <code>_?_:_</code> used between the parentheses is called the <em>ternary operator</em>. It is the expression version of the <code>if</code> statement.</p>
+<p>Let’s look at more examples of expressions. We enter expressions and the REPL evaluates them for us:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb37-1"><a href="ch_syntax.html#cb37-1" aria-hidden="true" tabindex="-1"></a>&gt; 'ab' + 'cd'</span>
+<span id="cb37-2"><a href="ch_syntax.html#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'abcd'</span></span>
+<span id="cb37-3"><a href="ch_syntax.html#cb37-3" aria-hidden="true" tabindex="-1"></a>&gt; Number('123')</span>
+<span id="cb37-4"><a href="ch_syntax.html#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="kw">123</span></span>
+<span id="cb37-5"><a href="ch_syntax.html#cb37-5" aria-hidden="true" tabindex="-1"></a>&gt; true || false</span>
+<span id="cb37-6"><a href="ch_syntax.html#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h4 id="what-is-allowed-where">7.4.3 What is allowed where?</h4>
+<p>The current location within JavaScript source code determines which kind of syntactic constructs you are allowed to use:</p>
+<ul>
+<li><p>The body of a function must be a sequence of statements:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb38-1"><a href="ch_syntax.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">max</span>(x<span class="op">,</span> y) {</span>
+<span id="cb38-2"><a href="ch_syntax.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (x <span class="op">&gt;</span> y) {</span>
+<span id="cb38-3"><a href="ch_syntax.html#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x<span class="op">;</span></span>
+<span id="cb38-4"><a href="ch_syntax.html#cb38-4" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb38-5"><a href="ch_syntax.html#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y<span class="op">;</span></span>
+<span id="cb38-6"><a href="ch_syntax.html#cb38-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb38-7"><a href="ch_syntax.html#cb38-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div></li>
+<li><p>The arguments of a function call or a method call must be expressions:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb39-1"><a href="ch_syntax.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'ab'</span> <span class="op">+</span> <span class="st">'cd'</span><span class="op">,</span> <span class="bu">Number</span>(<span class="st">'123'</span>))<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<p>However, expressions can be used as statements. Then they are called <em>expression statements</em>. The opposite is not true: when the context requires an expression, you can’t use a statement.</p>
+<p>The following code demonstrates that any expression <code>bar()</code> can be either expression or statement – it depends on the context:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb40-1"><a href="ch_syntax.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">f</span>() {</span>
+<span id="cb40-2"><a href="ch_syntax.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="fu">bar</span>())<span class="op">;</span> <span class="co">// bar() is expression</span></span>
+<span id="cb40-3"><a href="ch_syntax.html#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bar</span>()<span class="op">;</span> <span class="co">// bar(); is (expression) statement  </span></span>
+<span id="cb40-4"><a href="ch_syntax.html#cb40-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="ambiguous-syntax">7.5 Ambiguous syntax</h3>
+<p>JavaScript has several programming constructs that are syntactically ambiguous: the same syntax is interpreted differently, depending on whether it is used in statement context or in expression context. This section explores the phenomenon and the pitfalls it causes.</p>
+<h4 id="same-syntax-function-declaration-and-function-expression">7.5.1 Same syntax: function declaration and function expression</h4>
+<p>A <em>function declaration</em> is a statement:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb41-1"><a href="ch_syntax.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">id</span>(x) {</span>
+<span id="cb41-2"><a href="ch_syntax.html#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x<span class="op">;</span></span>
+<span id="cb41-3"><a href="ch_syntax.html#cb41-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>A <em>function expression</em> is an expression (right-hand side of <code>=</code>):</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb42-1"><a href="ch_syntax.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> id <span class="op">=</span> <span class="kw">function</span> <span class="fu">me</span>(x) {</span>
+<span id="cb42-2"><a href="ch_syntax.html#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x<span class="op">;</span></span>
+<span id="cb42-3"><a href="ch_syntax.html#cb42-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<h4 id="same-syntax-object-literal-and-block">7.5.2 Same syntax: object literal and block</h4>
+<p>In the following code, <code>{}</code> is an <em>object literal</em>: an expression that creates an empty object.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb43-1"><a href="ch_syntax.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {}<span class="op">;</span></span></code></pre></div>
+<p>This is an empty code block (a statement):</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb44-1"><a href="ch_syntax.html#cb44-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb44-2"><a href="ch_syntax.html#cb44-2" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="disambiguation">7.5.3 Disambiguation</h4>
+<p>The ambiguities are only a problem in statement context: If the JavaScript parser encounters ambiguous syntax, it doesn’t know if it’s a plain statement or an expression statement. For example:</p>
+<ul>
+<li>If a statement starts with <code>function</code>: Is it a function declaration or a function expression?</li>
+<li>If a statement starts with <code>{</code>: Is it an object literal or a code block?</li>
+</ul>
+<p>To resolve the ambiguity, statements starting with <code>function</code> or <code>{</code> are never interpreted as expressions. If you want an expression statement to start with either one of these tokens, you must wrap it in parentheses:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb45-1"><a href="ch_syntax.html#cb45-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">function</span> (x) { <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x) })(<span class="st">'abc'</span>)<span class="op">;</span></span>
+<span id="cb45-2"><a href="ch_syntax.html#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="ch_syntax.html#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb45-4"><a href="ch_syntax.html#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 'abc'</span></span></code></pre></div>
+<p>In this code:</p>
+<ol type="1">
+<li><p>We first create a function via a function expression:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb46-1"><a href="ch_syntax.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> (x) { <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x) }</span></code></pre></div></li>
+<li><p>Then we invoke that function: <code>('abc')</code></p></li>
+</ol>
+<p>The code fragment shown in (1) is only interpreted as an expression because we wrap it in parentheses. If we didn’t, we would get a syntax error because then JavaScript expects a function declaration and complains about the missing function name. Additionally, you can’t put a function call immediately after a function declaration.</p>
+<p>Later in this book, we’ll see more examples of pitfalls caused by syntactic ambiguity:</p>
+<ul>
+<li><a href="ch_destructuring.html#assigning-via-object-destructuring">Assigning via object destructuring</a></li>
+<li><a href="ch_callables.html#returning-object-literal-from-arrow-function">Returning an object literal from an arrow function</a></li>
+</ul>
+<h3 id="semicolons">7.6 Semicolons</h3>
+<h4 id="rule-of-thumb-for-semicolons">7.6.1 Rule of thumb for semicolons</h4>
+<p>Each statement is terminated by a semicolon:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb47-1"><a href="ch_syntax.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb47-2"><a href="ch_syntax.html#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">someFunction</span>(<span class="st">'abc'</span>)<span class="op">;</span></span>
+<span id="cb47-3"><a href="ch_syntax.html#cb47-3" aria-hidden="true" tabindex="-1"></a>i<span class="op">++;</span></span></code></pre></div>
+<p>except statements ending with blocks:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb48-1"><a href="ch_syntax.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">foo</span>() {</span>
+<span id="cb48-2"><a href="ch_syntax.html#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb48-3"><a href="ch_syntax.html#cb48-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb48-4"><a href="ch_syntax.html#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (y <span class="op">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb48-5"><a href="ch_syntax.html#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb48-6"><a href="ch_syntax.html#cb48-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The following case is slightly tricky:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb49-1"><a href="ch_syntax.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func <span class="op">=</span> () <span class="kw">=&gt;</span> {}<span class="op">;</span> <span class="co">// semicolon!</span></span></code></pre></div>
+<p>The whole <code>const</code> declaration (a statement) ends with a semicolon, but inside it, there is an arrow function expression. That is, it’s not the statement per se that ends with a curly brace; it’s the embedded arrow function expression. That’s why there is a semicolon at the end.</p>
+<h4 id="semicolons-control-statements">7.6.2 Semicolons: control statements</h4>
+<p>The body of a control statement is itself a statement. For example, this is the syntax of the <code>while</code> loop:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb50-1"><a href="ch_syntax.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (condition)</span>
+<span id="cb50-2"><a href="ch_syntax.html#cb50-2" aria-hidden="true" tabindex="-1"></a>  statement</span></code></pre></div>
+<p>The body can be a single statement:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb51-1"><a href="ch_syntax.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (a <span class="op">&gt;</span> <span class="dv">0</span>) a<span class="op">--;</span></span></code></pre></div>
+<p>But blocks are also statements and therefore legal bodies of control statements:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb52-1"><a href="ch_syntax.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (a <span class="op">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb52-2"><a href="ch_syntax.html#cb52-2" aria-hidden="true" tabindex="-1"></a>  a<span class="op">--;</span></span>
+<span id="cb52-3"><a href="ch_syntax.html#cb52-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>If you want a loop to have an empty body, your first option is an empty statement (which is just a semicolon):</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb53-1"><a href="ch_syntax.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="fu">processNextItem</span>() <span class="op">&gt;</span> <span class="dv">0</span>)<span class="op">;</span></span></code></pre></div>
+<p>Your second option is an empty block:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb54-1"><a href="ch_syntax.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="fu">processNextItem</span>() <span class="op">&gt;</span> <span class="dv">0</span>) {}</span></code></pre></div>
+<h3 id="automatic-semicolon-insertion-asi">7.7 Automatic semicolon insertion (ASI)</h3>
+<p><a id="index-entry-31" class="index-entry"></a><a id="index-entry-32" class="index-entry"></a></p>
+<p>While I recommend to always write semicolons, most of them are optional in JavaScript. The mechanism that makes this possible is called <em>automatic semicolon insertion</em> (ASI). In a way, it corrects syntax errors.</p>
+<p>ASI works as follows. Parsing of a statement continues until there is either:</p>
+<ul>
+<li>A semicolon</li>
+<li>A line terminator followed by an illegal token</li>
+</ul>
+<p>In other words, ASI can be seen as inserting semicolons at line breaks. <span data-refcheck="#asi-triggered-unexpectedly #asi-unexpectedly-not-triggered">The next subsections</span> cover the pitfalls of ASI.</p>
+<h4 id="asi-triggered-unexpectedly">7.7.1 ASI triggered unexpectedly</h4>
+<p>The good news about ASI is that – if you don’t rely on it and always write semicolons – there is only one pitfall that you need to be aware of. It is that JavaScript forbids line breaks after some tokens. If you do insert a line break, a semicolon will be inserted, too.</p>
+<p>The token where this is most practically relevant is <code>return</code>. Consider, for example, the following code:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb55-1"><a href="ch_syntax.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span></span>
+<span id="cb55-2"><a href="ch_syntax.html#cb55-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb55-3"><a href="ch_syntax.html#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'jane'</span></span>
+<span id="cb55-4"><a href="ch_syntax.html#cb55-4" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>This code is parsed as:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb56-1"><a href="ch_syntax.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span><span class="op">;</span></span>
+<span id="cb56-2"><a href="ch_syntax.html#cb56-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb56-3"><a href="ch_syntax.html#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'jane'</span><span class="op">;</span></span>
+<span id="cb56-4"><a href="ch_syntax.html#cb56-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb56-5"><a href="ch_syntax.html#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span></code></pre></div>
+<p>That is:</p>
+<ul>
+<li>Return statement without operand: <code>return;</code></li>
+<li>Start of code block: <code>{</code></li>
+<li>Expression statement <code>'jane';</code> with <a href="ch_control-flow.html#labels">label</a> <code>first:</code></li>
+<li>End of code block: <code>}</code></li>
+<li>Empty statement: <code>;</code></li>
+</ul>
+<p>Why does JavaScript do this? It protects against accidentally returning a value in a line after a <code>return</code>.</p>
+<h4 id="asi-unexpectedly-not-triggered">7.7.2 ASI unexpectedly not triggered</h4>
+<p>In some cases, ASI is <em>not</em> triggered when you think it should be. That makes life more complicated for people who don’t like semicolons because they need to be aware of those cases. The following are three examples. There are more.</p>
+<p><strong>Example 1:</strong> Unintended function call.</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb57-1"><a href="ch_syntax.html#cb57-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> b <span class="op">+</span> c</span>
+<span id="cb57-2"><a href="ch_syntax.html#cb57-2" aria-hidden="true" tabindex="-1"></a>(d <span class="op">+</span> e)<span class="op">.</span><span class="fu">print</span>()</span></code></pre></div>
+<p>Parsed as:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb58-1"><a href="ch_syntax.html#cb58-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> b <span class="op">+</span> <span class="fu">c</span>(d <span class="op">+</span> e)<span class="op">.</span><span class="fu">print</span>()<span class="op">;</span></span></code></pre></div>
+<p><strong>Example 2:</strong> Unintended division.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb59-1"><a href="ch_syntax.html#cb59-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> b</span>
+<span id="cb59-2"><a href="ch_syntax.html#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="op">/</span>hi<span class="op">/</span>g<span class="op">.</span><span class="fu">exec</span>(c)<span class="op">.</span><span class="fu">map</span>(d)</span></code></pre></div>
+<p>Parsed as:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb60-1"><a href="ch_syntax.html#cb60-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> b <span class="op">/</span> hi <span class="op">/</span> g<span class="op">.</span><span class="fu">exec</span>(c)<span class="op">.</span><span class="fu">map</span>(d)<span class="op">;</span></span></code></pre></div>
+<p><strong>Example 3:</strong> Unintended property access.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb61-1"><a href="ch_syntax.html#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">someFunction</span>()</span>
+<span id="cb61-2"><a href="ch_syntax.html#cb61-2" aria-hidden="true" tabindex="-1"></a>[<span class="st">'ul'</span><span class="op">,</span> <span class="st">'ol'</span>]<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> x <span class="op">+</span> x)</span></code></pre></div>
+<p>Executed as:</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb62-1"><a href="ch_syntax.html#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> propKey <span class="op">=</span> (<span class="st">'ul'</span><span class="op">,</span><span class="st">'ol'</span>)<span class="op">;</span> <span class="co">// comma operator</span></span>
+<span id="cb62-2"><a href="ch_syntax.html#cb62-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(propKey<span class="op">,</span> <span class="st">'ol'</span>)<span class="op">;</span></span>
+<span id="cb62-3"><a href="ch_syntax.html#cb62-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-4"><a href="ch_syntax.html#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="fu">someFunction</span>()[propKey]<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> x <span class="op">+</span> x)<span class="op">;</span></span></code></pre></div>
+<h3 id="semicolons-best-practices">7.8 Semicolons: best practices</h3>
+<p>I recommend that you always write semicolons:</p>
+<ul>
+<li>I like the visual structure it gives code – you clearly see when a statement ends.</li>
+<li>There are less rules to keep in mind.</li>
+<li>The majority of JavaScript programmers use semicolons.</li>
+</ul>
+<p>However, there are also many people who don’t like the added visual clutter of semicolons. If you are one of them: Code without them <em>is</em> legal. I recommend that you use tools to help you avoid mistakes. The following are two examples:</p>
+<ul>
+<li>The automatic code formatter <a href="https://prettier.io">Prettier</a> can be configured to not use semicolons. It then automatically fixes problems. For example, if it encounters a line that starts with a square bracket, it prefixes that line with a semicolon.</li>
+<li>The static checker <a href="https://eslint.org">ESLint</a> has <a href="https://eslint.org/docs/rules/semi">a rule</a> that you tell your preferred style (always semicolons or as few semicolons as possible) and that warns you about critical issues.</li>
+</ul>
+<h3 id="strict-mode">7.9 Strict mode vs.&nbsp;sloppy mode</h3>
+<p><a id="index-entry-33" class="index-entry"></a> <a id="index-entry-34" class="index-entry"></a></p>
+<p>Starting with ECMAScript 5, JavaScript has two <em>modes</em> in which JavaScript can be executed:</p>
+<ul>
+<li>Normal “sloppy” mode is the default in scripts (code fragments that are a precursor to modules and supported by browsers).</li>
+<li>Strict mode is the default in modules and classes, and can be switched on in scripts (how, is explained later). In this mode, several pitfalls of normal mode are removed and more exceptions are thrown.</li>
+</ul>
+<p>You’ll rarely encounter sloppy mode in modern JavaScript code, which is almost always located in modules. In this book, I assume that strict mode is always switched on.</p>
+<h4 id="switching-on-strict-mode">7.9.1 Switching on strict mode</h4>
+<p>In script files and CommonJS modules, you switch on strict mode for a complete file, by putting the following code in the first line:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb63-1"><a href="ch_syntax.html#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="st">'use strict'</span><span class="op">;</span></span></code></pre></div>
+<p>The neat thing about this “directive” is that ECMAScript versions before 5 simply ignore it: it’s an expression statement that does nothing.</p>
+<p>You can also switch on strict mode for just a single function:</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb64-1"><a href="ch_syntax.html#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">functionInStrictMode</span>() {</span>
+<span id="cb64-2"><a href="ch_syntax.html#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'use strict'</span><span class="op">;</span></span>
+<span id="cb64-3"><a href="ch_syntax.html#cb64-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="improvements-in-strict-mode">7.9.2 Improvements in strict mode</h4>
+<p>Let’s look at three things that strict mode does better than sloppy mode. Just in this one section, all code fragments are executed in sloppy mode.</p>
+<h5 id="sloppy-mode-pitfall-changing-an-undeclared-variable-creates-a-global-variable">7.9.2.1 Sloppy mode pitfall: changing an undeclared variable creates a global variable</h5>
+<p>In non-strict mode, changing an undeclared variable creates a global variable.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb65-1"><a href="ch_syntax.html#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sloppyFunc</span>() {</span>
+<span id="cb65-2"><a href="ch_syntax.html#cb65-2" aria-hidden="true" tabindex="-1"></a>  undeclaredVar1 <span class="op">=</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb65-3"><a href="ch_syntax.html#cb65-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb65-4"><a href="ch_syntax.html#cb65-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sloppyFunc</span>()<span class="op">;</span></span>
+<span id="cb65-5"><a href="ch_syntax.html#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Created global variable `undeclaredVar1`:</span></span>
+<span id="cb65-6"><a href="ch_syntax.html#cb65-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(undeclaredVar1<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span></code></pre></div>
+<p>Strict mode does it better and throws a <code>ReferenceError</code>. That makes it easier to detect typos.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb66-1"><a href="ch_syntax.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">strictFunc</span>() {</span>
+<span id="cb66-2"><a href="ch_syntax.html#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'use strict'</span><span class="op">;</span></span>
+<span id="cb66-3"><a href="ch_syntax.html#cb66-3" aria-hidden="true" tabindex="-1"></a>  undeclaredVar2 <span class="op">=</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb66-4"><a href="ch_syntax.html#cb66-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb66-5"><a href="ch_syntax.html#cb66-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb66-6"><a href="ch_syntax.html#cb66-6" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> <span class="fu">strictFunc</span>()<span class="op">,</span></span>
+<span id="cb66-7"><a href="ch_syntax.html#cb66-7" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb66-8"><a href="ch_syntax.html#cb66-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">'ReferenceError'</span><span class="op">,</span></span>
+<span id="cb66-9"><a href="ch_syntax.html#cb66-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">message</span><span class="op">:</span> <span class="st">'undeclaredVar2 is not defined'</span><span class="op">,</span></span>
+<span id="cb66-10"><a href="ch_syntax.html#cb66-10" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>The <code>assert.throws()</code> states that its first argument, a function, throws a <code>ReferenceError</code> when it is called.</p>
+<h5 id="function-declarations-are-block-scoped-in-strict-mode-function-scoped-in-sloppy-mode">7.9.2.2 Function declarations are block-scoped in strict mode, function-scoped in sloppy mode</h5>
+<p>In strict mode, a variable created via a function declaration only exists within the innermost enclosing block:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb67-1"><a href="ch_syntax.html#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">strictFunc</span>() {</span>
+<span id="cb67-2"><a href="ch_syntax.html#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'use strict'</span><span class="op">;</span></span>
+<span id="cb67-3"><a href="ch_syntax.html#cb67-3" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb67-4"><a href="ch_syntax.html#cb67-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="fu">foo</span>() { <span class="cf">return</span> <span class="dv">123</span> }</span>
+<span id="cb67-5"><a href="ch_syntax.html#cb67-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb67-6"><a href="ch_syntax.html#cb67-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">foo</span>()<span class="op">;</span> <span class="co">// ReferenceError</span></span>
+<span id="cb67-7"><a href="ch_syntax.html#cb67-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb67-8"><a href="ch_syntax.html#cb67-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb67-9"><a href="ch_syntax.html#cb67-9" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> <span class="fu">strictFunc</span>()<span class="op">,</span></span>
+<span id="cb67-10"><a href="ch_syntax.html#cb67-10" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb67-11"><a href="ch_syntax.html#cb67-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">'ReferenceError'</span><span class="op">,</span></span>
+<span id="cb67-12"><a href="ch_syntax.html#cb67-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">message</span><span class="op">:</span> <span class="st">'foo is not defined'</span><span class="op">,</span></span>
+<span id="cb67-13"><a href="ch_syntax.html#cb67-13" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>In sloppy mode, function declarations are function-scoped:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb68-1"><a href="ch_syntax.html#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sloppyFunc</span>() {</span>
+<span id="cb68-2"><a href="ch_syntax.html#cb68-2" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb68-3"><a href="ch_syntax.html#cb68-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="fu">foo</span>() { <span class="cf">return</span> <span class="dv">123</span> }</span>
+<span id="cb68-4"><a href="ch_syntax.html#cb68-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb68-5"><a href="ch_syntax.html#cb68-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">foo</span>()<span class="op">;</span> <span class="co">// works</span></span>
+<span id="cb68-6"><a href="ch_syntax.html#cb68-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb68-7"><a href="ch_syntax.html#cb68-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">sloppyFunc</span>()<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span></code></pre></div>
+<h5 id="sloppy-mode-doesnt-throw-exceptions-when-changing-immutable-data">7.9.2.3 Sloppy mode doesn’t throw exceptions when changing immutable data</h5>
+<p>In strict mode, you get an exception if you try to change immutable data:</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb69-1"><a href="ch_syntax.html#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">strictFunc</span>() {</span>
+<span id="cb69-2"><a href="ch_syntax.html#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'use strict'</span><span class="op">;</span></span>
+<span id="cb69-3"><a href="ch_syntax.html#cb69-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">true</span><span class="op">.</span><span class="at">prop</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// TypeError</span></span>
+<span id="cb69-4"><a href="ch_syntax.html#cb69-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb69-5"><a href="ch_syntax.html#cb69-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb69-6"><a href="ch_syntax.html#cb69-6" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> <span class="fu">strictFunc</span>()<span class="op">,</span></span>
+<span id="cb69-7"><a href="ch_syntax.html#cb69-7" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb69-8"><a href="ch_syntax.html#cb69-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">'TypeError'</span><span class="op">,</span></span>
+<span id="cb69-9"><a href="ch_syntax.html#cb69-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">message</span><span class="op">:</span> <span class="st">"Cannot create property 'prop' on boolean 'true'"</span><span class="op">,</span></span>
+<span id="cb69-10"><a href="ch_syntax.html#cb69-10" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>In sloppy mode, the assignment fails silently:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb70-1"><a href="ch_syntax.html#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sloppyFunc</span>() {</span>
+<span id="cb70-2"><a href="ch_syntax.html#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">true</span><span class="op">.</span><span class="at">prop</span> <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// fails silently</span></span>
+<span id="cb70-3"><a href="ch_syntax.html#cb70-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">true</span><span class="op">.</span><span class="at">prop</span><span class="op">;</span></span>
+<span id="cb70-4"><a href="ch_syntax.html#cb70-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb70-5"><a href="ch_syntax.html#cb70-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">sloppyFunc</span>()<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/external-link-regular.svg" height="24">&nbsp; <strong>Further reading: sloppy mode</strong></p>
+<p>For more information on how sloppy mode differs from strict mode, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">MDN</a>.</p>
+</div>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz: advanced</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/5">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_console.html">8 Consoles: interactive JavaScript command lines</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

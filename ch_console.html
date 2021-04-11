@@ -1,0 +1,142 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_console">8 Consoles: interactive JavaScript command lines</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>8.1 <a href="ch_console.html#trying-out-code">Trying out JavaScript code</a>
+<ul>
+<li>8.1.1 <a href="ch_console.html#browser-consoles">Browser consoles</a></li>
+<li>8.1.2 <a href="ch_console.html#the-node.js-repl">The Node.js REPL</a></li>
+<li>8.1.3 <a href="ch_console.html#other-options">Other options</a></li>
+</ul></li>
+<li>8.2 <a href="ch_console.html#the-console.-api-printing-data-and-more">The <code>console.*</code> API: printing data and more</a>
+<ul>
+<li>8.2.1 <a href="ch_console.html#printing-values-console.log-stdout">Printing values: <code>console.log()</code> (stdout)</a></li>
+<li>8.2.2 <a href="ch_console.html#printing-error-information-console.error-stderr">Printing error information: <code>console.error()</code> (stderr)</a></li>
+<li>8.2.3 <a href="ch_console.html#printing-nested-objects-via-json.stringify">Printing nested objects via <code>JSON.stringify()</code></a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<h3 id="trying-out-code">8.1 Trying out JavaScript code</h3>
+<p>You have many options for quickly running pieces of JavaScript code. The following subsections describe a few of them.</p>
+<h4 id="browser-consoles">8.1.1 Browser consoles</h4>
+<p><a id="index-entry-35" class="index-entry"></a></p>
+<p>Web browsers have so-called <em>consoles</em>: interactive command lines to which you can print text via <code>console.log()</code> and where you can run pieces of code. How to open the console differs from browser to browser. Fig.&nbsp;<a href="#fig:chrome-console">3</a> shows the console of Google Chrome.</p>
+<p>To find out how to open the console in your web browser, you can do a web search for “console «name-of-your-browser»”. These are pages for a few commonly used web browsers:</p>
+<ul>
+<li><a href="https://developer.apple.com/safari/tools/">Apple Safari</a></li>
+<li><a href="https://developers.google.com/web/tools/chrome-devtools/console/">Google Chrome</a></li>
+<li><a href="https://docs.microsoft.com/en-us/microsoft-edge/devtools-guide/console">Microsoft Edge</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Opening_the_Web_Console">Mozilla Firefox</a></li>
+</ul>
+<figure>
+<img src="img-book/902557a4fd4896bdae8b2b1b633841ee8354184e.png" id="fig:chrome-console" data-factor="0.4" width="417" height="337" alt="Figure 3: The console of the web browser “Google Chrome” is open (in the bottom half of window) while visiting a web page."><figcaption aria-hidden="true">Figure 3: The console of the web browser “Google Chrome” is open (in the bottom half of window) while visiting a web page.</figcaption>
+</figure>
+<h4 id="the-node.js-repl">8.1.2 The Node.js REPL</h4>
+<p><a id="index-entry-36" class="index-entry"></a></p>
+<p><em>REPL</em> stands for <em>read-eval-print loop</em> and basically means <em>command line</em>. To use it, you must first start Node.js from an operating system command line, via the command <code>node</code>. Then an interaction with it looks as depicted in fig.&nbsp;<a href="#fig:nodejs-repl">4</a>: The text after <code>&gt;</code> is input from the user; everything else is output from Node.js.</p>
+<figure>
+<img src="img-book/b46241fca6b34b0669e31fcea027842e01b320a2.png" id="fig:nodejs-repl" width="271" height="156" alt="Figure 4: Starting and using the Node.js REPL (interactive command line)."><figcaption aria-hidden="true">Figure 4: Starting and using the Node.js REPL (interactive command line).</figcaption>
+</figure>
+<div class="notebox">
+<p><img src="img-book/img/icons/eye-regular.svg" height="24">&nbsp; <strong>Reading: REPL interactions</strong></p>
+<p>I occasionally demonstrate JavaScript via REPL interactions. Then I also use greater-than symbols (<code>&gt;</code>) to mark input – for example:</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb71-1"><a href="ch_console.html#cb71-1" aria-hidden="true" tabindex="-1"></a>&gt; 3 + 5</span>
+<span id="cb71-2"><a href="ch_console.html#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="kw">8</span></span></code></pre></div>
+</div>
+<h4 id="other-options">8.1.3 Other options</h4>
+<p>Other options include:</p>
+<ul>
+<li><p>There are many web apps that let you experiment with JavaScript in web browsers – for example, <a href="https://babeljs.io/repl">Babel’s REPL</a>.</p></li>
+<li><p>There are also native apps and IDE plugins for running JavaScript.</p></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/exclamation-triangle-regular.svg" height="24">&nbsp; <strong>Consoles often run in non-strict mode</strong></p>
+<p>In modern JavaScript, most code (e.g., modules) is executed in <a href="ch_syntax.html#strict-mode">strict mode</a>. However, consoles often run in non-strict mode. Therefore, you may occasionally get slightly different results when using a console to execute code from this book.</p>
+</div>
+<h3 id="the-console.-api-printing-data-and-more">8.2 The <code>console.*</code> API: printing data and more</h3>
+<p>In browsers, the console is something you can bring up that is normally hidden. For Node.js, the console is the terminal that Node.js is currently running in.</p>
+<p>The full <code>console.*</code> API is documented <a href="https://developer.mozilla.org/en-US/docs/Web/API/console">on MDN web docs</a> and <a href="https://nodejs.org/api/console.html">on the Node.js website</a>. It is not part of the JavaScript language standard, but much functionality is supported by both browsers and Node.js.</p>
+<p>In this chapter, we only look at the following two methods for printing data (“printing” means displaying in the console):</p>
+<ul>
+<li><code>console.log()</code></li>
+<li><code>console.error()</code></li>
+</ul>
+<h4 id="printing-values-console.log-stdout">8.2.1 Printing values: <code>console.log()</code> (stdout)</h4>
+<p><a id="index-entry-37" class="index-entry"></a></p>
+<p>There are two variants of this operation:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb72-1"><a href="ch_console.html#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="op">...</span>values<span class="op">:</span> <span class="dt">any</span>[])<span class="op">:</span> <span class="dt">void</span></span>
+<span id="cb72-2"><a href="ch_console.html#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(pattern<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> <span class="op">...</span>values<span class="op">:</span> <span class="dt">any</span>[])<span class="op">:</span> <span class="dt">void</span></span></code></pre></div>
+<h5 id="printing-multiple-values">8.2.1.1 Printing multiple values</h5>
+<p>The first variant prints (text representations of) values on the console:</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb73-1"><a href="ch_console.html#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'abc'</span><span class="op">,</span> <span class="dv">123</span><span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb73-2"><a href="ch_console.html#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb73-3"><a href="ch_console.html#cb73-3" aria-hidden="true" tabindex="-1"></a><span class="co">// abc 123 true</span></span></code></pre></div>
+<p>At the end, <code>console.log()</code> always prints a newline. Therefore, if you call it with zero arguments, it just prints a newline.</p>
+<h5 id="printing-a-string-with-substitutions">8.2.1.2 Printing a string with substitutions</h5>
+<p>The second variant performs string substitution:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb74-1"><a href="ch_console.html#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'Test: %s %j'</span><span class="op">,</span> <span class="dv">123</span><span class="op">,</span> <span class="st">'abc'</span>)<span class="op">;</span></span>
+<span id="cb74-2"><a href="ch_console.html#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb74-3"><a href="ch_console.html#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Test: 123 "abc"</span></span></code></pre></div>
+<p>These are some of the directives you can use for substitutions:</p>
+<ul>
+<li><p><code>%s</code> converts the corresponding value to a string and inserts it.</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb75-1"><a href="ch_console.html#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'%s %s'</span><span class="op">,</span> <span class="st">'abc'</span><span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb75-2"><a href="ch_console.html#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb75-3"><a href="ch_console.html#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="co">// abc 123</span></span></code></pre></div></li>
+<li><p><code>%o</code> inserts a string representation of an object.</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb76-1"><a href="ch_console.html#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'%o'</span><span class="op">,</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">123</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="st">'abc'</span>})<span class="op">;</span></span>
+<span id="cb76-2"><a href="ch_console.html#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb76-3"><a href="ch_console.html#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="co">// { foo: 123, bar: 'abc' }</span></span></code></pre></div></li>
+<li><p><code>%j</code> converts a value to a JSON string and inserts it.</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb77-1"><a href="ch_console.html#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'%j'</span><span class="op">,</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">123</span><span class="op">,</span> <span class="dt">bar</span><span class="op">:</span> <span class="st">'abc'</span>})<span class="op">;</span></span>
+<span id="cb77-2"><a href="ch_console.html#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb77-3"><a href="ch_console.html#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="co">// {"foo":123,"bar":"abc"}</span></span></code></pre></div></li>
+<li><p><code>%%</code> inserts a single <code>%</code>.</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb78-1"><a href="ch_console.html#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'%s%%'</span><span class="op">,</span> <span class="dv">99</span>)<span class="op">;</span></span>
+<span id="cb78-2"><a href="ch_console.html#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb78-3"><a href="ch_console.html#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="co">// 99%</span></span></code></pre></div></li>
+</ul>
+<h4 id="printing-error-information-console.error-stderr">8.2.2 Printing error information: <code>console.error()</code> (stderr)</h4>
+<p><a id="index-entry-38" class="index-entry"></a></p>
+<p><code>console.error()</code> works the same as <code>console.log()</code>, but what it logs is considered error information. For Node.js, that means that the output goes to stderr instead of stdout on Unix.</p>
+<h4 id="printing-nested-objects-via-json.stringify">8.2.3 Printing nested objects via <code>JSON.stringify()</code></h4>
+<p><a href="ch_json.html#JSON.stringify"><code>JSON.stringify()</code></a> is occasionally useful for printing nested objects:</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb79-1"><a href="ch_console.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({<span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span> <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span>}<span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="dv">2</span>))<span class="op">;</span></span></code></pre></div>
+<p>Output:</p>
+<pre class="text"><code>{
+  "first": "Jane",
+  "last": "Doe"
+}</code></pre>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/48">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_assertion-api.html">9 Assertion API</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

@@ -1,0 +1,367 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_booleans">15 Booleans</h2>
+<p><a id="index-entry-112" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>15.1 <a href="ch_booleans.html#converting-to-boolean">Converting to boolean</a></li>
+<li>15.2 <a href="ch_booleans.html#falsiness-truthiness">Falsy and truthy values</a>
+<ul>
+<li>15.2.1 <a href="ch_booleans.html#checking-for-truthiness-or-falsiness">Checking for truthiness or falsiness</a></li>
+</ul></li>
+<li>15.3 <a href="ch_booleans.html#truthiness-existence-checks">Truthiness-based existence checks</a>
+<ul>
+<li>15.3.1 <a href="ch_booleans.html#pitfall-truthiness-based-existence-checks-are-imprecise">Pitfall: truthiness-based existence checks are imprecise</a></li>
+<li>15.3.2 <a href="ch_booleans.html#use-case-was-a-parameter-provided">Use case: was a parameter provided?</a></li>
+<li>15.3.3 <a href="ch_booleans.html#use-case-does-a-property-exist">Use case: does a property exist?</a></li>
+</ul></li>
+<li>15.4 <a href="ch_booleans.html#conditional-operator">Conditional operator (<code>? :</code>)</a></li>
+<li>15.5 <a href="ch_booleans.html#binary-logical-operators-and-x-y-or-x-y">Binary logical operators: And (<code>x &amp;&amp; y</code>), Or (<code>x || y</code>)</a>
+<ul>
+<li>15.5.1 <a href="ch_booleans.html#value-preservation">Value-preservation</a></li>
+<li>15.5.2 <a href="ch_booleans.html#short-circuiting">Short-circuiting</a></li>
+<li>15.5.3 <a href="ch_booleans.html#logical-and-x-y">Logical And (<code>x &amp;&amp; y</code>)</a></li>
+<li>15.5.4 <a href="ch_booleans.html#logical-or">Logical Or (<code>||</code>)</a></li>
+</ul></li>
+<li>15.6 <a href="ch_booleans.html#logical-not">Logical Not (<code>!</code>)</a></li>
+</ul>
+</div>
+<hr>
+<p>The primitive type <em>boolean</em> comprises two values – <code>false</code> and <code>true</code>:</p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb214-1"><a href="ch_booleans.html#cb214-1" aria-hidden="true" tabindex="-1"></a>&gt; typeof false</span>
+<span id="cb214-2"><a href="ch_booleans.html#cb214-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'boolean'</span></span>
+<span id="cb214-3"><a href="ch_booleans.html#cb214-3" aria-hidden="true" tabindex="-1"></a>&gt; typeof true</span>
+<span id="cb214-4"><a href="ch_booleans.html#cb214-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'boolean'</span></span></code></pre></div>
+<p><a id="index-entry-113" class="index-entry"></a><a id="index-entry-114" class="index-entry"></a></p>
+<h3 id="converting-to-boolean">15.1 Converting to boolean</h3>
+<p><a id="index-entry-115" class="index-entry"></a></p>
+<p><a id="index-entry-116" class="index-entry"></a></p>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>The meaning of “converting to [type]”</strong></p>
+<p>“Converting to [type]” is short for “Converting arbitrary values to values of type [type]”.</p>
+</div>
+<p>These are three ways in which you can convert an arbitrary value <code>x</code> to a boolean.</p>
+<ul>
+<li><p><code>Boolean(x)</code><br>
+Most descriptive; recommended.</p></li>
+<li><p><code>x ? true : false</code><br>
+Uses the conditional operator (explained <a href="ch_booleans.html#conditional-operator">later in this chapter</a>).</p></li>
+<li><p><code>!!x</code><br>
+Uses <a href="ch_booleans.html#logical-not">the logical Not operator (<code>!</code>)</a>. This operator coerces its operand to boolean. It is applied a second time to get a non-negated result.</p></li>
+</ul>
+<p>Tbl.&nbsp;<a href="#tbl:converting_to_boolean">4</a> describes how various values are converted to boolean.</p>
+<div id="tbl:converting_to_boolean">
+<table>
+<caption>Table 4: Converting values to booleans.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><code>x</code></th>
+<th style="text-align: left;"><code>Boolean(x)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>undefined</code></td>
+<td style="text-align: left;"><code>false</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>null</code></td>
+<td style="text-align: left;"><code>false</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;"><code>x</code> (no change)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">number</td>
+<td style="text-align: left;"><code>0</code> <code>→</code> <code>false</code>, <code>NaN</code> <code>→</code> <code>false</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Other numbers <code>→</code> <code>true</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bigint</td>
+<td style="text-align: left;"><code>0</code> <code>→</code> <code>false</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Other numbers <code>→</code> <code>true</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><code>''</code> <code>→</code> <code>false</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Other strings <code>→</code> <code>true</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">symbol</td>
+<td style="text-align: left;"><code>true</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">Always <code>true</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="falsiness-truthiness">15.2 Falsy and truthy values</h3>
+<p><a id="index-entry-117" class="index-entry"></a><a id="index-entry-118" class="index-entry"></a><a id="index-entry-119" class="index-entry"></a><a id="index-entry-120" class="index-entry"></a></p>
+<p>When checking the condition of an <code>if</code> statement, a <code>while</code> loop, or a <code>do-while</code> loop, JavaScript works differently than you may expect. Take, for example, the following condition:</p>
+<div class="sourceCode" id="cb215"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb215-1"><a href="ch_booleans.html#cb215-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (value) {}</span></code></pre></div>
+<p>In many programming languages, this condition is equivalent to:</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb216-1"><a href="ch_booleans.html#cb216-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (value <span class="op">===</span> <span class="kw">true</span>) {}</span></code></pre></div>
+<p>However, in JavaScript, it is equivalent to:</p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb217-1"><a href="ch_booleans.html#cb217-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="bu">Boolean</span>(value) <span class="op">===</span> <span class="kw">true</span>) {}</span></code></pre></div>
+<p>That is, JavaScript checks if <code>value</code> is <code>true</code> when converted to boolean. This kind of check is so common that the following names were introduced:</p>
+<ul>
+<li>A value is called <em>truthy</em> if it is <code>true</code> when converted to boolean.</li>
+<li>A value is called <em>falsy</em> if it is <code>false</code> when converted to boolean.</li>
+</ul>
+<p>Each value is either truthy or falsy. Consulting tbl.&nbsp;<a href="#tbl:converting_to_boolean">4</a>, we can make an exhaustive list of falsy values:</p>
+<ul>
+<li><code>undefined</code></li>
+<li><code>null</code></li>
+<li>Boolean: <code>false</code></li>
+<li>Numbers: <code>0</code>, <code>NaN</code></li>
+<li>Bigint: <code>0n</code></li>
+<li>String: <code>''</code></li>
+</ul>
+<p>All other values (including all objects) are truthy:</p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb218-1"><a href="ch_booleans.html#cb218-1" aria-hidden="true" tabindex="-1"></a>&gt; Boolean('abc')</span>
+<span id="cb218-2"><a href="ch_booleans.html#cb218-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb218-3"><a href="ch_booleans.html#cb218-3" aria-hidden="true" tabindex="-1"></a>&gt; Boolean([])</span>
+<span id="cb218-4"><a href="ch_booleans.html#cb218-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb218-5"><a href="ch_booleans.html#cb218-5" aria-hidden="true" tabindex="-1"></a>&gt; Boolean({})</span>
+<span id="cb218-6"><a href="ch_booleans.html#cb218-6" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h4 id="checking-for-truthiness-or-falsiness">15.2.1 Checking for truthiness or falsiness</h4>
+<div class="sourceCode" id="cb219"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb219-1"><a href="ch_booleans.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x) {</span>
+<span id="cb219-2"><a href="ch_booleans.html#cb219-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// x is truthy</span></span>
+<span id="cb219-3"><a href="ch_booleans.html#cb219-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb219-4"><a href="ch_booleans.html#cb219-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb219-5"><a href="ch_booleans.html#cb219-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="op">!</span>x) {</span>
+<span id="cb219-6"><a href="ch_booleans.html#cb219-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// x is falsy</span></span>
+<span id="cb219-7"><a href="ch_booleans.html#cb219-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb219-8"><a href="ch_booleans.html#cb219-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb219-9"><a href="ch_booleans.html#cb219-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x) {</span>
+<span id="cb219-10"><a href="ch_booleans.html#cb219-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// x is truthy</span></span>
+<span id="cb219-11"><a href="ch_booleans.html#cb219-11" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb219-12"><a href="ch_booleans.html#cb219-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">// x is falsy</span></span>
+<span id="cb219-13"><a href="ch_booleans.html#cb219-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb219-14"><a href="ch_booleans.html#cb219-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb219-15"><a href="ch_booleans.html#cb219-15" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> result <span class="op">=</span> x <span class="op">?</span> <span class="st">'truthy'</span> <span class="op">:</span> <span class="st">'falsy'</span><span class="op">;</span></span></code></pre></div>
+<p>The conditional operator that is used in the last line, is explained <a href="ch_booleans.html#conditional-operator">later in this chapter</a>.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Truthiness</strong></p>
+<p><code>exercises/booleans/truthiness_exrc.mjs</code></p>
+</div>
+<h3 id="truthiness-existence-checks">15.3 Truthiness-based existence checks</h3>
+<p>In JavaScript, if you read something that doesn’t exist (e.g., a missing parameter or a missing property), you usually get <code>undefined</code> as a result. In these cases, an existence check amounts to comparing a value with <code>undefined</code>. For example, the following code checks if object <code>obj</code> has the property <code>.prop</code>:</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb220-1"><a href="ch_booleans.html#cb220-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (obj<span class="op">.</span><span class="at">prop</span> <span class="op">!==</span> <span class="kw">undefined</span>) {</span>
+<span id="cb220-2"><a href="ch_booleans.html#cb220-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// obj has property .prop</span></span>
+<span id="cb220-3"><a href="ch_booleans.html#cb220-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Due to <code>undefined</code> being falsy, we can shorten this check to:</p>
+<div class="sourceCode" id="cb221"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb221-1"><a href="ch_booleans.html#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (obj<span class="op">.</span><span class="at">prop</span>) {</span>
+<span id="cb221-2"><a href="ch_booleans.html#cb221-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// obj has property .prop</span></span>
+<span id="cb221-3"><a href="ch_booleans.html#cb221-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="pitfall-truthiness-based-existence-checks-are-imprecise">15.3.1 Pitfall: truthiness-based existence checks are imprecise</h4>
+<p>Truthiness-based existence checks have one pitfall: they are not very precise. Consider this previous example:</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb222-1"><a href="ch_booleans.html#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (obj<span class="op">.</span><span class="at">prop</span>) {</span>
+<span id="cb222-2"><a href="ch_booleans.html#cb222-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// obj has property .prop</span></span>
+<span id="cb222-3"><a href="ch_booleans.html#cb222-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The body of the <code>if</code> statement is skipped if:</p>
+<ul>
+<li><code>obj.prop</code> is missing (in which case, JavaScript returns <code>undefined</code>).</li>
+</ul>
+<p>However, it is also skipped if:</p>
+<ul>
+<li><code>obj.prop</code> is <code>undefined</code>.</li>
+<li><code>obj.prop</code> is any other falsy value (<code>null</code>, <code>0</code>, <code>''</code>, etc.).</li>
+</ul>
+<p>In practice, this rarely causes problems, but you have to be aware of this pitfall.</p>
+<h4 id="use-case-was-a-parameter-provided">15.3.2 Use case: was a parameter provided?</h4>
+<p>A truthiness check is often used to determine if the caller of a function provided a parameter:</p>
+<div class="sourceCode" id="cb223"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb223-1"><a href="ch_booleans.html#cb223-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>(x) {</span>
+<span id="cb223-2"><a href="ch_booleans.html#cb223-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>x) {</span>
+<span id="cb223-3"><a href="ch_booleans.html#cb223-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Missing parameter x'</span>)<span class="op">;</span></span>
+<span id="cb223-4"><a href="ch_booleans.html#cb223-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb223-5"><a href="ch_booleans.html#cb223-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb223-6"><a href="ch_booleans.html#cb223-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>On the plus side, this pattern is established and short. It correctly throws errors for <code>undefined</code> and <code>null</code>.</p>
+<p>On the minus side, there is the previously mentioned pitfall: the code also throws errors for all other falsy values.</p>
+<p>An alternative is to check for <code>undefined</code>:</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb224-1"><a href="ch_booleans.html#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">===</span> <span class="kw">undefined</span>) {</span>
+<span id="cb224-2"><a href="ch_booleans.html#cb224-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Missing parameter x'</span>)<span class="op">;</span></span>
+<span id="cb224-3"><a href="ch_booleans.html#cb224-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="use-case-does-a-property-exist">15.3.3 Use case: does a property exist?</h4>
+<p>Truthiness checks are also often used to determine if a property exists:</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb225-1"><a href="ch_booleans.html#cb225-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">readFile</span>(fileDesc) {</span>
+<span id="cb225-2"><a href="ch_booleans.html#cb225-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>fileDesc<span class="op">.</span><span class="at">path</span>) {</span>
+<span id="cb225-3"><a href="ch_booleans.html#cb225-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Missing property: .path'</span>)<span class="op">;</span></span>
+<span id="cb225-4"><a href="ch_booleans.html#cb225-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb225-5"><a href="ch_booleans.html#cb225-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb225-6"><a href="ch_booleans.html#cb225-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb225-7"><a href="ch_booleans.html#cb225-7" aria-hidden="true" tabindex="-1"></a><span class="fu">readFile</span>({ <span class="dt">path</span><span class="op">:</span> <span class="st">'foo.txt'</span> })<span class="op">;</span> <span class="co">// no error</span></span></code></pre></div>
+<p>This pattern is also established and has the usual caveat: it not only throws if the property is missing, but also if it exists and has any of the falsy values.</p>
+<p>If you truly want to check if the property exists, you have to use <a href="ch_single-objects.html#in-operator">the <code>in</code> operator</a>:</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb226-1"><a href="ch_booleans.html#cb226-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="op">!</span> (<span class="st">'path'</span> <span class="kw">in</span> fileDesc)) {</span>
+<span id="cb226-2"><a href="ch_booleans.html#cb226-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Missing property: .path'</span>)<span class="op">;</span></span>
+<span id="cb226-3"><a href="ch_booleans.html#cb226-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="conditional-operator">15.4 Conditional operator (<code>? :</code>)</h3>
+<p><a id="index-entry-121" class="index-entry"></a><a id="index-entry-122" class="index-entry"></a><a id="index-entry-123" class="index-entry"></a></p>
+<p>The conditional operator is the expression version of the <code>if</code> statement. Its syntax is:</p>
+<pre class="text"><code>«condition» ? «thenExpression» : «elseExpression»</code></pre>
+<p>It is evaluated as follows:</p>
+<ul>
+<li>If <code>condition</code> is truthy, evaluate and return <code>thenExpression</code>.</li>
+<li>Otherwise, evaluate and return <code>elseExpression</code>.</li>
+</ul>
+<p>The conditional operator is also called <em>ternary operator</em> because it has three operands.</p>
+<p>Examples:</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb228-1"><a href="ch_booleans.html#cb228-1" aria-hidden="true" tabindex="-1"></a>&gt; true ? 'yes' : 'no'</span>
+<span id="cb228-2"><a href="ch_booleans.html#cb228-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'yes'</span></span>
+<span id="cb228-3"><a href="ch_booleans.html#cb228-3" aria-hidden="true" tabindex="-1"></a>&gt; false ? 'yes' : 'no'</span>
+<span id="cb228-4"><a href="ch_booleans.html#cb228-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'no'</span></span>
+<span id="cb228-5"><a href="ch_booleans.html#cb228-5" aria-hidden="true" tabindex="-1"></a>&gt; '' ? 'yes' : 'no'</span>
+<span id="cb228-6"><a href="ch_booleans.html#cb228-6" aria-hidden="true" tabindex="-1"></a><span class="kw">'no'</span></span></code></pre></div>
+<p>The following code demonstrates that whichever of the two branches “then” and “else” is chosen via the condition, only that branch is evaluated. The other branch isn’t.</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb229-1"><a href="ch_booleans.html#cb229-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> (<span class="kw">true</span> <span class="op">?</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'then'</span>) <span class="op">:</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'else'</span>))<span class="op">;</span></span>
+<span id="cb229-2"><a href="ch_booleans.html#cb229-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb229-3"><a href="ch_booleans.html#cb229-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb229-4"><a href="ch_booleans.html#cb229-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 'then'</span></span></code></pre></div>
+<h3 id="binary-logical-operators-and-x-y-or-x-y">15.5 Binary logical operators: And (<code>x &amp;&amp; y</code>), Or (<code>x || y</code>)</h3>
+<p>The binary logical operators <code>&amp;&amp;</code> and <code>||</code> are <em>value-preserving</em> and <em>short-circuiting</em>.</p>
+<h4 id="value-preservation">15.5.1 Value-preservation</h4>
+<p><a id="index-entry-124" class="index-entry"></a></p>
+<p><em>Value-preservation</em> means that operands are interpreted as booleans but returned unchanged:</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb230-1"><a href="ch_booleans.html#cb230-1" aria-hidden="true" tabindex="-1"></a>&gt; 12 || 'hello'</span>
+<span id="cb230-2"><a href="ch_booleans.html#cb230-2" aria-hidden="true" tabindex="-1"></a><span class="kw">12</span></span>
+<span id="cb230-3"><a href="ch_booleans.html#cb230-3" aria-hidden="true" tabindex="-1"></a>&gt; 0 || 'hello'</span>
+<span id="cb230-4"><a href="ch_booleans.html#cb230-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'hello'</span></span></code></pre></div>
+<h4 id="short-circuiting">15.5.2 Short-circuiting</h4>
+<p><a id="index-entry-125" class="index-entry"></a></p>
+<p><em>Short-circuiting</em> means if the first operand already determines the result, then the second operand is not evaluated. The only other operator that delays evaluating its operands is the conditional operator. Usually, all operands are evaluated before performing an operation.</p>
+<p>For example, logical And (<code>&amp;&amp;</code>) does not evaluate its second operand if the first one is falsy:</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb231-1"><a href="ch_booleans.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> <span class="kw">false</span> <span class="op">&amp;&amp;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'hello'</span>)<span class="op">;</span></span>
+<span id="cb231-2"><a href="ch_booleans.html#cb231-2" aria-hidden="true" tabindex="-1"></a><span class="co">// No output</span></span></code></pre></div>
+<p>If the first operand is truthy, <code>console.log()</code> is executed:</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb232-1"><a href="ch_booleans.html#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> <span class="kw">true</span> <span class="op">&amp;&amp;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'hello'</span>)<span class="op">;</span></span>
+<span id="cb232-2"><a href="ch_booleans.html#cb232-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb232-3"><a href="ch_booleans.html#cb232-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb232-4"><a href="ch_booleans.html#cb232-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 'hello'</span></span></code></pre></div>
+<h4 id="logical-and-x-y">15.5.3 Logical And (<code>x &amp;&amp; y</code>)</h4>
+<p><a id="index-entry-126" class="index-entry"></a><a id="index-entry-127" class="index-entry"></a></p>
+<p>The expression <code>a &amp;&amp; b</code> (“<code>a</code> And <code>b</code>”) is evaluated as follows:</p>
+<ol type="1">
+<li>Evaluate <code>a</code>.</li>
+<li>Is the result falsy? Return it.</li>
+<li>Otherwise, evaluate <code>b</code> and return the result.</li>
+</ol>
+<p>In other words, the following two expressions are roughly equivalent:</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb233-1"><a href="ch_booleans.html#cb233-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">&amp;&amp;</span> b</span>
+<span id="cb233-2"><a href="ch_booleans.html#cb233-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>a <span class="op">?</span> a <span class="op">:</span> b</span></code></pre></div>
+<p>Examples:</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb234-1"><a href="ch_booleans.html#cb234-1" aria-hidden="true" tabindex="-1"></a>&gt; false &amp;&amp; true</span>
+<span id="cb234-2"><a href="ch_booleans.html#cb234-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb234-3"><a href="ch_booleans.html#cb234-3" aria-hidden="true" tabindex="-1"></a>&gt; false &amp;&amp; 'abc'</span>
+<span id="cb234-4"><a href="ch_booleans.html#cb234-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb234-5"><a href="ch_booleans.html#cb234-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb234-6"><a href="ch_booleans.html#cb234-6" aria-hidden="true" tabindex="-1"></a>&gt; true &amp;&amp; false</span>
+<span id="cb234-7"><a href="ch_booleans.html#cb234-7" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb234-8"><a href="ch_booleans.html#cb234-8" aria-hidden="true" tabindex="-1"></a>&gt; true &amp;&amp; 'abc'</span>
+<span id="cb234-9"><a href="ch_booleans.html#cb234-9" aria-hidden="true" tabindex="-1"></a><span class="kw">'abc'</span></span>
+<span id="cb234-10"><a href="ch_booleans.html#cb234-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb234-11"><a href="ch_booleans.html#cb234-11" aria-hidden="true" tabindex="-1"></a>&gt; '' &amp;&amp; 'abc'</span>
+<span id="cb234-12"><a href="ch_booleans.html#cb234-12" aria-hidden="true" tabindex="-1"></a><span class="kw">''</span></span></code></pre></div>
+<h4 id="logical-or">15.5.4 Logical Or (<code>||</code>)</h4>
+<p><a id="index-entry-128" class="index-entry"></a><a id="index-entry-129" class="index-entry"></a></p>
+<p>The expression <code>a || b</code> (“<code>a</code> Or <code>b</code>”) is evaluated as follows:</p>
+<ol type="1">
+<li>Evaluate <code>a</code>.</li>
+<li>Is the result truthy? Return it.</li>
+<li>Otherwise, evaluate <code>b</code> and return the result.</li>
+</ol>
+<p>In other words, the following two expressions are roughly equivalent:</p>
+<div class="sourceCode" id="cb235"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb235-1"><a href="ch_booleans.html#cb235-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">||</span>&nbsp;b</span>
+<span id="cb235-2"><a href="ch_booleans.html#cb235-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">?</span> a <span class="op">:</span> b</span></code></pre></div>
+<p>Examples:</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb236-1"><a href="ch_booleans.html#cb236-1" aria-hidden="true" tabindex="-1"></a>&gt; true || false</span>
+<span id="cb236-2"><a href="ch_booleans.html#cb236-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb236-3"><a href="ch_booleans.html#cb236-3" aria-hidden="true" tabindex="-1"></a>&gt; true || 'abc'</span>
+<span id="cb236-4"><a href="ch_booleans.html#cb236-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb236-5"><a href="ch_booleans.html#cb236-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-6"><a href="ch_booleans.html#cb236-6" aria-hidden="true" tabindex="-1"></a>&gt; false || true</span>
+<span id="cb236-7"><a href="ch_booleans.html#cb236-7" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb236-8"><a href="ch_booleans.html#cb236-8" aria-hidden="true" tabindex="-1"></a>&gt; false || 'abc'</span>
+<span id="cb236-9"><a href="ch_booleans.html#cb236-9" aria-hidden="true" tabindex="-1"></a><span class="kw">'abc'</span></span>
+<span id="cb236-10"><a href="ch_booleans.html#cb236-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-11"><a href="ch_booleans.html#cb236-11" aria-hidden="true" tabindex="-1"></a>&gt; 'abc' || 'def'</span>
+<span id="cb236-12"><a href="ch_booleans.html#cb236-12" aria-hidden="true" tabindex="-1"></a><span class="kw">'abc'</span></span></code></pre></div>
+<h5 id="legacy-use-case-for-logical-or-providing-default-values">15.5.4.1 Legacy use case for logical Or (<code>||</code>): providing default values</h5>
+<p>ECMAScript 2020 introduced the nullish coalescing operator (<code>??</code>) for default values. Before that, logical Or was used for this purpose:</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb237-1"><a href="ch_booleans.html#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> valueToUse <span class="op">=</span> receivedValue <span class="op">||</span> defaultValue<span class="op">;</span></span></code></pre></div>
+<p>See <a href="ch_undefined-null.html#nullish-coalescing-operator">§14.4 “The nullish coalescing operator (<code>??</code>) for default values [ES2020]”</a> for more information on <code>??</code> and the downsides of <code>||</code> in this case.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Legacy exercise: Default values via the Or operator (<code>||</code>)</strong></p>
+<p><code>exercises/booleans/default_via_or_exrc.mjs</code></p>
+</div>
+<h3 id="logical-not">15.6 Logical Not (<code>!</code>)</h3>
+<p><a id="index-entry-130" class="index-entry"></a><a id="index-entry-131" class="index-entry"></a></p>
+<p>The expression <code>!x</code> (“Not <code>x</code>”) is evaluated as follows:</p>
+<ol type="1">
+<li>Evaluate <code>x</code>.</li>
+<li>Is it truthy? Return <code>false</code>.</li>
+<li>Otherwise, return <code>true</code>.</li>
+</ol>
+<p>Examples:</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb238-1"><a href="ch_booleans.html#cb238-1" aria-hidden="true" tabindex="-1"></a>&gt; !false</span>
+<span id="cb238-2"><a href="ch_booleans.html#cb238-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb238-3"><a href="ch_booleans.html#cb238-3" aria-hidden="true" tabindex="-1"></a>&gt; !true</span>
+<span id="cb238-4"><a href="ch_booleans.html#cb238-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb238-5"><a href="ch_booleans.html#cb238-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb238-6"><a href="ch_booleans.html#cb238-6" aria-hidden="true" tabindex="-1"></a>&gt; !0</span>
+<span id="cb238-7"><a href="ch_booleans.html#cb238-7" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb238-8"><a href="ch_booleans.html#cb238-8" aria-hidden="true" tabindex="-1"></a>&gt; !123</span>
+<span id="cb238-9"><a href="ch_booleans.html#cb238-9" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb238-10"><a href="ch_booleans.html#cb238-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb238-11"><a href="ch_booleans.html#cb238-11" aria-hidden="true" tabindex="-1"></a>&gt; !''</span>
+<span id="cb238-12"><a href="ch_booleans.html#cb238-12" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb238-13"><a href="ch_booleans.html#cb238-13" aria-hidden="true" tabindex="-1"></a>&gt; !'abc'</span>
+<span id="cb238-14"><a href="ch_booleans.html#cb238-14" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/10">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_numbers.html">16 Numbers</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

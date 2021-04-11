@@ -1,0 +1,638 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_typed-arrays">32 Typed Arrays: handling binary data (advanced)</h2>
+<p><a id="index-entry-401" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>32.1 <a href="ch_typed-arrays.html#the-basics-of-the-api">The basics of the API</a>
+<ul>
+<li>32.1.1 <a href="ch_typed-arrays.html#use-cases-for-typed-arrays">Use cases for Typed Arrays</a></li>
+<li>32.1.2 <a href="ch_typed-arrays.html#the-core-classes-arraybuffer-typed-arrays-dataview">The core classes: <code>ArrayBuffer</code>, Typed Arrays, <code>DataView</code></a></li>
+<li>32.1.3 <a href="ch_typed-arrays.html#using-typed-arrays">Using Typed Arrays</a></li>
+<li>32.1.4 <a href="ch_typed-arrays.html#using-dataviews">Using DataViews</a></li>
+</ul></li>
+<li>32.2 <a href="ch_typed-arrays.html#element-types">Element types</a>
+<ul>
+<li>32.2.1 <a href="ch_typed-arrays.html#handling-overflow-underflow">Handling overflow and underflow</a></li>
+<li>32.2.2 <a href="ch_typed-arrays.html#endianness">Endianness</a></li>
+</ul></li>
+<li>32.3 <a href="ch_typed-arrays.html#more-information-on-typed-arrays">More information on Typed Arrays</a>
+<ul>
+<li>32.3.1 <a href="ch_typed-arrays.html#the-static-method-elementtypearray.from">The static method <code>«ElementType»Array.from()</code></a></li>
+<li>32.3.2 <a href="ch_typed-arrays.html#typed-arrays-are-iterable">Typed Arrays are iterable</a></li>
+<li>32.3.3 <a href="ch_typed-arrays.html#typed-arrays-vs.-normal-arrays">Typed Arrays vs.&nbsp;normal Arrays</a></li>
+<li>32.3.4 <a href="ch_typed-arrays.html#converting-typed-arrays-to-and-from-normal-arrays">Converting Typed Arrays to and from normal Arrays</a></li>
+<li>32.3.5 <a href="ch_typed-arrays.html#concatenating-typed-arrays">Concatenating Typed Arrays</a></li>
+</ul></li>
+<li>32.4 <a href="ch_typed-arrays.html#typed-arrays-indices-offsets">Quick references: indices vs.&nbsp;offsets</a></li>
+<li>32.5 <a href="ch_typed-arrays.html#quick-reference-arraybuffers">Quick reference: ArrayBuffers</a>
+<ul>
+<li>32.5.1 <a href="ch_typed-arrays.html#new-arraybuffer"><code>new ArrayBuffer()</code></a></li>
+<li>32.5.2 <a href="ch_typed-arrays.html#static-methods-of-arraybuffer">Static methods of <code>ArrayBuffer</code></a></li>
+<li>32.5.3 <a href="ch_typed-arrays.html#properties-of-arraybuffer.prototype">Properties of <code>ArrayBuffer.prototype</code></a></li>
+</ul></li>
+<li>32.6 <a href="ch_typed-arrays.html#quick-reference-typed-arrays">Quick reference: Typed Arrays</a>
+<ul>
+<li>32.6.1 <a href="ch_typed-arrays.html#static-methods-of-typedarrayt">Static methods of <code>TypedArray&lt;T&gt;</code></a></li>
+<li>32.6.2 <a href="ch_typed-arrays.html#properties-of-typedarrayt.prototype">Properties of <code>TypedArray&lt;T&gt;.prototype</code></a></li>
+<li>32.6.3 <a href="ch_typed-arrays.html#new-elementtypearray"><code>new «ElementType»Array()</code></a></li>
+<li>32.6.4 <a href="ch_typed-arrays.html#static-properties-of-elementtypearray">Static properties of <code>«ElementType»Array</code></a></li>
+<li>32.6.5 <a href="ch_typed-arrays.html#properties-of-elementtypearray.prototype">Properties of <code>«ElementType»Array.prototype</code></a></li>
+</ul></li>
+<li>32.7 <a href="ch_typed-arrays.html#quick-reference-dataviews">Quick reference: DataViews</a>
+<ul>
+<li>32.7.1 <a href="ch_typed-arrays.html#new-dataview"><code>new DataView()</code></a></li>
+<li>32.7.2 <a href="ch_typed-arrays.html#properties-of-dataview.prototype">Properties of <code>DataView.prototype</code></a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<h3 id="the-basics-of-the-api">32.1 The basics of the API</h3>
+<p>Much data on the web is text: JSON files, HTML files, CSS files, JavaScript code, etc. JavaScript handles such data well via its built-in strings.</p>
+<p>However, before 2011, it did not handle binary data well. <a href="https://www.khronos.org/registry/typedarray/specs/1.0/">The Typed Array Specification 1.0</a> was introduced on February 8, 2011 and provides tools for working with binary data. With ECMAScript 6, Typed Arrays were added to the core language and gained methods that were previously only available for normal Arrays (<code>.map()</code>, <code>.filter()</code>, etc.).</p>
+<h4 id="use-cases-for-typed-arrays">32.1.1 Use cases for Typed Arrays</h4>
+<p>The main uses cases for Typed Arrays, are:</p>
+<ul>
+<li>Processing binary data: managing image data, manipulating binary files, handling binary network protocols, etc.</li>
+<li>Interacting with native APIs: Native APIs often receive and return data in a binary format, which you could neither store nor manipulate well in pre-ES6 JavaScript. That meant that whenever you were communicating with such an API, data had to be converted from JavaScript to binary and back for every call. Typed Arrays eliminate this bottleneck. One example of communicating with native APIs is WebGL, for which Typed Arrays were initially created. Section <a href="http://www.html5rocks.com/en/tutorials/webgl/typed_arrays/#toc-history">“History of Typed Arrays”</a> of the article <a href="http://www.html5rocks.com/en/tutorials/webgl/typed_arrays/#toc-history">“Typed Arrays: Binary Data in the Browser”</a> (by Ilmari Heikkinen for HTML5 Rocks) has more information.</li>
+</ul>
+<h4 id="the-core-classes-arraybuffer-typed-arrays-dataview">32.1.2 The core classes: <code>ArrayBuffer</code>, Typed Arrays, <code>DataView</code></h4>
+<p><a id="index-entry-402" class="index-entry"></a> <a id="index-entry-403" class="index-entry"></a></p>
+<p><a id="index-entry-404" class="index-entry"></a> <a id="index-entry-405" class="index-entry"></a> <a id="index-entry-406" class="index-entry"></a> <a id="index-entry-407" class="index-entry"></a> <a id="index-entry-408" class="index-entry"></a> <a id="index-entry-409" class="index-entry"></a> <a id="index-entry-410" class="index-entry"></a> <a id="index-entry-411" class="index-entry"></a> <a id="index-entry-412" class="index-entry"></a></p>
+<p><a id="index-entry-413" class="index-entry"></a> <a id="index-entry-414" class="index-entry"></a></p>
+<p>The Typed Array API stores binary data in instances of <code>ArrayBuffer</code>:</p>
+<div class="sourceCode" id="cb939"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb939-1"><a href="ch_typed-arrays.html#cb939-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> buf <span class="op">=</span> <span class="kw">new</span> <span class="bu">ArrayBuffer</span>(<span class="dv">4</span>)<span class="op">;</span> <span class="co">// length in bytes</span></span>
+<span id="cb939-2"><a href="ch_typed-arrays.html#cb939-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// buf is initialized with zeros</span></span></code></pre></div>
+<p>An ArrayBuffer itself is a black box: if you want to access its data, you must wrap it in another object – a <em>view object</em>. Two kinds of view objects are available:</p>
+<ul>
+<li>Typed Arrays: let you access the data as an indexed sequence of elements that all have the same type. Examples include:
+<ul>
+<li><code>Uint8Array</code>: Elements are unsigned 8-bit integers. <em>Unsigned</em> means that their ranges start at zero.</li>
+<li><code>Int16Array</code>: Elements are signed 16-bit integers. <em>Signed</em> means that they have a sign and can be negative, zero, or positive.</li>
+<li><code>Float32Array</code>: Elements are 32-bit floating point numbers.</li>
+</ul></li>
+<li>DataViews: let you interpret the data as various types (<code>Uint8</code>, <code>Int16</code>, <code>Float32</code>, etc.) that you can read and write at any byte offset.</li>
+</ul>
+<p>Fig.&nbsp;<a href="#fig:typed_arrays_class_diagram">20</a> shows a class diagram of the API.</p>
+<figure>
+<img src="img-book/3a8148c41d603aa628c33ef4439d142cd4b8103b.jpg" id="fig:typed_arrays_class_diagram" data-factor="0.4" width="411" height="291" alt="Figure 20: The classes of the Typed Array API."><figcaption aria-hidden="true">Figure 20: The classes of the Typed Array API.</figcaption>
+</figure>
+<h4 id="using-typed-arrays">32.1.3 Using Typed Arrays</h4>
+<p>Typed Arrays are used much like normal Arrays with a few notable differences:</p>
+<ul>
+<li>Typed Arrays store their data in ArrayBuffers.</li>
+<li>All elements are initialized with zeros.</li>
+<li>All elements have the same type. Writing values to a Typed Array coerces them to that type. Reading values produces normal numbers or bigints.</li>
+<li>The length of a Typed Array is immutable; it can’t be changed.</li>
+<li>Typed Arrays can’t have holes.</li>
+</ul>
+<h5 id="creating-typed-arrays">32.1.3.1 Creating Typed Arrays</h5>
+<p>The following code shows three different ways of creating the same Typed Array:</p>
+<div class="sourceCode" id="cb940"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb940-1"><a href="ch_typed-arrays.html#cb940-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Argument: Typed Array or Array-like object</span></span>
+<span id="cb940-2"><a href="ch_typed-arrays.html#cb940-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ta1 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Uint8Array</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>])<span class="op">;</span></span>
+<span id="cb940-3"><a href="ch_typed-arrays.html#cb940-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb940-4"><a href="ch_typed-arrays.html#cb940-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ta2 <span class="op">=</span> <span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb940-5"><a href="ch_typed-arrays.html#cb940-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb940-6"><a href="ch_typed-arrays.html#cb940-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ta3 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Uint8Array</span>(<span class="dv">3</span>)<span class="op">;</span> <span class="co">// length of Typed Array</span></span>
+<span id="cb940-7"><a href="ch_typed-arrays.html#cb940-7" aria-hidden="true" tabindex="-1"></a>ta3[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb940-8"><a href="ch_typed-arrays.html#cb940-8" aria-hidden="true" tabindex="-1"></a>ta3[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb940-9"><a href="ch_typed-arrays.html#cb940-9" aria-hidden="true" tabindex="-1"></a>ta3[<span class="dv">2</span>] <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb940-10"><a href="ch_typed-arrays.html#cb940-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb940-11"><a href="ch_typed-arrays.html#cb940-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(ta1<span class="op">,</span> ta2)<span class="op">;</span></span>
+<span id="cb940-12"><a href="ch_typed-arrays.html#cb940-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(ta1<span class="op">,</span> ta3)<span class="op">;</span></span></code></pre></div>
+<h5 id="the-wrapped-arraybuffer">32.1.3.2 The wrapped ArrayBuffer</h5>
+<div class="sourceCode" id="cb941"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb941-1"><a href="ch_typed-arrays.html#cb941-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> typedArray <span class="op">=</span> <span class="kw">new</span> <span class="bu">Int16Array</span>(<span class="dv">2</span>)<span class="op">;</span> <span class="co">// 2 elements</span></span>
+<span id="cb941-2"><a href="ch_typed-arrays.html#cb941-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(typedArray<span class="op">.</span><span class="at">length</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb941-3"><a href="ch_typed-arrays.html#cb941-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb941-4"><a href="ch_typed-arrays.html#cb941-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb941-5"><a href="ch_typed-arrays.html#cb941-5" aria-hidden="true" tabindex="-1"></a>  typedArray<span class="op">.</span><span class="at">buffer</span><span class="op">,</span> <span class="kw">new</span> <span class="bu">ArrayBuffer</span>(<span class="dv">4</span>))<span class="op">;</span> <span class="co">// 4 bytes</span></span></code></pre></div>
+<h5 id="getting-and-setting-elements">32.1.3.3 Getting and setting elements</h5>
+<div class="sourceCode" id="cb942"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb942-1"><a href="ch_typed-arrays.html#cb942-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> typedArray <span class="op">=</span> <span class="kw">new</span> <span class="bu">Int16Array</span>(<span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb942-2"><a href="ch_typed-arrays.html#cb942-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb942-3"><a href="ch_typed-arrays.html#cb942-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(typedArray[<span class="dv">1</span>]<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span> <span class="co">// initialized with 0</span></span>
+<span id="cb942-4"><a href="ch_typed-arrays.html#cb942-4" aria-hidden="true" tabindex="-1"></a>typedArray[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">72</span><span class="op">;</span></span>
+<span id="cb942-5"><a href="ch_typed-arrays.html#cb942-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(typedArray[<span class="dv">1</span>]<span class="op">,</span> <span class="dv">72</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="using-dataviews">32.1.4 Using DataViews</h4>
+<p>This is how DataViews are used:</p>
+<div class="sourceCode" id="cb943"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb943-1"><a href="ch_typed-arrays.html#cb943-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> dataView <span class="op">=</span> <span class="kw">new</span> <span class="bu">DataView</span>(<span class="kw">new</span> <span class="bu">ArrayBuffer</span>(<span class="dv">4</span>))<span class="op">;</span></span>
+<span id="cb943-2"><a href="ch_typed-arrays.html#cb943-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(dataView<span class="op">.</span><span class="fu">getInt16</span>(<span class="dv">0</span>)<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb943-3"><a href="ch_typed-arrays.html#cb943-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(dataView<span class="op">.</span><span class="fu">getUint8</span>(<span class="dv">0</span>)<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb943-4"><a href="ch_typed-arrays.html#cb943-4" aria-hidden="true" tabindex="-1"></a>dataView<span class="op">.</span><span class="fu">setUint8</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">5</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="element-types">32.2 Element types</h3>
+<div id="tbl:typed-array-element-types">
+<table>
+<caption>Table 20: Element types supported by the Typed Array API.</caption>
+<thead>
+<tr class="header">
+<th>Element</th>
+<th>Typed Array</th>
+<th>Bytes</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Int8</code></td>
+<td><code>Int8Array</code></td>
+<td>1</td>
+<td>8-bit signed integer</td>
+<td>ES6</td>
+</tr>
+<tr class="even">
+<td><code>Uint8</code></td>
+<td><code>Uint8Array</code></td>
+<td>1</td>
+<td>8-bit unsigned integer</td>
+<td>ES6</td>
+</tr>
+<tr class="odd">
+<td><code>Uint8C</code></td>
+<td><code>Uint8ClampedArray</code></td>
+<td>1</td>
+<td>8-bit unsigned integer</td>
+<td>ES6</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td>(clamped conversion)</td>
+<td>ES6</td>
+</tr>
+<tr class="odd">
+<td><code>Int16</code></td>
+<td><code>Int16Array</code></td>
+<td>2</td>
+<td>16-bit signed integer</td>
+<td>ES6</td>
+</tr>
+<tr class="even">
+<td><code>Uint16</code></td>
+<td><code>Uint16Array</code></td>
+<td>2</td>
+<td>16-bit unsigned integer</td>
+<td>ES6</td>
+</tr>
+<tr class="odd">
+<td><code>Int32</code></td>
+<td><code>Int32Array</code></td>
+<td>4</td>
+<td>32-bit signed integer</td>
+<td>ES6</td>
+</tr>
+<tr class="even">
+<td><code>Uint32</code></td>
+<td><code>Uint32Array</code></td>
+<td>4</td>
+<td>32-bit unsigned integer</td>
+<td>ES6</td>
+</tr>
+<tr class="odd">
+<td><code>BigInt64</code></td>
+<td><code>BigInt64Array</code></td>
+<td>8</td>
+<td>64-bit signed integer</td>
+<td>ES2020</td>
+</tr>
+<tr class="even">
+<td><code>BigUint64</code></td>
+<td><code>BigUint64Array</code></td>
+<td>8</td>
+<td>64-bit unsigned integer</td>
+<td>ES2020</td>
+</tr>
+<tr class="odd">
+<td><code>Float32</code></td>
+<td><code>Float32Array</code></td>
+<td>4</td>
+<td>32-bit floating point</td>
+<td>ES6</td>
+</tr>
+<tr class="even">
+<td><code>Float64</code></td>
+<td><code>Float64Array</code></td>
+<td>8</td>
+<td>64-bit floating point</td>
+<td>ES6</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Tbl.&nbsp;<a href="#tbl:typed-array-element-types">20</a> lists the available element types. These types (e.g., <code>Int32</code>) show up in two locations:</p>
+<ul>
+<li><p>In Typed Arrays, they specify the types of the elements. For example, all elements of a <code>Int32Array</code> have the type <code>Int32</code>. The element type is the only aspect of Typed Arrays that differs.</p></li>
+<li><p>In DataViews, they are the lenses through which they access their ArrayBuffers when you use methods such as <code>.getInt32()</code> and <code>.setInt32()</code>.</p></li>
+</ul>
+<p>The element type <code>Uint8C</code> is special: it is not supported by <code>DataView</code> and only exists to enable <code>Uint8ClampedArray</code>. This Typed Array is used by the <code>canvas</code> element (where it replaces <code>CanvasPixelArray</code>) and should otherwise be avoided. The only difference between <code>Uint8C</code> and <code>Uint8</code> is how overflow and underflow are handled (as explained in <span data-refcheck="#handling-overflow-underflow">the next subsection</span>).</p>
+<p>Typed Arrays and Array Buffers use numbers and bigints to import and export values:</p>
+<ul>
+<li><p>The types <code>BigInt64</code> and <code>BigUint64</code> are handled via bigints. For example, setters accept bigints and getters return bigints.</p></li>
+<li><p>All other element types are handled via numbers.</p></li>
+</ul>
+<h4 id="handling-overflow-underflow">32.2.1 Handling overflow and underflow</h4>
+<p>Normally, when a value is out of the range of the element type, modulo arithmetic is used to convert it to a value within range. For signed and unsigned integers that means that:</p>
+<ul>
+<li>The highest value plus one is converted to the lowest value (0 for unsigned integers).</li>
+<li>The lowest value minus one is converted to the highest value.</li>
+</ul>
+<p>The following function helps illustrate how conversion works:</p>
+<div class="sourceCode" id="cb944"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb944-1"><a href="ch_typed-arrays.html#cb944-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">setAndGet</span>(typedArray<span class="op">,</span> value) {</span>
+<span id="cb944-2"><a href="ch_typed-arrays.html#cb944-2" aria-hidden="true" tabindex="-1"></a>  typedArray[<span class="dv">0</span>] <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb944-3"><a href="ch_typed-arrays.html#cb944-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> typedArray[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb944-4"><a href="ch_typed-arrays.html#cb944-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Modulo conversion for unsigned 8-bit integers:</p>
+<div class="sourceCode" id="cb945"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb945-1"><a href="ch_typed-arrays.html#cb945-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> uint8 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Uint8Array</span>(<span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb945-2"><a href="ch_typed-arrays.html#cb945-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb945-3"><a href="ch_typed-arrays.html#cb945-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Highest value of range</span></span>
+<span id="cb945-4"><a href="ch_typed-arrays.html#cb945-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(uint8<span class="op">,</span> <span class="dv">255</span>)<span class="op">,</span> <span class="dv">255</span>)<span class="op">;</span></span>
+<span id="cb945-5"><a href="ch_typed-arrays.html#cb945-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Overflow</span></span>
+<span id="cb945-6"><a href="ch_typed-arrays.html#cb945-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(uint8<span class="op">,</span> <span class="dv">256</span>)<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb945-7"><a href="ch_typed-arrays.html#cb945-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb945-8"><a href="ch_typed-arrays.html#cb945-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Lowest value of range</span></span>
+<span id="cb945-9"><a href="ch_typed-arrays.html#cb945-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(uint8<span class="op">,</span> <span class="dv">0</span>)<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb945-10"><a href="ch_typed-arrays.html#cb945-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Underflow</span></span>
+<span id="cb945-11"><a href="ch_typed-arrays.html#cb945-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(uint8<span class="op">,</span> <span class="op">-</span><span class="dv">1</span>)<span class="op">,</span> <span class="dv">255</span>)<span class="op">;</span></span></code></pre></div>
+<p>Modulo conversion for signed 8-bit integers:</p>
+<div class="sourceCode" id="cb946"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb946-1"><a href="ch_typed-arrays.html#cb946-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> int8 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Int8Array</span>(<span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb946-2"><a href="ch_typed-arrays.html#cb946-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb946-3"><a href="ch_typed-arrays.html#cb946-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Highest value of range</span></span>
+<span id="cb946-4"><a href="ch_typed-arrays.html#cb946-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(int8<span class="op">,</span> <span class="dv">127</span>)<span class="op">,</span> <span class="dv">127</span>)<span class="op">;</span></span>
+<span id="cb946-5"><a href="ch_typed-arrays.html#cb946-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Overflow</span></span>
+<span id="cb946-6"><a href="ch_typed-arrays.html#cb946-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(int8<span class="op">,</span> <span class="dv">128</span>)<span class="op">,</span> <span class="op">-</span><span class="dv">128</span>)<span class="op">;</span></span>
+<span id="cb946-7"><a href="ch_typed-arrays.html#cb946-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb946-8"><a href="ch_typed-arrays.html#cb946-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Lowest value of range</span></span>
+<span id="cb946-9"><a href="ch_typed-arrays.html#cb946-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(int8<span class="op">,</span> <span class="op">-</span><span class="dv">128</span>)<span class="op">,</span> <span class="op">-</span><span class="dv">128</span>)<span class="op">;</span></span>
+<span id="cb946-10"><a href="ch_typed-arrays.html#cb946-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Underflow</span></span>
+<span id="cb946-11"><a href="ch_typed-arrays.html#cb946-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(int8<span class="op">,</span> <span class="op">-</span><span class="dv">129</span>)<span class="op">,</span> <span class="dv">127</span>)<span class="op">;</span></span></code></pre></div>
+<p>Clamped conversion is different:</p>
+<ul>
+<li>All underflowing values are converted to the lowest value.</li>
+<li>All overflowing values are converted to the highest value.</li>
+</ul>
+<div class="sourceCode" id="cb947"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb947-1"><a href="ch_typed-arrays.html#cb947-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> uint8c <span class="op">=</span> <span class="kw">new</span> <span class="bu">Uint8ClampedArray</span>(<span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb947-2"><a href="ch_typed-arrays.html#cb947-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb947-3"><a href="ch_typed-arrays.html#cb947-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Highest value of range</span></span>
+<span id="cb947-4"><a href="ch_typed-arrays.html#cb947-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(uint8c<span class="op">,</span> <span class="dv">255</span>)<span class="op">,</span> <span class="dv">255</span>)<span class="op">;</span></span>
+<span id="cb947-5"><a href="ch_typed-arrays.html#cb947-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Overflow</span></span>
+<span id="cb947-6"><a href="ch_typed-arrays.html#cb947-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(uint8c<span class="op">,</span> <span class="dv">256</span>)<span class="op">,</span> <span class="dv">255</span>)<span class="op">;</span></span>
+<span id="cb947-7"><a href="ch_typed-arrays.html#cb947-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb947-8"><a href="ch_typed-arrays.html#cb947-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Lowest value of range</span></span>
+<span id="cb947-9"><a href="ch_typed-arrays.html#cb947-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(uint8c<span class="op">,</span> <span class="dv">0</span>)<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb947-10"><a href="ch_typed-arrays.html#cb947-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Underflow</span></span>
+<span id="cb947-11"><a href="ch_typed-arrays.html#cb947-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">setAndGet</span>(uint8c<span class="op">,</span> <span class="op">-</span><span class="dv">1</span>)<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="endianness">32.2.2 Endianness</h4>
+<p><a id="index-entry-415" class="index-entry"></a></p>
+<p>Whenever a type (such as <code>Uint16</code>) is stored as a sequence of multiple bytes, <em>endianness</em> matters:</p>
+<ul>
+<li>Big endian: the most significant byte comes first. For example, the <code>Uint16</code> value 0x4321 is stored as two bytes – first 0x43, then 0x21. <a id="index-entry-416" class="index-entry"></a></li>
+<li>Little endian: the least significant byte comes first. For example, the <code>Uint16</code> value 0x4321 is stored as two bytes – first 0x21, then 0x43. <a id="index-entry-417" class="index-entry"></a></li>
+</ul>
+<p>Endianness tends to be fixed per CPU architecture and consistent across native APIs. Typed Arrays are used to communicate with those APIs, which is why their endianness follows the endianness of the platform and can’t be changed.</p>
+<p>On the other hand, the endianness of protocols and binary files varies, but is fixed per format, across platforms. Therefore, we must be able to access data with either endianness. DataViews serve this use case and let you specify endianness when you get or set a value.</p>
+<p><a href="https://en.wikipedia.org/wiki/Endianness">Quoting Wikipedia on Endianness</a>:</p>
+<ul>
+<li>Big-endian representation is the most common convention in data networking; fields in the protocols of the Internet protocol suite, such as IPv4, IPv6, TCP, and UDP, are transmitted in big-endian order. For this reason, big-endian byte order is also referred to as network byte order.</li>
+<li>Little-endian storage is popular for microprocessors in part due to significant historical influence on microprocessor designs by Intel Corporation.</li>
+</ul>
+<p>Other orderings are also possible. Those are generically called <em>middle-endian</em> or <em>mixed-endian</em>.</p>
+<h3 id="more-information-on-typed-arrays">32.3 More information on Typed Arrays</h3>
+<p>In this section, <code>«ElementType»Array</code> stands for <code>Int8Array</code>, <code>Uint8Array</code>, etc. <code>ElementType</code> is <code>Int8</code>, <code>Uint8</code>, etc.</p>
+<h4 id="the-static-method-elementtypearray.from">32.3.1 The static method <code>«ElementType»Array.from()</code></h4>
+<p>This method has the type signature:</p>
+<div class="sourceCode" id="cb948"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb948-1"><a href="ch_typed-arrays.html#cb948-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">from</span><span class="op">&lt;</span>S<span class="op">&gt;</span>(</span>
+<span id="cb948-2"><a href="ch_typed-arrays.html#cb948-2" aria-hidden="true" tabindex="-1"></a>  source<span class="op">:</span> Iterable<span class="op">&lt;</span>S<span class="op">&gt;|</span>ArrayLike<span class="op">&lt;</span>S<span class="op">&gt;,</span></span>
+<span id="cb948-3"><a href="ch_typed-arrays.html#cb948-3" aria-hidden="true" tabindex="-1"></a>  mapfn<span class="op">?:</span> S <span class="kw">=&gt;</span> ElementType<span class="op">,</span> thisArg<span class="op">?:</span> <span class="dt">any</span>)</span>
+<span id="cb948-4"><a href="ch_typed-arrays.html#cb948-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span> «ElementType»Array</span></code></pre></div>
+<p><code>.from()</code> converts <code>source</code> into an instance of <code>this</code> (a Typed Array).</p>
+<p>For example, normal Arrays are iterable and can be converted with this method:</p>
+<div class="sourceCode" id="cb949"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb949-1"><a href="ch_typed-arrays.html#cb949-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb949-2"><a href="ch_typed-arrays.html#cb949-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Uint16Array</span><span class="op">.</span><span class="fu">from</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>])<span class="op">,</span></span>
+<span id="cb949-3"><a href="ch_typed-arrays.html#cb949-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Uint16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>))<span class="op">;</span></span></code></pre></div>
+<p>Typed Arrays are also iterable:</p>
+<div class="sourceCode" id="cb950"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb950-1"><a href="ch_typed-arrays.html#cb950-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb950-2"><a href="ch_typed-arrays.html#cb950-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Uint16Array</span><span class="op">.</span><span class="fu">from</span>(<span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>))<span class="op">,</span></span>
+<span id="cb950-3"><a href="ch_typed-arrays.html#cb950-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Uint16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>))<span class="op">;</span></span></code></pre></div>
+<p><code>source</code> can also be <a href="ch_arrays.html#array-like-objects">an <em>Array-like object</em></a>:</p>
+<div class="sourceCode" id="cb951"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb951-1"><a href="ch_typed-arrays.html#cb951-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb951-2"><a href="ch_typed-arrays.html#cb951-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Uint16Array</span><span class="op">.</span><span class="fu">from</span>({<span class="dv">0</span><span class="op">:</span><span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">:</span><span class="dv">2</span><span class="op">,</span> <span class="dt">length</span><span class="op">:</span> <span class="dv">3</span>})<span class="op">,</span></span>
+<span id="cb951-3"><a href="ch_typed-arrays.html#cb951-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Uint16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>))<span class="op">;</span></span></code></pre></div>
+<p>The optional <code>mapfn</code> lets you transform the elements of <code>source</code> before they become elements of the result. Why perform the two steps <em>mapping</em> and <em>conversion</em> in one go? Compared to mapping separately via <code>.map()</code>, there are two advantages:</p>
+<ol type="1">
+<li>No intermediate Array or Typed Array is needed.</li>
+<li>When converting between Typed Arrays with different precisions, less can go wrong.</li>
+</ol>
+<p>Read on for an explanation of the second advantage.</p>
+<h5 id="pitfall-mapping-while-converting-between-typed-array-types">32.3.1.1 Pitfall: mapping while converting between Typed Array types</h5>
+<p>The static method <code>.from()</code> can optionally both map and convert between Typed Array types. Less can go wrong if you use that method.</p>
+<p>To see why that is, let us first convert a Typed Array to a Typed Array with a higher precision. If we use <code>.from()</code> to map, the result is automatically correct. Otherwise, you must first convert and then map.</p>
+<div class="sourceCode" id="cb952"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb952-1"><a href="ch_typed-arrays.html#cb952-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> typedArray <span class="op">=</span> <span class="bu">Int8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">127</span><span class="op">,</span> <span class="dv">126</span><span class="op">,</span> <span class="dv">125</span>)<span class="op">;</span></span>
+<span id="cb952-2"><a href="ch_typed-arrays.html#cb952-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb952-3"><a href="ch_typed-arrays.html#cb952-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int16Array</span><span class="op">.</span><span class="fu">from</span>(typedArray<span class="op">,</span> x <span class="kw">=&gt;</span> x <span class="op">*</span> <span class="dv">2</span>)<span class="op">,</span></span>
+<span id="cb952-4"><a href="ch_typed-arrays.html#cb952-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">254</span><span class="op">,</span> <span class="dv">252</span><span class="op">,</span> <span class="dv">250</span>))<span class="op">;</span></span>
+<span id="cb952-5"><a href="ch_typed-arrays.html#cb952-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb952-6"><a href="ch_typed-arrays.html#cb952-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb952-7"><a href="ch_typed-arrays.html#cb952-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int16Array</span><span class="op">.</span><span class="fu">from</span>(typedArray)<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> x <span class="op">*</span> <span class="dv">2</span>)<span class="op">,</span></span>
+<span id="cb952-8"><a href="ch_typed-arrays.html#cb952-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">254</span><span class="op">,</span> <span class="dv">252</span><span class="op">,</span> <span class="dv">250</span>))<span class="op">;</span> <span class="co">// OK</span></span>
+<span id="cb952-9"><a href="ch_typed-arrays.html#cb952-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb952-10"><a href="ch_typed-arrays.html#cb952-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int16Array</span><span class="op">.</span><span class="fu">from</span>(typedArray<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> x <span class="op">*</span> <span class="dv">2</span>))<span class="op">,</span></span>
+<span id="cb952-11"><a href="ch_typed-arrays.html#cb952-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="op">-</span><span class="dv">4</span><span class="op">,</span> <span class="op">-</span><span class="dv">6</span>))<span class="op">;</span> <span class="co">// wrong</span></span></code></pre></div>
+<p>If we go from a Typed Array to a Typed Array with a lower precision, mapping via <code>.from()</code> produces the correct result. Otherwise, we must first map and then convert.</p>
+<div class="sourceCode" id="cb953"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb953-1"><a href="ch_typed-arrays.html#cb953-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb953-2"><a href="ch_typed-arrays.html#cb953-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int8Array</span><span class="op">.</span><span class="fu">from</span>(<span class="bu">Int16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">254</span><span class="op">,</span> <span class="dv">252</span><span class="op">,</span> <span class="dv">250</span>)<span class="op">,</span> x <span class="kw">=&gt;</span> x <span class="op">/</span> <span class="dv">2</span>)<span class="op">,</span></span>
+<span id="cb953-3"><a href="ch_typed-arrays.html#cb953-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">127</span><span class="op">,</span> <span class="dv">126</span><span class="op">,</span> <span class="dv">125</span>))<span class="op">;</span></span>
+<span id="cb953-4"><a href="ch_typed-arrays.html#cb953-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb953-5"><a href="ch_typed-arrays.html#cb953-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb953-6"><a href="ch_typed-arrays.html#cb953-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int8Array</span><span class="op">.</span><span class="fu">from</span>(<span class="bu">Int16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">254</span><span class="op">,</span> <span class="dv">252</span><span class="op">,</span> <span class="dv">250</span>)<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> x <span class="op">/</span> <span class="dv">2</span>))<span class="op">,</span></span>
+<span id="cb953-7"><a href="ch_typed-arrays.html#cb953-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">127</span><span class="op">,</span> <span class="dv">126</span><span class="op">,</span> <span class="dv">125</span>))<span class="op">;</span> <span class="co">// OK</span></span>
+<span id="cb953-8"><a href="ch_typed-arrays.html#cb953-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb953-9"><a href="ch_typed-arrays.html#cb953-9" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int8Array</span><span class="op">.</span><span class="fu">from</span>(<span class="bu">Int16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">254</span><span class="op">,</span> <span class="dv">252</span><span class="op">,</span> <span class="dv">250</span>))<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> x <span class="op">/</span> <span class="dv">2</span>)<span class="op">,</span></span>
+<span id="cb953-10"><a href="ch_typed-arrays.html#cb953-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="op">-</span><span class="dv">3</span>))<span class="op">;</span> <span class="co">// wrong</span></span></code></pre></div>
+<p>The problem is that if we map via <code>.map()</code>, then input type and output type are the same. In contrast, <code>.from()</code> goes from an arbitrary input type to an output type that you specify via its receiver.</p>
+<h4 id="typed-arrays-are-iterable">32.3.2 Typed Arrays are iterable</h4>
+<p>Typed Arrays are <a href="ch_sync-iteration.html">iterable</a>. That means that you can use the <code>for-of</code> loop and other iteration-based mechanisms:</p>
+<div class="sourceCode" id="cb954"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb954-1"><a href="ch_typed-arrays.html#cb954-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ui8 <span class="op">=</span> <span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb954-2"><a href="ch_typed-arrays.html#cb954-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> byte <span class="kw">of</span> ui8) {</span>
+<span id="cb954-3"><a href="ch_typed-arrays.html#cb954-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(byte)<span class="op">;</span></span>
+<span id="cb954-4"><a href="ch_typed-arrays.html#cb954-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb954-5"><a href="ch_typed-arrays.html#cb954-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb954-6"><a href="ch_typed-arrays.html#cb954-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 0</span></span>
+<span id="cb954-7"><a href="ch_typed-arrays.html#cb954-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 1</span></span>
+<span id="cb954-8"><a href="ch_typed-arrays.html#cb954-8" aria-hidden="true" tabindex="-1"></a><span class="co">// 2</span></span></code></pre></div>
+<p>ArrayBuffers and DataViews are not iterable.</p>
+<h4 id="typed-arrays-vs.-normal-arrays">32.3.3 Typed Arrays vs.&nbsp;normal Arrays</h4>
+<p>Typed Arrays are much like normal Arrays: they have a <code>.length</code>, elements can be accessed via the bracket operator <code>[]</code>, and they have most of the standard Array methods. They differ from normal Arrays in the following ways:</p>
+<ul>
+<li><p>Typed Arrays have buffers. The elements of a Typed Array <code>ta</code> are not stored in <code>ta</code>, they are stored in an associated ArrayBuffer that can be accessed via <code>ta.buffer</code>:</p>
+<div class="sourceCode" id="cb955"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb955-1"><a href="ch_typed-arrays.html#cb955-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ta <span class="op">=</span> <span class="kw">new</span> <span class="bu">Uint16Array</span>(<span class="dv">2</span>)<span class="op">;</span> <span class="co">// 2 elements</span></span>
+<span id="cb955-2"><a href="ch_typed-arrays.html#cb955-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb955-3"><a href="ch_typed-arrays.html#cb955-3" aria-hidden="true" tabindex="-1"></a>  ta<span class="op">.</span><span class="at">buffer</span><span class="op">,</span> <span class="kw">new</span> <span class="bu">ArrayBuffer</span>(<span class="dv">4</span>))<span class="op">;</span> <span class="co">// 4 bytes</span></span></code></pre></div></li>
+<li><p>Typed Arrays are initialized with zeros:</p>
+<ul>
+<li><code>new Array(4)</code> creates a normal Array without any elements. It only has four <em>holes</em> (indices less than the <code>.length</code> that have no associated elements).</li>
+<li><code>new Uint8Array(4)</code> creates a Typed Array whose four elements are all 0.</li>
+</ul>
+<div class="sourceCode" id="cb956"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb956-1"><a href="ch_typed-arrays.html#cb956-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="kw">new</span> <span class="bu">Uint8Array</span>(<span class="dv">4</span>)<span class="op">,</span> <span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>))<span class="op">;</span></span></code></pre></div></li>
+<li><p>All of the elements of a Typed Array have the same type:</p>
+<ul>
+<li><p>Setting elements converts values to that type.</p>
+<div class="sourceCode" id="cb957"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb957-1"><a href="ch_typed-arrays.html#cb957-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ta <span class="op">=</span> <span class="kw">new</span> <span class="bu">Uint8Array</span>(<span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb957-2"><a href="ch_typed-arrays.html#cb957-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb957-3"><a href="ch_typed-arrays.html#cb957-3" aria-hidden="true" tabindex="-1"></a>ta[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">257</span><span class="op">;</span></span>
+<span id="cb957-4"><a href="ch_typed-arrays.html#cb957-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(ta[<span class="dv">0</span>]<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span> <span class="co">// 257 % 256 (overflow)</span></span>
+<span id="cb957-5"><a href="ch_typed-arrays.html#cb957-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb957-6"><a href="ch_typed-arrays.html#cb957-6" aria-hidden="true" tabindex="-1"></a>ta[<span class="dv">0</span>] <span class="op">=</span> <span class="st">'2'</span><span class="op">;</span></span>
+<span id="cb957-7"><a href="ch_typed-arrays.html#cb957-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(ta[<span class="dv">0</span>]<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p>Getting elements returns numbers or bigints.</p>
+<div class="sourceCode" id="cb958"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb958-1"><a href="ch_typed-arrays.html#cb958-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ta <span class="op">=</span> <span class="kw">new</span> <span class="bu">Uint8Array</span>(<span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb958-2"><a href="ch_typed-arrays.html#cb958-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(ta[<span class="dv">0</span>]<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb958-3"><a href="ch_typed-arrays.html#cb958-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="kw">typeof</span> ta[<span class="dv">0</span>]<span class="op">,</span> <span class="st">'number'</span>)<span class="op">;</span></span></code></pre></div></li>
+</ul></li>
+<li><p>The <code>.length</code> of a Typed Array is derived from its ArrayBuffer and never changes (unless you switch to a different ArrayBuffer).</p></li>
+<li><p>Normal Arrays can have holes; Typed Arrays can’t.</p></li>
+</ul>
+<h4 id="converting-typed-arrays-to-and-from-normal-arrays">32.3.4 Converting Typed Arrays to and from normal Arrays</h4>
+<p>To convert a normal Array to a Typed Array, you pass it to a Typed Array constructor (which accepts Array-like objects and Typed Arrays) or to <code>«ElementType»Array.from()</code> (which accepts iterables and Array-like objects). For example:</p>
+<div class="sourceCode" id="cb959"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb959-1"><a href="ch_typed-arrays.html#cb959-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ta1 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Uint8Array</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>])<span class="op">;</span></span>
+<span id="cb959-2"><a href="ch_typed-arrays.html#cb959-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ta2 <span class="op">=</span> <span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">from</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>])<span class="op">;</span></span>
+<span id="cb959-3"><a href="ch_typed-arrays.html#cb959-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(ta1<span class="op">,</span> ta2)<span class="op">;</span></span></code></pre></div>
+<p>To convert a Typed Array to a normal Array, you can use spreading or <code>Array.from()</code> (because Typed Arrays are iterable):</p>
+<div class="sourceCode" id="cb960"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb960-1"><a href="ch_typed-arrays.html#cb960-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb960-2"><a href="ch_typed-arrays.html#cb960-2" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span><span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>)]<span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>] )<span class="op">;</span></span>
+<span id="cb960-3"><a href="ch_typed-arrays.html#cb960-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb960-4"><a href="ch_typed-arrays.html#cb960-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>(<span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>))<span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>] )<span class="op">;</span></span></code></pre></div>
+<h4 id="concatenating-typed-arrays">32.3.5 Concatenating Typed Arrays</h4>
+<p>Typed Arrays don’t have a method <code>.concat()</code>, like normal Arrays do. The workaround is to use their overloaded method <code>.set()</code>:</p>
+<div class="sourceCode" id="cb961"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb961-1"><a href="ch_typed-arrays.html#cb961-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">set</span>(typedArray<span class="op">:</span> TypedArray<span class="op">,</span> offset<span class="op">=</span><span class="dv">0</span>)<span class="op">:</span> <span class="dt">void</span></span>
+<span id="cb961-2"><a href="ch_typed-arrays.html#cb961-2" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">set</span>(arrayLike<span class="op">:</span> ArrayLike<span class="op">&lt;</span><span class="dt">number</span><span class="op">&gt;,</span> offset<span class="op">=</span><span class="dv">0</span>)<span class="op">:</span> <span class="dt">void</span></span></code></pre></div>
+<p>It copies the existing <code>typedArray</code> or <code>arrayLike</code> into the receiver, at index <code>offset</code>. <code>TypedArray</code> is a fictitious abstract superclass of all concrete Typed Array classes.</p>
+<p>The following function uses that method to copy zero or more Typed Arrays (or Array-like objects) into an instance of <code>resultConstructor</code>:</p>
+<div class="sourceCode" id="cb962"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb962-1"><a href="ch_typed-arrays.html#cb962-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">concatenate</span>(resultConstructor<span class="op">,</span> <span class="op">...</span>arrays) {</span>
+<span id="cb962-2"><a href="ch_typed-arrays.html#cb962-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> totalLength <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb962-3"><a href="ch_typed-arrays.html#cb962-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> arr <span class="kw">of</span> arrays) {</span>
+<span id="cb962-4"><a href="ch_typed-arrays.html#cb962-4" aria-hidden="true" tabindex="-1"></a>    totalLength <span class="op">+=</span> arr<span class="op">.</span><span class="at">length</span><span class="op">;</span></span>
+<span id="cb962-5"><a href="ch_typed-arrays.html#cb962-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb962-6"><a href="ch_typed-arrays.html#cb962-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result <span class="op">=</span> <span class="kw">new</span> <span class="fu">resultConstructor</span>(totalLength)<span class="op">;</span></span>
+<span id="cb962-7"><a href="ch_typed-arrays.html#cb962-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> offset <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb962-8"><a href="ch_typed-arrays.html#cb962-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> arr <span class="kw">of</span> arrays) {</span>
+<span id="cb962-9"><a href="ch_typed-arrays.html#cb962-9" aria-hidden="true" tabindex="-1"></a>    result<span class="op">.</span><span class="fu">set</span>(arr<span class="op">,</span> offset)<span class="op">;</span></span>
+<span id="cb962-10"><a href="ch_typed-arrays.html#cb962-10" aria-hidden="true" tabindex="-1"></a>    offset <span class="op">+=</span> arr<span class="op">.</span><span class="at">length</span><span class="op">;</span></span>
+<span id="cb962-11"><a href="ch_typed-arrays.html#cb962-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb962-12"><a href="ch_typed-arrays.html#cb962-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb962-13"><a href="ch_typed-arrays.html#cb962-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb962-14"><a href="ch_typed-arrays.html#cb962-14" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb962-15"><a href="ch_typed-arrays.html#cb962-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">concatenate</span>(<span class="bu">Uint8Array</span><span class="op">,</span> <span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">,</span> [<span class="dv">3</span><span class="op">,</span> <span class="dv">4</span>])<span class="op">,</span></span>
+<span id="cb962-16"><a href="ch_typed-arrays.html#cb962-16" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span>))<span class="op">;</span></span></code></pre></div>
+<h3 id="typed-arrays-indices-offsets">32.4 Quick references: indices vs.&nbsp;offsets</h3>
+<p>In preparation for the quick references on ArrayBuffers, Typed Arrays, and DataViews, we need learn the differences between indices and offsets:</p>
+<ul>
+<li><p>Indices for the bracket operator <code>[ ]</code>: You can only use non-negative indices (starting at 0).</p>
+<p>In normal Arrays, writing to negative indices creates properties:</p>
+<div class="sourceCode" id="cb963"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb963-1"><a href="ch_typed-arrays.html#cb963-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="dv">6</span><span class="op">,</span> <span class="dv">7</span>]<span class="op">;</span></span>
+<span id="cb963-2"><a href="ch_typed-arrays.html#cb963-2" aria-hidden="true" tabindex="-1"></a>arr[<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb963-3"><a href="ch_typed-arrays.html#cb963-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb963-4"><a href="ch_typed-arrays.html#cb963-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(arr)<span class="op">,</span> [<span class="st">'0'</span><span class="op">,</span> <span class="st">'1'</span><span class="op">,</span> <span class="st">'-1'</span>])<span class="op">;</span></span></code></pre></div>
+<p>In Typed Arrays, writing to negative indices is ignored:</p>
+<div class="sourceCode" id="cb964"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb964-1"><a href="ch_typed-arrays.html#cb964-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> tarr <span class="op">=</span> <span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">6</span><span class="op">,</span> <span class="dv">7</span>)<span class="op">;</span></span>
+<span id="cb964-2"><a href="ch_typed-arrays.html#cb964-2" aria-hidden="true" tabindex="-1"></a>tarr[<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb964-3"><a href="ch_typed-arrays.html#cb964-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb964-4"><a href="ch_typed-arrays.html#cb964-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(tarr)<span class="op">,</span> [<span class="st">'0'</span><span class="op">,</span> <span class="st">'1'</span>])<span class="op">;</span></span></code></pre></div></li>
+<li><p>Indices for methods of ArrayBuffers, Typed Arrays, and DataViews: Every index can be negative. If it is, it is added to the length of the entity to produce the actual index. Therefore, <code>-1</code> refers to the last element, <code>-2</code> to the second-last, etc. Methods of normal Arrays work the same way.</p>
+<div class="sourceCode" id="cb965"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb965-1"><a href="ch_typed-arrays.html#cb965-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ui8 <span class="op">=</span> <span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb965-2"><a href="ch_typed-arrays.html#cb965-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(ui8<span class="op">.</span><span class="fu">slice</span>(<span class="op">-</span><span class="dv">1</span>)<span class="op">,</span> <span class="bu">Uint8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">2</span>))<span class="op">;</span></span></code></pre></div></li>
+<li><p>Offsets passed to methods of Typed Arrays and DataViews: must be non-negative – for example:</p>
+<div class="sourceCode" id="cb966"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb966-1"><a href="ch_typed-arrays.html#cb966-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> dataView <span class="op">=</span> <span class="kw">new</span> <span class="bu">DataView</span>(<span class="kw">new</span> <span class="bu">ArrayBuffer</span>(<span class="dv">4</span>))<span class="op">;</span></span>
+<span id="cb966-2"><a href="ch_typed-arrays.html#cb966-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb966-3"><a href="ch_typed-arrays.html#cb966-3" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> dataView<span class="op">.</span><span class="fu">getUint8</span>(<span class="op">-</span><span class="dv">1</span>)<span class="op">,</span></span>
+<span id="cb966-4"><a href="ch_typed-arrays.html#cb966-4" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb966-5"><a href="ch_typed-arrays.html#cb966-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">'RangeError'</span><span class="op">,</span></span>
+<span id="cb966-6"><a href="ch_typed-arrays.html#cb966-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">message</span><span class="op">:</span> <span class="st">'Offset is outside the bounds of the DataView'</span><span class="op">,</span></span>
+<span id="cb966-7"><a href="ch_typed-arrays.html#cb966-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<p>Whether a parameter is an index or an offset can only be determined by looking at documentation; there is no simple rule.</p>
+<h3 id="quick-reference-arraybuffers">32.5 Quick reference: ArrayBuffers</h3>
+<p>ArrayBuffers store binary data, which is meant to be accessed via Typed Arrays and DataViews.</p>
+<h4 id="new-arraybuffer">32.5.1 <code>new ArrayBuffer()</code></h4>
+<p>The type signature of the constructor is:</p>
+<div class="sourceCode" id="cb967"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb967-1"><a href="ch_typed-arrays.html#cb967-1" aria-hidden="true" tabindex="-1"></a><span class="kw">new</span> <span class="fu">ArrayBuffer</span>(length<span class="op">:</span> <span class="dt">number</span>)</span></code></pre></div>
+<p>Invoking this constructor via <code>new</code> creates an instance whose capacity is <code>length</code> bytes. Each of those bytes is initially 0.</p>
+<p>You can’t change the length of an ArrayBuffer; you can only create a new one with a different length.</p>
+<h4 id="static-methods-of-arraybuffer">32.5.2 Static methods of <code>ArrayBuffer</code></h4>
+<ul>
+<li><p><code>ArrayBuffer.isView(arg: any)</code></p>
+<p>Returns <code>true</code> if <code>arg</code> is an object and a <em>view</em> for an ArrayBuffer (i.e., if it is a Typed Array or a DataView).</p></li>
+</ul>
+<h4 id="properties-of-arraybuffer.prototype">32.5.3 Properties of <code>ArrayBuffer.prototype</code></h4>
+<ul>
+<li><p><code>get .byteLength(): number</code></p>
+<p>Returns the capacity of this ArrayBuffer in bytes.</p></li>
+<li><p><code>.slice(startIndex: number, endIndex=this.byteLength)</code></p>
+<p>Creates a new ArrayBuffer that contains the bytes of this ArrayBuffer whose indices are greater than or equal to <code>startIndex</code> and less than <code>endIndex</code>. <code>start</code> and <code>endIndex</code> can be negative (see <a href="ch_typed-arrays.html#typed-arrays-indices-offsets">§32.4 “Quick references: indices vs.&nbsp;offsets”</a>).</p></li>
+</ul>
+<h3 id="quick-reference-typed-arrays">32.6 Quick reference: Typed Arrays</h3>
+<p>The properties of the various Typed Array objects are introduced in two steps:</p>
+<ol type="1">
+<li><code>TypedArray</code>: First, we look at the abstract superclass of all Typed Array classes (which was shown in the class diagram <a href="#fig:typed_arrays_class_diagram">at the beginning of this chapter</a>). I’m calling that superclass <code>TypedArray</code>, but it is not directly accessible from JavaScript. <code>TypedArray.prototype</code> houses all methods of Typed Arrays.</li>
+<li><code>«ElementType»Array</code>: The concrete Typed Array classes are called <code>Uint8Array</code>, <code>Int16Array</code>, <code>Float32Array</code>, etc. These are the classes that you use via <code>new</code>, <code>.of</code>, and <code>.from()</code>.</li>
+</ol>
+<h4 id="static-methods-of-typedarrayt">32.6.1 Static methods of <code>TypedArray&lt;T&gt;</code></h4>
+<p>Both static <code>TypedArray</code> methods are inherited by its subclasses (<code>Uint8Array</code>, etc.). <code>TypedArray</code> is abstract. Therefore, you always use these methods via the subclasses, which are concrete and can have direct instances.</p>
+<ul>
+<li><p><code>.from&lt;S&gt;(source: Iterable&lt;S&gt;|ArrayLike&lt;S&gt;, mapfn?: S =&gt; T, thisArg?: any) : instanceof this</code></p>
+<p>Converts an iterable (including Arrays and Typed Arrays) or <a href="ch_arrays.html#array-like-objects">an Array-like object</a> to an instance of <code>this</code> (<code>instanceof this</code> is my invention to express that fact).</p>
+<div class="sourceCode" id="cb968"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb968-1"><a href="ch_typed-arrays.html#cb968-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb968-2"><a href="ch_typed-arrays.html#cb968-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Uint16Array</span><span class="op">.</span><span class="fu">from</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>])<span class="op">,</span></span>
+<span id="cb968-3"><a href="ch_typed-arrays.html#cb968-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Uint16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>))<span class="op">;</span></span></code></pre></div>
+<p>The optional <code>mapfn</code> lets you transform the elements of <code>source</code> before they become elements of the result.</p>
+<div class="sourceCode" id="cb969"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb969-1"><a href="ch_typed-arrays.html#cb969-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb969-2"><a href="ch_typed-arrays.html#cb969-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int16Array</span><span class="op">.</span><span class="fu">from</span>(<span class="bu">Int8Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">127</span><span class="op">,</span> <span class="dv">126</span><span class="op">,</span> <span class="dv">125</span>)<span class="op">,</span> x <span class="kw">=&gt;</span> x <span class="op">*</span> <span class="dv">2</span>)<span class="op">,</span></span>
+<span id="cb969-3"><a href="ch_typed-arrays.html#cb969-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="dv">254</span><span class="op">,</span> <span class="dv">252</span><span class="op">,</span> <span class="dv">250</span>))<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>.of(...items: bigint[]): instanceof this</code> (<code>BigInt64Array</code>, <code>BigUint64Array</code>)</p></li>
+<li><p><code>.of(...items: number[]): instanceof this</code> (all other Typed Arrays)</p>
+<p>Creates a new instance of <code>this</code> whose elements are <code>items</code> (coerced to the element type).</p>
+<div class="sourceCode" id="cb970"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb970-1"><a href="ch_typed-arrays.html#cb970-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb970-2"><a href="ch_typed-arrays.html#cb970-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Int16Array</span><span class="op">.</span><span class="fu">of</span>(<span class="op">-</span><span class="dv">1234</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">67</span>)<span class="op">,</span></span>
+<span id="cb970-3"><a href="ch_typed-arrays.html#cb970-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="bu">Int16Array</span>([<span class="op">-</span><span class="dv">1234</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">67</span>]) )<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="properties-of-typedarrayt.prototype">32.6.2 Properties of <code>TypedArray&lt;T&gt;.prototype</code></h4>
+<p>Indices accepted by Typed Array methods can be negative (they work like traditional Array methods that way). Offsets must be non-negative. For details, see <a href="ch_typed-arrays.html#typed-arrays-indices-offsets">§32.4 “Quick references: indices vs.&nbsp;offsets”</a>.</p>
+<h5 id="properties-specific-to-typed-arrays">32.6.2.1 Properties specific to Typed Arrays</h5>
+<p>The following properties are specific to Typed Arrays; normal Arrays don’t have them:</p>
+<ul>
+<li><p><code>get .buffer(): ArrayBuffer</code></p>
+<p>Returns the buffer backing this Typed Array.</p></li>
+<li><p><code>get .length(): number</code></p>
+<p>Returns the length in elements of this Typed Array’s buffer.</p></li>
+<li><p><code>get .byteLength(): number</code></p>
+<p>Returns the size in bytes of this Typed Array’s buffer.</p></li>
+<li><p><code>get .byteOffset(): number</code></p>
+<p>Returns the offset where this Typed Array “starts” inside its ArrayBuffer.</p></li>
+<li><p><code>.set(typedArray: TypedArray, offset=0): void</code></p></li>
+<li><p><code>.set(arrayLike: ArrayLike&lt;bigint&gt;, offset=0): void</code> (<code>BigInt64Array</code>, <code>BigUint64Array</code>)</p></li>
+<li><p><code>.set(arrayLike: ArrayLike&lt;number&gt;, offset=0): void</code> (all other Typed Arrays)</p>
+<p>Copies all elements of the first parameter to this Typed Array. The element at index 0 of the parameter is written to index <code>offset</code> of this Typed Array (etc.). For more information on Array-like objects, consult <a href="ch_arrays.html#array-like-objects">§31.4 “Array-like objects”</a>.</p></li>
+<li><p><code>.subarray(startIndex=0, endIndex=this.length): TypedArray&lt;T&gt;</code></p>
+<p>Returns a new Typed Array that has the same buffer as this Typed Array, but a (generally) smaller range. If <code>startIndex</code> is non-negative then the first element of the resulting Typed Array is <code>this[startIndex]</code>, the second <code>this[startIndex+1]</code> (etc.). If <code>startIndex</code> in negative, it is converted appropriately.</p></li>
+</ul>
+<h5 id="array-methods">32.6.2.2 Array methods</h5>
+<p>The following methods are basically the same as the methods of normal Arrays:</p>
+<ul>
+<li><code>.copyWithin(target: number, start: number, end=this.length): this</code> <sup>[W, ES6]</sup></li>
+<li><code>.entries(): Iterable&lt;[number, T]&gt;</code> <sup>[R, ES6]</sup></li>
+<li><code>.every(callback: (value: T, index: number, array: TypedArray&lt;T&gt;) =&gt; boolean, thisArg?: any): boolean</code> <sup>[R, ES6]</sup></li>
+<li><code>.fill(value: T, start=0, end=this.length): this</code> <sup>[W, ES6]</sup></li>
+<li><code>.filter(callback: (value: T, index: number, array: TypedArray&lt;T&gt;) =&gt; any, thisArg?: any): T[]</code> <sup>[R, ES6]</sup></li>
+<li><code>.find(predicate: (value: T, index: number, obj: T[]) =&gt; boolean, thisArg?: any): T | undefined</code> <sup>[R, ES6]</sup></li>
+<li><code>.findIndex(predicate: (value: T, index: number, obj: T[]) =&gt; boolean, thisArg?: any): number</code> <sup>[R, ES6]</sup></li>
+<li><code>.forEach(callback: (value: T, index: number, array: TypedArray&lt;T&gt;) =&gt; void, thisArg?: any): void</code> <sup>[R, ES6]</sup></li>
+<li><code>.includes(searchElement: T, fromIndex=0): boolean</code> <sup>[R, ES2016]</sup></li>
+<li><code>.indexOf(searchElement: T, fromIndex=0): number</code> <sup>[R, ES6]</sup></li>
+<li><code>.join(separator = ','): string</code> <sup>[R, ES6]</sup></li>
+<li><code>.keys(): Iterable&lt;number&gt;</code> <sup>[R, ES6]</sup></li>
+<li><code>.lastIndexOf(searchElement: T, fromIndex=this.length-1): number</code> <sup>[R, ES6]</sup></li>
+<li><code>.map&lt;U&gt;(mapFunc: (value: T, index: number, array: TypedArray&lt;T&gt;) =&gt; U, thisArg?: any): U[]</code> <sup>[R, ES6]</sup></li>
+<li><code>.reduce&lt;U&gt;(callback: (accumulator: U, element: T, index: number, array: T[]) =&gt; U, init?: U): U</code> <sup>[R, ES6]</sup></li>
+<li><code>.reduceRight&lt;U&gt;(callback: (accumulator: U, element: T, index: number, array: T[]) =&gt; U, init?: U): U</code> <sup>[R, ES6]</sup></li>
+<li><code>.reverse(): this</code> <sup>[W, ES6]</sup></li>
+<li><code>.slice(start=0, end=this.length): T[]</code> <sup>[R, ES6]</sup></li>
+<li><code>.some(callback: (value: T, index: number, array: TypedArray&lt;T&gt;) =&gt; boolean, thisArg?: any): boolean</code> <sup>[R, ES6]</sup></li>
+<li><code>.sort(compareFunc?: (a: T, b: T) =&gt; number): this</code> <sup>[W, ES6]</sup></li>
+<li><code>.toString(): string</code> <sup>[R, ES6]</sup></li>
+<li><code>.values(): Iterable&lt;T&gt;</code> <sup>[R, ES6]</sup></li>
+</ul>
+<p>For details on how these methods work, please consult <a href="ch_arrays.html#quickref-array-prototype">§31.12.3 “Methods of <code>Array&lt;T&gt;.prototype</code>”</a>.</p>
+<h4 id="new-elementtypearray">32.6.3 <code>new «ElementType»Array()</code></h4>
+<p>Each Typed Array constructor has a name that follows the pattern <code>«ElementType»Array</code>, where <code>«ElementType»</code> is one of the element types in the table at the beginning. That means that there are 11 constructors for Typed Arrays:</p>
+<ul>
+<li><code>Float32Array</code>, <code>Float64Array</code></li>
+<li><code>Int8Array</code>, <code>Int16Array</code>, <code>Int32Array</code>, <code>BigInt64Array</code></li>
+<li><code>Uint8Array</code>, <code>Uint8ClampedArray</code>, <code>Uint16Array</code>, <code>Uint32Array</code>, <code>BigUint64Array</code></li>
+</ul>
+<p>Each constructor has four <em>overloaded</em> versions – it behaves differently depending on how many arguments it receives and what their types are:</p>
+<ul>
+<li><p><code>new «ElementType»Array(buffer: ArrayBuffer, byteOffset=0, length=0)</code></p>
+<p>Creates a new <code>«ElementType»Array</code> whose buffer is <code>buffer</code>. It starts accessing the buffer at the given <code>byteOffset</code> and will have the given <code>length</code>. Note that <code>length</code> counts elements of the Typed Array (with 1–8 bytes each), not bytes.</p></li>
+<li><p><code>new «ElementType»Array(length=0)</code></p>
+<p>Creates a new <code>«ElementType»Array</code> with the given <code>length</code> and the appropriate buffer. The buffer’s size in bytes is:</p>
+<div class="sourceCode" id="cb971"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb971-1"><a href="ch_typed-arrays.html#cb971-1" aria-hidden="true" tabindex="-1"></a>length <span class="op">*</span> «ElementType»Array<span class="op">.</span><span class="at">BYTES_PER_ELEMENT</span></span></code></pre></div></li>
+<li><p><code>new «ElementType»Array(source: TypedArray)</code></p>
+<p>Creates a new instance of <code>«ElementType»Array</code> whose elements have the same values as the elements of <code>source</code>, but coerced to <code>ElementType</code>.</p></li>
+<li><p><code>new «ElementType»Array(source: ArrayLike&lt;bigint&gt;)</code> (<code>BigInt64Array</code>, <code>BigUint64Array</code>)</p></li>
+<li><p><code>new «ElementType»Array(source: ArrayLike&lt;number&gt;)</code> (all other Typed Arrays)</p>
+<p>Creates a new instance of <code>«ElementType»Array</code> whose elements have the same values as the elements of <code>source</code>, but coerced to <code>ElementType</code>. For more information on Array-like objects, consult <a href="ch_arrays.html#array-like-objects">§31.4 “Array-like objects”</a>.</p></li>
+</ul>
+<h4 id="static-properties-of-elementtypearray">32.6.4 Static properties of <code>«ElementType»Array</code></h4>
+<ul>
+<li><p><code>«ElementType»Array.BYTES_PER_ELEMENT: number</code></p>
+<p>Counts how many bytes are needed to store a single element:</p>
+<div class="sourceCode" id="cb972"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb972-1"><a href="ch_typed-arrays.html#cb972-1" aria-hidden="true" tabindex="-1"></a>&gt; Uint8Array.BYTES_PER_ELEMENT</span>
+<span id="cb972-2"><a href="ch_typed-arrays.html#cb972-2" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span>
+<span id="cb972-3"><a href="ch_typed-arrays.html#cb972-3" aria-hidden="true" tabindex="-1"></a>&gt; Int16Array.BYTES_PER_ELEMENT</span>
+<span id="cb972-4"><a href="ch_typed-arrays.html#cb972-4" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span>
+<span id="cb972-5"><a href="ch_typed-arrays.html#cb972-5" aria-hidden="true" tabindex="-1"></a>&gt; Float64Array.BYTES_PER_ELEMENT</span>
+<span id="cb972-6"><a href="ch_typed-arrays.html#cb972-6" aria-hidden="true" tabindex="-1"></a><span class="kw">8</span></span></code></pre></div></li>
+</ul>
+<h4 id="properties-of-elementtypearray.prototype">32.6.5 Properties of <code>«ElementType»Array.prototype</code></h4>
+<ul>
+<li><p><code>.BYTES_PER_ELEMENT: number</code></p>
+<p>The same as <code>«ElementType»Array.BYTES_PER_ELEMENT</code>.</p></li>
+</ul>
+<h3 id="quick-reference-dataviews">32.7 Quick reference: DataViews</h3>
+<h4 id="new-dataview">32.7.1 <code>new DataView()</code></h4>
+<ul>
+<li><p><code>new DataView(buffer: ArrayBuffer, byteOffset=0, byteLength=buffer.byteLength-byteOffset)</code></p>
+<p>Creates a new DataView whose data is stored in the ArrayBuffer <code>buffer</code>. By default, the new DataView can access all of <code>buffer</code>. The last two parameters allow you to change that.</p></li>
+</ul>
+<h4 id="properties-of-dataview.prototype">32.7.2 Properties of <code>DataView.prototype</code></h4>
+<p>In the remainder of this section, <code>«ElementType»</code> refers to either:</p>
+<ul>
+<li><code>Int8</code>, <code>Int16</code>, <code>Int32</code>, <code>BigInt64</code></li>
+<li><code>Uint8</code>, <code>Uint16</code>, <code>Uint32</code>, <code>BigUint64</code></li>
+<li><code>Float32</code>, <code>Float64</code></li>
+</ul>
+<p>These are the properties of <code>DataView.prototype</code>:</p>
+<ul>
+<li><p><code>get .buffer(): ArrayBuffer</code></p>
+<p>Returns the ArrayBuffer of this DataView.</p></li>
+<li><p><code>get .byteLength(): number</code></p>
+<p>Returns how many bytes can be accessed by this DataView.</p></li>
+<li><p><code>get .byteOffset(): number</code></p>
+<p>Returns at which offset this DataView starts accessing the bytes in its buffer.</p></li>
+<li><p><code>.get«ElementType»(byteOffset: number, littleEndian=false): bigint</code> (<code>BigInt64</code>, <code>BigUint64</code>)</p></li>
+<li><p><code>.get«ElementType»(byteOffset: number, littleEndian=false): number</code> (all other element types)</p>
+<p>Reads a value from the buffer of this DataView.</p></li>
+<li><p><code>.set«ElementType»(byteOffset: number, value: bigint, littleEndian=false): void</code> (<code>BigInt64</code>, <code>BigUint64</code>)</p></li>
+<li><p><code>.set«ElementType»(byteOffset: number, value: number, littleEndian=false): void</code> (all other element types)</p>
+<p>Writes <code>value</code> to the buffer of this DataView.</p></li>
+</ul>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/45">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_maps.html">33 Maps (<code>Map</code>)</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

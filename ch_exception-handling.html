@@ -1,0 +1,244 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_exception-handling">24 Exception handling</h2>
+<p><a id="index-entry-222" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>24.1 <a href="ch_exception-handling.html#motivation-throwing-and-catching-exceptions">Motivation: throwing and catching exceptions</a></li>
+<li>24.2 <a href="ch_exception-handling.html#throw"><code>throw</code></a>
+<ul>
+<li>24.2.1 <a href="ch_exception-handling.html#options-for-creating-error-objects">Options for creating error objects</a></li>
+</ul></li>
+<li>24.3 <a href="ch_exception-handling.html#the-try-statement">The <code>try</code> statement</a>
+<ul>
+<li>24.3.1 <a href="ch_exception-handling.html#the-try-block">The <code>try</code> block</a></li>
+<li>24.3.2 <a href="ch_exception-handling.html#the-catch-clause">The <code>catch</code> clause</a></li>
+<li>24.3.3 <a href="ch_exception-handling.html#the-finally-clause">The <code>finally</code> clause</a></li>
+</ul></li>
+<li>24.4 <a href="ch_exception-handling.html#error-classes">Error classes</a>
+<ul>
+<li>24.4.1 <a href="ch_exception-handling.html#exception-stack-trace">Properties of error objects</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>This chapter covers how JavaScript handles exceptions.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>Why doesn’t JavaScript throw exceptions more often?</strong></p>
+<p>JavaScript didn’t support exceptions until ES3. That explains why they are used sparingly by the language and its standard library.</p>
+</div>
+<h3 id="motivation-throwing-and-catching-exceptions">24.1 Motivation: throwing and catching exceptions</h3>
+<p>Consider the following code. It reads profiles stored in files into an Array with instances of class <code>Profile</code>:</p>
+<div class="sourceCode" id="cb516"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb516-1"><a href="ch_exception-handling.html#cb516-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">readProfiles</span>(filePaths) {</span>
+<span id="cb516-2"><a href="ch_exception-handling.html#cb516-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> profiles <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb516-3"><a href="ch_exception-handling.html#cb516-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> filePath <span class="kw">of</span> filePaths) {</span>
+<span id="cb516-4"><a href="ch_exception-handling.html#cb516-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span> {</span>
+<span id="cb516-5"><a href="ch_exception-handling.html#cb516-5" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> profile <span class="op">=</span> <span class="fu">readOneProfile</span>(filePath)<span class="op">;</span></span>
+<span id="cb516-6"><a href="ch_exception-handling.html#cb516-6" aria-hidden="true" tabindex="-1"></a>      profiles<span class="op">.</span><span class="fu">push</span>(profile)<span class="op">;</span></span>
+<span id="cb516-7"><a href="ch_exception-handling.html#cb516-7" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">catch</span> (err) { <span class="co">// (A)</span></span>
+<span id="cb516-8"><a href="ch_exception-handling.html#cb516-8" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'Error in: '</span><span class="op">+</span>filePath<span class="op">,</span> err)<span class="op">;</span></span>
+<span id="cb516-9"><a href="ch_exception-handling.html#cb516-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb516-10"><a href="ch_exception-handling.html#cb516-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb516-11"><a href="ch_exception-handling.html#cb516-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb516-12"><a href="ch_exception-handling.html#cb516-12" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">readOneProfile</span>(filePath) {</span>
+<span id="cb516-13"><a href="ch_exception-handling.html#cb516-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> profile <span class="op">=</span> <span class="kw">new</span> <span class="fu">Profile</span>()<span class="op">;</span></span>
+<span id="cb516-14"><a href="ch_exception-handling.html#cb516-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> file <span class="op">=</span> <span class="fu">openFile</span>(filePath)<span class="op">;</span></span>
+<span id="cb516-15"><a href="ch_exception-handling.html#cb516-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ··· (Read the data in `file` into `profile`)</span></span>
+<span id="cb516-16"><a href="ch_exception-handling.html#cb516-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> profile<span class="op">;</span></span>
+<span id="cb516-17"><a href="ch_exception-handling.html#cb516-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb516-18"><a href="ch_exception-handling.html#cb516-18" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">openFile</span>(filePath) {</span>
+<span id="cb516-19"><a href="ch_exception-handling.html#cb516-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>fs<span class="op">.</span><span class="fu">existsSync</span>(filePath)) {</span>
+<span id="cb516-20"><a href="ch_exception-handling.html#cb516-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Could not find file '</span><span class="op">+</span>filePath)<span class="op">;</span> <span class="co">// (B)</span></span>
+<span id="cb516-21"><a href="ch_exception-handling.html#cb516-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb516-22"><a href="ch_exception-handling.html#cb516-22" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ··· (Open the file whose path is `filePath`)</span></span>
+<span id="cb516-23"><a href="ch_exception-handling.html#cb516-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Let’s examine what happens in line B: An error occurred, but the best place to handle the problem is not the current location, it’s line A. There, we can skip the current file and move on to the next one.</p>
+<p>Therefore:</p>
+<ul>
+<li>In line B, we use a <code>throw</code> statement to indicate that there was a problem.</li>
+<li>In line A, we use a <code>try-catch</code> statement to handle the problem.</li>
+</ul>
+<p>When we throw, the following constructs are active:</p>
+<pre class="text"><code>readProfiles(···)
+  for (const filePath of filePaths)
+    try
+      readOneProfile(···)
+        openFile(···)
+          if (!fs.existsSync(filePath))
+            throw</code></pre>
+<p>One by one, <code>throw</code> exits the nested constructs, until it encounters a <code>try</code> statement. Execution continues in the <code>catch</code> clause of that <code>try</code> statement.</p>
+<h3 id="throw">24.2 <code>throw</code></h3>
+<p><a id="index-entry-223" class="index-entry"></a></p>
+<p>This is the syntax of the <code>throw</code> statement:</p>
+<div class="sourceCode" id="cb518"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb518-1"><a href="ch_exception-handling.html#cb518-1" aria-hidden="true" tabindex="-1"></a><span class="cf">throw</span> «value»<span class="op">;</span></span></code></pre></div>
+<p>Any value can be thrown, but it’s best to throw an instance of <code>Error</code> or its subclasses.</p>
+<div class="sourceCode" id="cb519"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb519-1"><a href="ch_exception-handling.html#cb519-1" aria-hidden="true" tabindex="-1"></a><span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Problem!'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="options-for-creating-error-objects">24.2.1 Options for creating error objects</h4>
+<ul>
+<li><p>Using class <code>Error</code>. That is less limiting in JavaScript than in a more static language because we can add our own properties to instances:</p>
+<div class="sourceCode" id="cb520"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb520-1"><a href="ch_exception-handling.html#cb520-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> err <span class="op">=</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Could not find the file'</span>)<span class="op">;</span></span>
+<span id="cb520-2"><a href="ch_exception-handling.html#cb520-2" aria-hidden="true" tabindex="-1"></a>err<span class="op">.</span><span class="at">filePath</span> <span class="op">=</span> filePath<span class="op">;</span></span>
+<span id="cb520-3"><a href="ch_exception-handling.html#cb520-3" aria-hidden="true" tabindex="-1"></a><span class="cf">throw</span> err<span class="op">;</span></span></code></pre></div></li>
+<li><p>Use one of JavaScript’s subclasses of <code>Error</code> (which are listed <a href="ch_exception-handling.html#error-classes">later</a>).</p></li>
+<li><p>Subclassing <code>Error</code>:</p>
+<div class="sourceCode" id="cb521"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb521-1"><a href="ch_exception-handling.html#cb521-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MyError <span class="kw">extends</span> <span class="bu">Error</span> {</span>
+<span id="cb521-2"><a href="ch_exception-handling.html#cb521-2" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb521-3"><a href="ch_exception-handling.html#cb521-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>() {</span>
+<span id="cb521-4"><a href="ch_exception-handling.html#cb521-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">throw</span> <span class="kw">new</span> <span class="fu">MyError</span>(<span class="st">'Problem!'</span>)<span class="op">;</span></span>
+<span id="cb521-5"><a href="ch_exception-handling.html#cb521-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb521-6"><a href="ch_exception-handling.html#cb521-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb521-7"><a href="ch_exception-handling.html#cb521-7" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> <span class="fu">func</span>()<span class="op">,</span></span>
+<span id="cb521-8"><a href="ch_exception-handling.html#cb521-8" aria-hidden="true" tabindex="-1"></a>  MyError)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h3 id="the-try-statement">24.3 The <code>try</code> statement</h3>
+<p><a id="index-entry-224" class="index-entry"></a></p>
+<p>The maximal version of the <code>try</code> statement looks as follows:</p>
+<div class="sourceCode" id="cb522"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb522-1"><a href="ch_exception-handling.html#cb522-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb522-2"><a href="ch_exception-handling.html#cb522-2" aria-hidden="true" tabindex="-1"></a>  «try_statements»</span>
+<span id="cb522-3"><a href="ch_exception-handling.html#cb522-3" aria-hidden="true" tabindex="-1"></a>} <span class="cf">catch</span> (error) {</span>
+<span id="cb522-4"><a href="ch_exception-handling.html#cb522-4" aria-hidden="true" tabindex="-1"></a>  «catch_statements»</span>
+<span id="cb522-5"><a href="ch_exception-handling.html#cb522-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">finally</span> {</span>
+<span id="cb522-6"><a href="ch_exception-handling.html#cb522-6" aria-hidden="true" tabindex="-1"></a>  «finally_statements»</span>
+<span id="cb522-7"><a href="ch_exception-handling.html#cb522-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>We can combine these clauses as follows:</p>
+<ul>
+<li><code>try-catch</code></li>
+<li><code>try-finally</code></li>
+<li><code>try-catch-finally</code></li>
+</ul>
+<h4 id="the-try-block">24.3.1 The <code>try</code> block</h4>
+<p>The <code>try</code> block can be considered the body of the statement. This is where we execute the regular code.</p>
+<h4 id="the-catch-clause">24.3.2 The <code>catch</code> clause</h4>
+<p><a id="index-entry-225" class="index-entry"></a></p>
+<p>If an exception reaches the <code>try</code> block, then it is assigned to the parameter of the <code>catch</code> clause and the code in that clause is executed. Next, execution normally continues after the <code>try</code> statement. That may change if:</p>
+<ul>
+<li>There is a <code>return</code>, <code>break</code>, or <code>throw</code> inside the <code>catch</code> block.</li>
+<li>There is a <code>finally</code> clause (which is always executed before the <code>try</code> statement ends).</li>
+</ul>
+<p>The following code demonstrates that the value that is thrown in line A is indeed caught in line B.</p>
+<div class="sourceCode" id="cb523"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb523-1"><a href="ch_exception-handling.html#cb523-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> errorObject <span class="op">=</span> <span class="kw">new</span> <span class="bu">Error</span>()<span class="op">;</span></span>
+<span id="cb523-2"><a href="ch_exception-handling.html#cb523-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>() {</span>
+<span id="cb523-3"><a href="ch_exception-handling.html#cb523-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">throw</span> errorObject<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb523-4"><a href="ch_exception-handling.html#cb523-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb523-5"><a href="ch_exception-handling.html#cb523-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb523-6"><a href="ch_exception-handling.html#cb523-6" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb523-7"><a href="ch_exception-handling.html#cb523-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">func</span>()<span class="op">;</span></span>
+<span id="cb523-8"><a href="ch_exception-handling.html#cb523-8" aria-hidden="true" tabindex="-1"></a>} <span class="cf">catch</span> (err) { <span class="co">// (B)</span></span>
+<span id="cb523-9"><a href="ch_exception-handling.html#cb523-9" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(err<span class="op">,</span> errorObject)<span class="op">;</span></span>
+<span id="cb523-10"><a href="ch_exception-handling.html#cb523-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h5 id="omitting-catch-binding">24.3.2.1 Omitting the <code>catch</code> binding</h5>
+<p>Since ECMAScript 2019, we can omit the <code>catch</code> parameter if we are not interested in the value that was thrown:</p>
+<div class="sourceCode" id="cb524"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb524-1"><a href="ch_exception-handling.html#cb524-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb524-2"><a href="ch_exception-handling.html#cb524-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb524-3"><a href="ch_exception-handling.html#cb524-3" aria-hidden="true" tabindex="-1"></a>} <span class="cf">catch</span> {</span>
+<span id="cb524-4"><a href="ch_exception-handling.html#cb524-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb524-5"><a href="ch_exception-handling.html#cb524-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>That may be occasionally useful. For example, Node.js has the API function <a href="https://nodejs.org/api/assert.html#assert_assert_throws_fn_error_message"><code>assert.throws(func)</code></a> that checks whether an error is thrown inside <code>func</code>. It could be implemented as follows.</p>
+<div class="sourceCode" id="cb525"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb525-1"><a href="ch_exception-handling.html#cb525-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">throws</span>(func) {</span>
+<span id="cb525-2"><a href="ch_exception-handling.html#cb525-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb525-3"><a href="ch_exception-handling.html#cb525-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">func</span>()<span class="op">;</span></span>
+<span id="cb525-4"><a href="ch_exception-handling.html#cb525-4" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">catch</span> {</span>
+<span id="cb525-5"><a href="ch_exception-handling.html#cb525-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span><span class="op">;</span> <span class="co">// everything OK</span></span>
+<span id="cb525-6"><a href="ch_exception-handling.html#cb525-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb525-7"><a href="ch_exception-handling.html#cb525-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Function didn’t throw an exception!'</span>)<span class="op">;</span></span>
+<span id="cb525-8"><a href="ch_exception-handling.html#cb525-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>However, a more complete implementation of this function would have a <code>catch</code> parameter and would, for example, check that its type is as expected.</p>
+<h4 id="the-finally-clause">24.3.3 The <code>finally</code> clause</h4>
+<p><a id="index-entry-226" class="index-entry"></a></p>
+<p>The code inside the <code>finally</code> clause is always executed at the end of a <code>try</code> statement – no matter what happens in the <code>try</code> block or the <code>catch</code> clause.</p>
+<p>Let’s look at a common use case for <code>finally</code>: We have created a resource and want to always destroy it when we are done with it, no matter what happens while working with it. We would implement that as follows:</p>
+<div class="sourceCode" id="cb526"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb526-1"><a href="ch_exception-handling.html#cb526-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> resource <span class="op">=</span> <span class="fu">createResource</span>()<span class="op">;</span></span>
+<span id="cb526-2"><a href="ch_exception-handling.html#cb526-2" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb526-3"><a href="ch_exception-handling.html#cb526-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Work with `resource`. Errors may be thrown.</span></span>
+<span id="cb526-4"><a href="ch_exception-handling.html#cb526-4" aria-hidden="true" tabindex="-1"></a>} <span class="cf">finally</span> {</span>
+<span id="cb526-5"><a href="ch_exception-handling.html#cb526-5" aria-hidden="true" tabindex="-1"></a>  resource<span class="op">.</span><span class="fu">destroy</span>()<span class="op">;</span></span>
+<span id="cb526-6"><a href="ch_exception-handling.html#cb526-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h5 id="finally-is-always-executed">24.3.3.1 <code>finally</code> is always executed</h5>
+<p>The <code>finally</code> clause is always executed, even if an error is thrown (line A):</p>
+<div class="sourceCode" id="cb527"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb527-1"><a href="ch_exception-handling.html#cb527-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> finallyWasExecuted <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb527-2"><a href="ch_exception-handling.html#cb527-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb527-3"><a href="ch_exception-handling.html#cb527-3" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> {</span>
+<span id="cb527-4"><a href="ch_exception-handling.html#cb527-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span> {</span>
+<span id="cb527-5"><a href="ch_exception-handling.html#cb527-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>()<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb527-6"><a href="ch_exception-handling.html#cb527-6" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">finally</span> {</span>
+<span id="cb527-7"><a href="ch_exception-handling.html#cb527-7" aria-hidden="true" tabindex="-1"></a>      finallyWasExecuted <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb527-8"><a href="ch_exception-handling.html#cb527-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb527-9"><a href="ch_exception-handling.html#cb527-9" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb527-10"><a href="ch_exception-handling.html#cb527-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Error</span></span>
+<span id="cb527-11"><a href="ch_exception-handling.html#cb527-11" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb527-12"><a href="ch_exception-handling.html#cb527-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(finallyWasExecuted<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div>
+<p>And even if there is a <code>return</code> statement (line A):</p>
+<div class="sourceCode" id="cb528"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb528-1"><a href="ch_exception-handling.html#cb528-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> finallyWasExecuted <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb528-2"><a href="ch_exception-handling.html#cb528-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>() {</span>
+<span id="cb528-3"><a href="ch_exception-handling.html#cb528-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb528-4"><a href="ch_exception-handling.html#cb528-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span><span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb528-5"><a href="ch_exception-handling.html#cb528-5" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">finally</span> {</span>
+<span id="cb528-6"><a href="ch_exception-handling.html#cb528-6" aria-hidden="true" tabindex="-1"></a>    finallyWasExecuted <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb528-7"><a href="ch_exception-handling.html#cb528-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb528-8"><a href="ch_exception-handling.html#cb528-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb528-9"><a href="ch_exception-handling.html#cb528-9" aria-hidden="true" tabindex="-1"></a><span class="fu">func</span>()<span class="op">;</span></span>
+<span id="cb528-10"><a href="ch_exception-handling.html#cb528-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(finallyWasExecuted<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="error-classes">24.4 Error classes</h3>
+<p><code>Error</code> is the common superclass of all built-in error classes. It has the following subclasses (I’m quoting <a href="https://tc39.github.io/ecma262/#sec-native-error-types-used-in-this-standard">the ECMAScript specification</a>):</p>
+<ul>
+<li><code>RangeError</code>: Indicates a value that is not in the set or range of allowable values.</li>
+<li><code>ReferenceError</code>: Indicate that an invalid reference value has been detected.</li>
+<li><code>SyntaxError</code>: Indicates that a parsing error has occurred.</li>
+<li><code>TypeError</code>: is used to indicate an unsuccessful operation when none of the other <em>NativeError</em> objects are an appropriate indication of the failure cause.</li>
+<li><code>URIError</code>: Indicates that one of the global URI handling functions was used in a way that is incompatible with its definition.</li>
+</ul>
+<h4 id="exception-stack-trace">24.4.1 Properties of error objects</h4>
+<p>Consider <code>err</code>, an instance of <code>Error</code>:</p>
+<div class="sourceCode" id="cb529"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb529-1"><a href="ch_exception-handling.html#cb529-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> err <span class="op">=</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Hello!'</span>)<span class="op">;</span></span>
+<span id="cb529-2"><a href="ch_exception-handling.html#cb529-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="bu">String</span>(err)<span class="op">,</span> <span class="st">'Error: Hello!'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Two properties of <code>err</code> are especially useful:</p>
+<ul>
+<li><p><code>.message</code>: contains just the error message.</p>
+<div class="sourceCode" id="cb530"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb530-1"><a href="ch_exception-handling.html#cb530-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(err<span class="op">.</span><span class="at">message</span><span class="op">,</span> <span class="st">'Hello!'</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>.stack</code>: contains a stack trace. It is supported by all mainstream browsers.</p>
+<div class="sourceCode" id="cb531"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb531-1"><a href="ch_exception-handling.html#cb531-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb531-2"><a href="ch_exception-handling.html#cb531-2" aria-hidden="true" tabindex="-1"></a>err<span class="op">.</span><span class="at">stack</span><span class="op">,</span></span>
+<span id="cb531-3"><a href="ch_exception-handling.html#cb531-3" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span>
+<span id="cb531-4"><a href="ch_exception-handling.html#cb531-4" aria-hidden="true" tabindex="-1"></a><span class="vs">Error: Hello!</span></span>
+<span id="cb531-5"><a href="ch_exception-handling.html#cb531-5" aria-hidden="true" tabindex="-1"></a><span class="vs">    at file://ch_exception-handling.mjs:1:13</span></span>
+<span id="cb531-6"><a href="ch_exception-handling.html#cb531-6" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span><span class="op">.</span><span class="fu">trim</span>())<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Exception handling</strong></p>
+<p><code>exercises/exception-handling/call_function_test.mjs</code></p>
+</div>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/42">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_callables.html">25 Callable values</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

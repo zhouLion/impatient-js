@@ -1,0 +1,428 @@
+body {
+    font-family: Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+    margin: 0 0 0 0;
+  }
+  
+  #page-content {
+    margin: 2em auto 2em auto;
+    max-width: 40em;
+    font-size: 1.1em;
+    line-height: 1.5;
+  }
+  
+  h3 {
+    border-bottom: thin solid lightgray;
+  }
+  
+  /****** anchors *****/
+  a[href] {
+    color: darkblue;
+    text-decoration: none;
+  }
+  
+  a[href]:hover {
+    text-decoration: underline;
+  }
+  
+  a[href]:visited {
+    color: darkblue;
+  }
+  
+  /* Highlight what the current hash points to */
+  *:target {
+    background-color: #FFFF66;
+  }
+  
+  /****** index entry *****/
+  a.index-entry:target::before {
+    content: "✘";
+  }
+  
+  /****** Notebox *****/
+  .notebox {
+    padding-left: 1em;
+    border-left: solid;
+  }
+  
+  /****** Tables *****/
+  td {
+    vertical-align: text-top;
+  }
+  
+  table {
+    border-collapse: collapse;
+  }
+  
+  table td, table th {
+    border: thin solid black;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+  }
+  
+  /****** TOC *****/
+  nav#TOC > ul {
+    padding-left: 0;
+  }
+  
+  nav#TOC > ul > li > ul {
+    padding-left: 0;
+  }
+  
+  nav#TOC ul {
+    list-style: none;
+  }
+  
+  nav#TOC > ul > li {
+    margin-top: 1em;
+  }
+  
+  nav#TOC > ul > li > ul {
+    margin-top: 1em;
+  }
+  
+  nav#TOC > ul > li > a {
+    margin-top: 4em;
+    text-transform: uppercase;
+  }
+  
+  nav#TOC > ul > li > ul > li {
+    margin-top: 0.5em;
+  }
+  
+  nav#TOC > ul > li > ul > li > a {
+    font-weight: bold;
+  }
+  
+  /* For downloads/complete-toc.html (<span> instead of <a>) */
+  nav#TOC > ul > li > span {
+    margin-top: 4em;
+    text-transform: uppercase;
+  }
+  
+  nav#TOC > ul > li > ul > li > span {
+    font-weight: bold;
+  }
+  
+  /****** Chapter TOC *****/
+  .chapter-toc ul {
+    list-style-type: none;
+  }
+  
+  /****** Top bar *****/
+  #top-bar {
+    border-bottom: thin solid gray;
+    text-align: center;
+    line-height: 1.3;
+    padding-top: 0.3em;
+    padding-bottom: 0.2em;
+  }
+  
+  /****** Footer *****/
+  .footer {
+    border-top: thin solid gray;
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /****** Carbon ad *****/
+  /* Whole ad box */
+  #adbox {
+    width: 280px;
+    font-size: 10pt;
+    line-height: 1.4;
+    border: solid thin gray;
+    padding: 2px 5px 2px 5px;
+  }
+  
+  #adbox-explain {
+    font-size: 9pt;
+    color: gray;
+    margin-bottom: 3px;
+  }
+  
+  /* Image and the text */
+  .carbon-wrap {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+  }
+  
+  a.carbon-text {
+    display: block;
+    width: 130px;
+    /*margin-top: 3px;
+    margin-bottom: 4px;*/
+  }
+  
+  a.carbon-text:link, a.carbon-text:active, a.carbon-text:visited {
+    color: black;
+    text-decoration: none;
+  }
+  
+  a.carbon-text:hover {
+    color: black;
+    text-decoration: underline;
+  }
+  
+  /* “ads via Carbon” follows the .carbon-wrap, vertically */
+  a.carbon-poweredby {
+    display: block;
+    font-size: 9pt;
+    text-align: left;
+  }
+  
+  a.carbon-poweredby:link, a.carbon-poweredby:active, a.carbon-poweredby:visited {
+    color: gray;
+    text-decoration: none;
+  }
+  
+  a.carbon-poweredby:hover {
+    color: gray;
+    text-decoration: underline;
+  }
+  
+  /****** Code *****/
+  pre {
+    margin: 0;
+    font-size: 1.2em;
+    line-height: 1.4;
+    margin-left: 1em;
+  }
+  
+  div.sourceCode {
+    overflow-x: auto;
+  }
+  
+  @media print {
+    div.sourceCode {
+        overflow-wrap: break-word;
+        overflow-x: visible;
+    }
+  }
+  
+  /*** Markdown: .numberLines ***/
+  pre.numberSource code {
+    counter-reset: source-line 0;
+  }
+  
+  pre.numberSource code > span {
+    position: relative;
+    left: -4em;
+    counter-increment: source-line;
+  }
+  
+  pre.numberSource code > span > a:first-child::before {
+    content: counter(source-line);
+    position: relative;
+    left: -1em;
+    text-align: right;
+    vertical-align: baseline;
+    border: none;
+    display: inline-block;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: 0 4px;
+    width: 4em;
+    color: #aaaaaa;
+  }
+  
+  pre.numberSource {
+    margin-left: 3em;
+    border-left: 1px solid #aaaaaa;
+    padding-left: 4px;
+  }
+  
+  /*** Pandoc CSS ***/
+  /* Extracted from standalone HTML:
+     Just the CSS for `code span`
+     --highlight-style=kate
+  */
+  code span {
+    color: #1f1c1b;
+  }
+  
+  /* Normal */
+  code span.al {
+    color: #bf0303;
+    background-color: #f7e6e6;
+    font-weight: bold;
+  }
+  
+  /* Alert */
+  code span.an {
+    color: #ca60ca;
+  }
+  
+  /* Annotation */
+  code span.at {
+    color: #0057ae;
+  }
+  
+  /* Attribute */
+  code span.bn {
+    color: #b08000;
+  }
+  
+  /* BaseN */
+  code span.bu {
+    color: #644a9b;
+    font-weight: bold;
+  }
+  
+  /* BuiltIn */
+  code span.cf {
+    color: #1f1c1b;
+    font-weight: bold;
+  }
+  
+  /* ControlFlow */
+  code span.ch {
+    color: #924c9d;
+  }
+  
+  /* Char */
+  code span.cn {
+    color: #aa5500;
+  }
+  
+  /* Constant */
+  code span.co {
+    color: #898887;
+  }
+  
+  /* Comment */
+  code span.cv {
+    color: #0095ff;
+  }
+  
+  /* CommentVar */
+  code span.do {
+    color: #607880;
+  }
+  
+  /* Documentation */
+  code span.dt {
+    color: #0057ae;
+  }
+  
+  /* DataType */
+  code span.dv {
+    color: #b08000;
+  }
+  
+  /* DecVal */
+  code span.er {
+    color: #bf0303;
+    text-decoration: underline;
+  }
+  
+  /* Error */
+  code span.ex {
+    color: #0095ff;
+    font-weight: bold;
+  }
+  
+  /* Extension */
+  code span.fl {
+    color: #b08000;
+  }
+  
+  /* Float */
+  code span.fu {
+    color: #644a9b;
+  }
+  
+  /* Function */
+  code span.im {
+    color: #ff5500;
+  }
+  
+  /* Import */
+  code span.in {
+    color: #b08000;
+  }
+  
+  /* Information */
+  code span.kw {
+    color: #1f1c1b;
+    font-weight: bold;
+  }
+  
+  /* Keyword */
+  code span.op {
+    color: #1f1c1b;
+  }
+  
+  /* Operator */
+  code span.ot {
+    color: #006e28;
+  }
+  
+  /* Other */
+  code span.pp {
+    color: #006e28;
+  }
+  
+  /* Preprocessor */
+  code span.re {
+    color: #0057ae;
+    background-color: #e0e9f8;
+  }
+  
+  /* RegionMarker */
+  code span.sc {
+    color: #3daee9;
+  }
+  
+  /* SpecialChar */
+  code span.ss {
+    color: #ff5500;
+  }
+  
+  /* SpecialString */
+  code span.st {
+    color: #bf0303;
+  }
+  
+  /* String */
+  code span.va {
+    color: #0057ae;
+  }
+  
+  /* Variable */
+  code span.vs {
+    color: #bf0303;
+  }
+  
+  /* VerbatimString */
+  code span.wa {
+    color: #bf0303;
+  }
+  
+  /* Warning */
+  #leftIframe {
+    height: 100vh;
+    width: 280px;
+    overflow: auto;
+    margin: 0;
+    background: white;
+    border-right: 1px solid gainsboro;
+    float: left;
+  }
+  
+  #contentIframe {
+    /* float: right; */
+    width: calc(100vw - 280px);
+    position: absolute;
+    top: 0;
+    height: 100%;
+    padding: 24px;
+  }
+  

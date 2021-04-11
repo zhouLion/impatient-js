@@ -1,0 +1,104 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_dynamic-code-evaluation">26 Evaluating code dynamically: <code>eval()</code>, <code>new Function()</code> (advanced)</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>26.1 <a href="ch_dynamic-code-evaluation.html#eval"><code>eval()</code></a></li>
+<li>26.2 <a href="ch_dynamic-code-evaluation.html#new-function"><code>new Function()</code></a></li>
+<li>26.3 <a href="ch_dynamic-code-evaluation.html#recommendations">Recommendations</a></li>
+</ul>
+</div>
+<hr>
+<p><span data-refcheck="#eval #new-function">In this chapter</span>, we’ll look at two ways of evaluating code dynamically: <code>eval()</code> and <code>new Function()</code>.</p>
+<h3 id="eval">26.1 <code>eval()</code></h3>
+<p><a id="index-entry-259" class="index-entry"></a></p>
+<p>Given a string <code>str</code> with JavaScript code, <code>eval(str)</code> evaluates that code and returns the result:</p>
+<div class="sourceCode" id="cb595"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb595-1"><a href="ch_dynamic-code-evaluation.html#cb595-1" aria-hidden="true" tabindex="-1"></a>&gt; eval('2 ** 4')</span>
+<span id="cb595-2"><a href="ch_dynamic-code-evaluation.html#cb595-2" aria-hidden="true" tabindex="-1"></a><span class="kw">16</span></span></code></pre></div>
+<p>There are two ways of invoking <code>eval()</code>:</p>
+<ul>
+<li><em>Directly</em>, via a function call. Then the code in its argument is evaluated inside the current scope.</li>
+<li><em>Indirectly</em>, not via a function call. Then it evaluates its code in global scope.</li>
+</ul>
+<p>“Not via a function call” means “anything that looks different than <code>eval(···)</code>”:</p>
+<ul>
+<li><code>eval.call(undefined, '···')</code></li>
+<li><code>(0, eval)('···')</code> (uses the comma operator)</li>
+<li><code>globalThis.eval('···')</code></li>
+<li><code>const e = eval; e('···')</code></li>
+<li>Etc.</li>
+</ul>
+<p>The following code illustrates the difference:</p>
+<div class="sourceCode" id="cb596"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb596-1"><a href="ch_dynamic-code-evaluation.html#cb596-1" aria-hidden="true" tabindex="-1"></a>globalThis<span class="op">.</span><span class="at">myVariable</span> <span class="op">=</span> <span class="st">'global'</span><span class="op">;</span></span>
+<span id="cb596-2"><a href="ch_dynamic-code-evaluation.html#cb596-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">func</span>() {</span>
+<span id="cb596-3"><a href="ch_dynamic-code-evaluation.html#cb596-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> myVariable <span class="op">=</span> <span class="st">'local'</span><span class="op">;</span></span>
+<span id="cb596-4"><a href="ch_dynamic-code-evaluation.html#cb596-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb596-5"><a href="ch_dynamic-code-evaluation.html#cb596-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Direct eval</span></span>
+<span id="cb596-6"><a href="ch_dynamic-code-evaluation.html#cb596-6" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(<span class="pp">eval</span>(<span class="st">'myVariable'</span>)<span class="op">,</span> <span class="st">'local'</span>)<span class="op">;</span></span>
+<span id="cb596-7"><a href="ch_dynamic-code-evaluation.html#cb596-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb596-8"><a href="ch_dynamic-code-evaluation.html#cb596-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Indirect eval</span></span>
+<span id="cb596-9"><a href="ch_dynamic-code-evaluation.html#cb596-9" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(eval<span class="op">.</span><span class="fu">call</span>(<span class="kw">undefined</span><span class="op">,</span> <span class="st">'myVariable'</span>)<span class="op">,</span> <span class="st">'global'</span>)<span class="op">;</span></span>
+<span id="cb596-10"><a href="ch_dynamic-code-evaluation.html#cb596-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Evaluating code in global context is safer because the code has access to fewer internals.</p>
+<h3 id="new-function">26.2 <code>new Function()</code></h3>
+<p><code>new Function()</code> creates a function object and is invoked as follows:</p>
+<div class="sourceCode" id="cb597"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb597-1"><a href="ch_dynamic-code-evaluation.html#cb597-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func <span class="op">=</span> <span class="kw">new</span> <span class="bu">Function</span>(<span class="st">'«param_1»'</span><span class="op">,</span> ···<span class="op">,</span> <span class="st">'«param_n»'</span><span class="op">,</span> <span class="st">'«func_body»'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The previous statement is equivalent to the next statement. Note that <code>«param_1»</code>, etc., are not inside string literals, anymore.</p>
+<div class="sourceCode" id="cb598"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb598-1"><a href="ch_dynamic-code-evaluation.html#cb598-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func <span class="op">=</span> <span class="kw">function</span> («param_1»<span class="op">,</span> ···<span class="op">,</span> «param_n») {</span>
+<span id="cb598-2"><a href="ch_dynamic-code-evaluation.html#cb598-2" aria-hidden="true" tabindex="-1"></a>  «func_body»</span>
+<span id="cb598-3"><a href="ch_dynamic-code-evaluation.html#cb598-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>In the next example, we create the same function twice, first via <code>new Function()</code>, then via a function expression:</p>
+<div class="sourceCode" id="cb599"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb599-1"><a href="ch_dynamic-code-evaluation.html#cb599-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> times1 <span class="op">=</span> <span class="kw">new</span> <span class="bu">Function</span>(<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'return a * b'</span>)<span class="op">;</span></span>
+<span id="cb599-2"><a href="ch_dynamic-code-evaluation.html#cb599-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> times2 <span class="op">=</span> <span class="kw">function</span> (a<span class="op">,</span> b) { <span class="cf">return</span> a <span class="op">*</span> b }<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/exclamation-triangle-regular.svg" height="24">&nbsp; <strong><code>new Function()</code> creates non-strict mode functions</strong></p>
+<p>By default, functions created via <code>new Function()</code> are <a href="ch_syntax.html#strict-mode">sloppy</a>. If we want the function body to be in strict mode, we have to <a href="ch_syntax.html#switching-on-strict-mode">switch it on manually</a>.</p>
+</div>
+<h3 id="recommendations">26.3 Recommendations</h3>
+<p>Avoid dynamic evaluation of code as much as you can:</p>
+<ul>
+<li>It’s a security risk because it may enable an attacker to execute arbitrary code with the privileges of your code.</li>
+<li>It may be switched off – for example, in browsers, via <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">a Content Security Policy</a>.</li>
+</ul>
+<p>Very often, JavaScript is dynamic enough so that you don’t need <code>eval()</code> or similar. In the following example, what we are doing with <code>eval()</code> (line A) can be achieved just as well without it (line B).</p>
+<div class="sourceCode" id="cb600"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb600-1"><a href="ch_dynamic-code-evaluation.html#cb600-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {<span class="dt">a</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">b</span><span class="op">:</span> <span class="dv">2</span>}<span class="op">;</span></span>
+<span id="cb600-2"><a href="ch_dynamic-code-evaluation.html#cb600-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> propKey <span class="op">=</span> <span class="st">'b'</span><span class="op">;</span></span>
+<span id="cb600-3"><a href="ch_dynamic-code-evaluation.html#cb600-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb600-4"><a href="ch_dynamic-code-evaluation.html#cb600-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="pp">eval</span>(<span class="st">'obj.'</span> <span class="op">+</span> propKey)<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb600-5"><a href="ch_dynamic-code-evaluation.html#cb600-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj[propKey]<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span> <span class="co">// (B)</span></span></code></pre></div>
+<p>If you have to dynamically evaluate code:</p>
+<ul>
+<li>Prefer <code>new Function()</code> over <code>eval()</code>: it always executes its code in global context and a function provides a clean interface to the evaluated code.</li>
+<li>Prefer indirect <code>eval</code> over direct <code>eval</code>: evaluating code in global context is safer.</li>
+</ul>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/51">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="pt_modularity.html">VI Modularity</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

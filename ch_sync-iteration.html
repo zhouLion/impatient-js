@@ -1,0 +1,212 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_sync-iteration">30 Synchronous iteration</h2>
+<p><a id="index-entry-375" class="index-entry"></a><a id="index-entry-376" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>30.1 <a href="ch_sync-iteration.html#what-is-synchronous-iteration-about">What is synchronous iteration about?</a></li>
+<li>30.2 <a href="ch_sync-iteration.html#iterable-iterator-iteratorresult">Core iteration constructs: iterables and iterators</a></li>
+<li>30.3 <a href="ch_sync-iteration.html#iterating-manually">Iterating manually</a>
+<ul>
+<li>30.3.1 <a href="ch_sync-iteration.html#iterating-over-an-iterable-via-while">Iterating over an iterable via <code>while</code></a></li>
+</ul></li>
+<li>30.4 <a href="ch_sync-iteration.html#iteration-in-practice">Iteration in practice</a>
+<ul>
+<li>30.4.1 <a href="ch_sync-iteration.html#iterating-over-arrays">Iterating over Arrays</a></li>
+<li>30.4.2 <a href="ch_sync-iteration.html#iterating-over-sets">Iterating over Sets</a></li>
+</ul></li>
+<li>30.5 <a href="ch_sync-iteration.html#quick-reference-synchronous-iteration">Quick reference: synchronous iteration</a>
+<ul>
+<li>30.5.1 <a href="ch_sync-iteration.html#iterable-data-sources">Iterable data sources</a></li>
+<li>30.5.2 <a href="ch_sync-iteration.html#iterating-constructs">Iterating constructs</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<h3 id="what-is-synchronous-iteration-about">30.1 What is synchronous iteration about?</h3>
+<p>Synchronous iteration is a <em>protocol</em> (interfaces plus rules for using them) that connects two groups of entities in JavaScript:</p>
+<ul>
+<li><p><strong>Data sources:</strong> On one hand, data comes in all shapes and sizes. In JavaScript’s standard library, you have the linear data structure Array, the ordered collection Set (elements are ordered by time of addition), the ordered dictionary Map (entries are ordered by time of addition), and more. In libraries, you may find tree-shaped data structures and more.</p></li>
+<li><p><strong>Data consumers:</strong> On the other hand, you have a whole class of constructs and algorithms that only need to access their input <em>sequentially</em>: one value at a time, until all values were visited. Examples include the <code>for-of</code> loop and spreading into function calls (via <code>...</code>).</p></li>
+</ul>
+<p>The iteration protocol connects these two groups via the interface <code>Iterable</code>: data sources deliver their contents sequentially “through it”; data consumers get their input via it.</p>
+<figure>
+<img src="img-book/28b806aaf76a8d70489bd6d28e35f3e37a803ac2.svg" id="fig:iterable-implementers-clients" width="321" height="108" alt="Figure 18: Data consumers such as the for-of loop use the interface Iterable. Data sources such as Arrays implement that interface."><figcaption aria-hidden="true">Figure 18: Data consumers such as the <code>for-of</code> loop use the interface <code>Iterable</code>. Data sources such as <code>Arrays</code> implement that interface.</figcaption>
+</figure>
+<p>Fig.&nbsp;<a href="#fig:iterable-implementers-clients">18</a> illustrates how iteration works: data consumers use the interface <code>Iterable</code>; data sources implement it.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>The JavaScript way of implementing interfaces</strong></p>
+<p>In JavaScript, an object <em>implements</em> an interface if it has all the methods that it describes. The interfaces mentioned in this chapter only exist in the ECMAScript specification.</p>
+</div>
+<p>Both sources and consumers of data profit from this arrangement:</p>
+<ul>
+<li><p>If you develop a new data structure, you only need to implement <code>Iterable</code> and a raft of tools can immediately be applied to it.</p></li>
+<li><p>If you write code that uses iteration, it automatically works with many sources of data.</p></li>
+</ul>
+<h3 id="iterable-iterator-iteratorresult">30.2 Core iteration constructs: iterables and iterators</h3>
+<p><a id="index-entry-377" class="index-entry"></a><a id="index-entry-378" class="index-entry"></a> <a id="index-entry-379" class="index-entry"></a><a id="index-entry-380" class="index-entry"></a></p>
+<p>Two roles (described by interfaces) form the core of iteration (fig.&nbsp;<a href="#fig:iteration-protocol">19</a>):</p>
+<ul>
+<li>An <em>iterable</em> is an object whose contents can be traversed sequentially.</li>
+<li>An <em>iterator</em> is the pointer used for the traversal.</li>
+</ul>
+<figure>
+<img src="img-book/c51dfce10b0efd9823cd4ea38a813afdc854d274.svg" id="fig:iteration-protocol" width="413" height="83" alt="Figure 19: Iteration has two main interfaces: Iterable and Iterator. The former has a method that returns the latter."><figcaption aria-hidden="true">Figure 19: Iteration has two main interfaces: <code>Iterable</code> and <code>Iterator</code>. The former has a method that returns the latter.</figcaption>
+</figure>
+<p>These are type definitions (in TypeScript’s notation) for the interfaces of the iteration protocol:</p>
+<div class="sourceCode" id="cb801"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb801-1"><a href="ch_sync-iteration.html#cb801-1" aria-hidden="true" tabindex="-1"></a>interface Iterable<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb801-2"><a href="ch_sync-iteration.html#cb801-2" aria-hidden="true" tabindex="-1"></a>  [Symbol<span class="op">.</span><span class="at">iterator</span>]() <span class="op">:</span> Iterator<span class="op">&lt;</span>T<span class="op">&gt;;</span></span>
+<span id="cb801-3"><a href="ch_sync-iteration.html#cb801-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb801-4"><a href="ch_sync-iteration.html#cb801-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb801-5"><a href="ch_sync-iteration.html#cb801-5" aria-hidden="true" tabindex="-1"></a>interface Iterator<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb801-6"><a href="ch_sync-iteration.html#cb801-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">next</span>() <span class="op">:</span> IteratorResult<span class="op">&lt;</span>T<span class="op">&gt;;</span></span>
+<span id="cb801-7"><a href="ch_sync-iteration.html#cb801-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb801-8"><a href="ch_sync-iteration.html#cb801-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb801-9"><a href="ch_sync-iteration.html#cb801-9" aria-hidden="true" tabindex="-1"></a>interface IteratorResult<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb801-10"><a href="ch_sync-iteration.html#cb801-10" aria-hidden="true" tabindex="-1"></a>  value<span class="op">:</span> T<span class="op">;</span></span>
+<span id="cb801-11"><a href="ch_sync-iteration.html#cb801-11" aria-hidden="true" tabindex="-1"></a>  done<span class="op">:</span> <span class="dt">boolean</span><span class="op">;</span></span>
+<span id="cb801-12"><a href="ch_sync-iteration.html#cb801-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The interfaces are used as follows:</p>
+<ul>
+<li>You ask an <code>Iterable</code> for an iterator via the method whose key is <code>Symbol.iterator</code>.</li>
+<li>The <code>Iterator</code> returns the iterated values via its method <code>.next()</code>.</li>
+<li>The values are not returned directly, but wrapped in objects with two properties:
+<ul>
+<li><code>.value</code> is the iterated value.</li>
+<li><code>.done</code> indicates if the end of the iteration has been reached yet. It is <code>true</code> after the last iterated value and <code>false</code> beforehand.</li>
+</ul></li>
+</ul>
+<h3 id="iterating-manually">30.3 Iterating manually</h3>
+<p>This is an example of using the iteration protocol:</p>
+<div class="sourceCode" id="cb802"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb802-1"><a href="ch_sync-iteration.html#cb802-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> iterable <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb802-2"><a href="ch_sync-iteration.html#cb802-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb802-3"><a href="ch_sync-iteration.html#cb802-3" aria-hidden="true" tabindex="-1"></a><span class="co">// The iterable is a factory for iterators:</span></span>
+<span id="cb802-4"><a href="ch_sync-iteration.html#cb802-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> iterator <span class="op">=</span> iterable[<span class="bu">Symbol</span><span class="op">.</span><span class="at">iterator</span>]()<span class="op">;</span></span>
+<span id="cb802-5"><a href="ch_sync-iteration.html#cb802-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb802-6"><a href="ch_sync-iteration.html#cb802-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Call .next() until .done is true:</span></span>
+<span id="cb802-7"><a href="ch_sync-iteration.html#cb802-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb802-8"><a href="ch_sync-iteration.html#cb802-8" aria-hidden="true" tabindex="-1"></a>  iterator<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span> { <span class="dt">value</span><span class="op">:</span> <span class="st">'a'</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span> })<span class="op">;</span></span>
+<span id="cb802-9"><a href="ch_sync-iteration.html#cb802-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb802-10"><a href="ch_sync-iteration.html#cb802-10" aria-hidden="true" tabindex="-1"></a>  iterator<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span> { <span class="dt">value</span><span class="op">:</span> <span class="st">'b'</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">false</span> })<span class="op">;</span></span>
+<span id="cb802-11"><a href="ch_sync-iteration.html#cb802-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb802-12"><a href="ch_sync-iteration.html#cb802-12" aria-hidden="true" tabindex="-1"></a>  iterator<span class="op">.</span><span class="fu">next</span>()<span class="op">,</span> { <span class="dt">value</span><span class="op">:</span> <span class="kw">undefined</span><span class="op">,</span> <span class="dt">done</span><span class="op">:</span> <span class="kw">true</span> })<span class="op">;</span></span></code></pre></div>
+<h4 id="iterating-over-an-iterable-via-while">30.3.1 Iterating over an iterable via <code>while</code></h4>
+<p>The following code demonstrates how to use a <code>while</code> loop to iterate over an iterable:</p>
+<div class="sourceCode" id="cb803"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb803-1"><a href="ch_sync-iteration.html#cb803-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">logAll</span>(iterable) {</span>
+<span id="cb803-2"><a href="ch_sync-iteration.html#cb803-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> iterator <span class="op">=</span> iterable[<span class="bu">Symbol</span><span class="op">.</span><span class="at">iterator</span>]()<span class="op">;</span></span>
+<span id="cb803-3"><a href="ch_sync-iteration.html#cb803-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (<span class="kw">true</span>) {</span>
+<span id="cb803-4"><a href="ch_sync-iteration.html#cb803-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> {value<span class="op">,</span> done} <span class="op">=</span> iterator<span class="op">.</span><span class="fu">next</span>()<span class="op">;</span></span>
+<span id="cb803-5"><a href="ch_sync-iteration.html#cb803-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (done) <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb803-6"><a href="ch_sync-iteration.html#cb803-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(value)<span class="op">;</span></span>
+<span id="cb803-7"><a href="ch_sync-iteration.html#cb803-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb803-8"><a href="ch_sync-iteration.html#cb803-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb803-9"><a href="ch_sync-iteration.html#cb803-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb803-10"><a href="ch_sync-iteration.html#cb803-10" aria-hidden="true" tabindex="-1"></a><span class="fu">logAll</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span>
+<span id="cb803-11"><a href="ch_sync-iteration.html#cb803-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb803-12"><a href="ch_sync-iteration.html#cb803-12" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb803-13"><a href="ch_sync-iteration.html#cb803-13" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Using sync iteration manually</strong></p>
+<p><code>exercises/sync-iteration-use/sync_iteration_manually_exrc.mjs</code></p>
+</div>
+<h3 id="iteration-in-practice">30.4 Iteration in practice</h3>
+<p>We have seen how to use the iteration protocol manually, and it is relatively cumbersome. But the protocol is not meant to be used directly – it is meant to be used via higher-level language constructs built on top of it. This section shows what that looks like.</p>
+<h4 id="iterating-over-arrays">30.4.1 Iterating over Arrays</h4>
+<p>JavaScript’s Arrays are iterable. That enables us to use the <code>for-of</code> loop:</p>
+<div class="sourceCode" id="cb804"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb804-1"><a href="ch_sync-iteration.html#cb804-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> myArray <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb804-2"><a href="ch_sync-iteration.html#cb804-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb804-3"><a href="ch_sync-iteration.html#cb804-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> myArray) {</span>
+<span id="cb804-4"><a href="ch_sync-iteration.html#cb804-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb804-5"><a href="ch_sync-iteration.html#cb804-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb804-6"><a href="ch_sync-iteration.html#cb804-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb804-7"><a href="ch_sync-iteration.html#cb804-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb804-8"><a href="ch_sync-iteration.html#cb804-8" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span>
+<span id="cb804-9"><a href="ch_sync-iteration.html#cb804-9" aria-hidden="true" tabindex="-1"></a><span class="co">// 'c'</span></span></code></pre></div>
+<p>Destructuring via Array patterns (explained later) also uses iteration under the hood:</p>
+<div class="sourceCode" id="cb805"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb805-1"><a href="ch_sync-iteration.html#cb805-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [first<span class="op">,</span> second] <span class="op">=</span> myArray<span class="op">;</span></span>
+<span id="cb805-2"><a href="ch_sync-iteration.html#cb805-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(first<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb805-3"><a href="ch_sync-iteration.html#cb805-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(second<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="iterating-over-sets">30.4.2 Iterating over Sets</h4>
+<p>JavaScript’s Set data structure is iterable. That means <code>for-of</code> works:</p>
+<div class="sourceCode" id="cb806"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb806-1"><a href="ch_sync-iteration.html#cb806-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> mySet <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">.</span><span class="fu">add</span>(<span class="st">'a'</span>)<span class="op">.</span><span class="fu">add</span>(<span class="st">'b'</span>)<span class="op">.</span><span class="fu">add</span>(<span class="st">'c'</span>)<span class="op">;</span></span>
+<span id="cb806-2"><a href="ch_sync-iteration.html#cb806-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb806-3"><a href="ch_sync-iteration.html#cb806-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> mySet) {</span>
+<span id="cb806-4"><a href="ch_sync-iteration.html#cb806-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb806-5"><a href="ch_sync-iteration.html#cb806-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb806-6"><a href="ch_sync-iteration.html#cb806-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb806-7"><a href="ch_sync-iteration.html#cb806-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb806-8"><a href="ch_sync-iteration.html#cb806-8" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span>
+<span id="cb806-9"><a href="ch_sync-iteration.html#cb806-9" aria-hidden="true" tabindex="-1"></a><span class="co">// 'c'</span></span></code></pre></div>
+<p>As does Array-destructuring:</p>
+<div class="sourceCode" id="cb807"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb807-1"><a href="ch_sync-iteration.html#cb807-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [first<span class="op">,</span> second] <span class="op">=</span> mySet<span class="op">;</span></span>
+<span id="cb807-2"><a href="ch_sync-iteration.html#cb807-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(first<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb807-3"><a href="ch_sync-iteration.html#cb807-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(second<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="quick-reference-synchronous-iteration">30.5 Quick reference: synchronous iteration</h3>
+<h4 id="iterable-data-sources">30.5.1 Iterable data sources</h4>
+<p>The following built-in data sources are iterable:</p>
+<ul>
+<li>Arrays</li>
+<li>Strings</li>
+<li>Maps</li>
+<li>Sets</li>
+<li>(Browsers: DOM data structures)</li>
+</ul>
+<p>To iterate over the properties of objects, you need helpers such as <code>Object.keys()</code> and <code>Object.entries()</code>. That is necessary because properties exist at a different level that is independent of the level of data structures.</p>
+<h4 id="iterating-constructs">30.5.2 Iterating constructs</h4>
+<p>The following constructs are based on iteration:</p>
+<ul>
+<li><p>Destructuring via an Array pattern:</p>
+<div class="sourceCode" id="cb808"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb808-1"><a href="ch_sync-iteration.html#cb808-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [x<span class="op">,</span>y] <span class="op">=</span> iterable<span class="op">;</span></span></code></pre></div></li>
+<li><p>The <code>for-of</code> loop:</p>
+<div class="sourceCode" id="cb809"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb809-1"><a href="ch_sync-iteration.html#cb809-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> iterable) { <span class="co">/*···*/</span> }</span></code></pre></div></li>
+<li><p><code>Array.from()</code>:</p>
+<div class="sourceCode" id="cb810"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb810-1"><a href="ch_sync-iteration.html#cb810-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>(iterable)<span class="op">;</span></span></code></pre></div></li>
+<li><p>Spreading (via <code>...</code>) into function calls and Array literals:</p>
+<div class="sourceCode" id="cb811"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb811-1"><a href="ch_sync-iteration.html#cb811-1" aria-hidden="true" tabindex="-1"></a><span class="fu">func</span>(<span class="op">...</span>iterable)<span class="op">;</span></span>
+<span id="cb811-2"><a href="ch_sync-iteration.html#cb811-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="op">...</span>iterable]<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>new Map()</code> and <code>new Set()</code>:</p>
+<div class="sourceCode" id="cb812"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb812-1"><a href="ch_sync-iteration.html#cb812-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> m <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>(iterableOverKeyValuePairs)<span class="op">;</span></span>
+<span id="cb812-2"><a href="ch_sync-iteration.html#cb812-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> s <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>(iterableOverElements)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>Promise.all()</code> and <code>Promise.race()</code>:</p>
+<div class="sourceCode" id="cb813"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb813-1"><a href="ch_sync-iteration.html#cb813-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> promise1 <span class="op">=</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>(iterableOverPromises)<span class="op">;</span></span>
+<span id="cb813-2"><a href="ch_sync-iteration.html#cb813-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> promise2 <span class="op">=</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">race</span>(iterableOverPromises)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>yield*</code>:</p>
+<div class="sourceCode" id="cb814"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb814-1"><a href="ch_sync-iteration.html#cb814-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="op">*</span> <span class="fu">generatorFunction</span>() {</span>
+<span id="cb814-2"><a href="ch_sync-iteration.html#cb814-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span><span class="op">*</span> iterable<span class="op">;</span></span>
+<span id="cb814-3"><a href="ch_sync-iteration.html#cb814-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/21">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_arrays.html">31 Arrays (<code>Array</code>)</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

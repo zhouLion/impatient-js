@@ -1,0 +1,82 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_weaksets">36 WeakSets (<code>WeakSet</code>) (advanced)</h2>
+<p><a id="index-entry-426" class="index-entry"></a><a id="index-entry-427" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>36.1 <a href="ch_weaksets.html#example-marking-objects-as-safe-to-use-with-a-method">Example: Marking objects as safe to use with a method</a></li>
+<li>36.2 <a href="ch_weaksets.html#weakset-api">WeakSet API</a></li>
+</ul>
+</div>
+<hr>
+<p>WeakSets are similar to Sets, with the following differences:</p>
+<ul>
+<li><p>They can hold objects without preventing those objects from being garbage-collected.</p></li>
+<li><p>They are black boxes: we only get any data out of a WeakSet if we have both the WeakSet and a value. The only methods that are supported are <code>.add()</code>, <code>.delete()</code>, <code>.has()</code>. Consult the section on <a href="ch_weakmaps.html#weakmaps-as-black-boxes">WeakMaps as black boxes</a> for an explanation of why WeakSets don’t allow iteration, looping, and clearing.</p></li>
+</ul>
+<p>Given that we can’t iterate over their elements, there are not that many use cases for WeakSets. They do enable us to mark objects.</p>
+<h3 id="example-marking-objects-as-safe-to-use-with-a-method">36.1 Example: Marking objects as safe to use with a method</h3>
+<p>The following code demonstrates how a class can ensure that its methods are only applied to instances that were created by it (based on <a href="https://mail.mozilla.org/pipermail/es-discuss/2015-June/043027.html">code by Domenic Denicola</a>):</p>
+<div class="sourceCode" id="cb1047"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1047-1"><a href="ch_weaksets.html#cb1047-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> instancesOfSafeClass <span class="op">=</span> <span class="kw">new</span> <span class="bu">WeakSet</span>()<span class="op">;</span></span>
+<span id="cb1047-2"><a href="ch_weaksets.html#cb1047-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1047-3"><a href="ch_weaksets.html#cb1047-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SafeClass {</span>
+<span id="cb1047-4"><a href="ch_weaksets.html#cb1047-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>() {</span>
+<span id="cb1047-5"><a href="ch_weaksets.html#cb1047-5" aria-hidden="true" tabindex="-1"></a>    instancesOfSafeClass<span class="op">.</span><span class="fu">add</span>(<span class="kw">this</span>)<span class="op">;</span></span>
+<span id="cb1047-6"><a href="ch_weaksets.html#cb1047-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1047-7"><a href="ch_weaksets.html#cb1047-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1047-8"><a href="ch_weaksets.html#cb1047-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">method</span>() {</span>
+<span id="cb1047-9"><a href="ch_weaksets.html#cb1047-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="op">!</span>instancesOfSafeClass<span class="op">.</span><span class="fu">has</span>(<span class="kw">this</span>)) {</span>
+<span id="cb1047-10"><a href="ch_weaksets.html#cb1047-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">TypeError</span>(<span class="st">'Incompatible object!'</span>)<span class="op">;</span></span>
+<span id="cb1047-11"><a href="ch_weaksets.html#cb1047-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1047-12"><a href="ch_weaksets.html#cb1047-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1047-13"><a href="ch_weaksets.html#cb1047-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1047-14"><a href="ch_weaksets.html#cb1047-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1047-15"><a href="ch_weaksets.html#cb1047-15" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> safeInstance <span class="op">=</span> <span class="kw">new</span> <span class="fu">SafeClass</span>()<span class="op">;</span></span>
+<span id="cb1047-16"><a href="ch_weaksets.html#cb1047-16" aria-hidden="true" tabindex="-1"></a>safeInstance<span class="op">.</span><span class="fu">method</span>()<span class="op">;</span> <span class="co">// works</span></span>
+<span id="cb1047-17"><a href="ch_weaksets.html#cb1047-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1047-18"><a href="ch_weaksets.html#cb1047-18" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb1047-19"><a href="ch_weaksets.html#cb1047-19" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> {</span>
+<span id="cb1047-20"><a href="ch_weaksets.html#cb1047-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> obj <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb1047-21"><a href="ch_weaksets.html#cb1047-21" aria-hidden="true" tabindex="-1"></a>    SafeClass<span class="op">.</span><span class="at">prototype</span><span class="op">.</span><span class="at">method</span><span class="op">.</span><span class="fu">call</span>(obj)<span class="op">;</span> <span class="co">// throws an exception</span></span>
+<span id="cb1047-22"><a href="ch_weaksets.html#cb1047-22" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb1047-23"><a href="ch_weaksets.html#cb1047-23" aria-hidden="true" tabindex="-1"></a>  <span class="bu">TypeError</span></span>
+<span id="cb1047-24"><a href="ch_weaksets.html#cb1047-24" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<h3 id="weakset-api">36.2 WeakSet API</h3>
+<p>The constructor and the three methods of <code>WeakSet</code> work the same as <a href="ch_sets.html#quickref-sets">their <code>Set</code> equivalents</a>:</p>
+<ul>
+<li><code>new WeakSet&lt;T&gt;(values?: Iterable&lt;T&gt;)</code> <sup>[ES6]</sup></li>
+<li><code>.add(value: T): this</code> <sup>[ES6]</sup></li>
+<li><code>.delete(value: T): boolean</code> <sup>[ES6]</sup></li>
+<li><code>.has(value: T): boolean</code> <sup>[ES6]</sup></li>
+</ul>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/38">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_destructuring.html">37 Destructuring</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

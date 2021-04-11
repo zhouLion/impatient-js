@@ -1,0 +1,178 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_assertion-api">9 Assertion API</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>9.1 <a href="ch_assertion-api.html#assertions-in-software-development">Assertions in software development</a></li>
+<li>9.2 <a href="ch_assertion-api.html#how-assertions-are-used-in-this-book">How assertions are used in this book</a>
+<ul>
+<li>9.2.1 <a href="ch_assertion-api.html#documenting-results-in-code-examples-via-assertions">Documenting results in code examples via assertions</a></li>
+<li>9.2.2 <a href="ch_assertion-api.html#implementing-test-driven-exercises-via-assertions">Implementing test-driven exercises via assertions</a></li>
+</ul></li>
+<li>9.3 <a href="ch_assertion-api.html#normal-comparison-vs.-deep-comparison">Normal comparison vs.&nbsp;deep comparison</a></li>
+<li>9.4 <a href="ch_assertion-api.html#quick-reference-module-assert">Quick reference: module <code>assert</code></a>
+<ul>
+<li>9.4.1 <a href="ch_assertion-api.html#normal-equality">Normal equality</a></li>
+<li>9.4.2 <a href="ch_assertion-api.html#deep-equality">Deep equality</a></li>
+<li>9.4.3 <a href="ch_assertion-api.html#expecting-exceptions">Expecting exceptions</a></li>
+<li>9.4.4 <a href="ch_assertion-api.html#another-tool-function">Another tool function</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<h3 id="assertions-in-software-development">9.1 Assertions in software development</h3>
+<p><a id="index-entry-39" class="index-entry"></a></p>
+<p>In software development, <em>assertions</em> state facts about values or pieces of code that must be true. If they aren’t, an exception is thrown. Node.js supports assertions via its built-in module <code>assert</code> – for example:</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb81-1"><a href="ch_assertion-api.html#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> assert <span class="im">from</span> <span class="st">'assert/strict'</span><span class="op">;</span></span>
+<span id="cb81-2"><a href="ch_assertion-api.html#cb81-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">3</span> <span class="op">+</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">8</span>)<span class="op">;</span></span></code></pre></div>
+<p>This assertion states that the expected result of 3 plus 5 is 8. The import statement uses <a href="https://nodejs.org/api/assert.html#assert_strict_mode">the recommended <code>strict</code> version</a> of <code>assert</code>.</p>
+<h3 id="how-assertions-are-used-in-this-book">9.2 How assertions are used in this book</h3>
+<p>In this book, assertions are used in two ways: to document results in code examples and to implement test-driven exercises.</p>
+<h4 id="documenting-results-in-code-examples-via-assertions">9.2.1 Documenting results in code examples via assertions</h4>
+<p>In code examples, assertions express expected results. Take, for example, the following function:</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb82-1"><a href="ch_assertion-api.html#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">id</span>(x) {</span>
+<span id="cb82-2"><a href="ch_assertion-api.html#cb82-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x<span class="op">;</span></span>
+<span id="cb82-3"><a href="ch_assertion-api.html#cb82-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>id()</code> returns its parameter. We can show it in action via an assertion:</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb83-1"><a href="ch_assertion-api.html#cb83-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">id</span>(<span class="st">'abc'</span>)<span class="op">,</span> <span class="st">'abc'</span>)<span class="op">;</span></span></code></pre></div>
+<p>In the examples, I usually omit the statement for importing <code>assert</code>.</p>
+<p>The motivation behind using assertions is:</p>
+<ul>
+<li>You can specify precisely what is expected.</li>
+<li>Code examples can be tested automatically, which ensures that they really work.</li>
+</ul>
+<h4 id="implementing-test-driven-exercises-via-assertions">9.2.2 Implementing test-driven exercises via assertions</h4>
+<p>The exercises for this book are test-driven, via the test framework Mocha. Checks inside the tests are made via methods of <code>assert</code>.</p>
+<p>The following is an example of such a test:</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb84-1"><a href="ch_assertion-api.html#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co">// For the exercise, you must implement the function hello().</span></span>
+<span id="cb84-2"><a href="ch_assertion-api.html#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="co">// The test checks if you have done it properly.</span></span>
+<span id="cb84-3"><a href="ch_assertion-api.html#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">'First exercise'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb84-4"><a href="ch_assertion-api.html#cb84-4" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">hello</span>(<span class="st">'world'</span>)<span class="op">,</span> <span class="st">'Hello world!'</span>)<span class="op">;</span></span>
+<span id="cb84-5"><a href="ch_assertion-api.html#cb84-5" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">hello</span>(<span class="st">'Jane'</span>)<span class="op">,</span> <span class="st">'Hello Jane!'</span>)<span class="op">;</span></span>
+<span id="cb84-6"><a href="ch_assertion-api.html#cb84-6" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">hello</span>(<span class="st">'John'</span>)<span class="op">,</span> <span class="st">'Hello John!'</span>)<span class="op">;</span></span>
+<span id="cb84-7"><a href="ch_assertion-api.html#cb84-7" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">hello</span>(<span class="st">''</span>)<span class="op">,</span> <span class="st">'Hello !'</span>)<span class="op">;</span></span>
+<span id="cb84-8"><a href="ch_assertion-api.html#cb84-8" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>For more information, consult <a href="ch_quizzes-exercises.html">§10 “Getting started with quizzes and exercises”</a>.</p>
+<h3 id="normal-comparison-vs.-deep-comparison">9.3 Normal comparison vs.&nbsp;deep comparison</h3>
+<p>The strict <code>equal()</code> uses <code>===</code> to compare values. Therefore, an object is only equal to itself – even if another object has the same content (because <code>===</code> does not compare the contents of objects, only their identities):</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb85-1"><a href="ch_assertion-api.html#cb85-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">notEqual</span>({<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span>}<span class="op">,</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span>})<span class="op">;</span></span></code></pre></div>
+<p><code>deepEqual()</code> is a better choice for comparing objects:</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb86-1"><a href="ch_assertion-api.html#cb86-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>({<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span>}<span class="op">,</span> {<span class="dt">foo</span><span class="op">:</span> <span class="dv">1</span>})<span class="op">;</span></span></code></pre></div>
+<p>This method works for Arrays, too:</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb87-1"><a href="ch_assertion-api.html#cb87-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">notEqual</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>])<span class="op">;</span></span>
+<span id="cb87-2"><a href="ch_assertion-api.html#cb87-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>])<span class="op">;</span></span></code></pre></div>
+<h3 id="quick-reference-module-assert">9.4 Quick reference: module <code>assert</code></h3>
+<p><a id="index-entry-40" class="index-entry"></a></p>
+<p>For the full documentation, see <a href="https://nodejs.org/api/assert.html">the Node.js docs</a>.</p>
+<h4 id="normal-equality">9.4.1 Normal equality</h4>
+<ul>
+<li><p><code>function equal(actual: any, expected: any, message?: string): void</code></p>
+<p><code>actual === expected</code> must be <code>true</code>. If not, an <code>AssertionError</code> is thrown.</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb88-1"><a href="ch_assertion-api.html#cb88-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">3</span><span class="op">+</span><span class="dv">3</span><span class="op">,</span> <span class="dv">6</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>function notEqual(actual: any, expected: any, message?: string): void</code></p>
+<p><code>actual !== expected</code> must be <code>true</code>. If not, an <code>AssertionError</code> is thrown.</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb89-1"><a href="ch_assertion-api.html#cb89-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">notEqual</span>(<span class="dv">3</span><span class="op">+</span><span class="dv">3</span><span class="op">,</span> <span class="dv">22</span>)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<p>The optional last parameter <code>message</code> can be used to explain what is asserted. If the assertion fails, the message is used to set up the <code>AssertionError</code> that is thrown.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb90-1"><a href="ch_assertion-api.html#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> e<span class="op">;</span></span>
+<span id="cb90-2"><a href="ch_assertion-api.html#cb90-2" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb90-3"><a href="ch_assertion-api.html#cb90-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> x <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb90-4"><a href="ch_assertion-api.html#cb90-4" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="dv">8</span><span class="op">,</span> <span class="st">'x must be equal to 8'</span>)</span>
+<span id="cb90-5"><a href="ch_assertion-api.html#cb90-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">catch</span> (err) {</span>
+<span id="cb90-6"><a href="ch_assertion-api.html#cb90-6" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb90-7"><a href="ch_assertion-api.html#cb90-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">String</span>(err)<span class="op">,</span></span>
+<span id="cb90-8"><a href="ch_assertion-api.html#cb90-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'AssertionError [ERR_ASSERTION]: x must be equal to 8'</span>)<span class="op">;</span></span>
+<span id="cb90-9"><a href="ch_assertion-api.html#cb90-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="deep-equality">9.4.2 Deep equality</h4>
+<ul>
+<li><p><code>function deepEqual(actual: any, expected: any, message?: string): void</code></p>
+<p><code>actual</code> must be deeply equal to <code>expected</code>. If not, an <code>AssertionError</code> is thrown.</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb91-1"><a href="ch_assertion-api.html#cb91-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>]<span class="op">,</span> [<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>])<span class="op">;</span></span>
+<span id="cb91-2"><a href="ch_assertion-api.html#cb91-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>([]<span class="op">,</span> [])<span class="op">;</span></span>
+<span id="cb91-3"><a href="ch_assertion-api.html#cb91-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-4"><a href="ch_assertion-api.html#cb91-4" aria-hidden="true" tabindex="-1"></a><span class="co">// To .equal(), an object is only equal to itself:</span></span>
+<span id="cb91-5"><a href="ch_assertion-api.html#cb91-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">notEqual</span>([]<span class="op">,</span> [])<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>function notDeepEqual(actual: any, expected: any, message?: string): void</code></p>
+<p><code>actual</code> must not be deeply equal to <code>expected</code>. If it is, an <code>AssertionError</code> is thrown.</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb92-1"><a href="ch_assertion-api.html#cb92-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">notDeepEqual</span>([<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>]<span class="op">,</span> [<span class="dv">1</span><span class="op">,</span><span class="dv">2</span>])<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="expecting-exceptions">9.4.3 Expecting exceptions</h4>
+<p>If you want to (or expect to) receive an exception, you need <code>throws()</code>: This function calls its first parameter, the function <code>block</code>, and only succeeds if it throws an exception. Additional parameters can be used to specify what that exception must look like.</p>
+<ul>
+<li><p><code>function throws(block: Function, message?: string): void</code></p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb93-1"><a href="ch_assertion-api.html#cb93-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb93-2"><a href="ch_assertion-api.html#cb93-2" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> {</span>
+<span id="cb93-3"><a href="ch_assertion-api.html#cb93-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">null</span><span class="op">.</span><span class="at">prop</span><span class="op">;</span></span>
+<span id="cb93-4"><a href="ch_assertion-api.html#cb93-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb93-5"><a href="ch_assertion-api.html#cb93-5" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>function throws(block: Function, error: Function, message?: string): void</code></p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb94-1"><a href="ch_assertion-api.html#cb94-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb94-2"><a href="ch_assertion-api.html#cb94-2" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> {</span>
+<span id="cb94-3"><a href="ch_assertion-api.html#cb94-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">null</span><span class="op">.</span><span class="at">prop</span><span class="op">;</span></span>
+<span id="cb94-4"><a href="ch_assertion-api.html#cb94-4" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb94-5"><a href="ch_assertion-api.html#cb94-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">TypeError</span></span>
+<span id="cb94-6"><a href="ch_assertion-api.html#cb94-6" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>function throws(block: Function, error: RegExp, message?: string): void</code></p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb95-1"><a href="ch_assertion-api.html#cb95-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb95-2"><a href="ch_assertion-api.html#cb95-2" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> {</span>
+<span id="cb95-3"><a href="ch_assertion-api.html#cb95-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">null</span><span class="op">.</span><span class="at">prop</span><span class="op">;</span></span>
+<span id="cb95-4"><a href="ch_assertion-api.html#cb95-4" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb95-5"><a href="ch_assertion-api.html#cb95-5" aria-hidden="true" tabindex="-1"></a>  <span class="ss">/</span><span class="sc">^</span><span class="ss">TypeError: Cannot read property 'prop' of null</span><span class="sc">$</span><span class="ss">/</span></span>
+<span id="cb95-6"><a href="ch_assertion-api.html#cb95-6" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div></li>
+<li><p><code>function throws(block: Function, error: Object, message?: string): void</code></p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb96-1"><a href="ch_assertion-api.html#cb96-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb96-2"><a href="ch_assertion-api.html#cb96-2" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> {</span>
+<span id="cb96-3"><a href="ch_assertion-api.html#cb96-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">null</span><span class="op">.</span><span class="at">prop</span><span class="op">;</span></span>
+<span id="cb96-4"><a href="ch_assertion-api.html#cb96-4" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb96-5"><a href="ch_assertion-api.html#cb96-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb96-6"><a href="ch_assertion-api.html#cb96-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">'TypeError'</span><span class="op">,</span></span>
+<span id="cb96-7"><a href="ch_assertion-api.html#cb96-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">message</span><span class="op">:</span> <span class="vs">`Cannot read property 'prop' of null`</span><span class="op">,</span></span>
+<span id="cb96-8"><a href="ch_assertion-api.html#cb96-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb96-9"><a href="ch_assertion-api.html#cb96-9" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="another-tool-function">9.4.4 Another tool function</h4>
+<ul>
+<li><p><code>function fail(message: string | Error): never</code></p>
+<p>Always throws an <code>AssertionError</code> when it is called. That is occasionally useful for unit testing.</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb97-1"><a href="ch_assertion-api.html#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb97-2"><a href="ch_assertion-api.html#cb97-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">functionThatShouldThrow</span>()<span class="op">;</span></span>
+<span id="cb97-3"><a href="ch_assertion-api.html#cb97-3" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">fail</span>()<span class="op">;</span></span>
+<span id="cb97-4"><a href="ch_assertion-api.html#cb97-4" aria-hidden="true" tabindex="-1"></a>} <span class="cf">catch</span> (_) {</span>
+<span id="cb97-5"><a href="ch_assertion-api.html#cb97-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Success</span></span>
+<span id="cb97-6"><a href="ch_assertion-api.html#cb97-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/3">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_quizzes-exercises.html">10 Getting started with quizzes and exercises</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

@@ -1,0 +1,382 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_destructuring">37 Destructuring</h2>
+<p><a id="index-entry-428" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>37.1 <a href="ch_destructuring.html#a-first-taste-of-destructuring">A first taste of destructuring</a></li>
+<li>37.2 <a href="ch_destructuring.html#constructing-vs.-extracting">Constructing vs.&nbsp;extracting</a></li>
+<li>37.3 <a href="ch_destructuring.html#where-can-we-destructure">Where can we destructure?</a></li>
+<li>37.4 <a href="ch_destructuring.html#object-destructuring">Object-destructuring</a>
+<ul>
+<li>37.4.1 <a href="ch_destructuring.html#property-value-shorthands">Property value shorthands</a></li>
+<li>37.4.2 <a href="ch_destructuring.html#rest-properties">Rest properties</a></li>
+<li>37.4.3 <a href="ch_destructuring.html#assigning-via-object-destructuring">Syntax pitfall: assigning via object destructuring</a></li>
+</ul></li>
+<li>37.5 <a href="ch_destructuring.html#array-destructuring">Array-destructuring</a>
+<ul>
+<li>37.5.1 <a href="ch_destructuring.html#array-destructuring-works-with-any-iterable">Array-destructuring works with any iterable</a></li>
+<li>37.5.2 <a href="ch_destructuring.html#rest-elements">Rest elements</a></li>
+</ul></li>
+<li>37.6 <a href="ch_destructuring.html#examples-of-destructuring">Examples of destructuring</a>
+<ul>
+<li>37.6.1 <a href="ch_destructuring.html#array-destructuring-swapping-variable-values">Array-destructuring: swapping variable values</a></li>
+<li>37.6.2 <a href="ch_destructuring.html#array-destructuring-operations-that-return-arrays">Array-destructuring: operations that return Arrays</a></li>
+<li>37.6.3 <a href="ch_destructuring.html#object-destructuring-multiple-return-values">Object-destructuring: multiple return values</a></li>
+</ul></li>
+<li>37.7 <a href="ch_destructuring.html#what-happens-if-a-pattern-part-does-not-match-anything">What happens if a pattern part does not match anything?</a>
+<ul>
+<li>37.7.1 <a href="ch_destructuring.html#object-destructuring-and-missing-properties">Object-destructuring and missing properties</a></li>
+<li>37.7.2 <a href="ch_destructuring.html#array-destructuring-and-missing-elements">Array-destructuring and missing elements</a></li>
+</ul></li>
+<li>37.8 <a href="ch_destructuring.html#what-values-cant-be-destructured">What values can’t be destructured?</a>
+<ul>
+<li>37.8.1 <a href="ch_destructuring.html#you-cant-object-destructure-undefined-and-null">You can’t object-destructure <code>undefined</code> and <code>null</code></a></li>
+<li>37.8.2 <a href="ch_destructuring.html#you-cant-array-destructure-non-iterable-values">You can’t Array-destructure non-iterable values</a></li>
+</ul></li>
+<li>37.9 <a href="ch_destructuring.html#advanced-4">(Advanced)</a></li>
+<li>37.10 <a href="ch_destructuring.html#default-values">Default values</a>
+<ul>
+<li>37.10.1 <a href="ch_destructuring.html#default-values-in-array-destructuring">Default values in Array-destructuring</a></li>
+<li>37.10.2 <a href="ch_destructuring.html#default-values-in-object-destructuring">Default values in object-destructuring</a></li>
+</ul></li>
+<li>37.11 <a href="ch_destructuring.html#parameter-definitions-are-similar-to-destructuring">Parameter definitions are similar to destructuring</a></li>
+<li>37.12 <a href="ch_destructuring.html#nested-destructuring">Nested destructuring</a></li>
+</ul>
+</div>
+<hr>
+<h3 id="a-first-taste-of-destructuring">37.1 A first taste of destructuring</h3>
+<p>With normal assignment, you extract one piece of data at a time – for example:</p>
+<div class="sourceCode" id="cb1048"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1048-1"><a href="ch_destructuring.html#cb1048-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb1048-2"><a href="ch_destructuring.html#cb1048-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> arr[<span class="dv">0</span>]<span class="op">;</span> <span class="co">// extract</span></span>
+<span id="cb1048-3"><a href="ch_destructuring.html#cb1048-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> y <span class="op">=</span> arr[<span class="dv">1</span>]<span class="op">;</span> <span class="co">// extract</span></span></code></pre></div>
+<p>With destructuring, you can extract multiple pieces of data at the same time via patterns in locations that receive data. The left-hand side of <code>=</code> in the previous code is one such location. In the following code, the square brackets in line A are a destructuring pattern:</p>
+<div class="sourceCode" id="cb1049"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1049-1"><a href="ch_destructuring.html#cb1049-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb1049-2"><a href="ch_destructuring.html#cb1049-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [x<span class="op">,</span> y] <span class="op">=</span> arr<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1049-3"><a href="ch_destructuring.html#cb1049-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb1049-4"><a href="ch_destructuring.html#cb1049-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(y<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span></code></pre></div>
+<p>This code does the same as the previous code.</p>
+<p>Note that the pattern is “smaller” than the data: we are only extracting what we need.</p>
+<h3 id="constructing-vs.-extracting">37.2 Constructing vs.&nbsp;extracting</h3>
+<p>In order to understand what destructuring is, consider that JavaScript has two kinds of operations that are opposites:</p>
+<ul>
+<li>You can <em>construct</em> compound data, for example, by setting properties and via object literals.</li>
+<li>You can <em>extract</em> data out of compound data, for example, by getting properties.</li>
+</ul>
+<p>Constructing data looks as follows:</p>
+<div class="sourceCode" id="cb1050"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1050-1"><a href="ch_destructuring.html#cb1050-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Constructing: one property at a time</span></span>
+<span id="cb1050-2"><a href="ch_destructuring.html#cb1050-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane1 <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb1050-3"><a href="ch_destructuring.html#cb1050-3" aria-hidden="true" tabindex="-1"></a>jane1<span class="op">.</span><span class="at">first</span> <span class="op">=</span> <span class="st">'Jane'</span><span class="op">;</span></span>
+<span id="cb1050-4"><a href="ch_destructuring.html#cb1050-4" aria-hidden="true" tabindex="-1"></a>jane1<span class="op">.</span><span class="at">last</span> <span class="op">=</span> <span class="st">'Doe'</span><span class="op">;</span></span>
+<span id="cb1050-5"><a href="ch_destructuring.html#cb1050-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1050-6"><a href="ch_destructuring.html#cb1050-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Constructing: multiple properties</span></span>
+<span id="cb1050-7"><a href="ch_destructuring.html#cb1050-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane2 <span class="op">=</span> {</span>
+<span id="cb1050-8"><a href="ch_destructuring.html#cb1050-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb1050-9"><a href="ch_destructuring.html#cb1050-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span><span class="op">,</span></span>
+<span id="cb1050-10"><a href="ch_destructuring.html#cb1050-10" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb1050-11"><a href="ch_destructuring.html#cb1050-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1050-12"><a href="ch_destructuring.html#cb1050-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(jane1<span class="op">,</span> jane2)<span class="op">;</span></span></code></pre></div>
+<p>Extracting data looks as follows:</p>
+<div class="sourceCode" id="cb1051"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1051-1"><a href="ch_destructuring.html#cb1051-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jane <span class="op">=</span> {</span>
+<span id="cb1051-2"><a href="ch_destructuring.html#cb1051-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb1051-3"><a href="ch_destructuring.html#cb1051-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span><span class="op">,</span></span>
+<span id="cb1051-4"><a href="ch_destructuring.html#cb1051-4" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb1051-5"><a href="ch_destructuring.html#cb1051-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1051-6"><a href="ch_destructuring.html#cb1051-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Extracting: one property at a time</span></span>
+<span id="cb1051-7"><a href="ch_destructuring.html#cb1051-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> f1 <span class="op">=</span> jane<span class="op">.</span><span class="at">first</span><span class="op">;</span></span>
+<span id="cb1051-8"><a href="ch_destructuring.html#cb1051-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> l1 <span class="op">=</span> jane<span class="op">.</span><span class="at">last</span><span class="op">;</span></span>
+<span id="cb1051-9"><a href="ch_destructuring.html#cb1051-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(f1<span class="op">,</span> <span class="st">'Jane'</span>)<span class="op">;</span></span>
+<span id="cb1051-10"><a href="ch_destructuring.html#cb1051-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(l1<span class="op">,</span> <span class="st">'Doe'</span>)<span class="op">;</span></span>
+<span id="cb1051-11"><a href="ch_destructuring.html#cb1051-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1051-12"><a href="ch_destructuring.html#cb1051-12" aria-hidden="true" tabindex="-1"></a><span class="co">// Extracting: multiple properties (NEW!)</span></span>
+<span id="cb1051-13"><a href="ch_destructuring.html#cb1051-13" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {<span class="dt">first</span><span class="op">:</span> f2<span class="op">,</span> <span class="dt">last</span><span class="op">:</span> l2} <span class="op">=</span> jane<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1051-14"><a href="ch_destructuring.html#cb1051-14" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(f2<span class="op">,</span> <span class="st">'Jane'</span>)<span class="op">;</span></span>
+<span id="cb1051-15"><a href="ch_destructuring.html#cb1051-15" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(l2<span class="op">,</span> <span class="st">'Doe'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The operation in line A is new: we declare two variables <code>f2</code> and <code>l2</code> and initialize them via <em>destructuring</em> (multivalue extraction).</p>
+<p>The following part of line A is a <em>destructuring pattern</em>:</p>
+<div class="sourceCode" id="cb1052"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1052-1"><a href="ch_destructuring.html#cb1052-1" aria-hidden="true" tabindex="-1"></a>{<span class="dt">first</span><span class="op">:</span> f2<span class="op">,</span> <span class="dt">last</span><span class="op">:</span> l2}</span></code></pre></div>
+<p>Destructuring patterns are syntactically similar to the literals that are used for multivalue construction. But they appear where data is received (e.g., at the left-hand sides of assignments), not where data is created (e.g., at the right-hand sides of assignments).</p>
+<h3 id="where-can-we-destructure">37.3 Where can we destructure?</h3>
+<p>Destructuring patterns can be used at “data sink locations” such as:</p>
+<ul>
+<li><p>Variable declarations:</p>
+<div class="sourceCode" id="cb1053"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1053-1"><a href="ch_destructuring.html#cb1053-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [a] <span class="op">=</span> [<span class="st">'x'</span>]<span class="op">;</span></span>
+<span id="cb1053-2"><a href="ch_destructuring.html#cb1053-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(a<span class="op">,</span> <span class="st">'x'</span>)<span class="op">;</span></span>
+<span id="cb1053-3"><a href="ch_destructuring.html#cb1053-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1053-4"><a href="ch_destructuring.html#cb1053-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> [b] <span class="op">=</span> [<span class="st">'y'</span>]<span class="op">;</span></span>
+<span id="cb1053-5"><a href="ch_destructuring.html#cb1053-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(b<span class="op">,</span> <span class="st">'y'</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p>Assignments:</p>
+<div class="sourceCode" id="cb1054"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1054-1"><a href="ch_destructuring.html#cb1054-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">;</span></span>
+<span id="cb1054-2"><a href="ch_destructuring.html#cb1054-2" aria-hidden="true" tabindex="-1"></a>[b] <span class="op">=</span> [<span class="st">'z'</span>]<span class="op">;</span></span>
+<span id="cb1054-3"><a href="ch_destructuring.html#cb1054-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(b<span class="op">,</span> <span class="st">'z'</span>)<span class="op">;</span></span></code></pre></div></li>
+<li><p>Parameter definitions:</p>
+<div class="sourceCode" id="cb1055"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1055-1"><a href="ch_destructuring.html#cb1055-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> f <span class="op">=</span> ([x]) <span class="kw">=&gt;</span> x<span class="op">;</span></span>
+<span id="cb1055-2"><a href="ch_destructuring.html#cb1055-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">f</span>([<span class="st">'a'</span>])<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<p>Note that variable declarations include <code>const</code> and <code>let</code> declarations in <code>for-of</code> loops:</p>
+<div class="sourceCode" id="cb1056"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1056-1"><a href="ch_destructuring.html#cb1056-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb1056-2"><a href="ch_destructuring.html#cb1056-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> [index<span class="op">,</span> element] <span class="kw">of</span> arr<span class="op">.</span><span class="fu">entries</span>()) {</span>
+<span id="cb1056-3"><a href="ch_destructuring.html#cb1056-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(index<span class="op">,</span> element)<span class="op">;</span></span>
+<span id="cb1056-4"><a href="ch_destructuring.html#cb1056-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1056-5"><a href="ch_destructuring.html#cb1056-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1056-6"><a href="ch_destructuring.html#cb1056-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 0, 'a'</span></span>
+<span id="cb1056-7"><a href="ch_destructuring.html#cb1056-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 1, 'b'</span></span></code></pre></div>
+<p>In <span data-refcheck="#object-destructuring #array-destructuring">the next two sections</span>, we’ll look deeper into the two kinds of destructuring: object-destructuring and Array-destructuring.</p>
+<h3 id="object-destructuring">37.4 Object-destructuring</h3>
+<p><a id="index-entry-429" class="index-entry"></a><a id="index-entry-430" class="index-entry"></a></p>
+<p><em>Object-destructuring</em> lets you batch-extract values of properties via patterns that look like object literals:</p>
+<div class="sourceCode" id="cb1057"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1057-1"><a href="ch_destructuring.html#cb1057-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> address <span class="op">=</span> {</span>
+<span id="cb1057-2"><a href="ch_destructuring.html#cb1057-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">street</span><span class="op">:</span> <span class="st">'Evergreen Terrace'</span><span class="op">,</span></span>
+<span id="cb1057-3"><a href="ch_destructuring.html#cb1057-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">number</span><span class="op">:</span> <span class="st">'742'</span><span class="op">,</span></span>
+<span id="cb1057-4"><a href="ch_destructuring.html#cb1057-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">city</span><span class="op">:</span> <span class="st">'Springfield'</span><span class="op">,</span></span>
+<span id="cb1057-5"><a href="ch_destructuring.html#cb1057-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">state</span><span class="op">:</span> <span class="st">'NT'</span><span class="op">,</span></span>
+<span id="cb1057-6"><a href="ch_destructuring.html#cb1057-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">zip</span><span class="op">:</span> <span class="st">'49007'</span><span class="op">,</span></span>
+<span id="cb1057-7"><a href="ch_destructuring.html#cb1057-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb1057-8"><a href="ch_destructuring.html#cb1057-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1057-9"><a href="ch_destructuring.html#cb1057-9" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { <span class="dt">street</span><span class="op">:</span> s<span class="op">,</span> <span class="dt">city</span><span class="op">:</span> c } <span class="op">=</span> address<span class="op">;</span></span>
+<span id="cb1057-10"><a href="ch_destructuring.html#cb1057-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(s<span class="op">,</span> <span class="st">'Evergreen Terrace'</span>)<span class="op">;</span></span>
+<span id="cb1057-11"><a href="ch_destructuring.html#cb1057-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(c<span class="op">,</span> <span class="st">'Springfield'</span>)<span class="op">;</span></span></code></pre></div>
+<p>You can think of the pattern as a transparent sheet that you place over the data: the pattern key <code>'street'</code> has a match in the data. Therefore, the data value <code>'Evergreen Terrace'</code> is assigned to the pattern variable <code>s</code>.</p>
+<p>You can also object-destructure primitive values:</p>
+<div class="sourceCode" id="cb1058"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1058-1"><a href="ch_destructuring.html#cb1058-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {<span class="dt">length</span><span class="op">:</span> len} <span class="op">=</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb1058-2"><a href="ch_destructuring.html#cb1058-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(len<span class="op">,</span> <span class="dv">3</span>)<span class="op">;</span></span></code></pre></div>
+<p>And you can object-destructure Arrays:</p>
+<div class="sourceCode" id="cb1059"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1059-1"><a href="ch_destructuring.html#cb1059-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {<span class="dv">0</span><span class="op">:</span>x<span class="op">,</span> <span class="dv">2</span><span class="op">:</span>y} <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb1059-2"><a href="ch_destructuring.html#cb1059-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb1059-3"><a href="ch_destructuring.html#cb1059-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(y<span class="op">,</span> <span class="st">'c'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Why does that work? <a href="ch_arrays.html#array-indices">Array indices are also properties</a>.</p>
+<h4 id="property-value-shorthands">37.4.1 Property value shorthands</h4>
+<p>Object literals support property value shorthands and so do object patterns:</p>
+<div class="sourceCode" id="cb1060"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1060-1"><a href="ch_destructuring.html#cb1060-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { street<span class="op">,</span> city } <span class="op">=</span> address<span class="op">;</span></span>
+<span id="cb1060-2"><a href="ch_destructuring.html#cb1060-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(street<span class="op">,</span> <span class="st">'Evergreen Terrace'</span>)<span class="op">;</span></span>
+<span id="cb1060-3"><a href="ch_destructuring.html#cb1060-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(city<span class="op">,</span> <span class="st">'Springfield'</span>)<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Object-destructuring</strong></p>
+<p><code>exercises/destructuring/object_destructuring_exrc.mjs</code></p>
+</div>
+<h4 id="rest-properties">37.4.2 Rest properties</h4>
+<p><a id="index-entry-431" class="index-entry"></a></p>
+<p>In object literals, you can have spread properties. In object patterns, you can have rest properties (which must come last):</p>
+<div class="sourceCode" id="cb1061"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1061-1"><a href="ch_destructuring.html#cb1061-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> { <span class="dt">a</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">b</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">c</span><span class="op">:</span> <span class="dv">3</span> }<span class="op">;</span></span>
+<span id="cb1061-2"><a href="ch_destructuring.html#cb1061-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { <span class="dt">a</span><span class="op">:</span> propValue<span class="op">,</span> <span class="op">...</span>remaining } <span class="op">=</span> obj<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1061-3"><a href="ch_destructuring.html#cb1061-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1061-4"><a href="ch_destructuring.html#cb1061-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(propValue<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb1061-5"><a href="ch_destructuring.html#cb1061-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(remaining<span class="op">,</span> {<span class="dt">b</span><span class="op">:</span><span class="dv">2</span><span class="op">,</span> <span class="dt">c</span><span class="op">:</span><span class="dv">3</span>})<span class="op">;</span></span></code></pre></div>
+<p>A rest property variable, such as <code>remaining</code> (line A), is assigned an object with all data properties whose keys are not mentioned in the pattern.</p>
+<p><code>remaining</code> can also be viewed as the result of non-destructively removing property <code>a</code> from <code>obj</code>.</p>
+<h4 id="assigning-via-object-destructuring">37.4.3 Syntax pitfall: assigning via object destructuring</h4>
+<p>If we object-destructure in an assignment, we are facing a pitfall caused by <a href="ch_syntax.html#ambiguous-syntax">syntactic ambiguity</a> – you can’t start a statement with a curly brace because then JavaScript thinks you are starting a block:</p>
+<div class="sourceCode" id="cb1062"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1062-1"><a href="ch_destructuring.html#cb1062-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> prop<span class="op">;</span></span>
+<span id="cb1062-2"><a href="ch_destructuring.html#cb1062-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb1062-3"><a href="ch_destructuring.html#cb1062-3" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> <span class="pp">eval</span>(<span class="st">"{prop} = { prop: 'hello' };"</span>)<span class="op">,</span></span>
+<span id="cb1062-4"><a href="ch_destructuring.html#cb1062-4" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb1062-5"><a href="ch_destructuring.html#cb1062-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">'SyntaxError'</span><span class="op">,</span></span>
+<span id="cb1062-6"><a href="ch_destructuring.html#cb1062-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">message</span><span class="op">:</span> <span class="st">"Unexpected token '='"</span><span class="op">,</span></span>
+<span id="cb1062-7"><a href="ch_destructuring.html#cb1062-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>Why <code>eval()</code>?</strong></p>
+<p><a href="ch_dynamic-code-evaluation.html#eval"><code>eval()</code></a> delays parsing (and therefore the <code>SyntaxError</code>) until the callback of <code>assert.throws()</code> is executed. If we didn’t use it, we’d already get an error when this code is parsed and <code>assert.throws()</code> wouldn’t even be executed.</p>
+</div>
+<p>The workaround is to put the whole assignment in parentheses:</p>
+<div class="sourceCode" id="cb1063"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1063-1"><a href="ch_destructuring.html#cb1063-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> prop<span class="op">;</span></span>
+<span id="cb1063-2"><a href="ch_destructuring.html#cb1063-2" aria-hidden="true" tabindex="-1"></a>({prop} <span class="op">=</span> { <span class="dt">prop</span><span class="op">:</span> <span class="st">'hello'</span> })<span class="op">;</span></span>
+<span id="cb1063-3"><a href="ch_destructuring.html#cb1063-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(prop<span class="op">,</span> <span class="st">'hello'</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="array-destructuring">37.5 Array-destructuring</h3>
+<p><a id="index-entry-432" class="index-entry"></a><a id="index-entry-433" class="index-entry"></a></p>
+<p><em>Array-destructuring</em> lets you batch-extract values of Array elements via patterns that look like Array literals:</p>
+<div class="sourceCode" id="cb1064"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1064-1"><a href="ch_destructuring.html#cb1064-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [x<span class="op">,</span> y] <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb1064-2"><a href="ch_destructuring.html#cb1064-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb1064-3"><a href="ch_destructuring.html#cb1064-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(y<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span></code></pre></div>
+<p>You can skip elements by mentioning holes inside Array patterns:</p>
+<div class="sourceCode" id="cb1065"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1065-1"><a href="ch_destructuring.html#cb1065-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [<span class="op">,</span> x<span class="op">,</span> y] <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1065-2"><a href="ch_destructuring.html#cb1065-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span>
+<span id="cb1065-3"><a href="ch_destructuring.html#cb1065-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(y<span class="op">,</span> <span class="st">'c'</span>)<span class="op">;</span></span></code></pre></div>
+<p>The first element of the Array pattern in line A is a hole, which is why the Array element at index 0 is ignored.</p>
+<h4 id="array-destructuring-works-with-any-iterable">37.5.1 Array-destructuring works with any iterable</h4>
+<p>Array-destructuring can be applied to any value that is iterable, not just to Arrays:</p>
+<div class="sourceCode" id="cb1066"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1066-1"><a href="ch_destructuring.html#cb1066-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Sets are iterable</span></span>
+<span id="cb1066-2"><a href="ch_destructuring.html#cb1066-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> mySet <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>()<span class="op">.</span><span class="fu">add</span>(<span class="st">'a'</span>)<span class="op">.</span><span class="fu">add</span>(<span class="st">'b'</span>)<span class="op">.</span><span class="fu">add</span>(<span class="st">'c'</span>)<span class="op">;</span></span>
+<span id="cb1066-3"><a href="ch_destructuring.html#cb1066-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [first<span class="op">,</span> second] <span class="op">=</span> mySet<span class="op">;</span></span>
+<span id="cb1066-4"><a href="ch_destructuring.html#cb1066-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(first<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb1066-5"><a href="ch_destructuring.html#cb1066-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(second<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span>
+<span id="cb1066-6"><a href="ch_destructuring.html#cb1066-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1066-7"><a href="ch_destructuring.html#cb1066-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Strings are iterable</span></span>
+<span id="cb1066-8"><a href="ch_destructuring.html#cb1066-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [a<span class="op">,</span> b] <span class="op">=</span> <span class="st">'xyz'</span><span class="op">;</span></span>
+<span id="cb1066-9"><a href="ch_destructuring.html#cb1066-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(a<span class="op">,</span> <span class="st">'x'</span>)<span class="op">;</span></span>
+<span id="cb1066-10"><a href="ch_destructuring.html#cb1066-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(b<span class="op">,</span> <span class="st">'y'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="rest-elements">37.5.2 Rest elements</h4>
+<p><a id="index-entry-434" class="index-entry"></a></p>
+<p>In Array literals, you can have spread elements. In Array patterns, you can have rest elements (which must come last):</p>
+<div class="sourceCode" id="cb1067"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1067-1"><a href="ch_destructuring.html#cb1067-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [x<span class="op">,</span> y<span class="op">,</span> <span class="op">...</span>remaining] <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span><span class="op">,</span> <span class="st">'d'</span>]<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1067-2"><a href="ch_destructuring.html#cb1067-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1067-3"><a href="ch_destructuring.html#cb1067-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb1067-4"><a href="ch_destructuring.html#cb1067-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(y<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span>
+<span id="cb1067-5"><a href="ch_destructuring.html#cb1067-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(remaining<span class="op">,</span> [<span class="st">'c'</span><span class="op">,</span> <span class="st">'d'</span>])<span class="op">;</span></span></code></pre></div>
+<p>A rest element variable, such as <code>remaining</code> (line A), is assigned an Array with all elements of the destructured value that were not mentioned yet.</p>
+<h3 id="examples-of-destructuring">37.6 Examples of destructuring</h3>
+<h4 id="array-destructuring-swapping-variable-values">37.6.1 Array-destructuring: swapping variable values</h4>
+<p>You can use Array-destructuring to swap the values of two variables without needing a temporary variable:</p>
+<div class="sourceCode" id="cb1068"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1068-1"><a href="ch_destructuring.html#cb1068-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> x <span class="op">=</span> <span class="st">'a'</span><span class="op">;</span></span>
+<span id="cb1068-2"><a href="ch_destructuring.html#cb1068-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> y <span class="op">=</span> <span class="st">'b'</span><span class="op">;</span></span>
+<span id="cb1068-3"><a href="ch_destructuring.html#cb1068-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1068-4"><a href="ch_destructuring.html#cb1068-4" aria-hidden="true" tabindex="-1"></a>[x<span class="op">,</span>y] <span class="op">=</span> [y<span class="op">,</span>x]<span class="op">;</span> <span class="co">// swap</span></span>
+<span id="cb1068-5"><a href="ch_destructuring.html#cb1068-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1068-6"><a href="ch_destructuring.html#cb1068-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="st">'b'</span>)<span class="op">;</span></span>
+<span id="cb1068-7"><a href="ch_destructuring.html#cb1068-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(y<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="array-destructuring-operations-that-return-arrays">37.6.2 Array-destructuring: operations that return Arrays</h4>
+<p>Array-destructuring is useful when operations return Arrays, as does, for example, the regular expression method <code>.exec()</code>:</p>
+<div class="sourceCode" id="cb1069"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1069-1"><a href="ch_destructuring.html#cb1069-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Skip the element at index 0 (the whole match):</span></span>
+<span id="cb1069-2"><a href="ch_destructuring.html#cb1069-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [<span class="op">,</span> year<span class="op">,</span> month<span class="op">,</span> day] <span class="op">=</span></span>
+<span id="cb1069-3"><a href="ch_destructuring.html#cb1069-3" aria-hidden="true" tabindex="-1"></a>  <span class="ss">/</span><span class="sc">^([0-9]{4})</span><span class="ss">-</span><span class="sc">([0-9]{2})</span><span class="ss">-</span><span class="sc">([0-9]{2})$</span><span class="ss">/</span></span>
+<span id="cb1069-4"><a href="ch_destructuring.html#cb1069-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">exec</span>(<span class="st">'2999-12-31'</span>)<span class="op">;</span></span>
+<span id="cb1069-5"><a href="ch_destructuring.html#cb1069-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1069-6"><a href="ch_destructuring.html#cb1069-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(year<span class="op">,</span> <span class="st">'2999'</span>)<span class="op">;</span></span>
+<span id="cb1069-7"><a href="ch_destructuring.html#cb1069-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(month<span class="op">,</span> <span class="st">'12'</span>)<span class="op">;</span></span>
+<span id="cb1069-8"><a href="ch_destructuring.html#cb1069-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(day<span class="op">,</span> <span class="st">'31'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="object-destructuring-multiple-return-values">37.6.3 Object-destructuring: multiple return values</h4>
+<p><a id="index-entry-435" class="index-entry"></a><a id="index-entry-436" class="index-entry"></a></p>
+<p>Destructuring is very useful if a function returns multiple values – either packaged as an Array or packaged as an object.</p>
+<p>Consider a function <code>findElement()</code> that finds elements in an Array:</p>
+<div class="sourceCode" id="cb1070"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1070-1"><a href="ch_destructuring.html#cb1070-1" aria-hidden="true" tabindex="-1"></a><span class="fu">findElement</span>(array<span class="op">,</span> (value<span class="op">,</span> index) <span class="kw">=&gt;</span> «boolean expression»)</span></code></pre></div>
+<p>Its second parameter is a function that receives the value and index of an element and returns a boolean indicating if this is the element the caller is looking for.</p>
+<p>We are now faced with a dilemma: Should <code>findElement()</code> return the value of the element it found or the index? One solution would be to create two separate functions, but that would result in duplicated code because both functions would be very similar.</p>
+<p>The following implementation avoids duplication by returning an object that contains both index and value of the element that is found:</p>
+<div class="sourceCode" id="cb1071"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1071-1"><a href="ch_destructuring.html#cb1071-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">findElement</span>(arr<span class="op">,</span> predicate) {</span>
+<span id="cb1071-2"><a href="ch_destructuring.html#cb1071-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> index<span class="op">=</span><span class="dv">0</span><span class="op">;</span> index <span class="op">&lt;</span> arr<span class="op">.</span><span class="at">length</span><span class="op">;</span> index<span class="op">++</span>) {</span>
+<span id="cb1071-3"><a href="ch_destructuring.html#cb1071-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> value <span class="op">=</span> arr[index]<span class="op">;</span></span>
+<span id="cb1071-4"><a href="ch_destructuring.html#cb1071-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">predicate</span>(value)) {</span>
+<span id="cb1071-5"><a href="ch_destructuring.html#cb1071-5" aria-hidden="true" tabindex="-1"></a>      <span class="co">// We found something:</span></span>
+<span id="cb1071-6"><a href="ch_destructuring.html#cb1071-6" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> { value<span class="op">,</span> index }<span class="op">;</span></span>
+<span id="cb1071-7"><a href="ch_destructuring.html#cb1071-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1071-8"><a href="ch_destructuring.html#cb1071-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1071-9"><a href="ch_destructuring.html#cb1071-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// We didn’t find anything:</span></span>
+<span id="cb1071-10"><a href="ch_destructuring.html#cb1071-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { <span class="dt">value</span><span class="op">:</span> <span class="kw">undefined</span><span class="op">,</span> <span class="dt">index</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> }<span class="op">;</span></span>
+<span id="cb1071-11"><a href="ch_destructuring.html#cb1071-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Destructuring helps us with processing the result of <code>findElement()</code>:</p>
+<div class="sourceCode" id="cb1072"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1072-1"><a href="ch_destructuring.html#cb1072-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="dv">7</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">6</span>]<span class="op">;</span></span>
+<span id="cb1072-2"><a href="ch_destructuring.html#cb1072-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1072-3"><a href="ch_destructuring.html#cb1072-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {value<span class="op">,</span> index} <span class="op">=</span> <span class="fu">findElement</span>(arr<span class="op">,</span> x <span class="kw">=&gt;</span> x <span class="op">%</span> <span class="dv">2</span> <span class="op">===</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb1072-4"><a href="ch_destructuring.html#cb1072-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(value<span class="op">,</span> <span class="dv">8</span>)<span class="op">;</span></span>
+<span id="cb1072-5"><a href="ch_destructuring.html#cb1072-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(index<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
+<p>As we are working with property keys, the order in which we mention <code>value</code> and <code>index</code> doesn’t matter:</p>
+<div class="sourceCode" id="cb1073"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1073-1"><a href="ch_destructuring.html#cb1073-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {index<span class="op">,</span> value} <span class="op">=</span> <span class="fu">findElement</span>(arr<span class="op">,</span> x <span class="kw">=&gt;</span> x <span class="op">%</span> <span class="dv">2</span> <span class="op">===</span> <span class="dv">0</span>)<span class="op">;</span></span></code></pre></div>
+<p>The kicker is that destructuring also serves us well if we are only interested in one of the two results:</p>
+<div class="sourceCode" id="cb1074"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1074-1"><a href="ch_destructuring.html#cb1074-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="dv">7</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">6</span>]<span class="op">;</span></span>
+<span id="cb1074-2"><a href="ch_destructuring.html#cb1074-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1074-3"><a href="ch_destructuring.html#cb1074-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {value} <span class="op">=</span> <span class="fu">findElement</span>(arr<span class="op">,</span> x <span class="kw">=&gt;</span> x <span class="op">%</span> <span class="dv">2</span> <span class="op">===</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb1074-4"><a href="ch_destructuring.html#cb1074-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(value<span class="op">,</span> <span class="dv">8</span>)<span class="op">;</span></span>
+<span id="cb1074-5"><a href="ch_destructuring.html#cb1074-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1074-6"><a href="ch_destructuring.html#cb1074-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {index} <span class="op">=</span> <span class="fu">findElement</span>(arr<span class="op">,</span> x <span class="kw">=&gt;</span> x <span class="op">%</span> <span class="dv">2</span> <span class="op">===</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb1074-7"><a href="ch_destructuring.html#cb1074-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(index<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
+<p>All of these conveniences combined make this way of handling multiple return values quite versatile.</p>
+<h3 id="what-happens-if-a-pattern-part-does-not-match-anything">37.7 What happens if a pattern part does not match anything?</h3>
+<p>What happens if there is no match for part of a pattern? The same thing that happens if you use non-batch operators: you get <code>undefined</code>.</p>
+<h4 id="object-destructuring-and-missing-properties">37.7.1 Object-destructuring and missing properties</h4>
+<p>If a property in an object pattern has no match on the right-hand side, you get <code>undefined</code>:</p>
+<div class="sourceCode" id="cb1075"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1075-1"><a href="ch_destructuring.html#cb1075-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {<span class="dt">prop</span><span class="op">:</span> p} <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb1075-2"><a href="ch_destructuring.html#cb1075-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(p<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="array-destructuring-and-missing-elements">37.7.2 Array-destructuring and missing elements</h4>
+<p>If an element in an Array pattern has no match on the right-hand side, you get <code>undefined</code>:</p>
+<div class="sourceCode" id="cb1076"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1076-1"><a href="ch_destructuring.html#cb1076-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [x] <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb1076-2"><a href="ch_destructuring.html#cb1076-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="what-values-cant-be-destructured">37.8 What values can’t be destructured?</h3>
+<h4 id="you-cant-object-destructure-undefined-and-null">37.8.1 You can’t object-destructure <code>undefined</code> and <code>null</code></h4>
+<p>Object-destructuring only fails if the value to be destructured is either <code>undefined</code> or <code>null</code>. That is, it fails whenever accessing a property via the dot operator would fail too.</p>
+<div class="sourceCode" id="cb1077"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1077-1"><a href="ch_destructuring.html#cb1077-1" aria-hidden="true" tabindex="-1"></a>&gt; const {prop} = undefined</span>
+<span id="cb1077-2"><a href="ch_destructuring.html#cb1077-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Cannot destructure property 'prop' of 'undefined'</span></span>
+<span id="cb1077-3"><a href="ch_destructuring.html#cb1077-3" aria-hidden="true" tabindex="-1"></a><span class="kw">as it is undefined.</span></span>
+<span id="cb1077-4"><a href="ch_destructuring.html#cb1077-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1077-5"><a href="ch_destructuring.html#cb1077-5" aria-hidden="true" tabindex="-1"></a>&gt; const {prop} = null</span>
+<span id="cb1077-6"><a href="ch_destructuring.html#cb1077-6" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: Cannot destructure property 'prop' of 'null'</span></span>
+<span id="cb1077-7"><a href="ch_destructuring.html#cb1077-7" aria-hidden="true" tabindex="-1"></a><span class="kw">as it is null.</span></span></code></pre></div>
+<h4 id="you-cant-array-destructure-non-iterable-values">37.8.2 You can’t Array-destructure non-iterable values</h4>
+<p>Array-destructuring demands that the destructured value be iterable. Therefore, you can’t Array-destructure <code>undefined</code> and <code>null</code>. But you can’t Array-destructure non-iterable objects either:</p>
+<div class="sourceCode" id="cb1078"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb1078-1"><a href="ch_destructuring.html#cb1078-1" aria-hidden="true" tabindex="-1"></a>&gt; const [x] = {}</span>
+<span id="cb1078-2"><a href="ch_destructuring.html#cb1078-2" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: {} is not iterable</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz: basic</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+<h3 id="advanced-4">37.9 (Advanced)</h3>
+<p>All of the remaining sections are advanced.</p>
+<h3 id="default-values">37.10 Default values</h3>
+<p><a id="index-entry-437" class="index-entry"></a></p>
+<p>Normally, if a pattern has no match, the corresponding variable is set to <code>undefined</code>:</p>
+<div class="sourceCode" id="cb1079"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1079-1"><a href="ch_destructuring.html#cb1079-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {<span class="dt">prop</span><span class="op">:</span> p} <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb1079-2"><a href="ch_destructuring.html#cb1079-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(p<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span></code></pre></div>
+<p>If you want a different value to be used, you need to specify a <em>default value</em> (via <code>=</code>):</p>
+<div class="sourceCode" id="cb1080"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1080-1"><a href="ch_destructuring.html#cb1080-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {<span class="dt">prop</span><span class="op">:</span> p <span class="op">=</span> <span class="dv">123</span>} <span class="op">=</span> {}<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1080-2"><a href="ch_destructuring.html#cb1080-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(p<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span></code></pre></div>
+<p>In line A, we specify the default value for <code>p</code> to be <code>123</code>. That default is used because the data that we are destructuring has no property named <code>prop</code>.</p>
+<h4 id="default-values-in-array-destructuring">37.10.1 Default values in Array-destructuring</h4>
+<p>Here, we have two default values that are assigned to the variables <code>x</code> and <code>y</code> because the corresponding elements don’t exist in the Array that is destructured.</p>
+<div class="sourceCode" id="cb1081"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1081-1"><a href="ch_destructuring.html#cb1081-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [x<span class="op">=</span><span class="dv">1</span><span class="op">,</span> y<span class="op">=</span><span class="dv">2</span>] <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb1081-2"><a href="ch_destructuring.html#cb1081-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1081-3"><a href="ch_destructuring.html#cb1081-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb1081-4"><a href="ch_destructuring.html#cb1081-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(y<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span></code></pre></div>
+<p>The default value for the first element of the Array pattern is <code>1</code>; the default value for the second element is <code>2</code>.</p>
+<h4 id="default-values-in-object-destructuring">37.10.2 Default values in object-destructuring</h4>
+<p>You can also specify default values for object-destructuring:</p>
+<div class="sourceCode" id="cb1082"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1082-1"><a href="ch_destructuring.html#cb1082-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {<span class="dt">first</span><span class="op">:</span> f<span class="op">=</span><span class="st">''</span><span class="op">,</span> <span class="dt">last</span><span class="op">:</span> l<span class="op">=</span><span class="st">''</span>} <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb1082-2"><a href="ch_destructuring.html#cb1082-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(f<span class="op">,</span> <span class="st">''</span>)<span class="op">;</span></span>
+<span id="cb1082-3"><a href="ch_destructuring.html#cb1082-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(l<span class="op">,</span> <span class="st">''</span>)<span class="op">;</span></span></code></pre></div>
+<p>Neither property key <code>first</code> nor property key <code>last</code> exist in the object that is destructured. Therefore, the default values are used.</p>
+<p>With property value shorthands, this code becomes simpler:</p>
+<div class="sourceCode" id="cb1083"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1083-1"><a href="ch_destructuring.html#cb1083-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> {first<span class="op">=</span><span class="st">''</span><span class="op">,</span> last<span class="op">=</span><span class="st">''</span>} <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb1083-2"><a href="ch_destructuring.html#cb1083-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(first<span class="op">,</span> <span class="st">''</span>)<span class="op">;</span></span>
+<span id="cb1083-3"><a href="ch_destructuring.html#cb1083-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(last<span class="op">,</span> <span class="st">''</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="parameter-definitions-are-similar-to-destructuring">37.11 Parameter definitions are similar to destructuring</h3>
+<p>Considering what we have learned in this chapter, parameter definitions have much in common with an Array pattern (rest elements, default values, etc.). In fact, the following two function declarations are equivalent:</p>
+<div class="sourceCode" id="cb1084"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1084-1"><a href="ch_destructuring.html#cb1084-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">f1</span>(«pattern1»<span class="op">,</span> «pattern2») {</span>
+<span id="cb1084-2"><a href="ch_destructuring.html#cb1084-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb1084-3"><a href="ch_destructuring.html#cb1084-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1084-4"><a href="ch_destructuring.html#cb1084-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1084-5"><a href="ch_destructuring.html#cb1084-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">f2</span>(<span class="op">...</span>args) {</span>
+<span id="cb1084-6"><a href="ch_destructuring.html#cb1084-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> [«pattern1»<span class="op">,</span> «pattern2»] <span class="op">=</span> args<span class="op">;</span></span>
+<span id="cb1084-7"><a href="ch_destructuring.html#cb1084-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb1084-8"><a href="ch_destructuring.html#cb1084-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="nested-destructuring">37.12 Nested destructuring</h3>
+<p>Until now, we have only used variables as <em>assignment targets</em> (data sinks) inside destructuring patterns. But you can also use patterns as assignment targets, which enables you to nest patterns to arbitrary depths:</p>
+<div class="sourceCode" id="cb1085"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1085-1"><a href="ch_destructuring.html#cb1085-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [</span>
+<span id="cb1085-2"><a href="ch_destructuring.html#cb1085-2" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span> <span class="dt">last</span><span class="op">:</span> <span class="st">'Bond'</span> }<span class="op">,</span></span>
+<span id="cb1085-3"><a href="ch_destructuring.html#cb1085-3" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">first</span><span class="op">:</span> <span class="st">'Lars'</span><span class="op">,</span> <span class="dt">last</span><span class="op">:</span> <span class="st">'Croft'</span> }<span class="op">,</span></span>
+<span id="cb1085-4"><a href="ch_destructuring.html#cb1085-4" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb1085-5"><a href="ch_destructuring.html#cb1085-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [<span class="op">,</span> {first}] <span class="op">=</span> arr<span class="op">;</span></span>
+<span id="cb1085-6"><a href="ch_destructuring.html#cb1085-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(first<span class="op">,</span> <span class="st">'Lars'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Inside the Array pattern in line A, there is a nested object pattern at index 1.</p>
+<p>Nested patterns can become difficult to understand, so they are best used in moderation.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz: advanced</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/25">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_sync-generators.html">38 Synchronous generators (advanced)</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

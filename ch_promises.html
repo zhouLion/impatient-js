@@ -1,0 +1,1263 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_promises">40 Promises for asynchronous programming [ES6]</h2>
+<p><a id="index-entry-455" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>40.1 <a href="ch_promises.html#the-basics-of-using-promises">The basics of using Promises</a>
+<ul>
+<li>40.1.1 <a href="ch_promises.html#using-a-promise-based-function">Using a Promise-based function</a></li>
+<li>40.1.2 <a href="ch_promises.html#what-is-a-promise">What is a Promise?</a></li>
+<li>40.1.3 <a href="ch_promises.html#implementing-a-promise-based-function">Implementing a Promise-based function</a></li>
+<li>40.1.4 <a href="ch_promises.html#states-of-promises">States of Promises</a></li>
+<li>40.1.5 <a href="ch_promises.html#promise.resolve-create-a-promise-fulfilled-with-a-given-value"><code>Promise.resolve()</code>: create a Promise fulfilled with a given value</a></li>
+<li>40.1.6 <a href="ch_promises.html#promise.reject-create-a-promise-rejected-with-a-given-value"><code>Promise.reject()</code>: create a Promise rejected with a given value</a></li>
+<li>40.1.7 <a href="ch_promises.html#returning-and-throwing-in-.then-callbacks">Returning and throwing in <code>.then()</code> callbacks</a></li>
+<li>40.1.8 <a href="ch_promises.html#catch-and-its-callback"><code>.catch()</code> and its callback</a></li>
+<li>40.1.9 <a href="ch_promises.html#chaining-method-calls">Chaining method calls</a></li>
+<li>40.1.10 <a href="ch_promises.html#Promise.prototype.finally"><code>.finally()</code> [ES2018]</a></li>
+<li>40.1.11 <a href="ch_promises.html#advantages-of-promises-over-plain-callbacks">Advantages of promises over plain callbacks</a></li>
+</ul></li>
+<li>40.2 <a href="ch_promises.html#examples-1">Examples</a>
+<ul>
+<li>40.2.1 <a href="ch_promises.html#node.js-reading-a-file-asynchronously">Node.js: Reading a file asynchronously</a></li>
+<li>40.2.2 <a href="ch_promises.html#promisifying-xmlhttprequest">Browsers: Promisifying <code>XMLHttpRequest</code></a></li>
+<li>40.2.3 <a href="ch_promises.html#node.js-util.promisify">Node.js: <code>util.promisify()</code></a></li>
+<li>40.2.4 <a href="ch_promises.html#browsers-fetch-api">Browsers: Fetch API</a></li>
+</ul></li>
+<li>40.3 <a href="ch_promises.html#error-handling-dont-mix-rejections-and-exceptions">Error handling: don’t mix rejections and exceptions</a></li>
+<li>40.4 <a href="ch_promises.html#promise-based-functions-start-synchronously-settle-asynchronously">Promise-based functions start synchronously, settle asynchronously</a></li>
+<li>40.5 <a href="ch_promises.html#promise-combinators">Promise combinator functions: working with Arrays of Promises</a>
+<ul>
+<li>40.5.1 <a href="ch_promises.html#what-is-a-promise-combinator-function">What is a Promise combinator function?</a></li>
+<li>40.5.2 <a href="ch_promises.html#promise.all"><code>Promise.all()</code></a></li>
+<li>40.5.3 <a href="ch_promises.html#promise.race"><code>Promise.race()</code></a></li>
+<li>40.5.4 <a href="ch_promises.html#Promise.any"><code>Promise.any()</code> [ES2021]</a></li>
+<li>40.5.5 <a href="ch_promises.html#Promise.allSettled"><code>Promise.allSettled()</code> [ES2020]</a></li>
+<li>40.5.6 <a href="ch_promises.html#short-circuiting-advanced-1">Short-circuiting (advanced)</a></li>
+</ul></li>
+<li>40.6 <a href="ch_promises.html#concurrency-and-promise.all-advanced">Concurrency and <code>Promise.all()</code> (advanced)</a>
+<ul>
+<li>40.6.1 <a href="ch_promises.html#sequential-execution-vs.-concurrent-execution">Sequential execution vs.&nbsp;concurrent execution</a></li>
+<li>40.6.2 <a href="ch_promises.html#focus-on-async-start">Concurrency tip: focus on when operations start</a></li>
+<li>40.6.3 <a href="ch_promises.html#promise-all-is-fork-join"><code>Promise.all()</code> is fork-join</a></li>
+</ul></li>
+<li>40.7 <a href="ch_promises.html#tips-for-chaining-promises">Tips for chaining Promises</a>
+<ul>
+<li>40.7.1 <a href="ch_promises.html#chaining-mistake-losing-the-tail">Chaining mistake: losing the&nbsp;tail</a></li>
+<li>40.7.2 <a href="ch_promises.html#chaining-mistake-nesting">Chaining mistake: nesting</a></li>
+<li>40.7.3 <a href="ch_promises.html#chaining-mistake-more-nesting-than-necessary">Chaining mistake: more nesting than necessary</a></li>
+<li>40.7.4 <a href="ch_promises.html#not-all-nesting-is-bad">Not all nesting is bad</a></li>
+<li>40.7.5 <a href="ch_promises.html#chaining-mistake-creating-promises-instead-of-chaining">Chaining mistake: creating Promises instead of chaining</a></li>
+</ul></li>
+<li>40.8 <a href="ch_promises.html#quick-reference-promise-combinator-functions">Quick reference: Promise combinator functions</a>
+<ul>
+<li>40.8.1 <a href="ch_promises.html#promise.all-1"><code>Promise.all()</code></a></li>
+<li>40.8.2 <a href="ch_promises.html#promise.race-1"><code>Promise.race()</code></a></li>
+<li>40.8.3 <a href="ch_promises.html#promise.any-es2021"><code>Promise.any()</code> [ES2021]</a></li>
+<li>40.8.4 <a href="ch_promises.html#promise.allsettled-es2020"><code>Promise.allSettled()</code> [ES2020]</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>In this chapter, we explore Promises, yet another pattern for delivering asynchronous results.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/eye-regular.svg" height="24">&nbsp; <strong>Recommended reading</strong></p>
+<p>This chapter builds on <a href="ch_async-js.html">the previous chapter</a> with background on asynchronous programming in JavaScript.</p>
+</div>
+<h3 id="the-basics-of-using-promises">40.1 The basics of using Promises</h3>
+<p>Promises are a pattern for delivering results asynchronously.</p>
+<h4 id="using-a-promise-based-function">40.1.1 Using a Promise-based function</h4>
+<p>The following code is an example of using the Promise-based function <code>addAsync()</code> (whose implementation is shown soon):</p>
+<div class="sourceCode" id="cb1130"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1130-1"><a href="ch_promises.html#cb1130-1" aria-hidden="true" tabindex="-1"></a><span class="fu">addAsync</span>(<span class="dv">3</span><span class="op">,</span> <span class="dv">4</span>)</span>
+<span id="cb1130-2"><a href="ch_promises.html#cb1130-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> { <span class="co">// success</span></span>
+<span id="cb1130-3"><a href="ch_promises.html#cb1130-3" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(result<span class="op">,</span> <span class="dv">7</span>)<span class="op">;</span></span>
+<span id="cb1130-4"><a href="ch_promises.html#cb1130-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1130-5"><a href="ch_promises.html#cb1130-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(error <span class="kw">=&gt;</span> { <span class="co">// failure</span></span>
+<span id="cb1130-6"><a href="ch_promises.html#cb1130-6" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">fail</span>(error)<span class="op">;</span></span>
+<span id="cb1130-7"><a href="ch_promises.html#cb1130-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>Promises are similar to <a href="ch_async-js.html#event-pattern">the event pattern</a>: There is an object (a <em>Promise</em>), where we register callbacks:</p>
+<ul>
+<li>Method <code>.then()</code> registers callbacks that handle results.</li>
+<li>Method <code>.catch()</code> registers callbacks that handle errors.</li>
+</ul>
+<p>A Promise-based function returns a Promise and sends it a result or an error (if and when it is done). The Promise passes it on to the relevant callbacks.</p>
+<p>In contrast to the event pattern, Promises are optimized for one-off results:</p>
+<ul>
+<li>A result (or an error) is cached so that it doesn’t matter if we register a callback before or after the result (or error) was sent.</li>
+<li>We can chain the Promise methods <code>.then()</code> and <code>.catch()</code> because they both return Promises. That helps with sequentially invoking multiple asynchronous functions. More on that later.</li>
+</ul>
+<h4 id="what-is-a-promise">40.1.2 What is a Promise?</h4>
+<p>What is a Promise? There are two ways of looking at it:</p>
+<ul>
+<li>On one hand, it is a placeholder or container for the final result that will eventually be delivered.</li>
+<li>On the other hand, it is an object with which we can register listeners.</li>
+</ul>
+<h4 id="implementing-a-promise-based-function">40.1.3 Implementing a Promise-based function</h4>
+<p>This is an implementation of a Promise-based function that adds two numbers <code>x</code> and <code>y</code>:</p>
+<div class="sourceCode" id="cb1131"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1131-1"><a href="ch_promises.html#cb1131-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">addAsync</span>(x<span class="op">,</span> y) {</span>
+<span id="cb1131-2"><a href="ch_promises.html#cb1131-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>(</span>
+<span id="cb1131-3"><a href="ch_promises.html#cb1131-3" aria-hidden="true" tabindex="-1"></a>    (resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span> { <span class="co">// (A)</span></span>
+<span id="cb1131-4"><a href="ch_promises.html#cb1131-4" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (x <span class="op">===</span> <span class="kw">undefined</span> <span class="op">||</span> y <span class="op">===</span> <span class="kw">undefined</span>) {</span>
+<span id="cb1131-5"><a href="ch_promises.html#cb1131-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">reject</span>(<span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Must provide two parameters'</span>))<span class="op">;</span></span>
+<span id="cb1131-6"><a href="ch_promises.html#cb1131-6" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb1131-7"><a href="ch_promises.html#cb1131-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">resolve</span>(x <span class="op">+</span> y)<span class="op">;</span></span>
+<span id="cb1131-8"><a href="ch_promises.html#cb1131-8" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1131-9"><a href="ch_promises.html#cb1131-9" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1131-10"><a href="ch_promises.html#cb1131-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>addAsync()</code> immediately invokes the <code>Promise</code> constructor. The actual implementation of that function resides in the callback that is passed to that constructor (line A). That callback is provided with two functions:</p>
+<ul>
+<li><code>resolve</code> is used for delivering a result (in case of success).</li>
+<li><code>reject</code> is used for delivering an error (in case of failure).</li>
+</ul>
+<h4 id="states-of-promises">40.1.4 States of Promises</h4>
+<p><a id="index-entry-456" class="index-entry"></a><a id="index-entry-457" class="index-entry"></a> <a id="index-entry-458" class="index-entry"></a> <a id="index-entry-459" class="index-entry"></a> <a id="index-entry-460" class="index-entry"></a> <a id="index-entry-461" class="index-entry"></a></p>
+<figure>
+<img src="img-book/e8897303d236d274953a62a6bc88130935e28857.svg" id="fig:promise_states_simple" width="267" height="105" alt="Figure 22: A Promise can be in either one of three states: pending, fulfilled, or rejected. If a Promise is in a final (non-pending) state, it is called settled."><figcaption aria-hidden="true">Figure 22: A Promise can be in either one of three states: pending, fulfilled, or rejected. If a Promise is in a final (non-pending) state, it is called <em>settled</em>.</figcaption>
+</figure>
+<p>Fig.&nbsp;<a href="#fig:promise_states_simple">22</a> depicts the three states a Promise can be in. Promises specialize in one-off results and protect us against <em>race conditions</em> (registering too early or too late):</p>
+<ul>
+<li>If we register a <code>.then()</code> callback or a <code>.catch()</code> callback too early, it is notified once a Promise is settled.</li>
+<li>Once a Promise is settled, the settlement value (result or error) is cached. Thus, if <code>.then()</code> or <code>.catch()</code> are called after the settlement, they receive the cached value.</li>
+</ul>
+<p>Additionally, once a Promise is settled, its state and settlement value can’t change anymore. That helps make code predictable and enforces the one-off nature of Promises.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>Some Promises are never settled</strong></p>
+<p>It is possible that a Promise is never settled. For example: </p>
+<div class="sourceCode" id="cb1132"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1132-1"><a href="ch_promises.html#cb1132-1" aria-hidden="true" tabindex="-1"></a><span class="kw">new</span> <span class="bu">Promise</span>(() <span class="kw">=&gt;</span> {})</span></code></pre></div>
+</div>
+<h4 id="promise.resolve-create-a-promise-fulfilled-with-a-given-value">40.1.5 <code>Promise.resolve()</code>: create a Promise fulfilled with a given value</h4>
+<p><code>Promise.resolve(x)</code> creates a Promise that is fulfilled with the value <code>x</code>:</p>
+<div class="sourceCode" id="cb1133"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1133-1"><a href="ch_promises.html#cb1133-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="dv">123</span>)</span>
+<span id="cb1133-2"><a href="ch_promises.html#cb1133-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(x <span class="kw">=&gt;</span> {</span>
+<span id="cb1133-3"><a href="ch_promises.html#cb1133-3" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb1133-4"><a href="ch_promises.html#cb1133-4" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>If the parameter is already a Promise, it is returned unchanged:</p>
+<div class="sourceCode" id="cb1134"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1134-1"><a href="ch_promises.html#cb1134-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> abcPromise <span class="op">=</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'abc'</span>)<span class="op">;</span></span>
+<span id="cb1134-2"><a href="ch_promises.html#cb1134-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1134-3"><a href="ch_promises.html#cb1134-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(abcPromise)<span class="op">,</span></span>
+<span id="cb1134-4"><a href="ch_promises.html#cb1134-4" aria-hidden="true" tabindex="-1"></a>  abcPromise)<span class="op">;</span></span></code></pre></div>
+<p>Therefore, given an arbitrary value <code>x</code>, we can use <code>Promise.resolve(x)</code> to ensure we have a Promise.</p>
+<p>Note that the name is <code>resolve</code>, not <code>fulfill</code>, because <code>.resolve()</code> returns a rejected Promise if its Parameter is a rejected Promise.</p>
+<h4 id="promise.reject-create-a-promise-rejected-with-a-given-value">40.1.6 <code>Promise.reject()</code>: create a Promise rejected with a given value</h4>
+<p><code>Promise.reject(err)</code> creates a Promise that is rejected with the value <code>err</code>:</p>
+<div class="sourceCode" id="cb1135"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1135-1"><a href="ch_promises.html#cb1135-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> myError <span class="op">=</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'My error!'</span>)<span class="op">;</span></span>
+<span id="cb1135-2"><a href="ch_promises.html#cb1135-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(myError)</span>
+<span id="cb1135-3"><a href="ch_promises.html#cb1135-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(err <span class="kw">=&gt;</span> {</span>
+<span id="cb1135-4"><a href="ch_promises.html#cb1135-4" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(err<span class="op">,</span> myError)<span class="op">;</span></span>
+<span id="cb1135-5"><a href="ch_promises.html#cb1135-5" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h4 id="returning-and-throwing-in-.then-callbacks">40.1.7 Returning and throwing in <code>.then()</code> callbacks</h4>
+<p><code>.then()</code> handles Promise fulfillments. It also returns a fresh Promise. How that Promise is settled depends on what happens inside the callback. Let’s look at three common cases.</p>
+<h5 id="returning-a-non-promise-value">40.1.7.1 Returning a non-Promise value</h5>
+<p>First, the callback can return a non-Promise value (line A). Consequently, the Promise returned by <code>.then()</code> is fulfilled with that value (as checked in line B):</p>
+<div class="sourceCode" id="cb1136"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1136-1"><a href="ch_promises.html#cb1136-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'abc'</span>)</span>
+<span id="cb1136-2"><a href="ch_promises.html#cb1136-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(str <span class="kw">=&gt;</span> {</span>
+<span id="cb1136-3"><a href="ch_promises.html#cb1136-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> str <span class="op">+</span> str<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1136-4"><a href="ch_promises.html#cb1136-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1136-5"><a href="ch_promises.html#cb1136-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(str2 <span class="kw">=&gt;</span> {</span>
+<span id="cb1136-6"><a href="ch_promises.html#cb1136-6" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(str2<span class="op">,</span> <span class="st">'abcabc'</span>)<span class="op">;</span> <span class="co">// (B)</span></span>
+<span id="cb1136-7"><a href="ch_promises.html#cb1136-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h5 id="returning-a-promise">40.1.7.2 Returning a Promise</h5>
+<p>Second, the callback can return a Promise <code>p</code> (line A). Consequently, <code>p</code> “becomes” what <code>.then()</code> returns. In other words: the Promise that <code>.then()</code> has already returned is effectively replaced by <code>p</code>.</p>
+<div class="sourceCode" id="cb1137"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1137-1"><a href="ch_promises.html#cb1137-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'abc'</span>)</span>
+<span id="cb1137-2"><a href="ch_promises.html#cb1137-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(str <span class="kw">=&gt;</span> {</span>
+<span id="cb1137-3"><a href="ch_promises.html#cb1137-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="dv">123</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1137-4"><a href="ch_promises.html#cb1137-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1137-5"><a href="ch_promises.html#cb1137-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(num <span class="kw">=&gt;</span> {</span>
+<span id="cb1137-6"><a href="ch_promises.html#cb1137-6" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(num<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb1137-7"><a href="ch_promises.html#cb1137-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>Why is that useful? We can return the result of a Promise-based operation and process its fulfillment value via a “flat” (non-nested) <code>.then()</code>. Compare:</p>
+<div class="sourceCode" id="cb1138"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1138-1"><a href="ch_promises.html#cb1138-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Flat</span></span>
+<span id="cb1138-2"><a href="ch_promises.html#cb1138-2" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc1</span>()</span>
+<span id="cb1138-3"><a href="ch_promises.html#cb1138-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result1 <span class="kw">=&gt;</span> {</span>
+<span id="cb1138-4"><a href="ch_promises.html#cb1138-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">/*···*/</span></span>
+<span id="cb1138-5"><a href="ch_promises.html#cb1138-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">asyncFunc2</span>()<span class="op">;</span></span>
+<span id="cb1138-6"><a href="ch_promises.html#cb1138-6" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1138-7"><a href="ch_promises.html#cb1138-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result2 <span class="kw">=&gt;</span> {</span>
+<span id="cb1138-8"><a href="ch_promises.html#cb1138-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">/*···*/</span></span>
+<span id="cb1138-9"><a href="ch_promises.html#cb1138-9" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1138-10"><a href="ch_promises.html#cb1138-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1138-11"><a href="ch_promises.html#cb1138-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Nested</span></span>
+<span id="cb1138-12"><a href="ch_promises.html#cb1138-12" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc1</span>()</span>
+<span id="cb1138-13"><a href="ch_promises.html#cb1138-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result1 <span class="kw">=&gt;</span> {</span>
+<span id="cb1138-14"><a href="ch_promises.html#cb1138-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">/*···*/</span></span>
+<span id="cb1138-15"><a href="ch_promises.html#cb1138-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">asyncFunc2</span>()</span>
+<span id="cb1138-16"><a href="ch_promises.html#cb1138-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(result2 <span class="kw">=&gt;</span> {</span>
+<span id="cb1138-17"><a href="ch_promises.html#cb1138-17" aria-hidden="true" tabindex="-1"></a>      <span class="co">/*···*/</span></span>
+<span id="cb1138-18"><a href="ch_promises.html#cb1138-18" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1138-19"><a href="ch_promises.html#cb1138-19" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h5 id="throwing-an-exception">40.1.7.3 Throwing an exception</h5>
+<p>Third, the callback can throw an exception. Consequently, the Promise returned by <code>.then()</code> is rejected with that exception. That is, a synchronous error is converted into an asynchronous error.</p>
+<div class="sourceCode" id="cb1139"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1139-1"><a href="ch_promises.html#cb1139-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> myError <span class="op">=</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'My error!'</span>)<span class="op">;</span></span>
+<span id="cb1139-2"><a href="ch_promises.html#cb1139-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'abc'</span>)</span>
+<span id="cb1139-3"><a href="ch_promises.html#cb1139-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(str <span class="kw">=&gt;</span> {</span>
+<span id="cb1139-4"><a href="ch_promises.html#cb1139-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> myError<span class="op">;</span></span>
+<span id="cb1139-5"><a href="ch_promises.html#cb1139-5" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1139-6"><a href="ch_promises.html#cb1139-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(err <span class="kw">=&gt;</span> {</span>
+<span id="cb1139-7"><a href="ch_promises.html#cb1139-7" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(err<span class="op">,</span> myError)<span class="op">;</span></span>
+<span id="cb1139-8"><a href="ch_promises.html#cb1139-8" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h4 id="catch-and-its-callback">40.1.8 <code>.catch()</code> and its callback</h4>
+<p>The difference between <code>.then()</code> and <code>.catch()</code> is that the latter is triggered by rejections, not fulfillments. However, both methods turn the actions of their callbacks into Promises in the same manner. For example, in the following code, the value returned by the <code>.catch()</code> callback in line A becomes a fulfillment value:</p>
+<div class="sourceCode" id="cb1140"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1140-1"><a href="ch_promises.html#cb1140-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> err <span class="op">=</span> <span class="kw">new</span> <span class="bu">Error</span>()<span class="op">;</span></span>
+<span id="cb1140-2"><a href="ch_promises.html#cb1140-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1140-3"><a href="ch_promises.html#cb1140-3" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(err)</span>
+<span id="cb1140-4"><a href="ch_promises.html#cb1140-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(e <span class="kw">=&gt;</span> {</span>
+<span id="cb1140-5"><a href="ch_promises.html#cb1140-5" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(e<span class="op">,</span> err)<span class="op">;</span></span>
+<span id="cb1140-6"><a href="ch_promises.html#cb1140-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Something went wrong, use a default value</span></span>
+<span id="cb1140-7"><a href="ch_promises.html#cb1140-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'default value'</span><span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1140-8"><a href="ch_promises.html#cb1140-8" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1140-9"><a href="ch_promises.html#cb1140-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(str <span class="kw">=&gt;</span> {</span>
+<span id="cb1140-10"><a href="ch_promises.html#cb1140-10" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(str<span class="op">,</span> <span class="st">'default value'</span>)<span class="op">;</span></span>
+<span id="cb1140-11"><a href="ch_promises.html#cb1140-11" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h4 id="chaining-method-calls">40.1.9 Chaining method calls</h4>
+<p><code>.then()</code> and <code>.catch()</code> always return Promises. That enables us to create arbitrary long chains of method calls:</p>
+<div class="sourceCode" id="cb1141"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1141-1"><a href="ch_promises.html#cb1141-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">myAsyncFunc</span>() {</span>
+<span id="cb1141-2"><a href="ch_promises.html#cb1141-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">asyncFunc1</span>() <span class="co">// (A)</span></span>
+<span id="cb1141-3"><a href="ch_promises.html#cb1141-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(result1 <span class="kw">=&gt;</span> {</span>
+<span id="cb1141-4"><a href="ch_promises.html#cb1141-4" aria-hidden="true" tabindex="-1"></a>      <span class="co">// ···</span></span>
+<span id="cb1141-5"><a href="ch_promises.html#cb1141-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="fu">asyncFunc2</span>()<span class="op">;</span> <span class="co">// a Promise</span></span>
+<span id="cb1141-6"><a href="ch_promises.html#cb1141-6" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1141-7"><a href="ch_promises.html#cb1141-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(result2 <span class="kw">=&gt;</span> {</span>
+<span id="cb1141-8"><a href="ch_promises.html#cb1141-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">// ···</span></span>
+<span id="cb1141-9"><a href="ch_promises.html#cb1141-9" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> result2 <span class="op">??</span> <span class="st">'(Empty)'</span><span class="op">;</span> <span class="co">// not a Promise</span></span>
+<span id="cb1141-10"><a href="ch_promises.html#cb1141-10" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1141-11"><a href="ch_promises.html#cb1141-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(result3 <span class="kw">=&gt;</span> {</span>
+<span id="cb1141-12"><a href="ch_promises.html#cb1141-12" aria-hidden="true" tabindex="-1"></a>      <span class="co">// ···</span></span>
+<span id="cb1141-13"><a href="ch_promises.html#cb1141-13" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="fu">asyncFunc4</span>()<span class="op">;</span> <span class="co">// a Promise</span></span>
+<span id="cb1141-14"><a href="ch_promises.html#cb1141-14" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1141-15"><a href="ch_promises.html#cb1141-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Due to chaining, the <code>return</code> in line A returns the result of the last <code>.then()</code>.</p>
+<p>In a way, <code>.then()</code> is the asynchronous version of the synchronous semicolon:</p>
+<ul>
+<li><code>.then()</code> executes two asynchronous operations sequentially.</li>
+<li>The semicolon executes two synchronous operations sequentially.</li>
+</ul>
+<p>We can also add <code>.catch()</code> into the mix and let it handle multiple error sources at the same time:</p>
+<div class="sourceCode" id="cb1142"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1142-1"><a href="ch_promises.html#cb1142-1" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc1</span>()</span>
+<span id="cb1142-2"><a href="ch_promises.html#cb1142-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result1 <span class="kw">=&gt;</span> {</span>
+<span id="cb1142-3"><a href="ch_promises.html#cb1142-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb1142-4"><a href="ch_promises.html#cb1142-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">asyncFunction2</span>()<span class="op">;</span></span>
+<span id="cb1142-5"><a href="ch_promises.html#cb1142-5" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1142-6"><a href="ch_promises.html#cb1142-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result2 <span class="kw">=&gt;</span> {</span>
+<span id="cb1142-7"><a href="ch_promises.html#cb1142-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb1142-8"><a href="ch_promises.html#cb1142-8" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1142-9"><a href="ch_promises.html#cb1142-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(error <span class="kw">=&gt;</span> {</span>
+<span id="cb1142-10"><a href="ch_promises.html#cb1142-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Failure: handle errors of asyncFunc1(), asyncFunc2()</span></span>
+<span id="cb1142-11"><a href="ch_promises.html#cb1142-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// and any (sync) exceptions thrown in previous callbacks</span></span>
+<span id="cb1142-12"><a href="ch_promises.html#cb1142-12" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h4 id="Promise.prototype.finally">40.1.10 <code>.finally()</code> [ES2018]</h4>
+<p>The Promise method <code>.finally()</code> is often used as follows:</p>
+<div class="sourceCode" id="cb1143"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1143-1"><a href="ch_promises.html#cb1143-1" aria-hidden="true" tabindex="-1"></a>somePromise</span>
+<span id="cb1143-2"><a href="ch_promises.html#cb1143-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>((result) <span class="kw">=&gt;</span> {</span>
+<span id="cb1143-3"><a href="ch_promises.html#cb1143-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb1143-4"><a href="ch_promises.html#cb1143-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1143-5"><a href="ch_promises.html#cb1143-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>((error) <span class="kw">=&gt;</span> {</span>
+<span id="cb1143-6"><a href="ch_promises.html#cb1143-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb1143-7"><a href="ch_promises.html#cb1143-7" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1143-8"><a href="ch_promises.html#cb1143-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">finally</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb1143-9"><a href="ch_promises.html#cb1143-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb1143-10"><a href="ch_promises.html#cb1143-10" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1143-11"><a href="ch_promises.html#cb1143-11" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span></code></pre></div>
+<p>The <code>.finally()</code> callback is always executed – independently of <code>somePromise</code> and the values returned by <code>.then()</code> and/or <code>.catch()</code>. In contrast:</p>
+<ul>
+<li>The <code>.then()</code> callback is only executed if <code>somePromise</code> is fulfilled.</li>
+<li>The <code>.catch()</code> callback is only executed if:
+<ul>
+<li>either <code>somePromise</code> is rejected,</li>
+<li>or the <code>.then()</code> callback returns a rejected Promise,</li>
+<li>or the <code>.then()</code> callback throws an exception.</li>
+</ul></li>
+</ul>
+<p><code>.finally()</code> ignores what its callback returns and simply passes on the settlement that existed before it was called:</p>
+<div class="sourceCode" id="cb1144"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1144-1"><a href="ch_promises.html#cb1144-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="dv">123</span>)</span>
+<span id="cb1144-2"><a href="ch_promises.html#cb1144-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">finally</span>(() <span class="kw">=&gt;</span> {})</span>
+<span id="cb1144-3"><a href="ch_promises.html#cb1144-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>((result) <span class="kw">=&gt;</span> {</span>
+<span id="cb1144-4"><a href="ch_promises.html#cb1144-4" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(result<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb1144-5"><a href="ch_promises.html#cb1144-5" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1144-6"><a href="ch_promises.html#cb1144-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1144-7"><a href="ch_promises.html#cb1144-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="st">'error'</span>)</span>
+<span id="cb1144-8"><a href="ch_promises.html#cb1144-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">finally</span>(() <span class="kw">=&gt;</span> {})</span>
+<span id="cb1144-9"><a href="ch_promises.html#cb1144-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>((error) <span class="kw">=&gt;</span> {</span>
+<span id="cb1144-10"><a href="ch_promises.html#cb1144-10" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(error<span class="op">,</span> <span class="st">'error'</span>)<span class="op">;</span></span>
+<span id="cb1144-11"><a href="ch_promises.html#cb1144-11" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>If, however, the <code>.finally()</code> callback throws an exception, the Promise returned by <code>.finally()</code> is rejected:</p>
+<div class="sourceCode" id="cb1145"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1145-1"><a href="ch_promises.html#cb1145-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="st">'error (originally)'</span>)</span>
+<span id="cb1145-2"><a href="ch_promises.html#cb1145-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">finally</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb1145-3"><a href="ch_promises.html#cb1145-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="st">'error (finally)'</span><span class="op">;</span></span>
+<span id="cb1145-4"><a href="ch_promises.html#cb1145-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1145-5"><a href="ch_promises.html#cb1145-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>((error) <span class="kw">=&gt;</span> {</span>
+<span id="cb1145-6"><a href="ch_promises.html#cb1145-6" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(error<span class="op">,</span> <span class="st">'error (finally)'</span>)<span class="op">;</span></span>
+<span id="cb1145-7"><a href="ch_promises.html#cb1145-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h5 id="use-case-for-.finally-cleaning-up">40.1.10.1 Use case for <code>.finally()</code>: cleaning up</h5>
+<p>One common use case for <code>.finally()</code> is similar to a common use case of the synchronous <code>finally</code> clause: cleaning up after you are done with a resource. That should always happen, regardless of whether everything went smoothly or there was an error – for example:</p>
+<div class="sourceCode" id="cb1146"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1146-1"><a href="ch_promises.html#cb1146-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> connection<span class="op">;</span></span>
+<span id="cb1146-2"><a href="ch_promises.html#cb1146-2" aria-hidden="true" tabindex="-1"></a>db<span class="op">.</span><span class="fu">open</span>()</span>
+<span id="cb1146-3"><a href="ch_promises.html#cb1146-3" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">then</span>((conn) <span class="kw">=&gt;</span> {</span>
+<span id="cb1146-4"><a href="ch_promises.html#cb1146-4" aria-hidden="true" tabindex="-1"></a>  connection <span class="op">=</span> conn<span class="op">;</span></span>
+<span id="cb1146-5"><a href="ch_promises.html#cb1146-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> connection<span class="op">.</span><span class="fu">select</span>({ <span class="dt">name</span><span class="op">:</span> <span class="st">'Jane'</span> })<span class="op">;</span></span>
+<span id="cb1146-6"><a href="ch_promises.html#cb1146-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1146-7"><a href="ch_promises.html#cb1146-7" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">then</span>((result) <span class="kw">=&gt;</span> {</span>
+<span id="cb1146-8"><a href="ch_promises.html#cb1146-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Process result</span></span>
+<span id="cb1146-9"><a href="ch_promises.html#cb1146-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Use `connection` to make more queries</span></span>
+<span id="cb1146-10"><a href="ch_promises.html#cb1146-10" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1146-11"><a href="ch_promises.html#cb1146-11" aria-hidden="true" tabindex="-1"></a><span class="co">// ···</span></span>
+<span id="cb1146-12"><a href="ch_promises.html#cb1146-12" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">catch</span>((error) <span class="kw">=&gt;</span> {</span>
+<span id="cb1146-13"><a href="ch_promises.html#cb1146-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">// handle errors</span></span>
+<span id="cb1146-14"><a href="ch_promises.html#cb1146-14" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1146-15"><a href="ch_promises.html#cb1146-15" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">finally</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb1146-16"><a href="ch_promises.html#cb1146-16" aria-hidden="true" tabindex="-1"></a>  connection<span class="op">.</span><span class="fu">close</span>()<span class="op">;</span></span>
+<span id="cb1146-17"><a href="ch_promises.html#cb1146-17" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<h5 id="use-case-for-.finally-doing-something-first-after-any-kind-of-settlement">40.1.10.2 Use case for <code>.finally()</code>: doing something first after any kind of settlement</h5>
+<p>We can also use <code>.finally()</code> before both <code>.then()</code> and <code>.catch()</code>. Then what we do in the <code>.finally()</code> callback is always executed before the other two callbacks.</p>
+<p>For example, this is what happens with a fulfilled Promise:</p>
+<div class="sourceCode" id="cb1147"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1147-1"><a href="ch_promises.html#cb1147-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'fulfilled'</span>)</span>
+<span id="cb1147-2"><a href="ch_promises.html#cb1147-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">finally</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb1147-3"><a href="ch_promises.html#cb1147-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'finally'</span>)<span class="op">;</span></span>
+<span id="cb1147-4"><a href="ch_promises.html#cb1147-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1147-5"><a href="ch_promises.html#cb1147-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>((result) <span class="kw">=&gt;</span> {</span>
+<span id="cb1147-6"><a href="ch_promises.html#cb1147-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'then '</span> <span class="op">+</span> result)<span class="op">;</span></span>
+<span id="cb1147-7"><a href="ch_promises.html#cb1147-7" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1147-8"><a href="ch_promises.html#cb1147-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>((error) <span class="kw">=&gt;</span> {</span>
+<span id="cb1147-9"><a href="ch_promises.html#cb1147-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'catch '</span> <span class="op">+</span> error)<span class="op">;</span></span>
+<span id="cb1147-10"><a href="ch_promises.html#cb1147-10" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1147-11"><a href="ch_promises.html#cb1147-11" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span>
+<span id="cb1147-12"><a href="ch_promises.html#cb1147-12" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1147-13"><a href="ch_promises.html#cb1147-13" aria-hidden="true" tabindex="-1"></a><span class="co">// 'finally'</span></span>
+<span id="cb1147-14"><a href="ch_promises.html#cb1147-14" aria-hidden="true" tabindex="-1"></a><span class="co">// 'then fulfilled'</span></span></code></pre></div>
+<p>This is what happens with a rejected Promise:</p>
+<div class="sourceCode" id="cb1148"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1148-1"><a href="ch_promises.html#cb1148-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="st">'rejected'</span>)</span>
+<span id="cb1148-2"><a href="ch_promises.html#cb1148-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">finally</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb1148-3"><a href="ch_promises.html#cb1148-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'finally'</span>)<span class="op">;</span></span>
+<span id="cb1148-4"><a href="ch_promises.html#cb1148-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1148-5"><a href="ch_promises.html#cb1148-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>((result) <span class="kw">=&gt;</span> {</span>
+<span id="cb1148-6"><a href="ch_promises.html#cb1148-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'then '</span> <span class="op">+</span> result)<span class="op">;</span></span>
+<span id="cb1148-7"><a href="ch_promises.html#cb1148-7" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1148-8"><a href="ch_promises.html#cb1148-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>((error) <span class="kw">=&gt;</span> {</span>
+<span id="cb1148-9"><a href="ch_promises.html#cb1148-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'catch '</span> <span class="op">+</span> error)<span class="op">;</span></span>
+<span id="cb1148-10"><a href="ch_promises.html#cb1148-10" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1148-11"><a href="ch_promises.html#cb1148-11" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span>
+<span id="cb1148-12"><a href="ch_promises.html#cb1148-12" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1148-13"><a href="ch_promises.html#cb1148-13" aria-hidden="true" tabindex="-1"></a><span class="co">// 'finally'</span></span>
+<span id="cb1148-14"><a href="ch_promises.html#cb1148-14" aria-hidden="true" tabindex="-1"></a><span class="co">// 'catch rejected'</span></span></code></pre></div>
+<h4 id="advantages-of-promises-over-plain-callbacks">40.1.11 Advantages of promises over plain callbacks</h4>
+<p>These are some of the advantages of Promises over plain callbacks when it comes to handling one-off results:</p>
+<ul>
+<li><p>The type signatures of Promise-based functions and methods are cleaner: if a function is callback-based, some parameters are about input, while the one or two callbacks at the end are about output. With Promises, everything output-related is handled via the returned value.</p></li>
+<li><p>Chaining asynchronous processing steps is more convenient.</p></li>
+<li><p>Promises handle both asynchronous errors (via rejections) and synchronous errors: Inside the callbacks for <code>new Promise()</code>, <code>.then()</code>, and <code>.catch()</code>, exceptions are converted to rejections. In contrast, if we use callbacks for asynchronicity, exceptions are normally not handled for us; we have to do it ourselves.</p></li>
+<li><p>Promises are a single standard that is slowly replacing several, mutually incompatible alternatives. For example, in Node.js, many functions are now available in Promise-based versions. And new asynchronous browser APIs are usually Promise-based.</p></li>
+</ul>
+<p>One of the biggest advantages of Promises involves not working with them directly: they are the foundation of <em>async functions</em>, a synchronous-looking syntax for performing asynchronous computations. Asynchronous functions are covered in <a href="ch_async-functions.html">the next chapter</a>.</p>
+<h3 id="examples-1">40.2 Examples</h3>
+<p>Seeing Promises in action helps with understanding them. Let’s look at examples.</p>
+<h4 id="node.js-reading-a-file-asynchronously">40.2.1 Node.js: Reading a file asynchronously</h4>
+<p>Consider the following text file <code>person.json</code> with <a href="ch_json.html">JSON data</a> in it:</p>
+<div class="sourceCode" id="cb1149"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb1149-1"><a href="ch_promises.html#cb1149-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1149-2"><a href="ch_promises.html#cb1149-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"first"</span><span class="fu">:</span> <span class="st">"Jane"</span><span class="fu">,</span></span>
+<span id="cb1149-3"><a href="ch_promises.html#cb1149-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"last"</span><span class="fu">:</span> <span class="st">"Doe"</span></span>
+<span id="cb1149-4"><a href="ch_promises.html#cb1149-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Let’s look at two versions of code that reads this file and parses it into an object. First, a callback-based version. Second, a Promise-based version.</p>
+<h5 id="the-callback-based-version">40.2.1.1 The callback-based version</h5>
+<p>The following code reads the contents of this file and converts it to a JavaScript object. It is based on Node.js-style callbacks:</p>
+<div class="sourceCode" id="cb1150"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1150-1"><a href="ch_promises.html#cb1150-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> fs <span class="im">from</span> <span class="st">'fs'</span><span class="op">;</span></span>
+<span id="cb1150-2"><a href="ch_promises.html#cb1150-2" aria-hidden="true" tabindex="-1"></a>fs<span class="op">.</span><span class="fu">readFile</span>(<span class="st">'person.json'</span><span class="op">,</span></span>
+<span id="cb1150-3"><a href="ch_promises.html#cb1150-3" aria-hidden="true" tabindex="-1"></a>  (error<span class="op">,</span> text) <span class="kw">=&gt;</span> {</span>
+<span id="cb1150-4"><a href="ch_promises.html#cb1150-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (error) { <span class="co">// (A)</span></span>
+<span id="cb1150-5"><a href="ch_promises.html#cb1150-5" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Failure</span></span>
+<span id="cb1150-6"><a href="ch_promises.html#cb1150-6" aria-hidden="true" tabindex="-1"></a>      assert<span class="op">.</span><span class="fu">fail</span>(error)<span class="op">;</span></span>
+<span id="cb1150-7"><a href="ch_promises.html#cb1150-7" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb1150-8"><a href="ch_promises.html#cb1150-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Success</span></span>
+<span id="cb1150-9"><a href="ch_promises.html#cb1150-9" aria-hidden="true" tabindex="-1"></a>      <span class="cf">try</span> { <span class="co">// (B)</span></span>
+<span id="cb1150-10"><a href="ch_promises.html#cb1150-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> obj <span class="op">=</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(text)<span class="op">;</span> <span class="co">// (C)</span></span>
+<span id="cb1150-11"><a href="ch_promises.html#cb1150-11" aria-hidden="true" tabindex="-1"></a>        assert<span class="op">.</span><span class="fu">deepEqual</span>(obj<span class="op">,</span> {</span>
+<span id="cb1150-12"><a href="ch_promises.html#cb1150-12" aria-hidden="true" tabindex="-1"></a>          <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb1150-13"><a href="ch_promises.html#cb1150-13" aria-hidden="true" tabindex="-1"></a>          <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span><span class="op">,</span></span>
+<span id="cb1150-14"><a href="ch_promises.html#cb1150-14" aria-hidden="true" tabindex="-1"></a>        })<span class="op">;</span></span>
+<span id="cb1150-15"><a href="ch_promises.html#cb1150-15" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">catch</span> (e) {</span>
+<span id="cb1150-16"><a href="ch_promises.html#cb1150-16" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Invalid JSON</span></span>
+<span id="cb1150-17"><a href="ch_promises.html#cb1150-17" aria-hidden="true" tabindex="-1"></a>        assert<span class="op">.</span><span class="fu">fail</span>(e)<span class="op">;</span></span>
+<span id="cb1150-18"><a href="ch_promises.html#cb1150-18" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1150-19"><a href="ch_promises.html#cb1150-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1150-20"><a href="ch_promises.html#cb1150-20" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p><code>fs</code> is a built-in Node.js module for file system operations. We use the callback-based function <code>fs.readFile()</code> to read a file whose name is <code>person.json</code>. If we succeed, the content is delivered via the parameter <code>text</code> as a string. In line C, we convert that string from the text-based data format JSON into a JavaScript object. <code>JSON</code> is an object with methods for consuming and producing JSON. It is part of JavaScript’s standard library and documented <a href="ch_json.html">later in this book</a>.</p>
+<p>Note that there are two error-handling mechanisms: the <code>if</code> in line A takes care of asynchronous errors reported by <code>fs.readFile()</code>, while the <code>try</code> in line B takes care of synchronous errors reported by <code>JSON.parse()</code>.</p>
+<h5 id="the-promise-based-version">40.2.1.2 The Promise-based version</h5>
+<p>The following code uses <code>readFileAsync()</code>, a Promise-based version of <code>fs.readFile()</code> (created via <code>util.promisify()</code>, which is explained later):</p>
+<div class="sourceCode" id="cb1151"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1151-1"><a href="ch_promises.html#cb1151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">readFileAsync</span>(<span class="st">'person.json'</span>)</span>
+<span id="cb1151-2"><a href="ch_promises.html#cb1151-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(text <span class="kw">=&gt;</span> { <span class="co">// (A)</span></span>
+<span id="cb1151-3"><a href="ch_promises.html#cb1151-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Success</span></span>
+<span id="cb1151-4"><a href="ch_promises.html#cb1151-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> obj <span class="op">=</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(text)<span class="op">;</span></span>
+<span id="cb1151-5"><a href="ch_promises.html#cb1151-5" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">deepEqual</span>(obj<span class="op">,</span> {</span>
+<span id="cb1151-6"><a href="ch_promises.html#cb1151-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb1151-7"><a href="ch_promises.html#cb1151-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span><span class="op">,</span></span>
+<span id="cb1151-8"><a href="ch_promises.html#cb1151-8" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1151-9"><a href="ch_promises.html#cb1151-9" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1151-10"><a href="ch_promises.html#cb1151-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(err <span class="kw">=&gt;</span> { <span class="co">// (B)</span></span>
+<span id="cb1151-11"><a href="ch_promises.html#cb1151-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Failure: file I/O error or JSON syntax error</span></span>
+<span id="cb1151-12"><a href="ch_promises.html#cb1151-12" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">fail</span>(err)<span class="op">;</span></span>
+<span id="cb1151-13"><a href="ch_promises.html#cb1151-13" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>Function <code>readFileAsync()</code> returns a Promise. In line A, we specify a success callback via method <code>.then()</code> of that Promise. The remaining code in <code>then</code>’s callback is synchronous.</p>
+<p><code>.then()</code> returns a Promise, which enables the invocation of the Promise method <code>.catch()</code> in line B. We use it to specify a failure callback.</p>
+<p>Note that <code>.catch()</code> lets us handle both the asynchronous errors of <code>readFileAsync()</code> and the synchronous errors of <code>JSON.parse()</code> because exceptions inside a <code>.then()</code> callback become rejections.</p>
+<h4 id="promisifying-xmlhttprequest">40.2.2 Browsers: Promisifying <code>XMLHttpRequest</code></h4>
+<p>We have previously seen the event-based <code>XMLHttpRequest</code> API for downloading data in web browsers. The following function promisifies that API:</p>
+<div class="sourceCode" id="cb1152"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1152-1"><a href="ch_promises.html#cb1152-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">httpGet</span>(url) {</span>
+<span id="cb1152-2"><a href="ch_promises.html#cb1152-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>(</span>
+<span id="cb1152-3"><a href="ch_promises.html#cb1152-3" aria-hidden="true" tabindex="-1"></a>    (resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span> {</span>
+<span id="cb1152-4"><a href="ch_promises.html#cb1152-4" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> xhr <span class="op">=</span> <span class="kw">new</span> <span class="bu">XMLHttpRequest</span>()<span class="op">;</span></span>
+<span id="cb1152-5"><a href="ch_promises.html#cb1152-5" aria-hidden="true" tabindex="-1"></a>      xhr<span class="op">.</span><span class="at">onload</span> <span class="op">=</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb1152-6"><a href="ch_promises.html#cb1152-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (xhr<span class="op">.</span><span class="at">status</span> <span class="op">===</span> <span class="dv">200</span>) {</span>
+<span id="cb1152-7"><a href="ch_promises.html#cb1152-7" aria-hidden="true" tabindex="-1"></a>          <span class="fu">resolve</span>(xhr<span class="op">.</span><span class="at">responseText</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1152-8"><a href="ch_promises.html#cb1152-8" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb1152-9"><a href="ch_promises.html#cb1152-9" aria-hidden="true" tabindex="-1"></a>          <span class="co">// Something went wrong (404, etc.)</span></span>
+<span id="cb1152-10"><a href="ch_promises.html#cb1152-10" aria-hidden="true" tabindex="-1"></a>          <span class="fu">reject</span>(<span class="kw">new</span> <span class="bu">Error</span>(xhr<span class="op">.</span><span class="at">statusText</span>))<span class="op">;</span> <span class="co">// (B)</span></span>
+<span id="cb1152-11"><a href="ch_promises.html#cb1152-11" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1152-12"><a href="ch_promises.html#cb1152-12" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1152-13"><a href="ch_promises.html#cb1152-13" aria-hidden="true" tabindex="-1"></a>      xhr<span class="op">.</span><span class="at">onerror</span> <span class="op">=</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb1152-14"><a href="ch_promises.html#cb1152-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">reject</span>(<span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Network error'</span>))<span class="op">;</span> <span class="co">// (C)</span></span>
+<span id="cb1152-15"><a href="ch_promises.html#cb1152-15" aria-hidden="true" tabindex="-1"></a>      }<span class="op">;</span></span>
+<span id="cb1152-16"><a href="ch_promises.html#cb1152-16" aria-hidden="true" tabindex="-1"></a>      xhr<span class="op">.</span><span class="fu">open</span>(<span class="st">'GET'</span><span class="op">,</span> url)<span class="op">;</span></span>
+<span id="cb1152-17"><a href="ch_promises.html#cb1152-17" aria-hidden="true" tabindex="-1"></a>      xhr<span class="op">.</span><span class="fu">send</span>()<span class="op">;</span></span>
+<span id="cb1152-18"><a href="ch_promises.html#cb1152-18" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1152-19"><a href="ch_promises.html#cb1152-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Note how the results and errors of <code>XMLHttpRequest</code> are handled via <code>resolve()</code> and <code>reject()</code>:</p>
+<ul>
+<li>A successful outcome leads to the returned Promise being fullfilled with it (line A).</li>
+<li>An error leads to the Promise being rejected (lines B and C).</li>
+</ul>
+<p>This is how to use <code>httpGet()</code>:</p>
+<div class="sourceCode" id="cb1153"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1153-1"><a href="ch_promises.html#cb1153-1" aria-hidden="true" tabindex="-1"></a><span class="fu">httpGet</span>(<span class="st">'http://example.com/textfile.txt'</span>)</span>
+<span id="cb1153-2"><a href="ch_promises.html#cb1153-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(content <span class="kw">=&gt;</span> {</span>
+<span id="cb1153-3"><a href="ch_promises.html#cb1153-3" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(content<span class="op">,</span> <span class="st">'Content of textfile.txt</span><span class="sc">\n</span><span class="st">'</span>)<span class="op">;</span></span>
+<span id="cb1153-4"><a href="ch_promises.html#cb1153-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1153-5"><a href="ch_promises.html#cb1153-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(error <span class="kw">=&gt;</span> {</span>
+<span id="cb1153-6"><a href="ch_promises.html#cb1153-6" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">fail</span>(error)<span class="op">;</span></span>
+<span id="cb1153-7"><a href="ch_promises.html#cb1153-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Timing out a Promise</strong></p>
+<p><code>exercises/promises/promise_timeout_test.mjs</code></p>
+</div>
+<h4 id="node.js-util.promisify">40.2.3 Node.js: <code>util.promisify()</code></h4>
+<p><code>util.promisify()</code> is a utility function that converts a callback-based function <code>f</code> into a Promise-based one. That is, we are going from this type signature:</p>
+<pre class="text"><code>f(arg_1, ···, arg_n, (err: Error, result: T) =&gt; void) : void</code></pre>
+<p>To this type signature:</p>
+<pre class="text"><code>f(arg_1, ···, arg_n) : Promise&lt;T&gt;</code></pre>
+<p>The following code promisifies the callback-based <code>fs.readFile()</code> (line A) and uses it:</p>
+<div class="sourceCode" id="cb1156"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1156-1"><a href="ch_promises.html#cb1156-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> fs <span class="im">from</span> <span class="st">'fs'</span><span class="op">;</span></span>
+<span id="cb1156-2"><a href="ch_promises.html#cb1156-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {promisify} <span class="im">from</span> <span class="st">'util'</span><span class="op">;</span></span>
+<span id="cb1156-3"><a href="ch_promises.html#cb1156-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1156-4"><a href="ch_promises.html#cb1156-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> readFileAsync <span class="op">=</span> <span class="fu">promisify</span>(fs<span class="op">.</span><span class="at">readFile</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1156-5"><a href="ch_promises.html#cb1156-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1156-6"><a href="ch_promises.html#cb1156-6" aria-hidden="true" tabindex="-1"></a><span class="fu">readFileAsync</span>(<span class="st">'some-file.txt'</span><span class="op">,</span> {<span class="dt">encoding</span><span class="op">:</span> <span class="st">'utf8'</span>})</span>
+<span id="cb1156-7"><a href="ch_promises.html#cb1156-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(text <span class="kw">=&gt;</span> {</span>
+<span id="cb1156-8"><a href="ch_promises.html#cb1156-8" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(text<span class="op">,</span> <span class="st">'The content of some-file.txt</span><span class="sc">\n</span><span class="st">'</span>)<span class="op">;</span></span>
+<span id="cb1156-9"><a href="ch_promises.html#cb1156-9" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1156-10"><a href="ch_promises.html#cb1156-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(err <span class="kw">=&gt;</span> {</span>
+<span id="cb1156-11"><a href="ch_promises.html#cb1156-11" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">fail</span>(err)<span class="op">;</span></span>
+<span id="cb1156-12"><a href="ch_promises.html#cb1156-12" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercises: <code>util.promisify()</code></strong></p>
+<ul>
+<li>Using <code>util.promisify()</code>: <code>exercises/promises/read_file_async_exrc.mjs</code></li>
+<li>Implementing <code>util.promisify()</code> yourself: <code>exercises/promises/my_promisify_test.mjs</code></li>
+</ul>
+</div>
+<h4 id="browsers-fetch-api">40.2.4 Browsers: Fetch API</h4>
+<p>All modern browsers support Fetch, a new Promise-based API for downloading data. Think of it as a Promise-based version of <code>XMLHttpRequest</code>. The following is an excerpt of <a href="https://fetch.spec.whatwg.org/#fetch-api">the API</a>:</p>
+<div class="sourceCode" id="cb1157"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1157-1"><a href="ch_promises.html#cb1157-1" aria-hidden="true" tabindex="-1"></a>interface Body {</span>
+<span id="cb1157-2"><a href="ch_promises.html#cb1157-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>() <span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">&gt;;</span></span>
+<span id="cb1157-3"><a href="ch_promises.html#cb1157-3" aria-hidden="true" tabindex="-1"></a>  ···</span>
+<span id="cb1157-4"><a href="ch_promises.html#cb1157-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1157-5"><a href="ch_promises.html#cb1157-5" aria-hidden="true" tabindex="-1"></a>interface Response extends Body {</span>
+<span id="cb1157-6"><a href="ch_promises.html#cb1157-6" aria-hidden="true" tabindex="-1"></a>  ···</span>
+<span id="cb1157-7"><a href="ch_promises.html#cb1157-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1157-8"><a href="ch_promises.html#cb1157-8" aria-hidden="true" tabindex="-1"></a><span class="kw">declare</span> <span class="kw">function</span> <span class="fu">fetch</span>(str) <span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>Response<span class="op">&gt;;</span></span></code></pre></div>
+<p>That means we can use <code>fetch()</code> as follows:</p>
+<div class="sourceCode" id="cb1158"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1158-1"><a href="ch_promises.html#cb1158-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fetch</span>(<span class="st">'http://example.com/textfile.txt'</span>)</span>
+<span id="cb1158-2"><a href="ch_promises.html#cb1158-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">text</span>())</span>
+<span id="cb1158-3"><a href="ch_promises.html#cb1158-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(text <span class="kw">=&gt;</span> {</span>
+<span id="cb1158-4"><a href="ch_promises.html#cb1158-4" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(text<span class="op">,</span> <span class="st">'Content of textfile.txt</span><span class="sc">\n</span><span class="st">'</span>)<span class="op">;</span></span>
+<span id="cb1158-5"><a href="ch_promises.html#cb1158-5" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Using the fetch API</strong></p>
+<p><code>exercises/promises/fetch_json_test.mjs</code></p>
+</div>
+<h3 id="error-handling-dont-mix-rejections-and-exceptions">40.3 Error handling: don’t mix rejections and exceptions</h3>
+<p>Rule for implementing functions and methods:</p>
+<blockquote>
+<p>Don’t mix (asynchronous) rejections and (synchronous) exceptions.</p>
+</blockquote>
+<p>This makes our synchronous and asynchronous code more predictable and simpler because we can always focus on a single error-handling mechanism.</p>
+<p>For Promise-based functions and methods, the rule means that they should never throw exceptions. Alas, it is easy to accidentally get this wrong – for example:</p>
+<div class="sourceCode" id="cb1159"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1159-1"><a href="ch_promises.html#cb1159-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Don’t do this</span></span>
+<span id="cb1159-2"><a href="ch_promises.html#cb1159-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">asyncFunc</span>() {</span>
+<span id="cb1159-3"><a href="ch_promises.html#cb1159-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">doSomethingSync</span>()<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1159-4"><a href="ch_promises.html#cb1159-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">doSomethingAsync</span>()</span>
+<span id="cb1159-5"><a href="ch_promises.html#cb1159-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> {</span>
+<span id="cb1159-6"><a href="ch_promises.html#cb1159-6" aria-hidden="true" tabindex="-1"></a>      <span class="co">// ···</span></span>
+<span id="cb1159-7"><a href="ch_promises.html#cb1159-7" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1159-8"><a href="ch_promises.html#cb1159-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The problem is that if an exception is thrown in line A, then <code>asyncFunc()</code> will throw an exception. Callers of that function only expect rejections and are not prepared for an exception. There are three ways in which we can fix this issue.</p>
+<p>We can wrap the whole body of the function in a <code>try-catch</code> statement and return a rejected Promise if an exception is thrown:</p>
+<div class="sourceCode" id="cb1160"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1160-1"><a href="ch_promises.html#cb1160-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Solution 1</span></span>
+<span id="cb1160-2"><a href="ch_promises.html#cb1160-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">asyncFunc</span>() {</span>
+<span id="cb1160-3"><a href="ch_promises.html#cb1160-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb1160-4"><a href="ch_promises.html#cb1160-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">doSomethingSync</span>()<span class="op">;</span></span>
+<span id="cb1160-5"><a href="ch_promises.html#cb1160-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">doSomethingAsync</span>()</span>
+<span id="cb1160-6"><a href="ch_promises.html#cb1160-6" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> {</span>
+<span id="cb1160-7"><a href="ch_promises.html#cb1160-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">// ···</span></span>
+<span id="cb1160-8"><a href="ch_promises.html#cb1160-8" aria-hidden="true" tabindex="-1"></a>      })<span class="op">;</span></span>
+<span id="cb1160-9"><a href="ch_promises.html#cb1160-9" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">catch</span> (err) {</span>
+<span id="cb1160-10"><a href="ch_promises.html#cb1160-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(err)<span class="op">;</span></span>
+<span id="cb1160-11"><a href="ch_promises.html#cb1160-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1160-12"><a href="ch_promises.html#cb1160-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Given that <code>.then()</code> converts exceptions to rejections, we can execute <code>doSomethingSync()</code> inside a <code>.then()</code> callback. To do so, we start a Promise chain via <code>Promise.resolve()</code>. We ignore the fulfillment value <code>undefined</code> of that initial Promise.</p>
+<div class="sourceCode" id="cb1161"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1161-1"><a href="ch_promises.html#cb1161-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Solution 2</span></span>
+<span id="cb1161-2"><a href="ch_promises.html#cb1161-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">asyncFunc</span>() {</span>
+<span id="cb1161-3"><a href="ch_promises.html#cb1161-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>()</span>
+<span id="cb1161-4"><a href="ch_promises.html#cb1161-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb1161-5"><a href="ch_promises.html#cb1161-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">doSomethingSync</span>()<span class="op">;</span></span>
+<span id="cb1161-6"><a href="ch_promises.html#cb1161-6" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="fu">doSomethingAsync</span>()<span class="op">;</span></span>
+<span id="cb1161-7"><a href="ch_promises.html#cb1161-7" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1161-8"><a href="ch_promises.html#cb1161-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> {</span>
+<span id="cb1161-9"><a href="ch_promises.html#cb1161-9" aria-hidden="true" tabindex="-1"></a>      <span class="co">// ···</span></span>
+<span id="cb1161-10"><a href="ch_promises.html#cb1161-10" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1161-11"><a href="ch_promises.html#cb1161-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Lastly, <code>new Promise()</code> also converts exceptions to rejections. Using this constructor is therefore similar to the previous solution:</p>
+<div class="sourceCode" id="cb1162"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1162-1"><a href="ch_promises.html#cb1162-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Solution 3</span></span>
+<span id="cb1162-2"><a href="ch_promises.html#cb1162-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">asyncFunc</span>() {</span>
+<span id="cb1162-3"><a href="ch_promises.html#cb1162-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span> {</span>
+<span id="cb1162-4"><a href="ch_promises.html#cb1162-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">doSomethingSync</span>()<span class="op">;</span></span>
+<span id="cb1162-5"><a href="ch_promises.html#cb1162-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">resolve</span>(<span class="fu">doSomethingAsync</span>())<span class="op">;</span></span>
+<span id="cb1162-6"><a href="ch_promises.html#cb1162-6" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1162-7"><a href="ch_promises.html#cb1162-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> {</span>
+<span id="cb1162-8"><a href="ch_promises.html#cb1162-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">// ···</span></span>
+<span id="cb1162-9"><a href="ch_promises.html#cb1162-9" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1162-10"><a href="ch_promises.html#cb1162-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="promise-based-functions-start-synchronously-settle-asynchronously">40.4 Promise-based functions start synchronously, settle asynchronously</h3>
+<p>Most Promise-based functions are executed as follows:</p>
+<ul>
+<li>Their execution starts right away, synchronously (in the current task).</li>
+<li>But the Promise they return is guaranteed to be settled asynchronously (in a later task) – if ever.</li>
+</ul>
+<p>The following code demonstrates that:</p>
+<div class="sourceCode" id="cb1163"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1163-1"><a href="ch_promises.html#cb1163-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">asyncFunc</span>() {</span>
+<span id="cb1163-2"><a href="ch_promises.html#cb1163-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'asyncFunc'</span>)<span class="op">;</span></span>
+<span id="cb1163-3"><a href="ch_promises.html#cb1163-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>(</span>
+<span id="cb1163-4"><a href="ch_promises.html#cb1163-4" aria-hidden="true" tabindex="-1"></a>    (resolve<span class="op">,</span> _reject) <span class="kw">=&gt;</span> {</span>
+<span id="cb1163-5"><a href="ch_promises.html#cb1163-5" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'new Promise()'</span>)<span class="op">;</span></span>
+<span id="cb1163-6"><a href="ch_promises.html#cb1163-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">resolve</span>()<span class="op">;</span></span>
+<span id="cb1163-7"><a href="ch_promises.html#cb1163-7" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1163-8"><a href="ch_promises.html#cb1163-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1163-9"><a href="ch_promises.html#cb1163-9" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'START'</span>)<span class="op">;</span></span>
+<span id="cb1163-10"><a href="ch_promises.html#cb1163-10" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc</span>()</span>
+<span id="cb1163-11"><a href="ch_promises.html#cb1163-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb1163-12"><a href="ch_promises.html#cb1163-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'.then()'</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1163-13"><a href="ch_promises.html#cb1163-13" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1163-14"><a href="ch_promises.html#cb1163-14" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'END'</span>)<span class="op">;</span></span>
+<span id="cb1163-15"><a href="ch_promises.html#cb1163-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1163-16"><a href="ch_promises.html#cb1163-16" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1163-17"><a href="ch_promises.html#cb1163-17" aria-hidden="true" tabindex="-1"></a><span class="co">// 'START'</span></span>
+<span id="cb1163-18"><a href="ch_promises.html#cb1163-18" aria-hidden="true" tabindex="-1"></a><span class="co">// 'asyncFunc'</span></span>
+<span id="cb1163-19"><a href="ch_promises.html#cb1163-19" aria-hidden="true" tabindex="-1"></a><span class="co">// 'new Promise()'</span></span>
+<span id="cb1163-20"><a href="ch_promises.html#cb1163-20" aria-hidden="true" tabindex="-1"></a><span class="co">// '</span><span class="re">END</span><span class="co">'</span></span>
+<span id="cb1163-21"><a href="ch_promises.html#cb1163-21" aria-hidden="true" tabindex="-1"></a><span class="co">// '.then()'</span></span></code></pre></div>
+<p>We can see that the callback of <code>new Promise()</code> is executed before the end of the code, while the result is delivered later (line A).</p>
+<p>Benefits of this approach:</p>
+<ul>
+<li><p>Starting synchronously helps avoid race conditions because we can rely on the order in which Promise-based functions begin. There is an example <a href="ch_async-functions.html#fire-and-forget-await">in the next chapter</a>, where text is written to a file and race conditions are avoided.</p></li>
+<li><p>Chaining Promises won’t starve other tasks of processing time because before a Promise is settled, there will always be a break, during which the event loop can run.</p></li>
+<li><p>Promise-based functions always return results asynchronously; we can be sure that there is never a synchronous return. This kind of predictability makes code easier to work with.</p></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/external-link-regular.svg" height="24">&nbsp; <strong>More information on this approach</strong></p>
+<p><a href="http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony">“Designing APIs for Asynchrony”</a> by Isaac Z. Schlueter</p>
+</div>
+<h3 id="promise-combinators">40.5 Promise combinator functions: working with Arrays of Promises</h3>
+<p><a id="index-entry-462" class="index-entry"></a> <a id="index-entry-463" class="index-entry"></a></p>
+<h4 id="what-is-a-promise-combinator-function">40.5.1 What is a Promise combinator function?</h4>
+<p>The <a href="https://wiki.haskell.org/Combinator_pattern"><em>combinator pattern</em></a> is a pattern in functional programming for building structures. It is based on two kinds of functions:</p>
+<ul>
+<li><em>Primitive functions</em> (short: <em>primitives</em>) create atomic pieces.</li>
+<li><em>Combinator functions</em> (short: <em>combinators</em>) combine atomic and/or compound pieces to create compound pieces.</li>
+</ul>
+<p>When it comes to JavaScript Promises:</p>
+<ul>
+<li><p>Primitive functions include: <code>Promise.resolve()</code>, <code>Promise.reject()</code></p></li>
+<li><p>Combinators include: <code>Promise.all()</code>, <code>Promise.race()</code>, <code>Promise.any()</code>, <code>Promise.allSettled()</code>. In each of these cases:</p>
+<ul>
+<li>Input is an iterable over zero or more Promises.</li>
+<li>Output is a single Promise.</li>
+</ul></li>
+</ul>
+<p>Next, we’ll take a closer look at the mentioned Promise combinators.</p>
+<h4 id="promise.all">40.5.2 <code>Promise.all()</code></h4>
+<p><a id="index-entry-464" class="index-entry"></a></p>
+<p>This is the type signature of <code>Promise.all()</code>:</p>
+<div class="sourceCode" id="cb1164"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1164-1"><a href="ch_promises.html#cb1164-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(promises<span class="op">:</span> Iterable<span class="op">&lt;</span><span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;&gt;</span>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>Array<span class="op">&lt;</span>T<span class="op">&gt;&gt;</span></span></code></pre></div>
+<p><code>Promise.all()</code> returns a Promise which is:</p>
+<ul>
+<li>Fulfilled if all <code>promises</code> are fulfilled.
+<ul>
+<li>Then its fulfillment value is an Array with the fulfillment values of <code>promises</code>.</li>
+</ul></li>
+<li>Rejected if at least one Promise is rejected.
+<ul>
+<li>Then its rejection value is the rejection value of that Promise.</li>
+</ul></li>
+</ul>
+<p>This is a quick demo of the output Promise being fulfilled:</p>
+<div class="sourceCode" id="cb1165"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1165-1"><a href="ch_promises.html#cb1165-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> promises <span class="op">=</span> [</span>
+<span id="cb1165-2"><a href="ch_promises.html#cb1165-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'result a'</span>)<span class="op">,</span></span>
+<span id="cb1165-3"><a href="ch_promises.html#cb1165-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'result b'</span>)<span class="op">,</span></span>
+<span id="cb1165-4"><a href="ch_promises.html#cb1165-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'result c'</span>)<span class="op">,</span></span>
+<span id="cb1165-5"><a href="ch_promises.html#cb1165-5" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb1165-6"><a href="ch_promises.html#cb1165-6" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>(promises)</span>
+<span id="cb1165-7"><a href="ch_promises.html#cb1165-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>((arr) <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1165-8"><a href="ch_promises.html#cb1165-8" aria-hidden="true" tabindex="-1"></a>    arr<span class="op">,</span> [<span class="st">'result a'</span><span class="op">,</span> <span class="st">'result b'</span><span class="op">,</span> <span class="st">'result c'</span>]</span>
+<span id="cb1165-9"><a href="ch_promises.html#cb1165-9" aria-hidden="true" tabindex="-1"></a>  ))<span class="op">;</span></span></code></pre></div>
+<p>The following example demonstrates what happens if at least one of the input Promises is rejected:</p>
+<div class="sourceCode" id="cb1166"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1166-1"><a href="ch_promises.html#cb1166-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> promises <span class="op">=</span> [</span>
+<span id="cb1166-2"><a href="ch_promises.html#cb1166-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'result a'</span>)<span class="op">,</span></span>
+<span id="cb1166-3"><a href="ch_promises.html#cb1166-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'result b'</span>)<span class="op">,</span></span>
+<span id="cb1166-4"><a href="ch_promises.html#cb1166-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="st">'ERROR'</span>)<span class="op">,</span></span>
+<span id="cb1166-5"><a href="ch_promises.html#cb1166-5" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb1166-6"><a href="ch_promises.html#cb1166-6" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>(promises)</span>
+<span id="cb1166-7"><a href="ch_promises.html#cb1166-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>((err) <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1166-8"><a href="ch_promises.html#cb1166-8" aria-hidden="true" tabindex="-1"></a>    err<span class="op">,</span> <span class="st">'ERROR'</span></span>
+<span id="cb1166-9"><a href="ch_promises.html#cb1166-9" aria-hidden="true" tabindex="-1"></a>  ))<span class="op">;</span></span></code></pre></div>
+<p>Fig.&nbsp;<a href="#fig:combinator-promise-all">23</a> illustrates how <code>Promise.all()</code> works.</p>
+<figure>
+<img src="img-book/899ba2778ac69bc116042979ae97093463beb8de.svg" id="fig:combinator-promise-all" data-factor="0.4" width="266" height="205" alt="Figure 23: The Promise combinator Promise.all()."><figcaption aria-hidden="true">Figure 23: The Promise combinator <code>Promise.all()</code>.</figcaption>
+</figure>
+<h5 id="asynchronous-.map-via-promise.all">40.5.2.1 Asynchronous <code>.map()</code> via <code>Promise.all()</code></h5>
+<p>Array transformation methods such as <code>.map()</code>, <code>.filter()</code>, etc., are made for synchronous computations. For example:</p>
+<div class="sourceCode" id="cb1167"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1167-1"><a href="ch_promises.html#cb1167-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">timesTwoSync</span>(x) {</span>
+<span id="cb1167-2"><a href="ch_promises.html#cb1167-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">2</span> <span class="op">*</span> x<span class="op">;</span></span>
+<span id="cb1167-3"><a href="ch_promises.html#cb1167-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1167-4"><a href="ch_promises.html#cb1167-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">;</span></span>
+<span id="cb1167-5"><a href="ch_promises.html#cb1167-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> result <span class="op">=</span> arr<span class="op">.</span><span class="fu">map</span>(timesTwoSync)<span class="op">;</span></span>
+<span id="cb1167-6"><a href="ch_promises.html#cb1167-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(result<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">6</span>])<span class="op">;</span></span></code></pre></div>
+<p>What happens if the callback of <code>.map()</code> is a Promise-based function (a function that maps normal values to Promises)? Then the result of <code>.map()</code> is an Array of Promises. Alas, that is not data that normal code can work with. Thankfully, we can fix that via <code>Promise.all()</code>: It converts an Array of Promises into a Promise that is fulfilled with an Array of normal values.</p>
+<div class="sourceCode" id="cb1168"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1168-1"><a href="ch_promises.html#cb1168-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">timesTwoAsync</span>(x) {</span>
+<span id="cb1168-2"><a href="ch_promises.html#cb1168-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>(resolve <span class="kw">=&gt;</span> <span class="fu">resolve</span>(x <span class="op">*</span> <span class="dv">2</span>))<span class="op">;</span></span>
+<span id="cb1168-3"><a href="ch_promises.html#cb1168-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1168-4"><a href="ch_promises.html#cb1168-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">;</span></span>
+<span id="cb1168-5"><a href="ch_promises.html#cb1168-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> promiseArr <span class="op">=</span> arr<span class="op">.</span><span class="fu">map</span>(timesTwoAsync)<span class="op">;</span></span>
+<span id="cb1168-6"><a href="ch_promises.html#cb1168-6" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>(promiseArr)</span>
+<span id="cb1168-7"><a href="ch_promises.html#cb1168-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> {</span>
+<span id="cb1168-8"><a href="ch_promises.html#cb1168-8" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">deepEqual</span>(result<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">6</span>])<span class="op">;</span></span>
+<span id="cb1168-9"><a href="ch_promises.html#cb1168-9" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h5 id="promise-all-download-text">40.5.2.2 A more realistic <code>.map()</code> example</h5>
+<p>Next, we’ll use <code>.map()</code> and <code>Promise.all()</code> to downlooad text files from the web. For that, we need the following tool function:</p>
+<div class="sourceCode" id="cb1169"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1169-1"><a href="ch_promises.html#cb1169-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">downloadText</span>(url) {</span>
+<span id="cb1169-2"><a href="ch_promises.html#cb1169-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">fetch</span>(url)</span>
+<span id="cb1169-3"><a href="ch_promises.html#cb1169-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>((response) <span class="kw">=&gt;</span> { <span class="co">// (A)</span></span>
+<span id="cb1169-4"><a href="ch_promises.html#cb1169-4" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="op">!</span>response<span class="op">.</span><span class="at">ok</span>) { <span class="co">// (B)</span></span>
+<span id="cb1169-5"><a href="ch_promises.html#cb1169-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(response<span class="op">.</span><span class="at">statusText</span>)<span class="op">;</span></span>
+<span id="cb1169-6"><a href="ch_promises.html#cb1169-6" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1169-7"><a href="ch_promises.html#cb1169-7" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> response<span class="op">.</span><span class="fu">text</span>()<span class="op">;</span> <span class="co">// (C)</span></span>
+<span id="cb1169-8"><a href="ch_promises.html#cb1169-8" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1169-9"><a href="ch_promises.html#cb1169-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>downloadText()</code> uses the Promise-based <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch">fetch API</a> to download a text file as a string:</p>
+<ul>
+<li>First, it asynchronously retrieves a <code>response</code> (line A).</li>
+<li><code>response.ok</code> (line B) checks if there were errors such as “file not found”.</li>
+<li>If there weren’t any, we use <code>.text()</code> (line C) to retrieve the content of the file as a string.</li>
+</ul>
+<p>In the following example, we download two text files:</p>
+<div class="sourceCode" id="cb1170"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1170-1"><a href="ch_promises.html#cb1170-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> urls <span class="op">=</span> [</span>
+<span id="cb1170-2"><a href="ch_promises.html#cb1170-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'http://example.com/first.txt'</span><span class="op">,</span></span>
+<span id="cb1170-3"><a href="ch_promises.html#cb1170-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'http://example.com/second.txt'</span><span class="op">,</span></span>
+<span id="cb1170-4"><a href="ch_promises.html#cb1170-4" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb1170-5"><a href="ch_promises.html#cb1170-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1170-6"><a href="ch_promises.html#cb1170-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> promises <span class="op">=</span> urls<span class="op">.</span><span class="fu">map</span>(</span>
+<span id="cb1170-7"><a href="ch_promises.html#cb1170-7" aria-hidden="true" tabindex="-1"></a>  url <span class="kw">=&gt;</span> <span class="fu">downloadText</span>(url))<span class="op">;</span></span>
+<span id="cb1170-8"><a href="ch_promises.html#cb1170-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1170-9"><a href="ch_promises.html#cb1170-9" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>(promises)</span>
+<span id="cb1170-10"><a href="ch_promises.html#cb1170-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(</span>
+<span id="cb1170-11"><a href="ch_promises.html#cb1170-11" aria-hidden="true" tabindex="-1"></a>    (arr) <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1170-12"><a href="ch_promises.html#cb1170-12" aria-hidden="true" tabindex="-1"></a>      arr<span class="op">,</span> [<span class="st">'First!'</span><span class="op">,</span> <span class="st">'Second!'</span>]</span>
+<span id="cb1170-13"><a href="ch_promises.html#cb1170-13" aria-hidden="true" tabindex="-1"></a>    ))<span class="op">;</span></span></code></pre></div>
+<h5 id="a-simple-implementation-of-promise.all">40.5.2.3 A simple implementation of <code>Promise.all()</code></h5>
+<p>This is a simplified implementation of <code>Promise.all()</code> (e.g., it performs no safety checks):</p>
+<div class="sourceCode" id="cb1171"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1171-1"><a href="ch_promises.html#cb1171-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">all</span>(iterable) {</span>
+<span id="cb1171-2"><a href="ch_promises.html#cb1171-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span> {</span>
+<span id="cb1171-3"><a href="ch_promises.html#cb1171-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> index <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1171-4"><a href="ch_promises.html#cb1171-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> promise <span class="kw">of</span> iterable) {</span>
+<span id="cb1171-5"><a href="ch_promises.html#cb1171-5" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Capture the current value of `index`</span></span>
+<span id="cb1171-6"><a href="ch_promises.html#cb1171-6" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> currentIndex <span class="op">=</span> index<span class="op">;</span></span>
+<span id="cb1171-7"><a href="ch_promises.html#cb1171-7" aria-hidden="true" tabindex="-1"></a>      promise<span class="op">.</span><span class="fu">then</span>(</span>
+<span id="cb1171-8"><a href="ch_promises.html#cb1171-8" aria-hidden="true" tabindex="-1"></a>        (value) <span class="kw">=&gt;</span> {</span>
+<span id="cb1171-9"><a href="ch_promises.html#cb1171-9" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (anErrorOccurred) <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb1171-10"><a href="ch_promises.html#cb1171-10" aria-hidden="true" tabindex="-1"></a>          result[currentIndex] <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb1171-11"><a href="ch_promises.html#cb1171-11" aria-hidden="true" tabindex="-1"></a>          elementCount<span class="op">++;</span></span>
+<span id="cb1171-12"><a href="ch_promises.html#cb1171-12" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (elementCount <span class="op">===</span> result<span class="op">.</span><span class="at">length</span>) {</span>
+<span id="cb1171-13"><a href="ch_promises.html#cb1171-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">resolve</span>(result)<span class="op">;</span></span>
+<span id="cb1171-14"><a href="ch_promises.html#cb1171-14" aria-hidden="true" tabindex="-1"></a>          }</span>
+<span id="cb1171-15"><a href="ch_promises.html#cb1171-15" aria-hidden="true" tabindex="-1"></a>        }<span class="op">,</span></span>
+<span id="cb1171-16"><a href="ch_promises.html#cb1171-16" aria-hidden="true" tabindex="-1"></a>        (err) <span class="kw">=&gt;</span> {</span>
+<span id="cb1171-17"><a href="ch_promises.html#cb1171-17" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (anErrorOccurred) <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb1171-18"><a href="ch_promises.html#cb1171-18" aria-hidden="true" tabindex="-1"></a>          anErrorOccurred <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb1171-19"><a href="ch_promises.html#cb1171-19" aria-hidden="true" tabindex="-1"></a>          <span class="fu">reject</span>(err)<span class="op">;</span></span>
+<span id="cb1171-20"><a href="ch_promises.html#cb1171-20" aria-hidden="true" tabindex="-1"></a>        })<span class="op">;</span></span>
+<span id="cb1171-21"><a href="ch_promises.html#cb1171-21" aria-hidden="true" tabindex="-1"></a>      index<span class="op">++;</span></span>
+<span id="cb1171-22"><a href="ch_promises.html#cb1171-22" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1171-23"><a href="ch_promises.html#cb1171-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (index <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb1171-24"><a href="ch_promises.html#cb1171-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">resolve</span>([])<span class="op">;</span></span>
+<span id="cb1171-25"><a href="ch_promises.html#cb1171-25" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb1171-26"><a href="ch_promises.html#cb1171-26" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1171-27"><a href="ch_promises.html#cb1171-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> elementCount <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1171-28"><a href="ch_promises.html#cb1171-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> anErrorOccurred <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb1171-29"><a href="ch_promises.html#cb1171-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> result <span class="op">=</span> <span class="kw">new</span> <span class="bu">Array</span>(index)<span class="op">;</span></span>
+<span id="cb1171-30"><a href="ch_promises.html#cb1171-30" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1171-31"><a href="ch_promises.html#cb1171-31" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="promise.race">40.5.3 <code>Promise.race()</code></h4>
+<p><a id="index-entry-465" class="index-entry"></a></p>
+<p>This is the type signature of <code>Promise.race()</code>:</p>
+<div class="sourceCode" id="cb1172"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1172-1"><a href="ch_promises.html#cb1172-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">race</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(promises<span class="op">:</span> Iterable<span class="op">&lt;</span><span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;&gt;</span>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;</span></span></code></pre></div>
+<p><code>Promise.race()</code> returns a Promise <code>q</code> which is settled as soon as the first Promise <code>p</code> among <code>promises</code> is settled. <code>q</code> has the same settlement value as <code>p</code>.</p>
+<p>In the following demo, the settlement of the fulfilled Promise (line A) happens before the settlement of the rejected Promise (line B). Therefore, the result is also fulfilled (line C).</p>
+<div class="sourceCode" id="cb1173"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1173-1"><a href="ch_promises.html#cb1173-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> promises <span class="op">=</span> [</span>
+<span id="cb1173-2"><a href="ch_promises.html#cb1173-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span></span>
+<span id="cb1173-3"><a href="ch_promises.html#cb1173-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">setTimeout</span>(() <span class="kw">=&gt;</span> <span class="fu">resolve</span>(<span class="st">'result'</span>)<span class="op">,</span> <span class="dv">100</span>))<span class="op">,</span> <span class="co">// (A)</span></span>
+<span id="cb1173-4"><a href="ch_promises.html#cb1173-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span></span>
+<span id="cb1173-5"><a href="ch_promises.html#cb1173-5" aria-hidden="true" tabindex="-1"></a>    <span class="pp">setTimeout</span>(() <span class="kw">=&gt;</span> <span class="fu">reject</span>(<span class="st">'ERROR'</span>)<span class="op">,</span> <span class="dv">200</span>))<span class="op">,</span> <span class="co">// (B)</span></span>
+<span id="cb1173-6"><a href="ch_promises.html#cb1173-6" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb1173-7"><a href="ch_promises.html#cb1173-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">race</span>(promises)</span>
+<span id="cb1173-8"><a href="ch_promises.html#cb1173-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>((result) <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">equal</span>( <span class="co">// (C)</span></span>
+<span id="cb1173-9"><a href="ch_promises.html#cb1173-9" aria-hidden="true" tabindex="-1"></a>    result<span class="op">,</span> <span class="st">'result'</span>))<span class="op">;</span></span></code></pre></div>
+<p>In the next demo, the rejection happens first:</p>
+<div class="sourceCode" id="cb1174"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1174-1"><a href="ch_promises.html#cb1174-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> promises <span class="op">=</span> [</span>
+<span id="cb1174-2"><a href="ch_promises.html#cb1174-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span></span>
+<span id="cb1174-3"><a href="ch_promises.html#cb1174-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">setTimeout</span>(() <span class="kw">=&gt;</span> <span class="fu">resolve</span>(<span class="st">'result'</span>)<span class="op">,</span> <span class="dv">200</span>))<span class="op">,</span></span>
+<span id="cb1174-4"><a href="ch_promises.html#cb1174-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span></span>
+<span id="cb1174-5"><a href="ch_promises.html#cb1174-5" aria-hidden="true" tabindex="-1"></a>    <span class="pp">setTimeout</span>(() <span class="kw">=&gt;</span> <span class="fu">reject</span>(<span class="st">'ERROR'</span>)<span class="op">,</span> <span class="dv">100</span>))<span class="op">,</span></span>
+<span id="cb1174-6"><a href="ch_promises.html#cb1174-6" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb1174-7"><a href="ch_promises.html#cb1174-7" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">race</span>(promises)</span>
+<span id="cb1174-8"><a href="ch_promises.html#cb1174-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(</span>
+<span id="cb1174-9"><a href="ch_promises.html#cb1174-9" aria-hidden="true" tabindex="-1"></a>    (result) <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">fail</span>()<span class="op">,</span></span>
+<span id="cb1174-10"><a href="ch_promises.html#cb1174-10" aria-hidden="true" tabindex="-1"></a>    (err) <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1174-11"><a href="ch_promises.html#cb1174-11" aria-hidden="true" tabindex="-1"></a>      err<span class="op">,</span> <span class="st">'ERROR'</span>))<span class="op">;</span></span></code></pre></div>
+<p>Note that the Promise returned by <code>Promise.race()</code> is settled as soon as the first among its input Promises is settled. That means that the result of <code>Promise.race([])</code> is never settled.</p>
+<p>Fig.&nbsp;<a href="#fig:combinator-promise-race">24</a> illustrates how <code>Promise.race()</code> works.</p>
+<figure>
+<img src="img-book/7ff3aae086844047cef52514f38fc6cff7fe93a3.svg" id="fig:combinator-promise-race" data-factor="0.4" width="265" height="205" alt="Figure 24: The Promise combinator Promise.race()."><figcaption aria-hidden="true">Figure 24: The Promise combinator <code>Promise.race()</code>.</figcaption>
+</figure>
+<h5 id="timing-out-via-race">40.5.3.1 Using <code>Promise.race()</code> to time out a Promise</h5>
+<p>In this section, we are going to use <code>Promise.race()</code> to time out Promises. The following helper function will be useful several times:</p>
+<div class="sourceCode" id="cb1175"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1175-1"><a href="ch_promises.html#cb1175-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">resolveAfter</span>(ms<span class="op">,</span> value<span class="op">=</span><span class="kw">undefined</span>) {</span>
+<span id="cb1175-2"><a href="ch_promises.html#cb1175-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span> {</span>
+<span id="cb1175-3"><a href="ch_promises.html#cb1175-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">setTimeout</span>(() <span class="kw">=&gt;</span> <span class="fu">resolve</span>(value)<span class="op">,</span> ms)<span class="op">;</span></span>
+<span id="cb1175-4"><a href="ch_promises.html#cb1175-4" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1175-5"><a href="ch_promises.html#cb1175-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>resolveAfter()</code> returns a Promise that is resolved with <code>value</code> after <code>ms</code> milliseconds.</p>
+<p>This function times out a Promise:</p>
+<div class="sourceCode" id="cb1176"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1176-1"><a href="ch_promises.html#cb1176-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">timeout</span>(timeoutInMs<span class="op">,</span> promise) {</span>
+<span id="cb1176-2"><a href="ch_promises.html#cb1176-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">race</span>([</span>
+<span id="cb1176-3"><a href="ch_promises.html#cb1176-3" aria-hidden="true" tabindex="-1"></a>    promise<span class="op">,</span></span>
+<span id="cb1176-4"><a href="ch_promises.html#cb1176-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">resolveAfter</span>(timeoutInMs<span class="op">,</span></span>
+<span id="cb1176-5"><a href="ch_promises.html#cb1176-5" aria-hidden="true" tabindex="-1"></a>      <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Operation timed out'</span>)))<span class="op">,</span></span>
+<span id="cb1176-6"><a href="ch_promises.html#cb1176-6" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">;</span></span>
+<span id="cb1176-7"><a href="ch_promises.html#cb1176-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>timeout()</code> returns a Promise whose settlement is the same as the one of whichever Promise settles first among the following two:</p>
+<ol type="1">
+<li>The parameter <code>promise</code></li>
+<li>A Promise that is rejected after <code>timeoutInMs</code> milliseconds</li>
+</ol>
+<p>To produce the second Promise, <code>timeout()</code> uses the fact that resolving a pending Promise with a rejected Promise leads to the former being rejected.</p>
+<p>Let’s see <code>timeout()</code> in action. Here, the input Promise is fulfilled before the timeout. Therefore, the output Promise is fulfilled.</p>
+<div class="sourceCode" id="cb1177"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1177-1"><a href="ch_promises.html#cb1177-1" aria-hidden="true" tabindex="-1"></a><span class="fu">timeout</span>(<span class="dv">200</span><span class="op">,</span> <span class="fu">resolveAfter</span>(<span class="dv">100</span><span class="op">,</span> <span class="st">'Result!'</span>))</span>
+<span id="cb1177-2"><a href="ch_promises.html#cb1177-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">equal</span>(result<span class="op">,</span> <span class="st">'Result!'</span>))<span class="op">;</span></span></code></pre></div>
+<p>Here, the timeout happens before the input Promise is fulfilled. Therefore, the output Promise is rejected.</p>
+<div class="sourceCode" id="cb1178"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1178-1"><a href="ch_promises.html#cb1178-1" aria-hidden="true" tabindex="-1"></a><span class="fu">timeout</span>(<span class="dv">100</span><span class="op">,</span> <span class="fu">resolveAfter</span>(<span class="dv">2000</span><span class="op">,</span> <span class="st">'Result!'</span>))</span>
+<span id="cb1178-2"><a href="ch_promises.html#cb1178-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(err <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">deepEqual</span>(err<span class="op">,</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Operation timed out'</span>)))<span class="op">;</span></span></code></pre></div>
+<p>It is important to understand what “timing out a Promise” really means:</p>
+<ul>
+<li>If the input Promise is settled quickly enough, its settlement is passed on to the output Promise.</li>
+<li>If it isn’t settled quickly enough, the output Promise is rejected.</li>
+</ul>
+<p>That is, timing out only prevents the input Promise from affecting the output (since a Promise can only be settled once). But it does not stop the asynchronous operation that produced the input Promise. That is a different subject matter.</p>
+<h5 id="a-simple-implementation-of-promise.race">40.5.3.2 A simple implementation of <code>Promise.race()</code></h5>
+<p>This is a simplified implementation of <code>Promise.race()</code> (e.g., it performs no safety checks):</p>
+<div class="sourceCode" id="cb1179"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1179-1"><a href="ch_promises.html#cb1179-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">race</span>(iterable) {</span>
+<span id="cb1179-2"><a href="ch_promises.html#cb1179-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span> {</span>
+<span id="cb1179-3"><a href="ch_promises.html#cb1179-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> promise <span class="kw">of</span> iterable) {</span>
+<span id="cb1179-4"><a href="ch_promises.html#cb1179-4" aria-hidden="true" tabindex="-1"></a>      promise<span class="op">.</span><span class="fu">then</span>(</span>
+<span id="cb1179-5"><a href="ch_promises.html#cb1179-5" aria-hidden="true" tabindex="-1"></a>        (value) <span class="kw">=&gt;</span> {</span>
+<span id="cb1179-6"><a href="ch_promises.html#cb1179-6" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (settlementOccurred) <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb1179-7"><a href="ch_promises.html#cb1179-7" aria-hidden="true" tabindex="-1"></a>          settlementOccurred <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb1179-8"><a href="ch_promises.html#cb1179-8" aria-hidden="true" tabindex="-1"></a>          <span class="fu">resolve</span>(value)<span class="op">;</span></span>
+<span id="cb1179-9"><a href="ch_promises.html#cb1179-9" aria-hidden="true" tabindex="-1"></a>        }<span class="op">,</span></span>
+<span id="cb1179-10"><a href="ch_promises.html#cb1179-10" aria-hidden="true" tabindex="-1"></a>        (err) <span class="kw">=&gt;</span> {</span>
+<span id="cb1179-11"><a href="ch_promises.html#cb1179-11" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (settlementOccurred) <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb1179-12"><a href="ch_promises.html#cb1179-12" aria-hidden="true" tabindex="-1"></a>          settlementOccurred <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb1179-13"><a href="ch_promises.html#cb1179-13" aria-hidden="true" tabindex="-1"></a>          <span class="fu">reject</span>(err)<span class="op">;</span></span>
+<span id="cb1179-14"><a href="ch_promises.html#cb1179-14" aria-hidden="true" tabindex="-1"></a>        })<span class="op">;</span></span>
+<span id="cb1179-15"><a href="ch_promises.html#cb1179-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1179-16"><a href="ch_promises.html#cb1179-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> settlementOccurred <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb1179-17"><a href="ch_promises.html#cb1179-17" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1179-18"><a href="ch_promises.html#cb1179-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="Promise.any">40.5.4 <code>Promise.any()</code> [ES2021]</h4>
+<p><a id="index-entry-466" class="index-entry"></a></p>
+<p>This is the type signature of <code>Promise.any()</code>:</p>
+<div class="sourceCode" id="cb1180"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1180-1"><a href="ch_promises.html#cb1180-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">any</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(promises<span class="op">:</span> Iterable<span class="op">&lt;</span><span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;&gt;</span>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;</span></span></code></pre></div>
+<p><code>Promise.any()</code> returns a Promise <code>p</code>. How it is settled, depends on the parameter <code>promises</code> (which refers to an iterable over Promises):</p>
+<ul>
+<li>If and when the first Promise is fulfilled, <code>p</code> is resolved with that Promise.</li>
+<li>If all Promises are rejected, <code>p</code> is rejected with an instance of <code>AggregateError</code> that contains all rejection values.</li>
+</ul>
+<p>This is the type signature of <code>AggregateError</code> (a few members were omitted):</p>
+<div class="sourceCode" id="cb1181"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1181-1"><a href="ch_promises.html#cb1181-1" aria-hidden="true" tabindex="-1"></a>class AggregateError {</span>
+<span id="cb1181-2"><a href="ch_promises.html#cb1181-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span>(errors<span class="op">:</span> Iterable<span class="op">&lt;</span><span class="dt">any</span><span class="op">&gt;,</span> message<span class="op">:</span> <span class="dt">string</span>)<span class="op">;</span></span>
+<span id="cb1181-3"><a href="ch_promises.html#cb1181-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">errors</span>()<span class="op">:</span> Array<span class="op">&lt;</span><span class="dt">any</span><span class="op">&gt;;</span></span>
+<span id="cb1181-4"><a href="ch_promises.html#cb1181-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">message</span>()<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb1181-5"><a href="ch_promises.html#cb1181-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Fig.&nbsp;<a href="#fig:combinator-promise-any">25</a> illustrates how <code>Promise.any()</code> works.</p>
+<figure>
+<img src="img-book/f0f250b74ab92c8ea3e0c3f5c77b5f4c5dc22d46.svg" id="fig:combinator-promise-any" data-factor="0.4" width="265" height="204" alt="Figure 25: The Promise combinator Promise.any()."><figcaption aria-hidden="true">Figure 25: The Promise combinator <code>Promise.any()</code>.</figcaption>
+</figure>
+<h5 id="two-first-examples">40.5.4.1 Two first examples</h5>
+<p>This is what happens if one Promise is fulfilled:</p>
+<div class="sourceCode" id="cb1182"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1182-1"><a href="ch_promises.html#cb1182-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> promises <span class="op">=</span> [</span>
+<span id="cb1182-2"><a href="ch_promises.html#cb1182-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="st">'ERROR A'</span>)<span class="op">,</span></span>
+<span id="cb1182-3"><a href="ch_promises.html#cb1182-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="st">'ERROR B'</span>)<span class="op">,</span></span>
+<span id="cb1182-4"><a href="ch_promises.html#cb1182-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'result'</span>)<span class="op">,</span></span>
+<span id="cb1182-5"><a href="ch_promises.html#cb1182-5" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb1182-6"><a href="ch_promises.html#cb1182-6" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">any</span>(promises)</span>
+<span id="cb1182-7"><a href="ch_promises.html#cb1182-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>((result) <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb1182-8"><a href="ch_promises.html#cb1182-8" aria-hidden="true" tabindex="-1"></a>    result<span class="op">,</span> <span class="st">'result'</span></span>
+<span id="cb1182-9"><a href="ch_promises.html#cb1182-9" aria-hidden="true" tabindex="-1"></a>  ))<span class="op">;</span></span></code></pre></div>
+<p>This is what happens if all Promises are rejected:</p>
+<div class="sourceCode" id="cb1183"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1183-1"><a href="ch_promises.html#cb1183-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> promises <span class="op">=</span> [</span>
+<span id="cb1183-2"><a href="ch_promises.html#cb1183-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="st">'ERROR A'</span>)<span class="op">,</span></span>
+<span id="cb1183-3"><a href="ch_promises.html#cb1183-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="st">'ERROR B'</span>)<span class="op">,</span></span>
+<span id="cb1183-4"><a href="ch_promises.html#cb1183-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="st">'ERROR C'</span>)<span class="op">,</span></span>
+<span id="cb1183-5"><a href="ch_promises.html#cb1183-5" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb1183-6"><a href="ch_promises.html#cb1183-6" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">any</span>(promises)</span>
+<span id="cb1183-7"><a href="ch_promises.html#cb1183-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>((aggregateError) <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1183-8"><a href="ch_promises.html#cb1183-8" aria-hidden="true" tabindex="-1"></a>    aggregateError<span class="op">.</span><span class="at">errors</span><span class="op">,</span></span>
+<span id="cb1183-9"><a href="ch_promises.html#cb1183-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">'ERROR A'</span><span class="op">,</span> <span class="st">'ERROR B'</span><span class="op">,</span> <span class="st">'ERROR C'</span>]</span>
+<span id="cb1183-10"><a href="ch_promises.html#cb1183-10" aria-hidden="true" tabindex="-1"></a>  ))<span class="op">;</span></span></code></pre></div>
+<h5 id="promise.any-vs.-promise.all">40.5.4.2 <code>Promise.any()</code> vs.&nbsp;<code>Promise.all()</code></h5>
+<p>There are two ways in which <code>Promise.any()</code> and <code>Promise.all()</code> can be compared:</p>
+<ul>
+<li>They are inverses of each other:
+<ul>
+<li><code>Promise.all()</code>: First input rejection rejects the result Promise or its fulfillment value is an Array with input fulfillment values.</li>
+<li><code>Promise.any()</code>: First input fulfillment fulfills the result Promise or its rejection value is an Array with input rejection values.</li>
+</ul></li>
+<li>They have different focuses:
+<ul>
+<li><code>Promise.all()</code> is interested in <em>all</em> fulfillments. The opposite case (at least one rejection) leads to a rejection.</li>
+<li><code>Promise.any()</code> is interested in the first fulfillment. The opposite case (only rejections) leads to a rejection.</li>
+</ul></li>
+</ul>
+<h5 id="promise.any-vs.-promise.race">40.5.4.3 <code>Promise.any()</code> vs.&nbsp;<code>Promise.race()</code></h5>
+<p><code>Promise.any()</code> and <code>Promise.race()</code> are also related, but interested in different things:</p>
+<ul>
+<li><code>Promise.race()</code> is interested in settlements. The Promise which is settled first, “wins”. In other words: We want to know about the asynchronous computation that terminates first.</li>
+<li><code>Promise.any()</code> is interested in fulfillments. The Promise which is fulfilled first, “wins”. In other words: We want to know about the asynchronous computation that succeeds first.</li>
+</ul>
+<p>The main – relatively rare – use case for <code>.race()</code> is timing out Promises. The use cases for <code>.any()</code> are broader. We’ll look at them next.</p>
+<h5 id="use-cases-for-promise.any">40.5.4.4 Use cases for <code>Promise.any()</code></h5>
+<p>We use <code>Promise.any()</code> if we have multiple asynchronous computations and we are only interested in the first successful one. In a way, we let the computations compete with each other and use whichever one is fastest.</p>
+<p>The following code demonstrates what that looks like when downloading resources:</p>
+<div class="sourceCode" id="cb1184"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1184-1"><a href="ch_promises.html#cb1184-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> resource <span class="op">=</span> <span class="cf">await</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">any</span>([</span>
+<span id="cb1184-2"><a href="ch_promises.html#cb1184-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fetch</span>(<span class="st">'http://example.com/first.txt'</span>)</span>
+<span id="cb1184-3"><a href="ch_promises.html#cb1184-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">text</span>())<span class="op">,</span></span>
+<span id="cb1184-4"><a href="ch_promises.html#cb1184-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fetch</span>(<span class="st">'http://example.com/second.txt'</span>)</span>
+<span id="cb1184-5"><a href="ch_promises.html#cb1184-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">text</span>())<span class="op">,</span></span>
+<span id="cb1184-6"><a href="ch_promises.html#cb1184-6" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span></code></pre></div>
+<p>The same pattern enables us to use whichever module downloads more quickly:</p>
+<div class="sourceCode" id="cb1185"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1185-1"><a href="ch_promises.html#cb1185-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> lodash <span class="op">=</span> <span class="cf">await</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">any</span>([</span>
+<span id="cb1185-2"><a href="ch_promises.html#cb1185-2" aria-hidden="true" tabindex="-1"></a>  <span class="im">import</span>(<span class="st">'https://primary.example.com/lodash'</span>)<span class="op">,</span></span>
+<span id="cb1185-3"><a href="ch_promises.html#cb1185-3" aria-hidden="true" tabindex="-1"></a>  <span class="im">import</span>(<span class="st">'https://secondary.example.com/lodash'</span>)<span class="op">,</span></span>
+<span id="cb1185-4"><a href="ch_promises.html#cb1185-4" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span></code></pre></div>
+<p>For comparison, this is the code we’d use if the secondary server is only a fallback – in case the primary server fails:</p>
+<div class="sourceCode" id="cb1186"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1186-1"><a href="ch_promises.html#cb1186-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> lodash<span class="op">;</span></span>
+<span id="cb1186-2"><a href="ch_promises.html#cb1186-2" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb1186-3"><a href="ch_promises.html#cb1186-3" aria-hidden="true" tabindex="-1"></a>  lodash <span class="op">=</span> <span class="cf">await</span> <span class="im">import</span>(<span class="st">'https://primary.example.com/lodash'</span>)<span class="op">;</span></span>
+<span id="cb1186-4"><a href="ch_promises.html#cb1186-4" aria-hidden="true" tabindex="-1"></a>} <span class="cf">catch</span> {</span>
+<span id="cb1186-5"><a href="ch_promises.html#cb1186-5" aria-hidden="true" tabindex="-1"></a>  lodash <span class="op">=</span> <span class="cf">await</span> <span class="im">import</span>(<span class="st">'https://secondary.example.com/lodash'</span>)<span class="op">;</span></span>
+<span id="cb1186-6"><a href="ch_promises.html#cb1186-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h5 id="how-would-we-implement-promise.any">40.5.4.5 How would we implement <code>Promise.any()</code>?</h5>
+<p>A simple implementation of <code>Promise.any()</code> is basically a mirror version of the implementation of <code>Promise.all()</code>.</p>
+<h4 id="Promise.allSettled">40.5.5 <code>Promise.allSettled()</code> [ES2020]</h4>
+<p><a id="index-entry-467" class="index-entry"></a></p>
+<p>This time, the type signatures are a little more complicated. Feel free to skip ahead to the first demo, which should be easier to understand.</p>
+<p>This is the type signature of <code>Promise.allSettled()</code>:</p>
+<div class="sourceCode" id="cb1187"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1187-1"><a href="ch_promises.html#cb1187-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">allSettled</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(promises<span class="op">:</span> Iterable<span class="op">&lt;</span><span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;&gt;</span>)</span>
+<span id="cb1187-2"><a href="ch_promises.html#cb1187-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>Array<span class="op">&lt;</span>SettlementObject<span class="op">&lt;</span>T<span class="op">&gt;&gt;&gt;</span></span></code></pre></div>
+<p>It returns a Promise for an Array whose elements have the following type signature:</p>
+<div class="sourceCode" id="cb1188"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1188-1"><a href="ch_promises.html#cb1188-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> SettlementObject<span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">=</span> FulfillmentObject<span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">|</span> RejectionObject<span class="op">;</span></span>
+<span id="cb1188-2"><a href="ch_promises.html#cb1188-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1188-3"><a href="ch_promises.html#cb1188-3" aria-hidden="true" tabindex="-1"></a>interface FulfillmentObject<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb1188-4"><a href="ch_promises.html#cb1188-4" aria-hidden="true" tabindex="-1"></a>  status<span class="op">:</span> <span class="st">'fulfilled'</span><span class="op">;</span></span>
+<span id="cb1188-5"><a href="ch_promises.html#cb1188-5" aria-hidden="true" tabindex="-1"></a>  value<span class="op">:</span> T<span class="op">;</span></span>
+<span id="cb1188-6"><a href="ch_promises.html#cb1188-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1188-7"><a href="ch_promises.html#cb1188-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1188-8"><a href="ch_promises.html#cb1188-8" aria-hidden="true" tabindex="-1"></a>interface RejectionObject {</span>
+<span id="cb1188-9"><a href="ch_promises.html#cb1188-9" aria-hidden="true" tabindex="-1"></a>  status<span class="op">:</span> <span class="st">'rejected'</span><span class="op">;</span></span>
+<span id="cb1188-10"><a href="ch_promises.html#cb1188-10" aria-hidden="true" tabindex="-1"></a>  reason<span class="op">:</span> <span class="dt">unknown</span><span class="op">;</span></span>
+<span id="cb1188-11"><a href="ch_promises.html#cb1188-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>Promise.allSettled()</code> returns a Promise <code>out</code>. Once all <code>promises</code> are settled, <code>out</code> is fulfilled with an Array. Each element <code>e</code> of that Array corresponds to one Promise <code>p</code> of <code>promises</code>:</p>
+<ul>
+<li><p>If <code>p</code> is fulfilled with the fulfillment value <code>v</code>, then <code>e</code> is</p>
+<div class="sourceCode" id="cb1189"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1189-1"><a href="ch_promises.html#cb1189-1" aria-hidden="true" tabindex="-1"></a>{ <span class="dt">status</span><span class="op">:</span> <span class="st">'fulfilled'</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span>  v }</span></code></pre></div></li>
+<li><p>If <code>p</code> is rejected with the rejection value <code>r</code>, then <code>e</code> is</p>
+<div class="sourceCode" id="cb1190"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1190-1"><a href="ch_promises.html#cb1190-1" aria-hidden="true" tabindex="-1"></a>{ <span class="dt">status</span><span class="op">:</span> <span class="st">'rejected'</span><span class="op">,</span>  <span class="dt">reason</span><span class="op">:</span> r }</span></code></pre></div></li>
+</ul>
+<p>Unless there is an error when iterating over <code>promises</code>, the output Promise <code>out</code> is never rejected.</p>
+<p>Fig.&nbsp;<a href="#fig:combinator-promise-all-settled">26</a> illustrates how <code>Promise.allSettled()</code> works.</p>
+<figure>
+<img src="img-book/31374870a2bf4ce82fce35b3c590c1f544b09834.svg" id="fig:combinator-promise-all-settled" data-factor="0.4" width="374" height="220" alt="Figure 26: The Promise combinator Promise.allSettled()."><figcaption aria-hidden="true">Figure 26: The Promise combinator <code>Promise.allSettled()</code>.</figcaption>
+</figure>
+<h5 id="a-first-demo-of-promise.allsettled">40.5.5.1 A first demo of <code>Promise.allSettled()</code></h5>
+<p>This is a quick first demo of how <code>Promise.allSettled()</code> works:</p>
+<div class="sourceCode" id="cb1191"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1191-1"><a href="ch_promises.html#cb1191-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">allSettled</span>([</span>
+<span id="cb1191-2"><a href="ch_promises.html#cb1191-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'a'</span>)<span class="op">,</span></span>
+<span id="cb1191-3"><a href="ch_promises.html#cb1191-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="st">'b'</span>)<span class="op">,</span></span>
+<span id="cb1191-4"><a href="ch_promises.html#cb1191-4" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb1191-5"><a href="ch_promises.html#cb1191-5" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">then</span>(arr <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">deepEqual</span>(arr<span class="op">,</span> [</span>
+<span id="cb1191-6"><a href="ch_promises.html#cb1191-6" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">status</span><span class="op">:</span> <span class="st">'fulfilled'</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span>  <span class="st">'a'</span> }<span class="op">,</span></span>
+<span id="cb1191-7"><a href="ch_promises.html#cb1191-7" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">status</span><span class="op">:</span> <span class="st">'rejected'</span><span class="op">,</span>  <span class="dt">reason</span><span class="op">:</span> <span class="st">'b'</span> }<span class="op">,</span></span>
+<span id="cb1191-8"><a href="ch_promises.html#cb1191-8" aria-hidden="true" tabindex="-1"></a>]))<span class="op">;</span></span></code></pre></div>
+<h5 id="a-longer-example-for-promise.allsettled">40.5.5.2 A longer example for <code>Promise.allSettled()</code></h5>
+<p>The next example is similar to <a href="ch_promises.html#promise-all-download-text">the <code>.map()</code> plus <code>Promise.all()</code> example</a> (from which we are borrowing the function <code>downloadText()</code>): We are downloading multiple text files whose URLs are stored in an Array. However, this time, we don’t want to stop when there is an error, we want to keep going. <code>Promise.allSettled()</code> allows us to do that:</p>
+<div class="sourceCode" id="cb1192"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1192-1"><a href="ch_promises.html#cb1192-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> urls <span class="op">=</span> [</span>
+<span id="cb1192-2"><a href="ch_promises.html#cb1192-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'http://example.com/exists.txt'</span><span class="op">,</span></span>
+<span id="cb1192-3"><a href="ch_promises.html#cb1192-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'http://example.com/missing.txt'</span><span class="op">,</span></span>
+<span id="cb1192-4"><a href="ch_promises.html#cb1192-4" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb1192-5"><a href="ch_promises.html#cb1192-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1192-6"><a href="ch_promises.html#cb1192-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> result <span class="op">=</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">allSettled</span>(</span>
+<span id="cb1192-7"><a href="ch_promises.html#cb1192-7" aria-hidden="true" tabindex="-1"></a>  urls<span class="op">.</span><span class="fu">map</span>(u <span class="kw">=&gt;</span> <span class="fu">downloadText</span>(u)))<span class="op">;</span></span>
+<span id="cb1192-8"><a href="ch_promises.html#cb1192-8" aria-hidden="true" tabindex="-1"></a>result<span class="op">.</span><span class="fu">then</span>(</span>
+<span id="cb1192-9"><a href="ch_promises.html#cb1192-9" aria-hidden="true" tabindex="-1"></a>  arr <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1192-10"><a href="ch_promises.html#cb1192-10" aria-hidden="true" tabindex="-1"></a>    arr<span class="op">,</span></span>
+<span id="cb1192-11"><a href="ch_promises.html#cb1192-11" aria-hidden="true" tabindex="-1"></a>    [</span>
+<span id="cb1192-12"><a href="ch_promises.html#cb1192-12" aria-hidden="true" tabindex="-1"></a>      {</span>
+<span id="cb1192-13"><a href="ch_promises.html#cb1192-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">status</span><span class="op">:</span> <span class="st">'fulfilled'</span><span class="op">,</span></span>
+<span id="cb1192-14"><a href="ch_promises.html#cb1192-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">value</span><span class="op">:</span> <span class="st">'Hello!'</span><span class="op">,</span></span>
+<span id="cb1192-15"><a href="ch_promises.html#cb1192-15" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
+<span id="cb1192-16"><a href="ch_promises.html#cb1192-16" aria-hidden="true" tabindex="-1"></a>      {</span>
+<span id="cb1192-17"><a href="ch_promises.html#cb1192-17" aria-hidden="true" tabindex="-1"></a>        <span class="dt">status</span><span class="op">:</span> <span class="st">'rejected'</span><span class="op">,</span></span>
+<span id="cb1192-18"><a href="ch_promises.html#cb1192-18" aria-hidden="true" tabindex="-1"></a>        <span class="dt">reason</span><span class="op">:</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Not Found'</span>)<span class="op">,</span></span>
+<span id="cb1192-19"><a href="ch_promises.html#cb1192-19" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
+<span id="cb1192-20"><a href="ch_promises.html#cb1192-20" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb1192-21"><a href="ch_promises.html#cb1192-21" aria-hidden="true" tabindex="-1"></a>))<span class="op">;</span></span></code></pre></div>
+<h5 id="a-simple-implementation-of-promise.allsettled">40.5.5.3 A simple implementation of <code>Promise.allSettled()</code></h5>
+<p>This is a simplified implementation of <code>Promise.allSettled()</code> (e.g., it performs no safety checks):</p>
+<div class="sourceCode" id="cb1193"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1193-1"><a href="ch_promises.html#cb1193-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">allSettled</span>(iterable) {</span>
+<span id="cb1193-2"><a href="ch_promises.html#cb1193-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span> {</span>
+<span id="cb1193-3"><a href="ch_promises.html#cb1193-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="fu">addElementToResult</span>(i<span class="op">,</span> elem) {</span>
+<span id="cb1193-4"><a href="ch_promises.html#cb1193-4" aria-hidden="true" tabindex="-1"></a>      result[i] <span class="op">=</span> elem<span class="op">;</span></span>
+<span id="cb1193-5"><a href="ch_promises.html#cb1193-5" aria-hidden="true" tabindex="-1"></a>      elementCount<span class="op">++;</span></span>
+<span id="cb1193-6"><a href="ch_promises.html#cb1193-6" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (elementCount <span class="op">===</span> result<span class="op">.</span><span class="at">length</span>) {</span>
+<span id="cb1193-7"><a href="ch_promises.html#cb1193-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">resolve</span>(result)<span class="op">;</span></span>
+<span id="cb1193-8"><a href="ch_promises.html#cb1193-8" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1193-9"><a href="ch_promises.html#cb1193-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1193-10"><a href="ch_promises.html#cb1193-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1193-11"><a href="ch_promises.html#cb1193-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> index <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1193-12"><a href="ch_promises.html#cb1193-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> promise <span class="kw">of</span> iterable) {</span>
+<span id="cb1193-13"><a href="ch_promises.html#cb1193-13" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Capture the current value of `index`</span></span>
+<span id="cb1193-14"><a href="ch_promises.html#cb1193-14" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> currentIndex <span class="op">=</span> index<span class="op">;</span></span>
+<span id="cb1193-15"><a href="ch_promises.html#cb1193-15" aria-hidden="true" tabindex="-1"></a>      promise<span class="op">.</span><span class="fu">then</span>(</span>
+<span id="cb1193-16"><a href="ch_promises.html#cb1193-16" aria-hidden="true" tabindex="-1"></a>        (value) <span class="kw">=&gt;</span> <span class="fu">addElementToResult</span>(</span>
+<span id="cb1193-17"><a href="ch_promises.html#cb1193-17" aria-hidden="true" tabindex="-1"></a>          currentIndex<span class="op">,</span> {</span>
+<span id="cb1193-18"><a href="ch_promises.html#cb1193-18" aria-hidden="true" tabindex="-1"></a>            <span class="dt">status</span><span class="op">:</span> <span class="st">'fulfilled'</span><span class="op">,</span></span>
+<span id="cb1193-19"><a href="ch_promises.html#cb1193-19" aria-hidden="true" tabindex="-1"></a>            value</span>
+<span id="cb1193-20"><a href="ch_promises.html#cb1193-20" aria-hidden="true" tabindex="-1"></a>          })<span class="op">,</span></span>
+<span id="cb1193-21"><a href="ch_promises.html#cb1193-21" aria-hidden="true" tabindex="-1"></a>        (reason) <span class="kw">=&gt;</span> <span class="fu">addElementToResult</span>(</span>
+<span id="cb1193-22"><a href="ch_promises.html#cb1193-22" aria-hidden="true" tabindex="-1"></a>          currentIndex<span class="op">,</span> {</span>
+<span id="cb1193-23"><a href="ch_promises.html#cb1193-23" aria-hidden="true" tabindex="-1"></a>            <span class="dt">status</span><span class="op">:</span> <span class="st">'rejected'</span><span class="op">,</span></span>
+<span id="cb1193-24"><a href="ch_promises.html#cb1193-24" aria-hidden="true" tabindex="-1"></a>            reason</span>
+<span id="cb1193-25"><a href="ch_promises.html#cb1193-25" aria-hidden="true" tabindex="-1"></a>          }))<span class="op">;</span></span>
+<span id="cb1193-26"><a href="ch_promises.html#cb1193-26" aria-hidden="true" tabindex="-1"></a>      index<span class="op">++;</span></span>
+<span id="cb1193-27"><a href="ch_promises.html#cb1193-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1193-28"><a href="ch_promises.html#cb1193-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (index <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb1193-29"><a href="ch_promises.html#cb1193-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">resolve</span>([])<span class="op">;</span></span>
+<span id="cb1193-30"><a href="ch_promises.html#cb1193-30" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb1193-31"><a href="ch_promises.html#cb1193-31" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1193-32"><a href="ch_promises.html#cb1193-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> elementCount <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1193-33"><a href="ch_promises.html#cb1193-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> result <span class="op">=</span> <span class="kw">new</span> <span class="bu">Array</span>(index)<span class="op">;</span></span>
+<span id="cb1193-34"><a href="ch_promises.html#cb1193-34" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1193-35"><a href="ch_promises.html#cb1193-35" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="short-circuiting-advanced-1">40.5.6 Short-circuiting (advanced)</h4>
+<p>For a Promise combinator, <em>short-circuiting</em> means that the output Promise is settled early – before all input Promises are settled. The following combinators short-circuit:</p>
+<ul>
+<li><code>Promise.all()</code>: The output Promise is rejected as soon as one input Promise is rejected.</li>
+<li><code>Promise.race()</code>: The output Promise is settled as soon as one input Promise is settled.</li>
+<li><code>Promise.any()</code>: The output Promise is fulfilled as soon as one input Promise is fulfilled.</li>
+</ul>
+<p>Once again, settling early does not mean that the operations behind the ignored Promises are stopped. It just means that their settlements are ignored.</p>
+<h3 id="concurrency-and-promise.all-advanced">40.6 Concurrency and <code>Promise.all()</code> (advanced)</h3>
+<h4 id="sequential-execution-vs.-concurrent-execution">40.6.1 Sequential execution vs.&nbsp;concurrent execution</h4>
+<p>Consider the following code:</p>
+<div class="sourceCode" id="cb1194"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1194-1"><a href="ch_promises.html#cb1194-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> asyncFunc1 <span class="op">=</span> () <span class="kw">=&gt;</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'one'</span>)<span class="op">;</span></span>
+<span id="cb1194-2"><a href="ch_promises.html#cb1194-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> asyncFunc2 <span class="op">=</span> () <span class="kw">=&gt;</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'two'</span>)<span class="op">;</span></span>
+<span id="cb1194-3"><a href="ch_promises.html#cb1194-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1194-4"><a href="ch_promises.html#cb1194-4" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc1</span>()</span>
+<span id="cb1194-5"><a href="ch_promises.html#cb1194-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result1 <span class="kw">=&gt;</span> {</span>
+<span id="cb1194-6"><a href="ch_promises.html#cb1194-6" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(result1<span class="op">,</span> <span class="st">'one'</span>)<span class="op">;</span></span>
+<span id="cb1194-7"><a href="ch_promises.html#cb1194-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">asyncFunc2</span>()<span class="op">;</span></span>
+<span id="cb1194-8"><a href="ch_promises.html#cb1194-8" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1194-9"><a href="ch_promises.html#cb1194-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result2 <span class="kw">=&gt;</span> {</span>
+<span id="cb1194-10"><a href="ch_promises.html#cb1194-10" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">equal</span>(result2<span class="op">,</span> <span class="st">'two'</span>)<span class="op">;</span></span>
+<span id="cb1194-11"><a href="ch_promises.html#cb1194-11" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>Using <code>.then()</code> in this manner executes Promise-based functions <em>sequentially</em>: only after the result of <code>asyncFunc1()</code> is settled will <code>asyncFunc2()</code> be executed.</p>
+<p><code>Promise.all()</code> helps execute Promise-based functions more concurrently:</p>
+<div class="sourceCode" id="cb1195"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1195-1"><a href="ch_promises.html#cb1195-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>([<span class="fu">asyncFunc1</span>()<span class="op">,</span> <span class="fu">asyncFunc2</span>()])</span>
+<span id="cb1195-2"><a href="ch_promises.html#cb1195-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(arr <span class="kw">=&gt;</span> {</span>
+<span id="cb1195-3"><a href="ch_promises.html#cb1195-3" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">deepEqual</span>(arr<span class="op">,</span> [<span class="st">'one'</span><span class="op">,</span> <span class="st">'two'</span>])<span class="op">;</span></span>
+<span id="cb1195-4"><a href="ch_promises.html#cb1195-4" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h4 id="focus-on-async-start">40.6.2 Concurrency tip: focus on when operations start</h4>
+<p>Tip for determining how “concurrent” asynchronous code is: Focus on when asynchronous operations start, not on how their Promises are handled.</p>
+<p>For example, each of the following functions executes <code>asyncFunc1()</code> and <code>asyncFunc2()</code> concurrently because they are started at nearly the same time.</p>
+<div class="sourceCode" id="cb1196"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1196-1"><a href="ch_promises.html#cb1196-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">concurrentAll</span>() {</span>
+<span id="cb1196-2"><a href="ch_promises.html#cb1196-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>([<span class="fu">asyncFunc1</span>()<span class="op">,</span> <span class="fu">asyncFunc2</span>()])<span class="op">;</span></span>
+<span id="cb1196-3"><a href="ch_promises.html#cb1196-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1196-4"><a href="ch_promises.html#cb1196-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1196-5"><a href="ch_promises.html#cb1196-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">concurrentThen</span>() {</span>
+<span id="cb1196-6"><a href="ch_promises.html#cb1196-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> p1 <span class="op">=</span> <span class="fu">asyncFunc1</span>()<span class="op">;</span></span>
+<span id="cb1196-7"><a href="ch_promises.html#cb1196-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> p2 <span class="op">=</span> <span class="fu">asyncFunc2</span>()<span class="op">;</span></span>
+<span id="cb1196-8"><a href="ch_promises.html#cb1196-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> p1<span class="op">.</span><span class="fu">then</span>(r1 <span class="kw">=&gt;</span> p2<span class="op">.</span><span class="fu">then</span>(r2 <span class="kw">=&gt;</span> [r1<span class="op">,</span> r2]))<span class="op">;</span></span>
+<span id="cb1196-9"><a href="ch_promises.html#cb1196-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>On the other hand, both of the following functions execute <code>asyncFunc1()</code> and <code>asyncFunc2()</code> sequentially: <code>asyncFunc2()</code> is only invoked after the Promise of <code>asyncFunc1()</code> is fulfilled.</p>
+<div class="sourceCode" id="cb1197"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1197-1"><a href="ch_promises.html#cb1197-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sequentialThen</span>() {</span>
+<span id="cb1197-2"><a href="ch_promises.html#cb1197-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">asyncFunc1</span>()</span>
+<span id="cb1197-3"><a href="ch_promises.html#cb1197-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(r1 <span class="kw">=&gt;</span> <span class="fu">asyncFunc2</span>()</span>
+<span id="cb1197-4"><a href="ch_promises.html#cb1197-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">then</span>(r2 <span class="kw">=&gt;</span> [r1<span class="op">,</span> r2]))<span class="op">;</span></span>
+<span id="cb1197-5"><a href="ch_promises.html#cb1197-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1197-6"><a href="ch_promises.html#cb1197-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1197-7"><a href="ch_promises.html#cb1197-7" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sequentialAll</span>() {</span>
+<span id="cb1197-8"><a href="ch_promises.html#cb1197-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> p1 <span class="op">=</span> <span class="fu">asyncFunc1</span>()<span class="op">;</span></span>
+<span id="cb1197-9"><a href="ch_promises.html#cb1197-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> p2 <span class="op">=</span> p1<span class="op">.</span><span class="fu">then</span>(() <span class="kw">=&gt;</span> <span class="fu">asyncFunc2</span>())<span class="op">;</span></span>
+<span id="cb1197-10"><a href="ch_promises.html#cb1197-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>([p1<span class="op">,</span> p2])<span class="op">;</span></span>
+<span id="cb1197-11"><a href="ch_promises.html#cb1197-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="promise-all-is-fork-join">40.6.3 <code>Promise.all()</code> is fork-join</h4>
+<p><code>Promise.all()</code> is loosely related to the concurrency pattern “fork join”. Let’s revisit an example that we have encountered <a href="ch_promises.html#promise-all-download-text">previously</a>:</p>
+<div class="sourceCode" id="cb1198"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1198-1"><a href="ch_promises.html#cb1198-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>([</span>
+<span id="cb1198-2"><a href="ch_promises.html#cb1198-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// (A) fork</span></span>
+<span id="cb1198-3"><a href="ch_promises.html#cb1198-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">downloadText</span>(<span class="st">'http://example.com/first.txt'</span>)<span class="op">,</span></span>
+<span id="cb1198-4"><a href="ch_promises.html#cb1198-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">downloadText</span>(<span class="st">'http://example.com/second.txt'</span>)<span class="op">,</span></span>
+<span id="cb1198-5"><a href="ch_promises.html#cb1198-5" aria-hidden="true" tabindex="-1"></a>  ])</span>
+<span id="cb1198-6"><a href="ch_promises.html#cb1198-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// (B) join</span></span>
+<span id="cb1198-7"><a href="ch_promises.html#cb1198-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(</span>
+<span id="cb1198-8"><a href="ch_promises.html#cb1198-8" aria-hidden="true" tabindex="-1"></a>    (arr) <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb1198-9"><a href="ch_promises.html#cb1198-9" aria-hidden="true" tabindex="-1"></a>      arr<span class="op">,</span> [<span class="st">'First!'</span><span class="op">,</span> <span class="st">'Second!'</span>]</span>
+<span id="cb1198-10"><a href="ch_promises.html#cb1198-10" aria-hidden="true" tabindex="-1"></a>    ))<span class="op">;</span></span></code></pre></div>
+<ul>
+<li>Fork: In line A, we are forking two asynchronous computations and executing them concurrently.</li>
+<li>Join: In line B, we are joining these computations into a single “thread” which is started once all of them are done.</li>
+</ul>
+<h3 id="tips-for-chaining-promises">40.7 Tips for chaining Promises</h3>
+<p>This section gives tips for chaining Promises.</p>
+<h4 id="chaining-mistake-losing-the-tail">40.7.1 Chaining mistake: losing the&nbsp;tail</h4>
+<p>Problem:</p>
+<div class="sourceCode" id="cb1199"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1199-1"><a href="ch_promises.html#cb1199-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Don’t do this</span></span>
+<span id="cb1199-2"><a href="ch_promises.html#cb1199-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">foo</span>() {</span>
+<span id="cb1199-3"><a href="ch_promises.html#cb1199-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> promise <span class="op">=</span> <span class="fu">asyncFunc</span>()<span class="op">;</span></span>
+<span id="cb1199-4"><a href="ch_promises.html#cb1199-4" aria-hidden="true" tabindex="-1"></a>  promise<span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> {</span>
+<span id="cb1199-5"><a href="ch_promises.html#cb1199-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb1199-6"><a href="ch_promises.html#cb1199-6" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1199-7"><a href="ch_promises.html#cb1199-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1199-8"><a href="ch_promises.html#cb1199-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> promise<span class="op">;</span></span>
+<span id="cb1199-9"><a href="ch_promises.html#cb1199-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Computation starts with the Promise returned by <code>asyncFunc()</code>. But afterward, computation continues and another Promise is created via <code>.then()</code>. <code>foo()</code> returns the former Promise, but should return the latter. This is how to fix it:</p>
+<div class="sourceCode" id="cb1200"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1200-1"><a href="ch_promises.html#cb1200-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">foo</span>() {</span>
+<span id="cb1200-2"><a href="ch_promises.html#cb1200-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> promise <span class="op">=</span> <span class="fu">asyncFunc</span>()<span class="op">;</span></span>
+<span id="cb1200-3"><a href="ch_promises.html#cb1200-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> promise<span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> {</span>
+<span id="cb1200-4"><a href="ch_promises.html#cb1200-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb1200-5"><a href="ch_promises.html#cb1200-5" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1200-6"><a href="ch_promises.html#cb1200-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="chaining-mistake-nesting">40.7.2 Chaining mistake: nesting</h4>
+<p>Problem:</p>
+<div class="sourceCode" id="cb1201"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1201-1"><a href="ch_promises.html#cb1201-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Don’t do this</span></span>
+<span id="cb1201-2"><a href="ch_promises.html#cb1201-2" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc1</span>()</span>
+<span id="cb1201-3"><a href="ch_promises.html#cb1201-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result1 <span class="kw">=&gt;</span> {</span>
+<span id="cb1201-4"><a href="ch_promises.html#cb1201-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">asyncFunc2</span>()</span>
+<span id="cb1201-5"><a href="ch_promises.html#cb1201-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">then</span>(result2 <span class="kw">=&gt;</span> { <span class="co">// (A)</span></span>
+<span id="cb1201-6"><a href="ch_promises.html#cb1201-6" aria-hidden="true" tabindex="-1"></a>      <span class="co">// ···</span></span>
+<span id="cb1201-7"><a href="ch_promises.html#cb1201-7" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1201-8"><a href="ch_promises.html#cb1201-8" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>The <code>.then()</code> in line A is nested. A flat structure would be better:</p>
+<div class="sourceCode" id="cb1202"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1202-1"><a href="ch_promises.html#cb1202-1" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc1</span>()</span>
+<span id="cb1202-2"><a href="ch_promises.html#cb1202-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result1 <span class="kw">=&gt;</span> {</span>
+<span id="cb1202-3"><a href="ch_promises.html#cb1202-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">asyncFunc2</span>()<span class="op">;</span></span>
+<span id="cb1202-4"><a href="ch_promises.html#cb1202-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1202-5"><a href="ch_promises.html#cb1202-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result2 <span class="kw">=&gt;</span> {</span>
+<span id="cb1202-6"><a href="ch_promises.html#cb1202-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ···</span></span>
+<span id="cb1202-7"><a href="ch_promises.html#cb1202-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h4 id="chaining-mistake-more-nesting-than-necessary">40.7.3 Chaining mistake: more nesting than necessary</h4>
+<p>This is another example of avoidable nesting:</p>
+<div class="sourceCode" id="cb1203"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1203-1"><a href="ch_promises.html#cb1203-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Don’t do this</span></span>
+<span id="cb1203-2"><a href="ch_promises.html#cb1203-2" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc1</span>()</span>
+<span id="cb1203-3"><a href="ch_promises.html#cb1203-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result1 <span class="kw">=&gt;</span> {</span>
+<span id="cb1203-4"><a href="ch_promises.html#cb1203-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (result1 <span class="op">&lt;</span> <span class="dv">0</span>) {</span>
+<span id="cb1203-5"><a href="ch_promises.html#cb1203-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="fu">asyncFuncA</span>()</span>
+<span id="cb1203-6"><a href="ch_promises.html#cb1203-6" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">then</span>(resultA <span class="kw">=&gt;</span> <span class="st">'Result: '</span> <span class="op">+</span> resultA)<span class="op">;</span></span>
+<span id="cb1203-7"><a href="ch_promises.html#cb1203-7" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb1203-8"><a href="ch_promises.html#cb1203-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="fu">asyncFuncB</span>()</span>
+<span id="cb1203-9"><a href="ch_promises.html#cb1203-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">then</span>(resultB <span class="kw">=&gt;</span> <span class="st">'Result: '</span> <span class="op">+</span> resultB)<span class="op">;</span></span>
+<span id="cb1203-10"><a href="ch_promises.html#cb1203-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1203-11"><a href="ch_promises.html#cb1203-11" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>We can once again get a flat structure:</p>
+<div class="sourceCode" id="cb1204"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1204-1"><a href="ch_promises.html#cb1204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc1</span>()</span>
+<span id="cb1204-2"><a href="ch_promises.html#cb1204-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result1 <span class="kw">=&gt;</span> {</span>
+<span id="cb1204-3"><a href="ch_promises.html#cb1204-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result1 <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="fu">asyncFuncA</span>() <span class="op">:</span> <span class="fu">asyncFuncB</span>()<span class="op">;</span></span>
+<span id="cb1204-4"><a href="ch_promises.html#cb1204-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb1204-5"><a href="ch_promises.html#cb1204-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(resultAB <span class="kw">=&gt;</span> {</span>
+<span id="cb1204-6"><a href="ch_promises.html#cb1204-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'Result: '</span> <span class="op">+</span> resultAB<span class="op">;</span></span>
+<span id="cb1204-7"><a href="ch_promises.html#cb1204-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<h4 id="not-all-nesting-is-bad">40.7.4 Not all nesting is bad</h4>
+<p>In the following code, we actually benefit from nesting:</p>
+<div class="sourceCode" id="cb1205"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1205-1"><a href="ch_promises.html#cb1205-1" aria-hidden="true" tabindex="-1"></a>db<span class="op">.</span><span class="fu">open</span>()</span>
+<span id="cb1205-2"><a href="ch_promises.html#cb1205-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(connection <span class="kw">=&gt;</span> { <span class="co">// (A)</span></span>
+<span id="cb1205-3"><a href="ch_promises.html#cb1205-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> connection<span class="op">.</span><span class="fu">select</span>({ <span class="dt">name</span><span class="op">:</span> <span class="st">'Jane'</span> })</span>
+<span id="cb1205-4"><a href="ch_promises.html#cb1205-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> { <span class="co">// (B)</span></span>
+<span id="cb1205-5"><a href="ch_promises.html#cb1205-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Process result</span></span>
+<span id="cb1205-6"><a href="ch_promises.html#cb1205-6" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Use `connection` to make more queries</span></span>
+<span id="cb1205-7"><a href="ch_promises.html#cb1205-7" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb1205-8"><a href="ch_promises.html#cb1205-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">// ···</span></span>
+<span id="cb1205-9"><a href="ch_promises.html#cb1205-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">finally</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb1205-10"><a href="ch_promises.html#cb1205-10" aria-hidden="true" tabindex="-1"></a>        connection<span class="op">.</span><span class="fu">close</span>()<span class="op">;</span> <span class="co">// (C)</span></span>
+<span id="cb1205-11"><a href="ch_promises.html#cb1205-11" aria-hidden="true" tabindex="-1"></a>      })<span class="op">;</span></span>
+<span id="cb1205-12"><a href="ch_promises.html#cb1205-12" aria-hidden="true" tabindex="-1"></a>  })</span></code></pre></div>
+<p>We are receiving an asynchronous result in line A. In line B, we are nesting so that we have access to variable <code>connection</code> inside the callback and in line C.</p>
+<h4 id="chaining-mistake-creating-promises-instead-of-chaining">40.7.5 Chaining mistake: creating Promises instead of chaining</h4>
+<p>Problem:</p>
+<div class="sourceCode" id="cb1206"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1206-1"><a href="ch_promises.html#cb1206-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Don’t do this</span></span>
+<span id="cb1206-2"><a href="ch_promises.html#cb1206-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Model {</span>
+<span id="cb1206-3"><a href="ch_promises.html#cb1206-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">insertInto</span>(db) {</span>
+<span id="cb1206-4"><a href="ch_promises.html#cb1206-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span> { <span class="co">// (A)</span></span>
+<span id="cb1206-5"><a href="ch_promises.html#cb1206-5" aria-hidden="true" tabindex="-1"></a>      db<span class="op">.</span><span class="fu">insert</span>(<span class="kw">this</span><span class="op">.</span><span class="at">fields</span>)</span>
+<span id="cb1206-6"><a href="ch_promises.html#cb1206-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">then</span>(resultCode <span class="kw">=&gt;</span> {</span>
+<span id="cb1206-7"><a href="ch_promises.html#cb1206-7" aria-hidden="true" tabindex="-1"></a>          <span class="kw">this</span><span class="op">.</span><span class="fu">notifyObservers</span>({<span class="dt">event</span><span class="op">:</span> <span class="st">'created'</span><span class="op">,</span> <span class="dt">model</span><span class="op">:</span> <span class="kw">this</span>})<span class="op">;</span></span>
+<span id="cb1206-8"><a href="ch_promises.html#cb1206-8" aria-hidden="true" tabindex="-1"></a>          <span class="fu">resolve</span>(resultCode)<span class="op">;</span></span>
+<span id="cb1206-9"><a href="ch_promises.html#cb1206-9" aria-hidden="true" tabindex="-1"></a>        })<span class="op">.</span><span class="fu">catch</span>(err <span class="kw">=&gt;</span> {</span>
+<span id="cb1206-10"><a href="ch_promises.html#cb1206-10" aria-hidden="true" tabindex="-1"></a>          <span class="fu">reject</span>(err)<span class="op">;</span></span>
+<span id="cb1206-11"><a href="ch_promises.html#cb1206-11" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb1206-12"><a href="ch_promises.html#cb1206-12" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1206-13"><a href="ch_promises.html#cb1206-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1206-14"><a href="ch_promises.html#cb1206-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb1206-15"><a href="ch_promises.html#cb1206-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>In line A, we are creating a Promise to deliver the result of <code>db.insert()</code>. That is unnecessarily verbose and can be simplified:</p>
+<div class="sourceCode" id="cb1207"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1207-1"><a href="ch_promises.html#cb1207-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Model {</span>
+<span id="cb1207-2"><a href="ch_promises.html#cb1207-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">insertInto</span>(db) {</span>
+<span id="cb1207-3"><a href="ch_promises.html#cb1207-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> db<span class="op">.</span><span class="fu">insert</span>(<span class="kw">this</span><span class="op">.</span><span class="at">fields</span>)</span>
+<span id="cb1207-4"><a href="ch_promises.html#cb1207-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">then</span>(resultCode <span class="kw">=&gt;</span> {</span>
+<span id="cb1207-5"><a href="ch_promises.html#cb1207-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="fu">notifyObservers</span>({<span class="dt">event</span><span class="op">:</span> <span class="st">'created'</span><span class="op">,</span> <span class="dt">model</span><span class="op">:</span> <span class="kw">this</span>})<span class="op">;</span></span>
+<span id="cb1207-6"><a href="ch_promises.html#cb1207-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> resultCode<span class="op">;</span></span>
+<span id="cb1207-7"><a href="ch_promises.html#cb1207-7" aria-hidden="true" tabindex="-1"></a>      })<span class="op">;</span></span>
+<span id="cb1207-8"><a href="ch_promises.html#cb1207-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1207-9"><a href="ch_promises.html#cb1207-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb1207-10"><a href="ch_promises.html#cb1207-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The key idea is that we don’t need to create a Promise; we can return the result of the <code>.then()</code> call. An additional benefit is that we don’t need to catch and re-reject the failure of <code>db.insert()</code>. We simply pass its rejection on to the caller of <code>.insertInto()</code>.</p>
+<h3 id="quick-reference-promise-combinator-functions">40.8 Quick reference: Promise combinator functions</h3>
+<p>Unless noted otherwise, the functionality was introduced in ECMAScript 6 (which is when Promises were added to the language).</p>
+<p>Glossary:</p>
+<ul>
+<li><em>Short-circuiting</em>: In some cases, the output Promise can be settled early (before every input Promise is settled). More information on how this works is given later.</li>
+</ul>
+<h4 id="promise.all-1">40.8.1 <code>Promise.all()</code></h4>
+<div class="sourceCode" id="cb1208"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1208-1"><a href="ch_promises.html#cb1208-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(promises<span class="op">:</span> Iterable<span class="op">&lt;</span><span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;&gt;</span>)</span>
+<span id="cb1208-2"><a href="ch_promises.html#cb1208-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>Array<span class="op">&lt;</span>T<span class="op">&gt;&gt;</span></span></code></pre></div>
+<ul>
+<li><strong>Fulfillment</strong> of <code>P</code>: if all input Promises are fulfilled.
+<ul>
+<li>Value: Array with the fulfillment values of the input Promises</li>
+</ul></li>
+<li><strong>Rejection</strong> of <code>P</code>: if one input Promise is rejected.
+<ul>
+<li>Value: rejection value of the input Promise</li>
+</ul></li>
+<li>Short-circuits: yes</li>
+<li>Use case: processing Arrays with Promises (rejections terminate processing)</li>
+</ul>
+<h4 id="promise.race-1">40.8.2 <code>Promise.race()</code></h4>
+<div class="sourceCode" id="cb1209"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1209-1"><a href="ch_promises.html#cb1209-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">race</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(promises<span class="op">:</span> Iterable<span class="op">&lt;</span><span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;&gt;</span>)</span>
+<span id="cb1209-2"><a href="ch_promises.html#cb1209-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;</span></span></code></pre></div>
+<ul>
+<li><strong>Settlement</strong> of <code>P</code>: if the first input Promise is settled.
+<ul>
+<li>Value: settlement value of the input Promise</li>
+</ul></li>
+<li>Short-circuits: yes</li>
+<li>Use case: reacting to the first settlement among multiple Promises</li>
+</ul>
+<h4 id="promise.any-es2021">40.8.3 <code>Promise.any()</code> [ES2021]</h4>
+<div class="sourceCode" id="cb1210"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1210-1"><a href="ch_promises.html#cb1210-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">any</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(promises<span class="op">:</span> Iterable<span class="op">&lt;</span><span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;&gt;</span>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;</span></span></code></pre></div>
+<ul>
+<li><strong>Fulfillment</strong> of <code>P</code>: if one input Promise is fulfilled.
+<ul>
+<li>Value: fulfillment value of the input Promise</li>
+</ul></li>
+<li><strong>Rejection</strong> of <code>P</code>: if all input Promises are rejected.
+<ul>
+<li>Value: <code>AggregateError</code> that contains the rejection values of the input Promises.</li>
+</ul></li>
+<li>Short-circuits: yes</li>
+<li>Use case: Among several asynchronous computations, we are only interested in the first successful one. That is, we are trying several approaches and the fastest one should win.</li>
+</ul>
+<p>This is the type signature of <code>AggregateError</code> (a few members were omitted):</p>
+<div class="sourceCode" id="cb1211"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1211-1"><a href="ch_promises.html#cb1211-1" aria-hidden="true" tabindex="-1"></a>class AggregateError {</span>
+<span id="cb1211-2"><a href="ch_promises.html#cb1211-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span>(errors<span class="op">:</span> Iterable<span class="op">&lt;</span><span class="dt">any</span><span class="op">&gt;,</span> message<span class="op">:</span> <span class="dt">string</span>)<span class="op">;</span></span>
+<span id="cb1211-3"><a href="ch_promises.html#cb1211-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">errors</span>()<span class="op">:</span> Array<span class="op">&lt;</span><span class="dt">any</span><span class="op">&gt;;</span></span>
+<span id="cb1211-4"><a href="ch_promises.html#cb1211-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">message</span>()<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb1211-5"><a href="ch_promises.html#cb1211-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="promise.allsettled-es2020">40.8.4 <code>Promise.allSettled()</code> [ES2020]</h4>
+<div class="sourceCode" id="cb1212"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1212-1"><a href="ch_promises.html#cb1212-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Promise</span><span class="op">.</span><span class="fu">allSettled</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(promises<span class="op">:</span> Iterable<span class="op">&lt;</span><span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;&gt;</span>)</span>
+<span id="cb1212-2"><a href="ch_promises.html#cb1212-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>Array<span class="op">&lt;</span>SettlementObject<span class="op">&lt;</span>T<span class="op">&gt;&gt;&gt;</span></span></code></pre></div>
+<ul>
+<li><strong>Fulfillment</strong> of <code>P</code>: if all input Promise are settled.
+<ul>
+<li>Value: Array with one <em>settlement object</em> for each input Promise. A settlement object contains the kind of settlement and the settlement value.</li>
+</ul></li>
+<li><strong>Rejection</strong> of <code>P</code>: if there is an error when iterating over the input Promises.</li>
+<li>Short-circuits: no</li>
+<li>Use case: processing Arrays with Promises (rejections don’t terminate processing)</li>
+</ul>
+<p>This is the type signature of <code>SettlementObject</code>:</p>
+<div class="sourceCode" id="cb1213"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1213-1"><a href="ch_promises.html#cb1213-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> SettlementObject<span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">=</span> FulfillmentObject<span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">|</span> RejectionObject<span class="op">;</span></span>
+<span id="cb1213-2"><a href="ch_promises.html#cb1213-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1213-3"><a href="ch_promises.html#cb1213-3" aria-hidden="true" tabindex="-1"></a>interface FulfillmentObject<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb1213-4"><a href="ch_promises.html#cb1213-4" aria-hidden="true" tabindex="-1"></a>  status<span class="op">:</span> <span class="st">'fulfilled'</span><span class="op">;</span></span>
+<span id="cb1213-5"><a href="ch_promises.html#cb1213-5" aria-hidden="true" tabindex="-1"></a>  value<span class="op">:</span> T<span class="op">;</span></span>
+<span id="cb1213-6"><a href="ch_promises.html#cb1213-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1213-7"><a href="ch_promises.html#cb1213-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1213-8"><a href="ch_promises.html#cb1213-8" aria-hidden="true" tabindex="-1"></a>interface RejectionObject {</span>
+<span id="cb1213-9"><a href="ch_promises.html#cb1213-9" aria-hidden="true" tabindex="-1"></a>  status<span class="op">:</span> <span class="st">'rejected'</span><span class="op">;</span></span>
+<span id="cb1213-10"><a href="ch_promises.html#cb1213-10" aria-hidden="true" tabindex="-1"></a>  reason<span class="op">:</span> <span class="dt">unknown</span><span class="op">;</span></span>
+<span id="cb1213-11"><a href="ch_promises.html#cb1213-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/27">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_async-functions.html">41 Async functions</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

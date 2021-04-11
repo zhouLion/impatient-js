@@ -1,0 +1,368 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_async-functions">41 Async functions</h2>
+<p><a id="index-entry-468" class="index-entry"></a><a id="index-entry-469" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>41.1 <a href="ch_async-functions.html#async-functions-the-basics">Async functions: the basics</a>
+<ul>
+<li>41.1.1 <a href="ch_async-functions.html#async-constructs">Async constructs</a></li>
+</ul></li>
+<li>41.2 <a href="ch_async-functions.html#returning-from-async-functions">Returning from async functions</a>
+<ul>
+<li>41.2.1 <a href="ch_async-functions.html#async-functions-always-return-promises">Async functions always return Promises</a></li>
+<li>41.2.2 <a href="ch_async-functions.html#returned-promises-are-not-wrapped">Returned Promises are not wrapped</a></li>
+<li>41.2.3 <a href="ch_async-functions.html#executing-async-functions-synchronous-start-asynchronous-settlement-advanced">Executing async functions: synchronous start, asynchronous settlement (advanced)</a></li>
+</ul></li>
+<li>41.3 <a href="ch_async-functions.html#await-working-with-promises"><code>await</code>: working with Promises</a>
+<ul>
+<li>41.3.1 <a href="ch_async-functions.html#await-and-fulfilled-promises"><code>await</code> and fulfilled Promises</a></li>
+<li>41.3.2 <a href="ch_async-functions.html#await-and-rejected-promises"><code>await</code> and rejected Promises</a></li>
+<li>41.3.3 <a href="ch_async-functions.html#await-is-shallow-we-cant-use-it-in-callbacks"><code>await</code> is shallow (we can’t use it in callbacks)</a></li>
+</ul></li>
+<li>41.4 <a href="ch_async-functions.html#advanced-5">(Advanced)</a></li>
+<li>41.5 <a href="ch_async-functions.html#immediately-invoked-async-arrow-functions">Immediately invoked async arrow functions</a></li>
+<li>41.6 <a href="ch_async-functions.html#concurrency-and-await">Concurrency and <code>await</code></a>
+<ul>
+<li>41.6.1 <a href="ch_async-functions.html#await-sequentially"><code>await</code>: running asynchronous functions sequentially</a></li>
+<li>41.6.2 <a href="ch_async-functions.html#await-concurrently"><code>await</code>: running asynchronous functions concurrently</a></li>
+</ul></li>
+<li>41.7 <a href="ch_async-functions.html#tips-for-using-async-functions">Tips for using async functions</a>
+<ul>
+<li>41.7.1 <a href="ch_async-functions.html#fire-and-forget-await">We don’t need <code>await</code> if we “fire and forget”</a></li>
+<li>41.7.2 <a href="ch_async-functions.html#it-can-make-sense-to-await-and-ignore-the-result">It can make sense to <code>await</code> and ignore the result</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>Roughly, <em>async functions</em> provide better syntax for code that uses Promises. In order to use async functions, we should therefore understand Promises. They are explained in <a href="ch_promises.html">the previous chapter</a>.</p>
+<h3 id="async-functions-the-basics">41.1 Async functions: the basics</h3>
+<p>Consider the following async function:</p>
+<div class="sourceCode" id="cb1214"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1214-1"><a href="ch_async-functions.html#cb1214-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">fetchJsonAsync</span>(url) {</span>
+<span id="cb1214-2"><a href="ch_async-functions.html#cb1214-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb1214-3"><a href="ch_async-functions.html#cb1214-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> request <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(url)<span class="op">;</span> <span class="co">// async</span></span>
+<span id="cb1214-4"><a href="ch_async-functions.html#cb1214-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> text <span class="op">=</span> <span class="cf">await</span> request<span class="op">.</span><span class="fu">text</span>()<span class="op">;</span> <span class="co">// async</span></span>
+<span id="cb1214-5"><a href="ch_async-functions.html#cb1214-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(text)<span class="op">;</span> <span class="co">// sync</span></span>
+<span id="cb1214-6"><a href="ch_async-functions.html#cb1214-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1214-7"><a href="ch_async-functions.html#cb1214-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">catch</span> (error) {</span>
+<span id="cb1214-8"><a href="ch_async-functions.html#cb1214-8" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">fail</span>(error)<span class="op">;</span></span>
+<span id="cb1214-9"><a href="ch_async-functions.html#cb1214-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1214-10"><a href="ch_async-functions.html#cb1214-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The previous, rather synchronous-looking code is equivalent to the following code that uses Promises directly:</p>
+<div class="sourceCode" id="cb1215"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1215-1"><a href="ch_async-functions.html#cb1215-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">fetchJsonViaPromises</span>(url) {</span>
+<span id="cb1215-2"><a href="ch_async-functions.html#cb1215-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">fetch</span>(url) <span class="co">// async</span></span>
+<span id="cb1215-3"><a href="ch_async-functions.html#cb1215-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(request <span class="kw">=&gt;</span> request<span class="op">.</span><span class="fu">text</span>()) <span class="co">// async</span></span>
+<span id="cb1215-4"><a href="ch_async-functions.html#cb1215-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(text <span class="kw">=&gt;</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(text)) <span class="co">// sync</span></span>
+<span id="cb1215-5"><a href="ch_async-functions.html#cb1215-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(error <span class="kw">=&gt;</span> {</span>
+<span id="cb1215-6"><a href="ch_async-functions.html#cb1215-6" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">fail</span>(error)<span class="op">;</span></span>
+<span id="cb1215-7"><a href="ch_async-functions.html#cb1215-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1215-8"><a href="ch_async-functions.html#cb1215-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>A few observations about the async function <code>fetchJsonAsync()</code>:</p>
+<ul>
+<li><p>Async functions are marked with the keyword <code>async</code>.</p></li>
+<li><p>Inside the body of an async function, we write Promise-based code as if it were synchronous. We only need to apply the <code>await</code> operator whenever a value is a Promise. That operator pauses the async function and resumes it once the Promise is settled:</p>
+<ul>
+<li>If the Promise is fulfilled, <code>await</code> returns the fulfillment value.</li>
+<li>If the Promise is rejected, <code>await</code> throws the rejection value.</li>
+</ul></li>
+<li><p>The result of an async function is always a Promise:</p>
+<ul>
+<li>Any value that is returned (explicitly or implicitly) is used to fulfill the Promise.</li>
+<li>Any exception that is thrown is used to reject the Promise.</li>
+</ul></li>
+</ul>
+<p>Both <code>fetchJsonAsync()</code> and <code>fetchJsonViaPromises()</code> are called in exactly the same way, like this:</p>
+<div class="sourceCode" id="cb1216"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1216-1"><a href="ch_async-functions.html#cb1216-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fetchJsonAsync</span>(<span class="st">'http://example.com/person.json'</span>)</span>
+<span id="cb1216-2"><a href="ch_async-functions.html#cb1216-2" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">then</span>(obj <span class="kw">=&gt;</span> {</span>
+<span id="cb1216-3"><a href="ch_async-functions.html#cb1216-3" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(obj<span class="op">,</span> {</span>
+<span id="cb1216-4"><a href="ch_async-functions.html#cb1216-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">first</span><span class="op">:</span> <span class="st">'Jane'</span><span class="op">,</span></span>
+<span id="cb1216-5"><a href="ch_async-functions.html#cb1216-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">last</span><span class="op">:</span> <span class="st">'Doe'</span><span class="op">,</span></span>
+<span id="cb1216-6"><a href="ch_async-functions.html#cb1216-6" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1216-7"><a href="ch_async-functions.html#cb1216-7" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>Async functions are as Promise-based as functions that use Promises directly</strong></p>
+<p>From the outside, it is virtually impossible to tell the difference between an async function and a function that returns a Promise.</p>
+</div>
+<h4 id="async-constructs">41.1.1 Async constructs</h4>
+<p><a id="index-entry-470" class="index-entry"></a></p>
+<p>JavaScript has the following async versions of synchronous callable entities. Their roles are always either real function or method.</p>
+<div class="sourceCode" id="cb1217"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1217-1"><a href="ch_async-functions.html#cb1217-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Async function declaration</span></span>
+<span id="cb1217-2"><a href="ch_async-functions.html#cb1217-2" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">func1</span>() {}</span>
+<span id="cb1217-3"><a href="ch_async-functions.html#cb1217-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1217-4"><a href="ch_async-functions.html#cb1217-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Async function expression</span></span>
+<span id="cb1217-5"><a href="ch_async-functions.html#cb1217-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func2 <span class="op">=</span> <span class="kw">async</span> <span class="kw">function</span> () {}<span class="op">;</span></span>
+<span id="cb1217-6"><a href="ch_async-functions.html#cb1217-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1217-7"><a href="ch_async-functions.html#cb1217-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Async arrow function</span></span>
+<span id="cb1217-8"><a href="ch_async-functions.html#cb1217-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> func3 <span class="op">=</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {}<span class="op">;</span></span>
+<span id="cb1217-9"><a href="ch_async-functions.html#cb1217-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1217-10"><a href="ch_async-functions.html#cb1217-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Async method definition in an object literal</span></span>
+<span id="cb1217-11"><a href="ch_async-functions.html#cb1217-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> { <span class="kw">async</span> <span class="fu">m</span>() {} }<span class="op">;</span></span>
+<span id="cb1217-12"><a href="ch_async-functions.html#cb1217-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1217-13"><a href="ch_async-functions.html#cb1217-13" aria-hidden="true" tabindex="-1"></a><span class="co">// Async method definition in a class definition</span></span>
+<span id="cb1217-14"><a href="ch_async-functions.html#cb1217-14" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MyClass { <span class="kw">async</span> <span class="fu">m</span>() {} }</span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>Asynchronous functions vs.&nbsp;async functions</strong></p>
+<p>The difference between the terms <em>asynchronous function</em> and <em>async function</em> is subtle, but important:</p>
+<ul>
+<li><p>An <em>asynchronous function</em> is any function that delivers its result asynchronously – for example, a callback-based function or a Promise-based function.</p></li>
+<li><p>An <em>async function</em> is defined via special syntax, involving the keywords <code>async</code> and <code>await</code>. It is also called async/await due to these two keywords. Async functions are based on Promises and therefore also asynchronous functions (which is somewhat confusing).</p></li>
+</ul>
+</div>
+<h3 id="returning-from-async-functions">41.2 Returning from async functions</h3>
+<h4 id="async-functions-always-return-promises">41.2.1 Async functions always return Promises</h4>
+<p>Each async function always returns a Promise.</p>
+<p>Inside the async function, we fulfill the result Promise via <code>return</code> (line A):</p>
+<div class="sourceCode" id="cb1218"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1218-1"><a href="ch_async-functions.html#cb1218-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">asyncFunc</span>() {</span>
+<span id="cb1218-2"><a href="ch_async-functions.html#cb1218-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">123</span><span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1218-3"><a href="ch_async-functions.html#cb1218-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1218-4"><a href="ch_async-functions.html#cb1218-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1218-5"><a href="ch_async-functions.html#cb1218-5" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc</span>()</span>
+<span id="cb1218-6"><a href="ch_async-functions.html#cb1218-6" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> {</span>
+<span id="cb1218-7"><a href="ch_async-functions.html#cb1218-7" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(result<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span>
+<span id="cb1218-8"><a href="ch_async-functions.html#cb1218-8" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>As usual, if we don’t explicitly return anything, <code>undefined</code> is returned for us:</p>
+<div class="sourceCode" id="cb1219"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1219-1"><a href="ch_async-functions.html#cb1219-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">asyncFunc</span>() {</span>
+<span id="cb1219-2"><a href="ch_async-functions.html#cb1219-2" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1219-3"><a href="ch_async-functions.html#cb1219-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1219-4"><a href="ch_async-functions.html#cb1219-4" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc</span>()</span>
+<span id="cb1219-5"><a href="ch_async-functions.html#cb1219-5" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> {</span>
+<span id="cb1219-6"><a href="ch_async-functions.html#cb1219-6" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(result<span class="op">,</span> <span class="kw">undefined</span>)<span class="op">;</span></span>
+<span id="cb1219-7"><a href="ch_async-functions.html#cb1219-7" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>We reject the result Promise via <code>throw</code> (line A):</p>
+<div class="sourceCode" id="cb1220"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1220-1"><a href="ch_async-functions.html#cb1220-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">asyncFunc</span>() {</span>
+<span id="cb1220-2"><a href="ch_async-functions.html#cb1220-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Problem!'</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1220-3"><a href="ch_async-functions.html#cb1220-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1220-4"><a href="ch_async-functions.html#cb1220-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1220-5"><a href="ch_async-functions.html#cb1220-5" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc</span>()</span>
+<span id="cb1220-6"><a href="ch_async-functions.html#cb1220-6" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">catch</span>(err <span class="kw">=&gt;</span> {</span>
+<span id="cb1220-7"><a href="ch_async-functions.html#cb1220-7" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(err<span class="op">,</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Problem!'</span>))<span class="op">;</span></span>
+<span id="cb1220-8"><a href="ch_async-functions.html#cb1220-8" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<h4 id="returned-promises-are-not-wrapped">41.2.2 Returned Promises are not wrapped</h4>
+<p>If we return a Promise <code>p</code> from an async function, then <code>p</code> becomes the result of the function (or rather, the result “locks in” on <code>p</code> and behaves exactly like it). That is, the Promise is not wrapped in yet another Promise.</p>
+<div class="sourceCode" id="cb1221"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1221-1"><a href="ch_async-functions.html#cb1221-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">asyncFunc</span>() {</span>
+<span id="cb1221-2"><a href="ch_async-functions.html#cb1221-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'abc'</span>)<span class="op">;</span></span>
+<span id="cb1221-3"><a href="ch_async-functions.html#cb1221-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1221-4"><a href="ch_async-functions.html#cb1221-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1221-5"><a href="ch_async-functions.html#cb1221-5" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc</span>()</span>
+<span id="cb1221-6"><a href="ch_async-functions.html#cb1221-6" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">equal</span>(result<span class="op">,</span> <span class="st">'abc'</span>))<span class="op">;</span></span></code></pre></div>
+<p>Recall that any Promise <code>q</code> is treated similarly in the following situations:</p>
+<ul>
+<li><code>resolve(q)</code> inside <code>new Promise((resolve, reject) =&gt; { ··· })</code></li>
+<li><code>return q</code> inside <code>.then(result =&gt; { ··· })</code></li>
+<li><code>return q</code> inside <code>.catch(err =&gt; { ··· })</code></li>
+</ul>
+<h4 id="executing-async-functions-synchronous-start-asynchronous-settlement-advanced">41.2.3 Executing async functions: synchronous start, asynchronous settlement (advanced)</h4>
+<p>Async functions are executed as follows:</p>
+<ul>
+<li>The Promise <code>p</code> for the result is created when the async function is started.</li>
+<li>Then the body is executed. There are two ways in which execution can leave the body:
+<ul>
+<li>Execution can leave <strong>permanently</strong> while settling <code>p</code>:
+<ul>
+<li>A <code>return</code> fulfills <code>p</code>.</li>
+<li>A <code>throw</code> rejects <code>p</code>.</li>
+</ul></li>
+<li>Execution can also leave <strong>temporarily</strong> when awaiting the settlement of another Promise <code>q</code> via <code>await</code>. The async function is paused and execution leaves it. It is resumed once <code>q</code> is settled.</li>
+</ul></li>
+<li>Promise <code>p</code> is returned after execution has left the body for the first time (permanently or temporarily).</li>
+</ul>
+<p>Note that the notification of the settlement of the result <code>p</code> happens asynchronously, as is always the case with Promises.</p>
+<p>The following code demonstrates that an async function is started synchronously (line A), then the current task finishes (line C), then the result Promise is settled – asynchronously (line B).</p>
+<div class="sourceCode" id="cb1222"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1222-1"><a href="ch_async-functions.html#cb1222-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">asyncFunc</span>() {</span>
+<span id="cb1222-2"><a href="ch_async-functions.html#cb1222-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'asyncFunc() starts'</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1222-3"><a href="ch_async-functions.html#cb1222-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="st">'abc'</span><span class="op">;</span></span>
+<span id="cb1222-4"><a href="ch_async-functions.html#cb1222-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1222-5"><a href="ch_async-functions.html#cb1222-5" aria-hidden="true" tabindex="-1"></a><span class="fu">asyncFunc</span>()<span class="op">.</span></span>
+<span id="cb1222-6"><a href="ch_async-functions.html#cb1222-6" aria-hidden="true" tabindex="-1"></a><span class="fu">then</span>(x <span class="kw">=&gt;</span> { <span class="co">// (B)</span></span>
+<span id="cb1222-7"><a href="ch_async-functions.html#cb1222-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Resolved: </span><span class="sc">${</span>x<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb1222-8"><a href="ch_async-functions.html#cb1222-8" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb1222-9"><a href="ch_async-functions.html#cb1222-9" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'Task ends'</span>)<span class="op">;</span> <span class="co">// (C)</span></span>
+<span id="cb1222-10"><a href="ch_async-functions.html#cb1222-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1222-11"><a href="ch_async-functions.html#cb1222-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1222-12"><a href="ch_async-functions.html#cb1222-12" aria-hidden="true" tabindex="-1"></a><span class="co">// 'asyncFunc() starts'</span></span>
+<span id="cb1222-13"><a href="ch_async-functions.html#cb1222-13" aria-hidden="true" tabindex="-1"></a><span class="co">// 'Task ends'</span></span>
+<span id="cb1222-14"><a href="ch_async-functions.html#cb1222-14" aria-hidden="true" tabindex="-1"></a><span class="co">// 'Resolved: abc'</span></span></code></pre></div>
+<h3 id="await-working-with-promises">41.3 <code>await</code>: working with Promises</h3>
+<p><a id="index-entry-471" class="index-entry"></a></p>
+<p>The <code>await</code> operator can only be used inside async functions and async generators (which are explained in <a href="ch_async-iteration.html#async-generators">§42.2 “Asynchronous generators”</a>). Its operand is usually a Promise and leads to the following steps being performed:</p>
+<ul>
+<li>The current async function is paused and returned from. This step is similar to how <code>yield</code> works in <a href="ch_sync-generators.html">sync generators</a>.</li>
+<li>Eventually, the current task is finished and processing of the task queue continues.</li>
+<li>When and if the Promise is settled, the async function is resumed in a new task:
+<ul>
+<li>If the Promise is fulfilled, <code>await</code> returns the fulfillment value.</li>
+<li>If the Promise is rejected, <code>await</code> throws the rejection value.</li>
+</ul></li>
+</ul>
+<p>Read on to find out more about how <code>await</code> handles Promises in various states.</p>
+<h4 id="await-and-fulfilled-promises">41.3.1 <code>await</code> and fulfilled Promises</h4>
+<p>If its operand ends up being a fulfilled Promise, <code>await</code> returns its fulfillment value:</p>
+<div class="sourceCode" id="cb1223"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1223-1"><a href="ch_async-functions.html#cb1223-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="cf">await</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'yes!'</span>)<span class="op">,</span> <span class="st">'yes!'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Non-Promise values are allowed, too, and simply passed on (synchronously, without pausing the async function):</p>
+<div class="sourceCode" id="cb1224"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1224-1"><a href="ch_async-functions.html#cb1224-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="cf">await</span> <span class="st">'yes!'</span><span class="op">,</span> <span class="st">'yes!'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="await-and-rejected-promises">41.3.2 <code>await</code> and rejected Promises</h4>
+<p>If its operand is a rejected Promise, then <code>await</code> throws the rejection value:</p>
+<div class="sourceCode" id="cb1225"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1225-1"><a href="ch_async-functions.html#cb1225-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb1225-2"><a href="ch_async-functions.html#cb1225-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(<span class="kw">new</span> <span class="bu">Error</span>())<span class="op">;</span></span>
+<span id="cb1225-3"><a href="ch_async-functions.html#cb1225-3" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">fail</span>()<span class="op">;</span> <span class="co">// we never get here</span></span>
+<span id="cb1225-4"><a href="ch_async-functions.html#cb1225-4" aria-hidden="true" tabindex="-1"></a>} <span class="cf">catch</span> (e) {</span>
+<span id="cb1225-5"><a href="ch_async-functions.html#cb1225-5" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(e <span class="kw">instanceof</span> <span class="bu">Error</span><span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb1225-6"><a href="ch_async-functions.html#cb1225-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Fetch API via async functions</strong></p>
+<p><code>exercises/async-functions/fetch_json2_test.mjs</code></p>
+</div>
+<h4 id="await-is-shallow-we-cant-use-it-in-callbacks">41.3.3 <code>await</code> is shallow (we can’t use it in callbacks)</h4>
+<p>If we are inside an async function and want to pause it via <code>await</code>, we must do so directly within that function; we can’t use it inside a nested function, such as a callback. That is, pausing is <em>shallow</em>.</p>
+<p>For example, the following code can’t be executed:</p>
+<div class="sourceCode" id="cb1226"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1226-1"><a href="ch_async-functions.html#cb1226-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">downloadContent</span>(urls) {</span>
+<span id="cb1226-2"><a href="ch_async-functions.html#cb1226-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> urls<span class="op">.</span><span class="fu">map</span>((url) <span class="kw">=&gt;</span> {</span>
+<span id="cb1226-3"><a href="ch_async-functions.html#cb1226-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="cf">await</span> <span class="fu">httpGet</span>(url)<span class="op">;</span> <span class="co">// SyntaxError!</span></span>
+<span id="cb1226-4"><a href="ch_async-functions.html#cb1226-4" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1226-5"><a href="ch_async-functions.html#cb1226-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The reason is that normal arrow functions don’t allow <code>await</code> inside their bodies.</p>
+<p>OK, let’s try an async arrow function then:</p>
+<div class="sourceCode" id="cb1227"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1227-1"><a href="ch_async-functions.html#cb1227-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">downloadContent</span>(urls) {</span>
+<span id="cb1227-2"><a href="ch_async-functions.html#cb1227-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> urls<span class="op">.</span><span class="fu">map</span>(<span class="kw">async</span> (url) <span class="kw">=&gt;</span> {</span>
+<span id="cb1227-3"><a href="ch_async-functions.html#cb1227-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="cf">await</span> <span class="fu">httpGet</span>(url)<span class="op">;</span></span>
+<span id="cb1227-4"><a href="ch_async-functions.html#cb1227-4" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1227-5"><a href="ch_async-functions.html#cb1227-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Alas, this doesn’t work either: Now <code>.map()</code> (and therefore <code>downloadContent()</code>) returns an Array with Promises, not an Array with (unwrapped) values.</p>
+<p>One possible solution is to use <code>Promise.all()</code> to unwrap all Promises:</p>
+<div class="sourceCode" id="cb1228"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1228-1"><a href="ch_async-functions.html#cb1228-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">downloadContent</span>(urls) {</span>
+<span id="cb1228-2"><a href="ch_async-functions.html#cb1228-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> promiseArray <span class="op">=</span> urls<span class="op">.</span><span class="fu">map</span>(<span class="kw">async</span> (url) <span class="kw">=&gt;</span> {</span>
+<span id="cb1228-3"><a href="ch_async-functions.html#cb1228-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="cf">await</span> <span class="fu">httpGet</span>(url)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb1228-4"><a href="ch_async-functions.html#cb1228-4" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1228-5"><a href="ch_async-functions.html#cb1228-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="cf">await</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>(promiseArray)<span class="op">;</span></span>
+<span id="cb1228-6"><a href="ch_async-functions.html#cb1228-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Can this code be improved? Yes it can: in line A, we are unwrapping a Promise via <code>await</code>, only to re-wrap it immediately via <code>return</code>. If we omit <code>await</code>, we don’t even need an async arrow function:</p>
+<div class="sourceCode" id="cb1229"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1229-1"><a href="ch_async-functions.html#cb1229-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">downloadContent</span>(urls) {</span>
+<span id="cb1229-2"><a href="ch_async-functions.html#cb1229-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> promiseArray <span class="op">=</span> urls<span class="op">.</span><span class="fu">map</span>(</span>
+<span id="cb1229-3"><a href="ch_async-functions.html#cb1229-3" aria-hidden="true" tabindex="-1"></a>    url <span class="kw">=&gt;</span> <span class="fu">httpGet</span>(url))<span class="op">;</span></span>
+<span id="cb1229-4"><a href="ch_async-functions.html#cb1229-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="cf">await</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>(promiseArray)<span class="op">;</span> <span class="co">// (B)</span></span>
+<span id="cb1229-5"><a href="ch_async-functions.html#cb1229-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>For the same reason, we can also omit <code>await</code> in line B.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Mapping and filtering asynchronously</strong></p>
+<p><code>exercises/async-functions/map_async_test.mjs</code></p>
+</div>
+<h3 id="advanced-5">41.4 (Advanced)</h3>
+<p>All remaining sections are advanced.</p>
+<h3 id="immediately-invoked-async-arrow-functions">41.5 Immediately invoked async arrow functions</h3>
+<p>If we need an <code>await</code> outside an async function, we can immediately invoke an async arrow function:</p>
+<div class="sourceCode" id="cb1230"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1230-1"><a href="ch_async-functions.html#cb1230-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">async</span> () <span class="kw">=&gt;</span> { <span class="co">// start</span></span>
+<span id="cb1230-2"><a href="ch_async-functions.html#cb1230-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> promise <span class="op">=</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">resolve</span>(<span class="st">'abc'</span>)<span class="op">;</span></span>
+<span id="cb1230-3"><a href="ch_async-functions.html#cb1230-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> value <span class="op">=</span> <span class="cf">await</span> promise<span class="op">;</span></span>
+<span id="cb1230-4"><a href="ch_async-functions.html#cb1230-4" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(value<span class="op">,</span> <span class="st">'abc'</span>)<span class="op">;</span></span>
+<span id="cb1230-5"><a href="ch_async-functions.html#cb1230-5" aria-hidden="true" tabindex="-1"></a>})()<span class="op">;</span> <span class="co">// end</span></span></code></pre></div>
+<p>The result of an immediately invoked async arrow function is a Promise:</p>
+<div class="sourceCode" id="cb1231"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1231-1"><a href="ch_async-functions.html#cb1231-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> promise <span class="op">=</span> (<span class="kw">async</span> () <span class="kw">=&gt;</span> <span class="dv">123</span>)()<span class="op">;</span></span>
+<span id="cb1231-2"><a href="ch_async-functions.html#cb1231-2" aria-hidden="true" tabindex="-1"></a>promise<span class="op">.</span><span class="fu">then</span>(x <span class="kw">=&gt;</span> assert<span class="op">.</span><span class="fu">equal</span>(x<span class="op">,</span> <span class="dv">123</span>))<span class="op">;</span></span></code></pre></div>
+<p>One use case for immediately invoked async arrow functions is using <code>await</code> at the top level of a module (e.g., to download data via <code>fetch()</code>).</p>
+<h3 id="concurrency-and-await">41.6 Concurrency and <code>await</code></h3>
+<p>In <span data-refcheck="#await-sequentially #await-concurrently">the next two subsections</span>, we’ll use the helper function <code>paused()</code>:</p>
+<div class="sourceCode" id="cb1232"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1232-1"><a href="ch_async-functions.html#cb1232-1" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb1232-2"><a href="ch_async-functions.html#cb1232-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Resolves after `ms` milliseconds</span></span>
+<span id="cb1232-3"><a href="ch_async-functions.html#cb1232-3" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb1232-4"><a href="ch_async-functions.html#cb1232-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">delay</span>(ms) {</span>
+<span id="cb1232-5"><a href="ch_async-functions.html#cb1232-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> _reject) <span class="kw">=&gt;</span> {</span>
+<span id="cb1232-6"><a href="ch_async-functions.html#cb1232-6" aria-hidden="true" tabindex="-1"></a>    <span class="pp">setTimeout</span>(resolve<span class="op">,</span> ms)<span class="op">;</span></span>
+<span id="cb1232-7"><a href="ch_async-functions.html#cb1232-7" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb1232-8"><a href="ch_async-functions.html#cb1232-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1232-9"><a href="ch_async-functions.html#cb1232-9" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">paused</span>(id) {</span>
+<span id="cb1232-10"><a href="ch_async-functions.html#cb1232-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'START '</span> <span class="op">+</span> id)<span class="op">;</span></span>
+<span id="cb1232-11"><a href="ch_async-functions.html#cb1232-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="fu">delay</span>(<span class="dv">10</span>)<span class="op">;</span> <span class="co">// pause</span></span>
+<span id="cb1232-12"><a href="ch_async-functions.html#cb1232-12" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'END '</span> <span class="op">+</span> id)<span class="op">;</span></span>
+<span id="cb1232-13"><a href="ch_async-functions.html#cb1232-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> id<span class="op">;</span></span>
+<span id="cb1232-14"><a href="ch_async-functions.html#cb1232-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="await-sequentially">41.6.1 <code>await</code>: running asynchronous functions sequentially</h4>
+<p>If we prefix the invocations of multiple asynchronous functions with <code>await</code>, then those functions are executed sequentially:</p>
+<div class="sourceCode" id="cb1233"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1233-1"><a href="ch_async-functions.html#cb1233-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">sequentialAwait</span>() {</span>
+<span id="cb1233-2"><a href="ch_async-functions.html#cb1233-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result1 <span class="op">=</span> <span class="cf">await</span> <span class="fu">paused</span>(<span class="st">'first'</span>)<span class="op">;</span></span>
+<span id="cb1233-3"><a href="ch_async-functions.html#cb1233-3" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(result1<span class="op">,</span> <span class="st">'first'</span>)<span class="op">;</span></span>
+<span id="cb1233-4"><a href="ch_async-functions.html#cb1233-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1233-5"><a href="ch_async-functions.html#cb1233-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result2 <span class="op">=</span> <span class="cf">await</span> <span class="fu">paused</span>(<span class="st">'second'</span>)<span class="op">;</span></span>
+<span id="cb1233-6"><a href="ch_async-functions.html#cb1233-6" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(result2<span class="op">,</span> <span class="st">'second'</span>)<span class="op">;</span></span>
+<span id="cb1233-7"><a href="ch_async-functions.html#cb1233-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1233-8"><a href="ch_async-functions.html#cb1233-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1233-9"><a href="ch_async-functions.html#cb1233-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1233-10"><a href="ch_async-functions.html#cb1233-10" aria-hidden="true" tabindex="-1"></a><span class="co">// 'START first'</span></span>
+<span id="cb1233-11"><a href="ch_async-functions.html#cb1233-11" aria-hidden="true" tabindex="-1"></a><span class="co">// '</span><span class="re">END</span><span class="co"> first'</span></span>
+<span id="cb1233-12"><a href="ch_async-functions.html#cb1233-12" aria-hidden="true" tabindex="-1"></a><span class="co">// 'START second'</span></span>
+<span id="cb1233-13"><a href="ch_async-functions.html#cb1233-13" aria-hidden="true" tabindex="-1"></a><span class="co">// '</span><span class="re">END</span><span class="co"> second'</span></span></code></pre></div>
+<p>That is, <code>paused('second')</code> is only started after <code>paused('first')</code> is completely finished.</p>
+<h4 id="await-concurrently">41.6.2 <code>await</code>: running asynchronous functions concurrently</h4>
+<p>If we want to run multiple functions concurrently, we can use the tool method <code>Promise.all()</code>:</p>
+<div class="sourceCode" id="cb1234"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1234-1"><a href="ch_async-functions.html#cb1234-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">concurrentPromiseAll</span>() {</span>
+<span id="cb1234-2"><a href="ch_async-functions.html#cb1234-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result <span class="op">=</span> <span class="cf">await</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">all</span>([</span>
+<span id="cb1234-3"><a href="ch_async-functions.html#cb1234-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paused</span>(<span class="st">'first'</span>)<span class="op">,</span> <span class="fu">paused</span>(<span class="st">'second'</span>)</span>
+<span id="cb1234-4"><a href="ch_async-functions.html#cb1234-4" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">;</span></span>
+<span id="cb1234-5"><a href="ch_async-functions.html#cb1234-5" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">deepEqual</span>(result<span class="op">,</span> [<span class="st">'first'</span><span class="op">,</span> <span class="st">'second'</span>])<span class="op">;</span></span>
+<span id="cb1234-6"><a href="ch_async-functions.html#cb1234-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1234-7"><a href="ch_async-functions.html#cb1234-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1234-8"><a href="ch_async-functions.html#cb1234-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1234-9"><a href="ch_async-functions.html#cb1234-9" aria-hidden="true" tabindex="-1"></a><span class="co">// 'START first'</span></span>
+<span id="cb1234-10"><a href="ch_async-functions.html#cb1234-10" aria-hidden="true" tabindex="-1"></a><span class="co">// 'START second'</span></span>
+<span id="cb1234-11"><a href="ch_async-functions.html#cb1234-11" aria-hidden="true" tabindex="-1"></a><span class="co">// '</span><span class="re">END</span><span class="co"> first'</span></span>
+<span id="cb1234-12"><a href="ch_async-functions.html#cb1234-12" aria-hidden="true" tabindex="-1"></a><span class="co">// '</span><span class="re">END</span><span class="co"> second'</span></span></code></pre></div>
+<p>Here, both asynchronous functions are started at the same time. Once both are settled, <code>await</code> gives us either an Array of fulfillment values or – if at least one Promise is rejected – an exception.</p>
+<p>Recall from <a href="ch_promises.html#focus-on-async-start">§40.6.2 “Concurrency tip: focus on when operations start”</a> that what counts is when we start a Promise-based computation; not how we process its result. Therefore, the following code is as “concurrent” as the previous one:</p>
+<div class="sourceCode" id="cb1235"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1235-1"><a href="ch_async-functions.html#cb1235-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">concurrentAwait</span>() {</span>
+<span id="cb1235-2"><a href="ch_async-functions.html#cb1235-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> resultPromise1 <span class="op">=</span> <span class="fu">paused</span>(<span class="st">'first'</span>)<span class="op">;</span></span>
+<span id="cb1235-3"><a href="ch_async-functions.html#cb1235-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> resultPromise2 <span class="op">=</span> <span class="fu">paused</span>(<span class="st">'second'</span>)<span class="op">;</span></span>
+<span id="cb1235-4"><a href="ch_async-functions.html#cb1235-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1235-5"><a href="ch_async-functions.html#cb1235-5" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(<span class="cf">await</span> resultPromise1<span class="op">,</span> <span class="st">'first'</span>)<span class="op">;</span></span>
+<span id="cb1235-6"><a href="ch_async-functions.html#cb1235-6" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(<span class="cf">await</span> resultPromise2<span class="op">,</span> <span class="st">'second'</span>)<span class="op">;</span></span>
+<span id="cb1235-7"><a href="ch_async-functions.html#cb1235-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1235-8"><a href="ch_async-functions.html#cb1235-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb1235-9"><a href="ch_async-functions.html#cb1235-9" aria-hidden="true" tabindex="-1"></a><span class="co">// 'START first'</span></span>
+<span id="cb1235-10"><a href="ch_async-functions.html#cb1235-10" aria-hidden="true" tabindex="-1"></a><span class="co">// 'START second'</span></span>
+<span id="cb1235-11"><a href="ch_async-functions.html#cb1235-11" aria-hidden="true" tabindex="-1"></a><span class="co">// '</span><span class="re">END</span><span class="co"> first'</span></span>
+<span id="cb1235-12"><a href="ch_async-functions.html#cb1235-12" aria-hidden="true" tabindex="-1"></a><span class="co">// '</span><span class="re">END</span><span class="co"> second'</span></span></code></pre></div>
+<h3 id="tips-for-using-async-functions">41.7 Tips for using async functions</h3>
+<h4 id="fire-and-forget-await">41.7.1 We don’t need <code>await</code> if we “fire and forget”</h4>
+<p><code>await</code> is not required when working with a Promise-based function; we only need it if we want to pause and wait until the returned Promise is settled. If we only want to start an asynchronous operation, then we don’t need it:</p>
+<div class="sourceCode" id="cb1236"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1236-1"><a href="ch_async-functions.html#cb1236-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">asyncFunc</span>() {</span>
+<span id="cb1236-2"><a href="ch_async-functions.html#cb1236-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> writer <span class="op">=</span> <span class="fu">openFile</span>(<span class="st">'someFile.txt'</span>)<span class="op">;</span></span>
+<span id="cb1236-3"><a href="ch_async-functions.html#cb1236-3" aria-hidden="true" tabindex="-1"></a>  writer<span class="op">.</span><span class="fu">write</span>(<span class="st">'hello'</span>)<span class="op">;</span> <span class="co">// don’t wait</span></span>
+<span id="cb1236-4"><a href="ch_async-functions.html#cb1236-4" aria-hidden="true" tabindex="-1"></a>  writer<span class="op">.</span><span class="fu">write</span>(<span class="st">'world'</span>)<span class="op">;</span> <span class="co">// don’t wait</span></span>
+<span id="cb1236-5"><a href="ch_async-functions.html#cb1236-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> writer<span class="op">.</span><span class="fu">close</span>()<span class="op">;</span> <span class="co">// wait for file to close</span></span>
+<span id="cb1236-6"><a href="ch_async-functions.html#cb1236-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>In this code, we don’t await <code>.write()</code> because we don’t care when it is finished. We do, however, want to wait until <code>.close()</code> is done.</p>
+<p>Note: Each invocation of <code>.write()</code> starts synchronously. That prevents race conditions.</p>
+<h4 id="it-can-make-sense-to-await-and-ignore-the-result">41.7.2 It can make sense to <code>await</code> and ignore the result</h4>
+<p>It can occasionally make sense to use <code>await</code>, even if we ignore its result – for example:</p>
+<div class="sourceCode" id="cb1237"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1237-1"><a href="ch_async-functions.html#cb1237-1" aria-hidden="true" tabindex="-1"></a><span class="cf">await</span> <span class="fu">longRunningAsyncOperation</span>()<span class="op">;</span></span>
+<span id="cb1237-2"><a href="ch_async-functions.html#cb1237-2" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'Done!'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Here, we are using <code>await</code> to join a long-running asynchronous operation. That ensures that the logging really happens <em>after</em> that operation is done.</p>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/28">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_async-iteration.html">42 Asynchronous iteration</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

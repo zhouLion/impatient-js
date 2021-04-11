@@ -1,0 +1,192 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_quizzes-exercises">10 Getting started with quizzes and exercises</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>10.1 <a href="ch_quizzes-exercises.html#quizzes">Quizzes</a></li>
+<li>10.2 <a href="ch_quizzes-exercises.html#exercises">Exercises</a>
+<ul>
+<li>10.2.1 <a href="ch_quizzes-exercises.html#installing-the-exercises">Installing the exercises</a></li>
+<li>10.2.2 <a href="ch_quizzes-exercises.html#running-exercises">Running exercises</a></li>
+</ul></li>
+<li>10.3 <a href="ch_quizzes-exercises.html#unit-tests-in-javascript">Unit tests in JavaScript</a>
+<ul>
+<li>10.3.1 <a href="ch_quizzes-exercises.html#a-typical-test">A typical test</a></li>
+<li>10.3.2 <a href="ch_quizzes-exercises.html#async-tests-mocha">Asynchronous tests in Mocha</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<p>Throughout most chapters, there are quizzes and exercises. These are a paid feature, but a comprehensive preview is available. This chapter explains how to get started with them.</p>
+<h3 id="quizzes">10.1 Quizzes</h3>
+<p><a id="index-entry-41" class="index-entry"></a></p>
+<p>Installation:</p>
+<ul>
+<li>Download and unzip <code>impatient-js-quiz.zip</code></li>
+</ul>
+<p>Running the quiz app:</p>
+<ul>
+<li>Open <code>impatient-js-quiz/index.html</code> in a web browser</li>
+<li>You’ll see a TOC of all the quizzes.</li>
+</ul>
+<h3 id="exercises">10.2 Exercises</h3>
+<p><a id="index-entry-42" class="index-entry"></a></p>
+<h4 id="installing-the-exercises">10.2.1 Installing the exercises</h4>
+<p>To install the exercises:</p>
+<ul>
+<li>Download and unzip <code>impatient-js-code.zip</code></li>
+<li>Follow the instructions in <code>README.txt</code></li>
+</ul>
+<h4 id="running-exercises">10.2.2 Running exercises</h4>
+<ul>
+<li>Exercises are referred to by path in this book.
+<ul>
+<li>For example: <code>exercises/quizzes-exercises/first_module_test.mjs</code></li>
+</ul></li>
+<li>Within each file:
+<ul>
+<li>The first line contains the command for running the exercise.</li>
+<li>The following lines describe what you have to do.</li>
+</ul></li>
+</ul>
+<h3 id="unit-tests-in-javascript">10.3 Unit tests in JavaScript</h3>
+<p><a id="index-entry-43" class="index-entry"></a></p>
+<p>All exercises in this book are tests that are run via the test framework <a href="https://mochajs.org">Mocha</a>. This section gives a brief introduction.</p>
+<h4 id="a-typical-test">10.3.1 A typical test</h4>
+<p>Typical test code is split into two parts:</p>
+<ul>
+<li>Part 1: the code to be tested.</li>
+<li>Part 2: the tests for the code.</li>
+</ul>
+<p>Take, for example, the following two files:</p>
+<ul>
+<li><code>id.mjs</code> (code to be tested)</li>
+<li><code>id_test.mjs</code> (tests)</li>
+</ul>
+<h5 id="part-1-the-code">10.3.1.1 Part 1: the code</h5>
+<p>The code itself resides in <code>id.mjs</code>:</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb98-1"><a href="ch_quizzes-exercises.html#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">id</span>(x) {</span>
+<span id="cb98-2"><a href="ch_quizzes-exercises.html#cb98-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> x<span class="op">;</span></span>
+<span id="cb98-3"><a href="ch_quizzes-exercises.html#cb98-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The key thing here is: everything we want to test must be exported. Otherwise, the test code can’t access it.</p>
+<h5 id="part-2-the-tests">10.3.1.2 Part 2: the tests</h5>
+<div class="notebox">
+<p><img src="img-book/img/icons/eye-regular.svg" height="24">&nbsp; <strong>Don’t worry about the exact details of tests</strong></p>
+<p>You don’t need to worry about the exact details of tests: They are always implemented for you. Therefore, you only need to read them, but not write them.</p>
+</div>
+<p>The tests for the code reside in <code>id_test.mjs</code>:</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb99-1"><a href="ch_quizzes-exercises.html#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co">// npm t demos/quizzes-exercises/id_test.mjs</span></span>
+<span id="cb99-2"><a href="ch_quizzes-exercises.html#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suite</span>(<span class="st">'id_test.mjs'</span>)<span class="op">;</span></span>
+<span id="cb99-3"><a href="ch_quizzes-exercises.html#cb99-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-4"><a href="ch_quizzes-exercises.html#cb99-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> assert <span class="im">from</span> <span class="st">'assert/strict'</span><span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb99-5"><a href="ch_quizzes-exercises.html#cb99-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {id} <span class="im">from</span> <span class="st">'./id.mjs'</span><span class="op">;</span> <span class="co">// (B)</span></span>
+<span id="cb99-6"><a href="ch_quizzes-exercises.html#cb99-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-7"><a href="ch_quizzes-exercises.html#cb99-7" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">'My test'</span><span class="op">,</span> () <span class="kw">=&gt;</span> { <span class="co">// (C)</span></span>
+<span id="cb99-8"><a href="ch_quizzes-exercises.html#cb99-8" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">id</span>(<span class="st">'abc'</span>)<span class="op">,</span> <span class="st">'abc'</span>)<span class="op">;</span> <span class="co">// (D)</span></span>
+<span id="cb99-9"><a href="ch_quizzes-exercises.html#cb99-9" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>The core of this test file is line D – <a href="ch_assertion-api.html">an assertion</a>: <code>assert.equal()</code> specifies that the expected result of <code>id('abc')</code> is <code>'abc'</code>.</p>
+<p>As for the other lines:</p>
+<ul>
+<li>The comment at the very beginning shows the shell command for running the test.</li>
+<li>Line A: We import the Node.js assertion library (in <em>strict assertion mode</em>).</li>
+<li>Line B: We import the function to test.</li>
+<li>Line C: We define a test. This is done by calling the function <code>test()</code>:
+<ul>
+<li>First parameter: the name of the test.</li>
+<li>Second parameter: the test code, which is provided via an arrow function. The parameter <code>t</code> gives us access to AVA’s testing API (assertions, etc.).</li>
+</ul></li>
+</ul>
+<p>To run the test, we execute the following in a command line:</p>
+<pre class="text"><code>npm t demos/quizzes-exercises/id_test.mjs</code></pre>
+<p>The <code>t</code> is an abbreviation for <code>test</code>. That is, the long version of this command is:</p>
+<pre class="text"><code>npm test demos/quizzes-exercises/id_test.mjs</code></pre>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Your first exercise</strong></p>
+<p>The following exercise gives you a first taste of what exercises are like:</p>
+<ul>
+<li><p><code>exercises/quizzes-exercises/first_module_test.mjs</code></p></li>
+</ul>
+</div>
+<h4 id="async-tests-mocha">10.3.2 Asynchronous tests in Mocha</h4>
+<div class="notebox">
+<p><img src="img-book/img/icons/eye-regular.svg" height="24">&nbsp; <strong>Reading</strong></p>
+<p>You may want to postpone reading this section until you get to the chapters on asynchronous programming.</p>
+</div>
+<p>Writing tests for asynchronous code requires extra work: The test receives its results later and has to signal to Mocha that it isn’t finished yet when it returns. The following subsections examine three ways of doing so.</p>
+<h5 id="asynchronicity-via-callbacks">10.3.2.1 Asynchronicity via callbacks</h5>
+<p>If the callback we pass to <code>test()</code> has a parameter (e.g., <code>done</code>), Mocha switches to callback-based asynchronicity. When we are done with our asynchronous work, we have to call <code>done</code>:</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb102-1"><a href="ch_quizzes-exercises.html#cb102-1" aria-hidden="true" tabindex="-1"></a>test<span class="op">.</span><span class="fu">cb</span>(<span class="st">'divideCallback'</span><span class="op">,</span> t <span class="kw">=&gt;</span> {</span>
+<span id="cb102-2"><a href="ch_quizzes-exercises.html#cb102-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">divideCallback</span>(<span class="dv">8</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> (error<span class="op">,</span> result) <span class="kw">=&gt;</span> {</span>
+<span id="cb102-3"><a href="ch_quizzes-exercises.html#cb102-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (error) {</span>
+<span id="cb102-4"><a href="ch_quizzes-exercises.html#cb102-4" aria-hidden="true" tabindex="-1"></a>      t<span class="op">.</span><span class="fu">end</span>(error)<span class="op">;</span></span>
+<span id="cb102-5"><a href="ch_quizzes-exercises.html#cb102-5" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb102-6"><a href="ch_quizzes-exercises.html#cb102-6" aria-hidden="true" tabindex="-1"></a>      assert<span class="op">.</span><span class="fu">strictEqual</span>(result<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb102-7"><a href="ch_quizzes-exercises.html#cb102-7" aria-hidden="true" tabindex="-1"></a>      t<span class="op">.</span><span class="fu">end</span>()<span class="op">;</span></span>
+<span id="cb102-8"><a href="ch_quizzes-exercises.html#cb102-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb102-9"><a href="ch_quizzes-exercises.html#cb102-9" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb102-10"><a href="ch_quizzes-exercises.html#cb102-10" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>This is what <code>divideCallback()</code> looks like:</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb103-1"><a href="ch_quizzes-exercises.html#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">divideCallback</span>(x<span class="op">,</span> y<span class="op">,</span> callback) {</span>
+<span id="cb103-2"><a href="ch_quizzes-exercises.html#cb103-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (y <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb103-3"><a href="ch_quizzes-exercises.html#cb103-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">callback</span>(<span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Division by zero'</span>))<span class="op">;</span></span>
+<span id="cb103-4"><a href="ch_quizzes-exercises.html#cb103-4" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb103-5"><a href="ch_quizzes-exercises.html#cb103-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">callback</span>(<span class="kw">null</span><span class="op">,</span> x <span class="op">/</span> y)<span class="op">;</span></span>
+<span id="cb103-6"><a href="ch_quizzes-exercises.html#cb103-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb103-7"><a href="ch_quizzes-exercises.html#cb103-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h5 id="asynchronicity-via-promises">10.3.2.2 Asynchronicity via Promises</h5>
+<p>If a test returns a Promise, Mocha switches to Promise-based asynchronicity. A test is considered successful if the Promise is fulfilled and failed if the Promise is rejected or if a settlement takes longer than a timeout.</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb104-1"><a href="ch_quizzes-exercises.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">'dividePromise 1'</span><span class="op">,</span> t <span class="kw">=&gt;</span> {</span>
+<span id="cb104-2"><a href="ch_quizzes-exercises.html#cb104-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">dividePromise</span>(<span class="dv">8</span><span class="op">,</span> <span class="dv">4</span>)</span>
+<span id="cb104-3"><a href="ch_quizzes-exercises.html#cb104-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(result <span class="kw">=&gt;</span> {</span>
+<span id="cb104-4"><a href="ch_quizzes-exercises.html#cb104-4" aria-hidden="true" tabindex="-1"></a>    assert<span class="op">.</span><span class="fu">strictEqual</span>(result<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb104-5"><a href="ch_quizzes-exercises.html#cb104-5" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb104-6"><a href="ch_quizzes-exercises.html#cb104-6" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><code>dividePromise()</code> is implemented as follows:</p>
+<div class="sourceCode" id="cb105"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb105-1"><a href="ch_quizzes-exercises.html#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">dividePromise</span>(x<span class="op">,</span> y) {</span>
+<span id="cb105-2"><a href="ch_quizzes-exercises.html#cb105-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Promise</span>((resolve<span class="op">,</span> reject) <span class="kw">=&gt;</span> {</span>
+<span id="cb105-3"><a href="ch_quizzes-exercises.html#cb105-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (y <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb105-4"><a href="ch_quizzes-exercises.html#cb105-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">reject</span>(<span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Division by zero'</span>))<span class="op">;</span></span>
+<span id="cb105-5"><a href="ch_quizzes-exercises.html#cb105-5" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb105-6"><a href="ch_quizzes-exercises.html#cb105-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">resolve</span>(x <span class="op">/</span> y)<span class="op">;</span></span>
+<span id="cb105-7"><a href="ch_quizzes-exercises.html#cb105-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb105-8"><a href="ch_quizzes-exercises.html#cb105-8" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb105-9"><a href="ch_quizzes-exercises.html#cb105-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h5 id="async-functions-as-test-bodies">10.3.2.3 Async functions as test “bodies”</h5>
+<p>Async functions always return Promises. Therefore, an async function is a convenient way of implementing an asynchronous test. The following code is equivalent to the previous example.</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb106-1"><a href="ch_quizzes-exercises.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">'dividePromise 2'</span><span class="op">,</span> <span class="kw">async</span> t <span class="kw">=&gt;</span> {</span>
+<span id="cb106-2"><a href="ch_quizzes-exercises.html#cb106-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result <span class="op">=</span> <span class="cf">await</span> <span class="fu">dividePromise</span>(<span class="dv">8</span><span class="op">,</span> <span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb106-3"><a href="ch_quizzes-exercises.html#cb106-3" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(result<span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb106-4"><a href="ch_quizzes-exercises.html#cb106-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// No explicit return necessary!</span></span>
+<span id="cb106-5"><a href="ch_quizzes-exercises.html#cb106-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>We don’t need to explicitly return anything: The implicitly returned <code>undefined</code> is used to fulfill the Promise returned by this async function. And if the test code throws an exception, then the async function takes care of rejecting the returned Promise.</p>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/2">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="pt_variables-values.html">III Variables and values</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

@@ -1,0 +1,350 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_operators">13 Operators</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>13.1 <a href="ch_operators.html#making-sense-of-operators">Making sense of operators</a>
+<ul>
+<li>13.1.1 <a href="ch_operators.html#operators-coerce-their-operands-to-appropriate-types">Operators coerce their operands to appropriate types</a></li>
+<li>13.1.2 <a href="ch_operators.html#most-operators-only-work-with-primitive-values">Most operators only work with primitive values</a></li>
+</ul></li>
+<li>13.2 <a href="ch_operators.html#the-plus-operator">The plus operator (<code>+</code>)</a></li>
+<li>13.3 <a href="ch_operators.html#assignment-operators">Assignment operators</a>
+<ul>
+<li>13.3.1 <a href="ch_operators.html#the-plain-assignment-operator">The plain assignment operator</a></li>
+<li>13.3.2 <a href="ch_operators.html#compound-assignment-operators">Compound assignment operators</a></li>
+</ul></li>
+<li>13.4 <a href="ch_operators.html#equality-vs.">Equality: <code>==</code> vs.&nbsp;<code>===</code></a>
+<ul>
+<li>13.4.1 <a href="ch_operators.html#loose-equality-and">Loose equality (<code>==</code> and <code>!=</code>)</a></li>
+<li>13.4.2 <a href="ch_operators.html#strict-equality">Strict equality (<code>===</code> and <code>!==</code>)</a></li>
+<li>13.4.3 <a href="ch_operators.html#recommendation-always-strict-equality">Recommendation: always use strict equality</a></li>
+<li>13.4.4 <a href="ch_operators.html#Object.is">Even stricter than <code>===</code>: <code>Object.is()</code></a></li>
+</ul></li>
+<li>13.5 <a href="ch_operators.html#ordering-operators">Ordering operators</a></li>
+<li>13.6 <a href="ch_operators.html#various-other-operators">Various other operators</a>
+<ul>
+<li>13.6.1 <a href="ch_operators.html#comma-operator">Comma operator</a></li>
+<li>13.6.2 <a href="ch_operators.html#void-operator"><code>void</code> operator</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<h3 id="making-sense-of-operators">13.1 Making sense of operators</h3>
+<p>JavaScript’s operators may seem quirky. With the following two rules, they are easier to understand:</p>
+<ul>
+<li>Operators coerce their operands to appropriate types</li>
+<li>Most operators only work with primitive values</li>
+</ul>
+<h4 id="operators-coerce-their-operands-to-appropriate-types">13.1.1 Operators coerce their operands to appropriate types</h4>
+<p>If an operator gets operands that don’t have the proper types, it rarely throws an exception. Instead, it <em>coerces</em> (automatically converts) the operands so that it can work with them. Let’s look at two examples.</p>
+<p>First, the multiplication operator can only work with numbers. Therefore, it converts strings to numbers before computing its result.</p>
+<div class="sourceCode" id="cb160"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb160-1"><a href="ch_operators.html#cb160-1" aria-hidden="true" tabindex="-1"></a>&gt; '7' * '3'</span>
+<span id="cb160-2"><a href="ch_operators.html#cb160-2" aria-hidden="true" tabindex="-1"></a><span class="kw">21</span></span></code></pre></div>
+<p>Second, the square brackets operator (<code>[ ]</code>) for accessing the properties of an object can only handle strings and symbols. All other values are coerced to string:</p>
+<div class="sourceCode" id="cb161"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb161-1"><a href="ch_operators.html#cb161-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> obj <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb161-2"><a href="ch_operators.html#cb161-2" aria-hidden="true" tabindex="-1"></a>obj[<span class="st">'true'</span>] <span class="op">=</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb161-3"><a href="ch_operators.html#cb161-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb161-4"><a href="ch_operators.html#cb161-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Coerce true to the string 'true'</span></span>
+<span id="cb161-5"><a href="ch_operators.html#cb161-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(obj[<span class="kw">true</span>]<span class="op">,</span> <span class="dv">123</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="most-operators-only-work-with-primitive-values">13.1.2 Most operators only work with primitive values</h4>
+<p>As mentioned before, most operators only work with primitive values. If an operand is an object, it is usually coerced to a primitive value – for example:</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb162-1"><a href="ch_operators.html#cb162-1" aria-hidden="true" tabindex="-1"></a>&gt; [1,2,3] + [4,5,6]</span>
+<span id="cb162-2"><a href="ch_operators.html#cb162-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'1,2,34,5,6'</span></span></code></pre></div>
+<p>Why? The plus operator first coerces its operands to primitive values:</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb163-1"><a href="ch_operators.html#cb163-1" aria-hidden="true" tabindex="-1"></a>&gt; String([1,2,3])</span>
+<span id="cb163-2"><a href="ch_operators.html#cb163-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'1,2,3'</span></span>
+<span id="cb163-3"><a href="ch_operators.html#cb163-3" aria-hidden="true" tabindex="-1"></a>&gt; String([4,5,6])</span>
+<span id="cb163-4"><a href="ch_operators.html#cb163-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'4,5,6'</span></span></code></pre></div>
+<p>Next, it concatenates the two strings:</p>
+<div class="sourceCode" id="cb164"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb164-1"><a href="ch_operators.html#cb164-1" aria-hidden="true" tabindex="-1"></a>&gt; '1,2,3' + '4,5,6'</span>
+<span id="cb164-2"><a href="ch_operators.html#cb164-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'1,2,34,5,6'</span></span></code></pre></div>
+<h3 id="the-plus-operator">13.2 The plus operator (<code>+</code>)</h3>
+<p><a id="index-entry-87" class="index-entry"></a><a id="index-entry-88" class="index-entry"></a><a id="index-entry-89" class="index-entry"></a></p>
+<p>The plus operator works as follows in JavaScript:</p>
+<ul>
+<li>First, it converts both operands to primitive values. Then it switches to one of two modes:
+<ul>
+<li>String mode: If one of the two primitive values is a string, then it converts the other one to a string, concatenates both strings, and returns the result.</li>
+<li>Number mode: Otherwise, It converts both operands to numbers, adds them, and returns the result.</li>
+</ul></li>
+</ul>
+<p>String mode lets us use <code>+</code> to assemble strings:</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb165-1"><a href="ch_operators.html#cb165-1" aria-hidden="true" tabindex="-1"></a>&gt; 'There are ' + 3 + ' items'</span>
+<span id="cb165-2"><a href="ch_operators.html#cb165-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'There are 3 items'</span></span></code></pre></div>
+<p>Number mode means that if neither operand is a string (or an object that becomes a string) then everything is coerced to numbers:</p>
+<div class="sourceCode" id="cb166"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb166-1"><a href="ch_operators.html#cb166-1" aria-hidden="true" tabindex="-1"></a>&gt; 4 + true</span>
+<span id="cb166-2"><a href="ch_operators.html#cb166-2" aria-hidden="true" tabindex="-1"></a><span class="kw">5</span></span></code></pre></div>
+<p><code>Number(true)</code> is <code>1</code>.</p>
+<h3 id="assignment-operators">13.3 Assignment operators</h3>
+<p><a id="index-entry-90" class="index-entry"></a> <a id="index-entry-91" class="index-entry"></a> <a id="index-entry-92" class="index-entry"></a></p>
+<h4 id="the-plain-assignment-operator">13.3.1 The plain assignment operator</h4>
+<p>The plain assignment operator is used to change storage locations:</p>
+<div class="sourceCode" id="cb167"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb167-1"><a href="ch_operators.html#cb167-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> value<span class="op">;</span> <span class="co">// assign to a previously declared variable</span></span>
+<span id="cb167-2"><a href="ch_operators.html#cb167-2" aria-hidden="true" tabindex="-1"></a>obj<span class="op">.</span><span class="at">propKey</span> <span class="op">=</span> value<span class="op">;</span> <span class="co">// assign to a property</span></span>
+<span id="cb167-3"><a href="ch_operators.html#cb167-3" aria-hidden="true" tabindex="-1"></a>arr[index] <span class="op">=</span> value<span class="op">;</span> <span class="co">// assign to an Array element</span></span></code></pre></div>
+<p>Initializers in variable declarations can also be viewed as a form of assignment:</p>
+<div class="sourceCode" id="cb168"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb168-1"><a href="ch_operators.html#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb168-2"><a href="ch_operators.html#cb168-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> y <span class="op">=</span> value<span class="op">;</span></span></code></pre></div>
+<h4 id="compound-assignment-operators">13.3.2 Compound assignment operators</h4>
+<p>JavaScript supports the following assignment operators:</p>
+<ul>
+<li>Arithmetic assignment operators: <code>+= -= *= /= %=</code> [ES1]
+<ul>
+<li><code>+=</code> can also be used for string concatenation</li>
+<li>Introduced later: <code>**=</code> [ES2016]</li>
+</ul></li>
+<li>Bitwise assignment operators: <code>&amp;= ^= |=</code> [ES1]</li>
+<li>Bitwise shift assignment operators: <code>&lt;&lt;= &gt;&gt;= &gt;&gt;&gt;=</code> [ES1]</li>
+<li>Logical assignment operators: <code>||= &amp;&amp;= ??=</code> [ES2021]</li>
+</ul>
+<h5 id="logical-assignment-operators">13.3.2.1 Logical assignment operators</h5>
+<p>Logical assignment operators work differently from other compound assignment operators:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Assignment operator</th>
+<th>Equivalent to</th>
+<th>Only assigns if <code>a</code> is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>a ||= b</code></td>
+<td><code>a || (a = b)</code></td>
+<td>Falsy</td>
+</tr>
+<tr class="even">
+<td><code>a &amp;&amp;= b</code></td>
+<td><code>a &amp;&amp; (a = b)</code></td>
+<td>Truthy</td>
+</tr>
+<tr class="odd">
+<td><code>a ??= b</code></td>
+<td><code>a ?? (a = b)</code></td>
+<td>Nullish</td>
+</tr>
+</tbody>
+</table>
+<p>Why is <code>a ||= b</code> equivalent to the following expression?</p>
+<blockquote>
+<p><code>a || (a = b)</code></p>
+</blockquote>
+<p>Why not to this expression?</p>
+<blockquote>
+<p><code>a = a || b</code></p>
+</blockquote>
+<p>The former expression has the benefit of <a href="ch_booleans.html#short-circuiting">short-circuiting</a>: The assignment is only evaluated if <code>a</code> evaluates to <code>false</code>. Therefore, the assignment is only performed if it’s necessary. In contrast, the latter expression always performs an assignment.</p>
+<p>For more on <code>??=</code>, see <a href="ch_undefined-null.html#nullish-coalescing-assignment-operator">§14.4.5 “The nullish coalescing assignment operator (<code>??=</code>)”</a>.</p>
+<h5 id="the-remaining-compound-assignment-operators">13.3.2.2 The remaining compound assignment operators</h5>
+<p>For operators <code>op</code> other than <code>|| &amp;&amp; ??</code>, the following two ways of assigning are equivalent:</p>
+<pre class="text"><code>myvar op= value
+myvar = myvar op value</code></pre>
+<p>If, for example, <code>op</code> is <code>+</code>, then we get the operator <code>+=</code> that works as follows.</p>
+<div class="sourceCode" id="cb170"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb170-1"><a href="ch_operators.html#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> str <span class="op">=</span> <span class="st">''</span><span class="op">;</span></span>
+<span id="cb170-2"><a href="ch_operators.html#cb170-2" aria-hidden="true" tabindex="-1"></a>str <span class="op">+=</span> <span class="st">'&lt;b&gt;'</span><span class="op">;</span></span>
+<span id="cb170-3"><a href="ch_operators.html#cb170-3" aria-hidden="true" tabindex="-1"></a>str <span class="op">+=</span> <span class="st">'Hello!'</span><span class="op">;</span></span>
+<span id="cb170-4"><a href="ch_operators.html#cb170-4" aria-hidden="true" tabindex="-1"></a>str <span class="op">+=</span> <span class="st">'&lt;/b&gt;'</span><span class="op">;</span></span>
+<span id="cb170-5"><a href="ch_operators.html#cb170-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb170-6"><a href="ch_operators.html#cb170-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(str<span class="op">,</span> <span class="st">'&lt;b&gt;Hello!&lt;/b&gt;'</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="equality-vs.">13.4 Equality: <code>==</code> vs.&nbsp;<code>===</code></h3>
+<p>JavaScript has two kinds of equality operators: loose equality (<code>==</code>) and strict equality (<code>===</code>). The recommendation is to always use the latter.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>Other names for <code>==</code> and <code>===</code></strong></p>
+<ul>
+<li><code>==</code> is also called <em>double equals</em>. Its official name in the language specification is <a href="https://tc39.github.io/ecma262/#sec-abstract-equality-comparison"><em>abstract equality comparison</em></a>.</li>
+<li><code>===</code> is also called <em>triple equals</em>.</li>
+</ul>
+</div>
+<h4 id="loose-equality-and">13.4.1 Loose equality (<code>==</code> and <code>!=</code>)</h4>
+<p>Loose equality is one of JavaScript’s quirks. It often coerces operands. Some of those coercions make sense:</p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb171-1"><a href="ch_operators.html#cb171-1" aria-hidden="true" tabindex="-1"></a>&gt; '123' == 123</span>
+<span id="cb171-2"><a href="ch_operators.html#cb171-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb171-3"><a href="ch_operators.html#cb171-3" aria-hidden="true" tabindex="-1"></a>&gt; false == 0</span>
+<span id="cb171-4"><a href="ch_operators.html#cb171-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Others less so:</p>
+<div class="sourceCode" id="cb172"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb172-1"><a href="ch_operators.html#cb172-1" aria-hidden="true" tabindex="-1"></a>&gt; '' == 0</span>
+<span id="cb172-2"><a href="ch_operators.html#cb172-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Objects are coerced to primitives if (and only if!) the other operand is primitive:</p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb173-1"><a href="ch_operators.html#cb173-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3] == '1,2,3'</span>
+<span id="cb173-2"><a href="ch_operators.html#cb173-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb173-3"><a href="ch_operators.html#cb173-3" aria-hidden="true" tabindex="-1"></a>&gt; ['1', '2', '3'] == '1,2,3'</span>
+<span id="cb173-4"><a href="ch_operators.html#cb173-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>If both operands are objects, they are only equal if they are the same object:</p>
+<div class="sourceCode" id="cb174"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb174-1"><a href="ch_operators.html#cb174-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3] == ['1', '2', '3']</span>
+<span id="cb174-2"><a href="ch_operators.html#cb174-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb174-3"><a href="ch_operators.html#cb174-3" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3] == [1, 2, 3]</span>
+<span id="cb174-4"><a href="ch_operators.html#cb174-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb174-5"><a href="ch_operators.html#cb174-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-6"><a href="ch_operators.html#cb174-6" aria-hidden="true" tabindex="-1"></a>&gt; const arr = [1, 2, 3];</span>
+<span id="cb174-7"><a href="ch_operators.html#cb174-7" aria-hidden="true" tabindex="-1"></a>&gt; arr == arr</span>
+<span id="cb174-8"><a href="ch_operators.html#cb174-8" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Lastly, <code>==</code> considers <code>undefined</code> and <code>null</code> to be equal:</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb175-1"><a href="ch_operators.html#cb175-1" aria-hidden="true" tabindex="-1"></a>&gt; undefined == null</span>
+<span id="cb175-2"><a href="ch_operators.html#cb175-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<h4 id="strict-equality">13.4.2 Strict equality (<code>===</code> and <code>!==</code>)</h4>
+<p><a id="index-entry-93" class="index-entry"></a> <a id="index-entry-94" class="index-entry"></a> <a id="index-entry-95" class="index-entry"></a></p>
+<p>Strict equality never coerces. Two values are only equal if they have the same type. Let’s revisit our previous interaction with the <code>==</code> operator and see what the <code>===</code> operator does:</p>
+<div class="sourceCode" id="cb176"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb176-1"><a href="ch_operators.html#cb176-1" aria-hidden="true" tabindex="-1"></a>&gt; false === 0</span>
+<span id="cb176-2"><a href="ch_operators.html#cb176-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb176-3"><a href="ch_operators.html#cb176-3" aria-hidden="true" tabindex="-1"></a>&gt; '123' === 123</span>
+<span id="cb176-4"><a href="ch_operators.html#cb176-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<p>An object is only equal to another value if that value is the same object:</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb177-1"><a href="ch_operators.html#cb177-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3] === '1,2,3'</span>
+<span id="cb177-2"><a href="ch_operators.html#cb177-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb177-3"><a href="ch_operators.html#cb177-3" aria-hidden="true" tabindex="-1"></a>&gt; ['1', '2', '3'] === '1,2,3'</span>
+<span id="cb177-4"><a href="ch_operators.html#cb177-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb177-5"><a href="ch_operators.html#cb177-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-6"><a href="ch_operators.html#cb177-6" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3] === ['1', '2', '3']</span>
+<span id="cb177-7"><a href="ch_operators.html#cb177-7" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb177-8"><a href="ch_operators.html#cb177-8" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3] === [1, 2, 3]</span>
+<span id="cb177-9"><a href="ch_operators.html#cb177-9" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb177-10"><a href="ch_operators.html#cb177-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-11"><a href="ch_operators.html#cb177-11" aria-hidden="true" tabindex="-1"></a>&gt; const arr = [1, 2, 3];</span>
+<span id="cb177-12"><a href="ch_operators.html#cb177-12" aria-hidden="true" tabindex="-1"></a>&gt; arr === arr</span>
+<span id="cb177-13"><a href="ch_operators.html#cb177-13" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>The <code>===</code> operator does not consider <code>undefined</code> and <code>null</code> to be equal:</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb178-1"><a href="ch_operators.html#cb178-1" aria-hidden="true" tabindex="-1"></a>&gt; undefined === null</span>
+<span id="cb178-2"><a href="ch_operators.html#cb178-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<h4 id="recommendation-always-strict-equality">13.4.3 Recommendation: always use strict equality</h4>
+<p>I recommend to always use <code>===</code>. It makes your code easier to understand and spares you from having to think about the quirks of <code>==</code>.</p>
+<p>Let’s look at two use cases for <code>==</code> and what I recommend to do instead.</p>
+<h5 id="use-case-for-comparing-with-a-number-or-a-string">13.4.3.1 Use case for <code>==</code>: comparing with a number or a string</h5>
+<p><code>==</code> lets you check if a value <code>x</code> is a number or that number as a string – with a single comparison:</p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb179-1"><a href="ch_operators.html#cb179-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">==</span> <span class="dv">123</span>) {</span>
+<span id="cb179-2"><a href="ch_operators.html#cb179-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// x is either 123 or '123'</span></span>
+<span id="cb179-3"><a href="ch_operators.html#cb179-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>I prefer either of the following two alternatives:</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb180-1"><a href="ch_operators.html#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">===</span> <span class="dv">123</span> <span class="op">||</span> x <span class="op">===</span> <span class="st">'123'</span>) ···</span>
+<span id="cb180-2"><a href="ch_operators.html#cb180-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="bu">Number</span>(x) <span class="op">===</span> <span class="dv">123</span>) ···</span></code></pre></div>
+<p>You can also convert <code>x</code> to a number when you first encounter it.</p>
+<h5 id="use-case-for-comparing-with-undefined-or-null">13.4.3.2 Use case for <code>==</code>: comparing with <code>undefined</code> or <code>null</code></h5>
+<p>Another use case for <code>==</code> is to check if a value <code>x</code> is either <code>undefined</code> or <code>null</code>:</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb181-1"><a href="ch_operators.html#cb181-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">==</span> <span class="kw">null</span>) {</span>
+<span id="cb181-2"><a href="ch_operators.html#cb181-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// x is either null or undefined</span></span>
+<span id="cb181-3"><a href="ch_operators.html#cb181-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The problem with this code is that you can’t be sure if someone meant to write it that way or if they made a typo and meant <code>=== null</code>.</p>
+<p>I prefer either of the following two alternatives:</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb182-1"><a href="ch_operators.html#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">===</span> <span class="kw">undefined</span> <span class="op">||</span> x <span class="op">===</span> <span class="kw">null</span>) ···</span>
+<span id="cb182-2"><a href="ch_operators.html#cb182-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="op">!</span>x) ···</span></code></pre></div>
+<p>A downside of the second alternative is that it accepts values other than <code>undefined</code> and <code>null</code>, but it is a well-established pattern in JavaScript (to be explained in detail in <a href="ch_booleans.html#truthiness-existence-checks">§15.3 “Truthiness-based existence checks”</a>).</p>
+<p>The following three conditions are also roughly equivalent:</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb183-1"><a href="ch_operators.html#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">!=</span> <span class="kw">null</span>) ···</span>
+<span id="cb183-2"><a href="ch_operators.html#cb183-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="op">!==</span> <span class="kw">undefined</span> <span class="op">&amp;&amp;</span> x <span class="op">!==</span> <span class="kw">null</span>) ···</span>
+<span id="cb183-3"><a href="ch_operators.html#cb183-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x) ···</span></code></pre></div>
+<h4 id="Object.is">13.4.4 Even stricter than <code>===</code>: <code>Object.is()</code></h4>
+<p><a id="index-entry-96" class="index-entry"></a></p>
+<p>Method <code>Object.is()</code> compares two values:</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb184-1"><a href="ch_operators.html#cb184-1" aria-hidden="true" tabindex="-1"></a>&gt; Object.is(123, 123)</span>
+<span id="cb184-2"><a href="ch_operators.html#cb184-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb184-3"><a href="ch_operators.html#cb184-3" aria-hidden="true" tabindex="-1"></a>&gt; Object.is(123, '123')</span>
+<span id="cb184-4"><a href="ch_operators.html#cb184-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<p>It is even stricter than <code>===</code>. For example, it considers <code>NaN</code>, <a href="ch_numbers.html#nan">the error value for computations involving numbers</a>, to be equal to itself:</p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb185-1"><a href="ch_operators.html#cb185-1" aria-hidden="true" tabindex="-1"></a>&gt; Object.is(NaN, NaN)</span>
+<span id="cb185-2"><a href="ch_operators.html#cb185-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb185-3"><a href="ch_operators.html#cb185-3" aria-hidden="true" tabindex="-1"></a>&gt; NaN === NaN</span>
+<span id="cb185-4"><a href="ch_operators.html#cb185-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<p>That is occasionally useful. For example, you can use it to implement an improved version of the Array method <code>.indexOf()</code>:</p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb186-1"><a href="ch_operators.html#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> myIndexOf <span class="op">=</span> (arr<span class="op">,</span> elem) <span class="kw">=&gt;</span> {</span>
+<span id="cb186-2"><a href="ch_operators.html#cb186-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> arr<span class="op">.</span><span class="fu">findIndex</span>(x <span class="kw">=&gt;</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">is</span>(x<span class="op">,</span> elem))<span class="op">;</span></span>
+<span id="cb186-3"><a href="ch_operators.html#cb186-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p><code>myIndexOf()</code> finds <code>NaN</code> in an Array, while <code>.indexOf()</code> doesn’t:</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb187-1"><a href="ch_operators.html#cb187-1" aria-hidden="true" tabindex="-1"></a>&gt; myIndexOf([0,NaN,2], NaN)</span>
+<span id="cb187-2"><a href="ch_operators.html#cb187-2" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span>
+<span id="cb187-3"><a href="ch_operators.html#cb187-3" aria-hidden="true" tabindex="-1"></a>&gt; [0,NaN,2].indexOf(NaN)</span>
+<span id="cb187-4"><a href="ch_operators.html#cb187-4" aria-hidden="true" tabindex="-1"></a><span class="kw">-1</span></span></code></pre></div>
+<p>The result <code>-1</code> means that <code>.indexOf()</code> couldn’t find its argument in the Array.</p>
+<h3 id="ordering-operators">13.5 Ordering operators</h3>
+<div id="tbl:ordering_operators">
+<table>
+<caption>Table 3: JavaScript’s ordering operators.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Operator</th>
+<th style="text-align: left;">name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>&lt;</code></td>
+<td style="text-align: left;">less than</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>&lt;=</code></td>
+<td style="text-align: left;">Less than or equal</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>&gt;</code></td>
+<td style="text-align: left;">Greater than</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>&gt;=</code></td>
+<td style="text-align: left;">Greater than or equal</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>JavaScript’s ordering operators (tbl.&nbsp;<a href="#tbl:ordering_operators">3</a>) work for both numbers and strings:</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb188-1"><a href="ch_operators.html#cb188-1" aria-hidden="true" tabindex="-1"></a>&gt; 5 &gt;= 2</span>
+<span id="cb188-2"><a href="ch_operators.html#cb188-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb188-3"><a href="ch_operators.html#cb188-3" aria-hidden="true" tabindex="-1"></a>&gt; 'bar' &lt; 'foo'</span>
+<span id="cb188-4"><a href="ch_operators.html#cb188-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p><code>&lt;=</code> and <code>&gt;=</code> are based on strict equality.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/exclamation-triangle-regular.svg" height="24">&nbsp; <strong>The ordering operators don’t work well for human languages</strong></p>
+<p>The ordering operators don’t work well for comparing text in a human language, e.g., when capitalization or accents are involved. The details are explained in <a href="ch_strings.html#comparing-strings">§20.5 “Comparing strings”</a>.</p>
+</div>
+<h3 id="various-other-operators">13.6 Various other operators</h3>
+<p>The following operators are covered elsewhere in this book:</p>
+<ul>
+<li>Operators for <a href="ch_booleans.html">booleans</a>, <a href="ch_numbers.html">numbers</a>, <a href="ch_strings.html">strings</a>, <a href="ch_single-objects.html">objects</a></li>
+<li><a href="ch_undefined-null.html#nullish-coalescing-operator">The nullish coalescing operator (<code>??</code>) for default values</a></li>
+</ul>
+<p><span data-refcheck="#comma-operator #void-operator">The next two subsections</span> discuss two operators that are rarely used.</p>
+<h4 id="comma-operator">13.6.1 Comma operator</h4>
+<p><a id="index-entry-97" class="index-entry"></a> <a id="index-entry-98" class="index-entry"></a> <a id="index-entry-99" class="index-entry"></a></p>
+<p>The comma operator has two operands, evaluates both of them and returns the second one:</p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb189-1"><a href="ch_operators.html#cb189-1" aria-hidden="true" tabindex="-1"></a>&gt; 'a', 'b'</span>
+<span id="cb189-2"><a href="ch_operators.html#cb189-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'b'</span></span></code></pre></div>
+<p>For more information on this operator, see <a href="http://speakingjs.com/es5/ch09.html#comma_operator"><em>Speaking JavaScript</em></a>.</p>
+<h4 id="void-operator">13.6.2 <code>void</code> operator</h4>
+<p><a id="index-entry-100" class="index-entry"></a> <a id="index-entry-101" class="index-entry"></a></p>
+<p>The <code>void</code> operator evaluates its operand and returns <code>undefined</code>:</p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb190-1"><a href="ch_operators.html#cb190-1" aria-hidden="true" tabindex="-1"></a>&gt; void (3 + 2)</span>
+<span id="cb190-2"><a href="ch_operators.html#cb190-2" aria-hidden="true" tabindex="-1"></a><span class="kw">undefined</span></span></code></pre></div>
+<p>For more information on this operator, see <a href="http://speakingjs.com/es5/ch09.html#void_operator"><em>Speaking JavaScript</em></a>.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/8">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="pt_primitive-values.html">IV Primitive values</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

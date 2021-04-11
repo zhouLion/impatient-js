@@ -1,0 +1,1137 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_arrays">31 Arrays (<code>Array</code>)</h2>
+<p><a id="index-entry-381" class="index-entry"></a></p>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>31.1 <a href="ch_arrays.html#the-two-roles-of-arrays-in-javascript">The two roles of Arrays in JavaScript</a></li>
+<li>31.2 <a href="ch_arrays.html#basic-array-operations">Basic Array operations</a>
+<ul>
+<li>31.2.1 <a href="ch_arrays.html#array-literals">Creating, reading, writing Arrays</a></li>
+<li>31.2.2 <a href="ch_arrays.html#the-.length-of-an-array">The <code>.length</code> of an Array</a></li>
+<li>31.2.3 <a href="ch_arrays.html#clearing-an-array">Clearing an Array</a></li>
+<li>31.2.4 <a href="ch_arrays.html#spreading-into-array-literals">Spreading into Array literals [ES6]</a></li>
+<li>31.2.5 <a href="ch_arrays.html#arrays-listing-indices-and-entries-es6">Arrays: listing indices and entries [ES6]</a></li>
+<li>31.2.6 <a href="ch_arrays.html#is-a-value-an-array">Is a value an Array?</a></li>
+</ul></li>
+<li>31.3 <a href="ch_arrays.html#for-of-and-arrays-es6"><code>for-of</code> and Arrays [ES6]</a>
+<ul>
+<li>31.3.1 <a href="ch_arrays.html#for-of-iterating-over-elements"><code>for-of</code>: iterating over elements</a></li>
+<li>31.3.2 <a href="ch_arrays.html#for-of-iterating-over-indices"><code>for-of</code>: iterating over indices</a></li>
+<li>31.3.3 <a href="ch_arrays.html#for-of-iterating-over-index-element-pairs"><code>for-of</code>: iterating over [index, element] pairs</a></li>
+</ul></li>
+<li>31.4 <a href="ch_arrays.html#array-like-objects">Array-like objects</a></li>
+<li>31.5 <a href="ch_arrays.html#converting-iterable-and-array-like-values-to-arrays">Converting iterable and Array-like values to Arrays</a>
+<ul>
+<li>31.5.1 <a href="ch_arrays.html#converting-iterables-to-arrays-via-spreading-...">Converting iterables to Arrays via spreading (<code>...</code>)</a></li>
+<li>31.5.2 <a href="ch_arrays.html#converting-iterables-and-array-like-objects-to-arrays-via-array.from-advanced">Converting iterables and Array-like objects to Arrays via <code>Array.from()</code> (advanced)</a></li>
+</ul></li>
+<li>31.6 <a href="ch_arrays.html#filling-arrays">Creating and filling Arrays with arbitrary lengths</a>
+<ul>
+<li>31.6.1 <a href="ch_arrays.html#do-you-need-to-create-an-empty-array-that-youll-fill-completely-later-on">Do you need to create an empty Array that you’ll fill completely later on?</a></li>
+<li>31.6.2 <a href="ch_arrays.html#do-you-need-to-create-an-array-filled-with-a-primitive-value">Do you need to create an Array filled with a primitive value?</a></li>
+<li>31.6.3 <a href="ch_arrays.html#creating-arrays-filled-with-objects">Do you need to create an Array filled with objects?</a></li>
+<li>31.6.4 <a href="ch_arrays.html#create-range-of-integers">Do you need to create a range of integers?</a></li>
+<li>31.6.5 <a href="ch_arrays.html#use-a-typed-array-if-the-elements-are-all-integers-or-all-floats">Use a Typed Array if the elements are all integers or all floats</a></li>
+</ul></li>
+<li>31.7 <a href="ch_arrays.html#multidimensional-arrays">Multidimensional Arrays</a></li>
+<li>31.8 <a href="ch_arrays.html#more-array-features-advanced">More Array features (advanced)</a>
+<ul>
+<li>31.8.1 <a href="ch_arrays.html#array-indices">Array indices are (slightly special) property keys</a></li>
+<li>31.8.2 <a href="ch_arrays.html#array-holes">Arrays are dictionaries and can have holes</a></li>
+</ul></li>
+<li>31.9 <a href="ch_arrays.html#adding-and-removing-elements-destructively-and-non-destructively">Adding and removing elements (destructively and non-destructively)</a>
+<ul>
+<li>31.9.1 <a href="ch_arrays.html#prepending-elements-and-arrays">Prepending elements and Arrays</a></li>
+<li>31.9.2 <a href="ch_arrays.html#appending-elements-and-arrays">Appending elements and Arrays</a></li>
+<li>31.9.3 <a href="ch_arrays.html#removing-elements">Removing elements</a></li>
+</ul></li>
+<li>31.10 <a href="ch_arrays.html#methods-iteration-and-transformation-.find-.map-.filter-etc.">Methods: iteration and transformation (<code>.find()</code>, <code>.map()</code>, <code>.filter()</code>, etc.)</a>
+<ul>
+<li>31.10.1 <a href="ch_arrays.html#callbacks-for-iteration-and-transformation-methods">Callbacks for iteration and transformation methods</a></li>
+<li>31.10.2 <a href="ch_arrays.html#searching-elements-.find-.findindex">Searching elements: <code>.find()</code>, <code>.findIndex()</code></a></li>
+<li>31.10.3 <a href="ch_arrays.html#map-copy-while-giving-elements-new-values"><code>.map()</code>: copy while giving elements new values</a></li>
+<li>31.10.4 <a href="ch_arrays.html#Array.prototype.flatMap"><code>.flatMap()</code>: mapping to zero or more values</a></li>
+<li>31.10.5 <a href="ch_arrays.html#filter-only-keep-some-of-the-elements"><code>.filter()</code>: only keep some of the elements</a></li>
+<li>31.10.6 <a href="ch_arrays.html#Array.prototype.reduce"><code>.reduce()</code>: deriving a value from an Array (advanced)</a></li>
+</ul></li>
+<li>31.11 <a href="ch_arrays.html#sort-sorting-arrays"><code>.sort()</code>: sorting Arrays</a>
+<ul>
+<li>31.11.1 <a href="ch_arrays.html#customizing-the-sort-order">Customizing the sort order</a></li>
+<li>31.11.2 <a href="ch_arrays.html#sorting-numbers">Sorting numbers</a></li>
+<li>31.11.3 <a href="ch_arrays.html#sorting-objects">Sorting objects</a></li>
+</ul></li>
+<li>31.12 <a href="ch_arrays.html#quickref-arrays">Quick reference: <code>Array&lt;T&gt;</code></a>
+<ul>
+<li>31.12.1 <a href="ch_arrays.html#new-array"><code>new Array()</code></a></li>
+<li>31.12.2 <a href="ch_arrays.html#static-methods-of-array">Static methods of <code>Array</code></a></li>
+<li>31.12.3 <a href="ch_arrays.html#quickref-array-prototype">Methods of <code>Array&lt;T&gt;.prototype</code></a></li>
+<li>31.12.4 <a href="ch_arrays.html#sources-3">Sources</a></li>
+</ul></li>
+</ul>
+</div>
+<hr>
+<h3 id="the-two-roles-of-arrays-in-javascript">31.1 The two roles of Arrays in JavaScript</h3>
+<p><a id="index-entry-382" class="index-entry"></a><a id="index-entry-383" class="index-entry"></a></p>
+<p>Arrays play two roles in JavaScript:</p>
+<ul>
+<li>Tuples: Arrays-as-tuples have a fixed number of indexed elements. Each of those elements can have a different type. <a id="index-entry-384" class="index-entry"></a></li>
+<li>Sequences: Arrays-as-sequences have a variable number of indexed elements. Each of those elements has the same type. <a id="index-entry-385" class="index-entry"></a></li>
+</ul>
+<p>In practice, these two roles are often mixed.</p>
+<p>Notably, Arrays-as-sequences are so flexible that you can use them as (traditional) arrays, stacks, and queues (see exercise later in this chapter).</p>
+<h3 id="basic-array-operations">31.2 Basic Array operations</h3>
+<h4 id="array-literals">31.2.1 Creating, reading, writing Arrays</h4>
+<p><a id="index-entry-386" class="index-entry"></a></p>
+<p>The best way to create an Array is via an <em>Array literal</em>:</p>
+<div class="sourceCode" id="cb815"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb815-1"><a href="ch_arrays.html#cb815-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span></code></pre></div>
+<p>The Array literal starts and ends with square brackets <code>[]</code>. It creates an Array with three <em>elements</em>: <code>'a'</code>, <code>'b'</code>, and <code>'c'</code>.</p>
+<p><a id="index-entry-387" class="index-entry"></a></p>
+<p>Trailing commas are allowed and ignored in Array literals:</p>
+<div class="sourceCode" id="cb816"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb816-1"><a href="ch_arrays.html#cb816-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [</span>
+<span id="cb816-2"><a href="ch_arrays.html#cb816-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'a'</span><span class="op">,</span></span>
+<span id="cb816-3"><a href="ch_arrays.html#cb816-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'b'</span><span class="op">,</span></span>
+<span id="cb816-4"><a href="ch_arrays.html#cb816-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">'c'</span><span class="op">,</span></span>
+<span id="cb816-5"><a href="ch_arrays.html#cb816-5" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span></code></pre></div>
+<p>To read an Array element, you put an index in square brackets (indices start at zero):</p>
+<div class="sourceCode" id="cb817"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb817-1"><a href="ch_arrays.html#cb817-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb817-2"><a href="ch_arrays.html#cb817-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(arr[<span class="dv">0</span>]<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span></code></pre></div>
+<p>To change an Array element, you assign to an Array with an index:</p>
+<div class="sourceCode" id="cb818"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb818-1"><a href="ch_arrays.html#cb818-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb818-2"><a href="ch_arrays.html#cb818-2" aria-hidden="true" tabindex="-1"></a>arr[<span class="dv">0</span>] <span class="op">=</span> <span class="st">'x'</span><span class="op">;</span></span>
+<span id="cb818-3"><a href="ch_arrays.html#cb818-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr<span class="op">,</span> [<span class="st">'x'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>])<span class="op">;</span></span></code></pre></div>
+<p>The range of Array indices is 32 bits (excluding the maximum length): [0, 2<sup>32</sup>−1)</p>
+<h4 id="the-.length-of-an-array">31.2.2 The <code>.length</code> of an Array</h4>
+<p>Every Array has a property <code>.length</code> that can be used to both read and change(!) the number of elements in an Array.</p>
+<p>The length of an Array is always the highest index plus one:</p>
+<div class="sourceCode" id="cb819"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb819-1"><a href="ch_arrays.html#cb819-1" aria-hidden="true" tabindex="-1"></a>&gt; const arr = ['a', 'b'];</span>
+<span id="cb819-2"><a href="ch_arrays.html#cb819-2" aria-hidden="true" tabindex="-1"></a>&gt; arr.length</span>
+<span id="cb819-3"><a href="ch_arrays.html#cb819-3" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span></code></pre></div>
+<p>If you write to the Array at the index of the length, you append an element:</p>
+<div class="sourceCode" id="cb820"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb820-1"><a href="ch_arrays.html#cb820-1" aria-hidden="true" tabindex="-1"></a>&gt; arr[arr.length] = 'c';</span>
+<span id="cb820-2"><a href="ch_arrays.html#cb820-2" aria-hidden="true" tabindex="-1"></a>&gt; arr</span>
+<span id="cb820-3"><a href="ch_arrays.html#cb820-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b', 'c' ]</span></span>
+<span id="cb820-4"><a href="ch_arrays.html#cb820-4" aria-hidden="true" tabindex="-1"></a>&gt; arr.length</span>
+<span id="cb820-5"><a href="ch_arrays.html#cb820-5" aria-hidden="true" tabindex="-1"></a><span class="kw">3</span></span></code></pre></div>
+<p>Another way of (destructively) appending an element is via the Array method <code>.push()</code>:</p>
+<div class="sourceCode" id="cb821"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb821-1"><a href="ch_arrays.html#cb821-1" aria-hidden="true" tabindex="-1"></a>&gt; arr.push('d');</span>
+<span id="cb821-2"><a href="ch_arrays.html#cb821-2" aria-hidden="true" tabindex="-1"></a>&gt; arr</span>
+<span id="cb821-3"><a href="ch_arrays.html#cb821-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b', 'c', 'd' ]</span></span></code></pre></div>
+<p>If you set <code>.length</code>, you are pruning the Array by removing elements:</p>
+<div class="sourceCode" id="cb822"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb822-1"><a href="ch_arrays.html#cb822-1" aria-hidden="true" tabindex="-1"></a>&gt; arr.length = 1;</span>
+<span id="cb822-2"><a href="ch_arrays.html#cb822-2" aria-hidden="true" tabindex="-1"></a>&gt; arr</span>
+<span id="cb822-3"><a href="ch_arrays.html#cb822-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a' ]</span></span></code></pre></div>
+<h4 id="clearing-an-array">31.2.3 Clearing an Array</h4>
+<p>To clear (empty) an Array, you can either set its <code>.length</code> to zero:</p>
+<div class="sourceCode" id="cb823"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb823-1"><a href="ch_arrays.html#cb823-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb823-2"><a href="ch_arrays.html#cb823-2" aria-hidden="true" tabindex="-1"></a>arr<span class="op">.</span><span class="at">length</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb823-3"><a href="ch_arrays.html#cb823-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr<span class="op">,</span> [])<span class="op">;</span></span></code></pre></div>
+<p>or you can assign a new empty Array to the variable storing the Array:</p>
+<div class="sourceCode" id="cb824"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb824-1"><a href="ch_arrays.html#cb824-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb824-2"><a href="ch_arrays.html#cb824-2" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb824-3"><a href="ch_arrays.html#cb824-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr<span class="op">,</span> [])<span class="op">;</span></span></code></pre></div>
+<p>The latter approach has the advantage of not affecting other locations that point to the same Array. If, however, you do want to reset a shared Array for everyone, then you need the former approach.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Removing empty lines via <code>.push()</code></strong></p>
+<p><code>exercises/arrays/remove_empty_lines_push_test.mjs</code></p>
+</div>
+<h4 id="spreading-into-array-literals">31.2.4 Spreading into Array literals [ES6]</h4>
+<p><a id="index-entry-388" class="index-entry"></a></p>
+<p>Inside an Array literal, a <em>spread element</em> consists of three dots (<code>...</code>) followed by an expression. It results in the expression being evaluated and then iterated over. Each iterated value becomes an additional Array element – for example:</p>
+<div class="sourceCode" id="cb825"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb825-1"><a href="ch_arrays.html#cb825-1" aria-hidden="true" tabindex="-1"></a>&gt; const iterable = ['b', 'c'];</span>
+<span id="cb825-2"><a href="ch_arrays.html#cb825-2" aria-hidden="true" tabindex="-1"></a>&gt; ['a', ...iterable, 'd']</span>
+<span id="cb825-3"><a href="ch_arrays.html#cb825-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b', 'c', 'd' ]</span></span></code></pre></div>
+<p>That means that we can use spreading to create a copy of an Array:</p>
+<div class="sourceCode" id="cb826"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb826-1"><a href="ch_arrays.html#cb826-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> original <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb826-2"><a href="ch_arrays.html#cb826-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> copy <span class="op">=</span> [<span class="op">...</span>original]<span class="op">;</span></span></code></pre></div>
+<p>Spreading is also convenient for concatenating Arrays (and other iterables) into Arrays:</p>
+<div class="sourceCode" id="cb827"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb827-1"><a href="ch_arrays.html#cb827-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr1 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb827-2"><a href="ch_arrays.html#cb827-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr2 <span class="op">=</span> [<span class="st">'c'</span><span class="op">,</span> <span class="st">'d'</span>]<span class="op">;</span></span>
+<span id="cb827-3"><a href="ch_arrays.html#cb827-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb827-4"><a href="ch_arrays.html#cb827-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> concatenated <span class="op">=</span> [<span class="op">...</span>arr1<span class="op">,</span> <span class="op">...</span>arr2<span class="op">,</span> <span class="st">'e'</span>]<span class="op">;</span></span>
+<span id="cb827-5"><a href="ch_arrays.html#cb827-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb827-6"><a href="ch_arrays.html#cb827-6" aria-hidden="true" tabindex="-1"></a>  concatenated<span class="op">,</span></span>
+<span id="cb827-7"><a href="ch_arrays.html#cb827-7" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span><span class="op">,</span> <span class="st">'d'</span><span class="op">,</span> <span class="st">'e'</span>])<span class="op">;</span></span></code></pre></div>
+<p>Due to spreading using iteration, it only works if the value is iterable:</p>
+<div class="sourceCode" id="cb828"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb828-1"><a href="ch_arrays.html#cb828-1" aria-hidden="true" tabindex="-1"></a>&gt; [...'abc'] // strings are iterable</span>
+<span id="cb828-2"><a href="ch_arrays.html#cb828-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b', 'c' ]</span></span>
+<span id="cb828-3"><a href="ch_arrays.html#cb828-3" aria-hidden="true" tabindex="-1"></a>&gt; [...123]</span>
+<span id="cb828-4"><a href="ch_arrays.html#cb828-4" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: number 123 is not iterable</span></span>
+<span id="cb828-5"><a href="ch_arrays.html#cb828-5" aria-hidden="true" tabindex="-1"></a>&gt; [...undefined]</span>
+<span id="cb828-6"><a href="ch_arrays.html#cb828-6" aria-hidden="true" tabindex="-1"></a><span class="kw">TypeError: undefined is not iterable</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/exclamation-triangle-regular.svg" height="24">&nbsp; <strong>Spreading into Array literals is shallow</strong></p>
+<p>Similar to <a href="ch_single-objects.html#spreading-into-object-literals">spreading into object literals</a>, spreading into Array literals creates <em>shallow</em> copies. That is, nested Arrays are not copied.</p>
+</div>
+<h4 id="arrays-listing-indices-and-entries-es6">31.2.5 Arrays: listing indices and entries [ES6]</h4>
+<p>Method <code>.keys()</code> lists the indices of an Array:</p>
+<div class="sourceCode" id="cb829"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb829-1"><a href="ch_arrays.html#cb829-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb829-2"><a href="ch_arrays.html#cb829-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb829-3"><a href="ch_arrays.html#cb829-3" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>arr<span class="op">.</span><span class="fu">keys</span>()]<span class="op">,</span> <span class="co">// (A)</span></span>
+<span id="cb829-4"><a href="ch_arrays.html#cb829-4" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>])<span class="op">;</span></span></code></pre></div>
+<p><code>.keys()</code> returns an iterable. In line A, we spread to obtain an Array.</p>
+<p>Listing Array indices is different from listing properties. The former produces numbers; the latter produces stringified numbers (in addition to non-index property keys):</p>
+<div class="sourceCode" id="cb830"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb830-1"><a href="ch_arrays.html#cb830-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb830-2"><a href="ch_arrays.html#cb830-2" aria-hidden="true" tabindex="-1"></a>arr<span class="op">.</span><span class="at">prop</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb830-3"><a href="ch_arrays.html#cb830-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb830-4"><a href="ch_arrays.html#cb830-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb830-5"><a href="ch_arrays.html#cb830-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(arr)<span class="op">,</span></span>
+<span id="cb830-6"><a href="ch_arrays.html#cb830-6" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'0'</span><span class="op">,</span> <span class="st">'1'</span><span class="op">,</span> <span class="st">'prop'</span>])<span class="op">;</span></span></code></pre></div>
+<p>Method <code>.entries()</code> lists the contents of an Array as [index, element] pairs:</p>
+<div class="sourceCode" id="cb831"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb831-1"><a href="ch_arrays.html#cb831-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb831-2"><a href="ch_arrays.html#cb831-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb831-3"><a href="ch_arrays.html#cb831-3" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>arr<span class="op">.</span><span class="fu">entries</span>()]<span class="op">,</span></span>
+<span id="cb831-4"><a href="ch_arrays.html#cb831-4" aria-hidden="true" tabindex="-1"></a>  [[<span class="dv">0</span><span class="op">,</span> <span class="st">'a'</span>]<span class="op">,</span> [<span class="dv">1</span><span class="op">,</span> <span class="st">'b'</span>]])<span class="op">;</span></span></code></pre></div>
+<h4 id="is-a-value-an-array">31.2.6 Is a value an Array?</h4>
+<p>Following are two ways of checking if a value is an Array:</p>
+<div class="sourceCode" id="cb832"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb832-1"><a href="ch_arrays.html#cb832-1" aria-hidden="true" tabindex="-1"></a>&gt; [] instanceof Array</span>
+<span id="cb832-2"><a href="ch_arrays.html#cb832-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb832-3"><a href="ch_arrays.html#cb832-3" aria-hidden="true" tabindex="-1"></a>&gt; Array.isArray([])</span>
+<span id="cb832-4"><a href="ch_arrays.html#cb832-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p><code>instanceof</code> is usually fine. You need <code>Array.isArray()</code> if a value may come from another <em>realm</em>. Roughly, a realm is an instance of JavaScript’s global scope. Some realms are isolated from each other (e.g., <a href="ch_async-js.html#web-workers">Web Workers</a> in browsers), but there are also realms between which you can move data – for example, same-origin iframes in browsers. <code>x instanceof Array</code> checks the prototype chain of <code>x</code> and therefore returns <code>false</code> if <code>x</code> is an Array from another realm.</p>
+<p><code>typeof</code> categorizes Arrays as objects:</p>
+<div class="sourceCode" id="cb833"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb833-1"><a href="ch_arrays.html#cb833-1" aria-hidden="true" tabindex="-1"></a>&gt; typeof []</span>
+<span id="cb833-2"><a href="ch_arrays.html#cb833-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'object'</span></span></code></pre></div>
+<h3 id="for-of-and-arrays-es6">31.3 <code>for-of</code> and Arrays [ES6]</h3>
+<p>We have already encountered the <code>for-of</code> loop. This section briefly recaps how to use it for Arrays.</p>
+<h4 id="for-of-iterating-over-elements">31.3.1 <code>for-of</code>: iterating over elements</h4>
+<p>The following <code>for-of</code> loop iterates over the elements of an Array:</p>
+<div class="sourceCode" id="cb834"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb834-1"><a href="ch_arrays.html#cb834-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> element <span class="kw">of</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]) {</span>
+<span id="cb834-2"><a href="ch_arrays.html#cb834-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(element)<span class="op">;</span></span>
+<span id="cb834-3"><a href="ch_arrays.html#cb834-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb834-4"><a href="ch_arrays.html#cb834-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb834-5"><a href="ch_arrays.html#cb834-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb834-6"><a href="ch_arrays.html#cb834-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div>
+<h4 id="for-of-iterating-over-indices">31.3.2 <code>for-of</code>: iterating over indices</h4>
+<p>This <code>for-of</code> loop iterates over the indices of an Array:</p>
+<div class="sourceCode" id="cb835"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb835-1"><a href="ch_arrays.html#cb835-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> element <span class="kw">of</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">.</span><span class="fu">keys</span>()) {</span>
+<span id="cb835-2"><a href="ch_arrays.html#cb835-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(element)<span class="op">;</span></span>
+<span id="cb835-3"><a href="ch_arrays.html#cb835-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb835-4"><a href="ch_arrays.html#cb835-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb835-5"><a href="ch_arrays.html#cb835-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 0</span></span>
+<span id="cb835-6"><a href="ch_arrays.html#cb835-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 1</span></span></code></pre></div>
+<h4 id="for-of-iterating-over-index-element-pairs">31.3.3 <code>for-of</code>: iterating over [index, element] pairs</h4>
+<p>The following <code>for-of</code> loop iterates over [index, element] pairs. Destructuring (described <a href="ch_destructuring.html">later</a>), gives us convenient syntax for setting up <code>index</code> and <code>element</code> in the head of <code>for-of</code>.</p>
+<div class="sourceCode" id="cb836"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb836-1"><a href="ch_arrays.html#cb836-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> [index<span class="op">,</span> element] <span class="kw">of</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">.</span><span class="fu">entries</span>()) {</span>
+<span id="cb836-2"><a href="ch_arrays.html#cb836-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(index<span class="op">,</span> element)<span class="op">;</span></span>
+<span id="cb836-3"><a href="ch_arrays.html#cb836-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb836-4"><a href="ch_arrays.html#cb836-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb836-5"><a href="ch_arrays.html#cb836-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 0, 'a'</span></span>
+<span id="cb836-6"><a href="ch_arrays.html#cb836-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 1, 'b'</span></span></code></pre></div>
+<h3 id="array-like-objects">31.4 Array-like objects</h3>
+<p><a id="index-entry-389" class="index-entry"></a></p>
+<p>Some operations that work with Arrays require only the bare minimum: values must only be <em>Array-like</em>. An Array-like value is an object with the following properties:</p>
+<ul>
+<li><code>.length</code>: holds the length of the Array-like object.</li>
+<li><code>[0]</code>: holds the element at index 0 (etc.). Note that if you use numbers as property names, they are always coerced to strings. Therefore, <code>[0]</code> retrieves the value of the property whose key is <code>'0'</code>.</li>
+</ul>
+<p>For example, <code>Array.from()</code> accepts Array-like objects and converts them to Arrays:</p>
+<div class="sourceCode" id="cb837"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb837-1"><a href="ch_arrays.html#cb837-1" aria-hidden="true" tabindex="-1"></a><span class="co">// If you omit .length, it is interpreted as 0</span></span>
+<span id="cb837-2"><a href="ch_arrays.html#cb837-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb837-3"><a href="ch_arrays.html#cb837-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({})<span class="op">,</span></span>
+<span id="cb837-4"><a href="ch_arrays.html#cb837-4" aria-hidden="true" tabindex="-1"></a>  [])<span class="op">;</span></span>
+<span id="cb837-5"><a href="ch_arrays.html#cb837-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb837-6"><a href="ch_arrays.html#cb837-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb837-7"><a href="ch_arrays.html#cb837-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({<span class="dt">length</span><span class="op">:</span><span class="dv">2</span><span class="op">,</span> <span class="dv">0</span><span class="op">:</span><span class="st">'a'</span><span class="op">,</span> <span class="dv">1</span><span class="op">:</span><span class="st">'b'</span>})<span class="op">,</span></span>
+<span id="cb837-8"><a href="ch_arrays.html#cb837-8" aria-hidden="true" tabindex="-1"></a>  [ <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span> ])<span class="op">;</span></span></code></pre></div>
+<p>The TypeScript interface for Array-like objects is:</p>
+<div class="sourceCode" id="cb838"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb838-1"><a href="ch_arrays.html#cb838-1" aria-hidden="true" tabindex="-1"></a>interface ArrayLike<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb838-2"><a href="ch_arrays.html#cb838-2" aria-hidden="true" tabindex="-1"></a>  length<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
+<span id="cb838-3"><a href="ch_arrays.html#cb838-3" aria-hidden="true" tabindex="-1"></a>  [n<span class="op">:</span> <span class="dt">number</span>]<span class="op">:</span> T<span class="op">;</span></span>
+<span id="cb838-4"><a href="ch_arrays.html#cb838-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong>Array-like objects are relatively rare in modern JavaScript</strong></p>
+<p>Array-like objects used to be common before ES6; now you don’t see them very often.</p>
+</div>
+<h3 id="converting-iterable-and-array-like-values-to-arrays">31.5 Converting iterable and Array-like values to Arrays</h3>
+<p>There are two common ways of converting iterable and Array-like values to Arrays: spreading and <code>Array.from()</code>.</p>
+<h4 id="converting-iterables-to-arrays-via-spreading-...">31.5.1 Converting iterables to Arrays via spreading (<code>...</code>)</h4>
+<p>Inside an Array literal, spreading via <code>...</code> converts any iterable object into a series of Array elements. For example:</p>
+<div class="sourceCode" id="cb839"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb839-1"><a href="ch_arrays.html#cb839-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Get an Array-like collection from a web browser’s DOM</span></span>
+<span id="cb839-2"><a href="ch_arrays.html#cb839-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> domCollection <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelectorAll</span>(<span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb839-3"><a href="ch_arrays.html#cb839-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb839-4"><a href="ch_arrays.html#cb839-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Alas, the collection is missing many Array methods</span></span>
+<span id="cb839-5"><a href="ch_arrays.html#cb839-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="st">'map'</span> <span class="kw">in</span> domCollection<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span>
+<span id="cb839-6"><a href="ch_arrays.html#cb839-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb839-7"><a href="ch_arrays.html#cb839-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Solution: convert it to an Array</span></span>
+<span id="cb839-8"><a href="ch_arrays.html#cb839-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="op">...</span>domCollection]<span class="op">;</span></span>
+<span id="cb839-9"><a href="ch_arrays.html#cb839-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb839-10"><a href="ch_arrays.html#cb839-10" aria-hidden="true" tabindex="-1"></a>  arr<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> x<span class="op">.</span><span class="at">href</span>)<span class="op">,</span></span>
+<span id="cb839-11"><a href="ch_arrays.html#cb839-11" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'https://2ality.com'</span><span class="op">,</span> <span class="st">'https://exploringjs.com'</span>])<span class="op">;</span></span></code></pre></div>
+<p>The conversion works because the DOM collection is iterable.</p>
+<h4 id="converting-iterables-and-array-like-objects-to-arrays-via-array.from-advanced">31.5.2 Converting iterables and Array-like objects to Arrays via <code>Array.from()</code> (advanced)</h4>
+<p><code>Array.from()</code> can be used in two modes.</p>
+<h5 id="mode-1-of-array.from-converting">31.5.2.1 Mode 1 of <code>Array.from()</code>: converting</h5>
+<p>The first mode has the following type signature:</p>
+<div class="sourceCode" id="cb840"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb840-1"><a href="ch_arrays.html#cb840-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">from</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(iterable<span class="op">:</span> Iterable<span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">|</span> ArrayLike<span class="op">&lt;</span>T<span class="op">&gt;</span>)<span class="op">:</span> T[]</span></code></pre></div>
+<p>Interface <code>Iterable</code> is shown <a href="ch_sync-iteration.html#iterable-iterator-iteratorresult">in the chapter on synchronous iteration</a>. Interface <code>ArrayLike</code> appeared <a href="ch_arrays.html#array-like-objects">earlier in this chapter</a>.</p>
+<p>With a single parameter, <code>Array.from()</code> converts anything iterable or Array-like to an Array:</p>
+<div class="sourceCode" id="cb841"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb841-1"><a href="ch_arrays.html#cb841-1" aria-hidden="true" tabindex="-1"></a>&gt; Array.from(new Set(['a', 'b']))</span>
+<span id="cb841-2"><a href="ch_arrays.html#cb841-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b' ]</span></span>
+<span id="cb841-3"><a href="ch_arrays.html#cb841-3" aria-hidden="true" tabindex="-1"></a>&gt; Array.from({length: 2, 0:'a', 1:'b'})</span>
+<span id="cb841-4"><a href="ch_arrays.html#cb841-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b' ]</span></span></code></pre></div>
+<h5 id="mode-2-of-array.from-converting-and-mapping">31.5.2.2 Mode 2 of <code>Array.from()</code>: converting and mapping</h5>
+<p>The second mode of <code>Array.from()</code> involves two parameters:</p>
+<div class="sourceCode" id="cb842"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb842-1"><a href="ch_arrays.html#cb842-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">from</span><span class="op">&lt;</span>T<span class="op">,</span> U<span class="op">&gt;</span>(</span>
+<span id="cb842-2"><a href="ch_arrays.html#cb842-2" aria-hidden="true" tabindex="-1"></a>  iterable<span class="op">:</span> Iterable<span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">|</span> ArrayLike<span class="op">&lt;</span>T<span class="op">&gt;,</span></span>
+<span id="cb842-3"><a href="ch_arrays.html#cb842-3" aria-hidden="true" tabindex="-1"></a>  mapFunc<span class="op">:</span> (v<span class="op">:</span> T<span class="op">,</span> i<span class="op">:</span> <span class="dt">number</span>) <span class="kw">=&gt;</span> U<span class="op">,</span></span>
+<span id="cb842-4"><a href="ch_arrays.html#cb842-4" aria-hidden="true" tabindex="-1"></a>  thisArg<span class="op">?:</span> <span class="dt">any</span>)</span>
+<span id="cb842-5"><a href="ch_arrays.html#cb842-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span> U[]</span></code></pre></div>
+<p>In this mode, <code>Array.from()</code> does several things:</p>
+<ul>
+<li>It iterates over <code>iterable</code>.</li>
+<li>It calls <code>mapFunc</code> with each iterated value. The optional parameter <code>thisArg</code> specifies a <code>this</code> for <code>mapFunc</code>.</li>
+<li>It applies <code>mapFunc</code> to each iterated value.</li>
+<li>It collects the results in a new Array and returns it.</li>
+</ul>
+<p>In other words: we are going from an iterable with elements of type <code>T</code> to an Array with elements of type <code>U</code>.</p>
+<p>This is an example:</p>
+<div class="sourceCode" id="cb843"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb843-1"><a href="ch_arrays.html#cb843-1" aria-hidden="true" tabindex="-1"></a>&gt; Array.from(new Set(['a', 'b']), x =&gt; x + x)</span>
+<span id="cb843-2"><a href="ch_arrays.html#cb843-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'aa', 'bb' ]</span></span></code></pre></div>
+<h3 id="filling-arrays">31.6 Creating and filling Arrays with arbitrary lengths</h3>
+<p>The best way of creating an Array is via an Array literal. However, you can’t always use one: The Array may be too large, you may not know its length during development, or you may want to keep its length flexible. Then I recommend the following techniques for creating, and possibly filling, Arrays.</p>
+<h4 id="do-you-need-to-create-an-empty-array-that-youll-fill-completely-later-on">31.6.1 Do you need to create an empty Array that you’ll fill completely later on?</h4>
+<div class="sourceCode" id="cb844"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb844-1"><a href="ch_arrays.html#cb844-1" aria-hidden="true" tabindex="-1"></a>&gt; new Array(3)</span>
+<span id="cb844-2"><a href="ch_arrays.html#cb844-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ , , ,]</span></span></code></pre></div>
+<p>Note that the result has three <a href="ch_arrays.html#array-holes"><em>holes</em> (empty slots)</a> – the last comma in an Array literal is always ignored.</p>
+<h4 id="do-you-need-to-create-an-array-filled-with-a-primitive-value">31.6.2 Do you need to create an Array filled with a primitive value?</h4>
+<div class="sourceCode" id="cb845"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb845-1"><a href="ch_arrays.html#cb845-1" aria-hidden="true" tabindex="-1"></a>&gt; new Array(3).fill(0)</span>
+<span id="cb845-2"><a href="ch_arrays.html#cb845-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[0, 0, 0]</span></span></code></pre></div>
+<p>Caveat: If you use <code>.fill()</code> with an object, then each Array element will refer to this object (sharing it).</p>
+<div class="sourceCode" id="cb846"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb846-1"><a href="ch_arrays.html#cb846-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> <span class="kw">new</span> <span class="bu">Array</span>(<span class="dv">3</span>)<span class="op">.</span><span class="fu">fill</span>({})<span class="op">;</span></span>
+<span id="cb846-2"><a href="ch_arrays.html#cb846-2" aria-hidden="true" tabindex="-1"></a>arr[<span class="dv">0</span>]<span class="op">.</span><span class="at">prop</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb846-3"><a href="ch_arrays.html#cb846-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb846-4"><a href="ch_arrays.html#cb846-4" aria-hidden="true" tabindex="-1"></a>  arr<span class="op">,</span> [</span>
+<span id="cb846-5"><a href="ch_arrays.html#cb846-5" aria-hidden="true" tabindex="-1"></a>    {<span class="dt">prop</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb846-6"><a href="ch_arrays.html#cb846-6" aria-hidden="true" tabindex="-1"></a>    {<span class="dt">prop</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb846-7"><a href="ch_arrays.html#cb846-7" aria-hidden="true" tabindex="-1"></a>    {<span class="dt">prop</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb846-8"><a href="ch_arrays.html#cb846-8" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">;</span></span></code></pre></div>
+<p><span data-refcheck="#creating-arrays-filled-with-objects">The next subsection</span> explains how to fix this.</p>
+<h4 id="creating-arrays-filled-with-objects">31.6.3 Do you need to create an Array filled with objects?</h4>
+<div class="sourceCode" id="cb847"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb847-1"><a href="ch_arrays.html#cb847-1" aria-hidden="true" tabindex="-1"></a>&gt; Array.from({length: 3}, () =&gt; ({}))</span>
+<span id="cb847-2"><a href="ch_arrays.html#cb847-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[{}, {}, {}]</span></span></code></pre></div>
+<h4 id="create-range-of-integers">31.6.4 Do you need to create a range of integers?</h4>
+<div class="sourceCode" id="cb848"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb848-1"><a href="ch_arrays.html#cb848-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">createRange</span>(start<span class="op">,</span> end) {</span>
+<span id="cb848-2"><a href="ch_arrays.html#cb848-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({<span class="dt">length</span><span class="op">:</span> end<span class="op">-</span>start}<span class="op">,</span> (_<span class="op">,</span> i) <span class="kw">=&gt;</span> i<span class="op">+</span>start)<span class="op">;</span></span>
+<span id="cb848-3"><a href="ch_arrays.html#cb848-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb848-4"><a href="ch_arrays.html#cb848-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb848-5"><a href="ch_arrays.html#cb848-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">createRange</span>(<span class="dv">2</span><span class="op">,</span> <span class="dv">5</span>)<span class="op">,</span></span>
+<span id="cb848-6"><a href="ch_arrays.html#cb848-6" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span>])<span class="op">;</span></span></code></pre></div>
+<p>Here is an alternative, slightly hacky technique for creating integer ranges that start at zero:</p>
+<div class="sourceCode" id="cb849"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb849-1"><a href="ch_arrays.html#cb849-1" aria-hidden="true" tabindex="-1"></a><span class="co">/** Returns an iterable */</span></span>
+<span id="cb849-2"><a href="ch_arrays.html#cb849-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">createRange</span>(end) {</span>
+<span id="cb849-3"><a href="ch_arrays.html#cb849-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Array</span>(end)<span class="op">.</span><span class="fu">keys</span>()<span class="op">;</span></span>
+<span id="cb849-4"><a href="ch_arrays.html#cb849-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb849-5"><a href="ch_arrays.html#cb849-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb849-6"><a href="ch_arrays.html#cb849-6" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span><span class="fu">createRange</span>(<span class="dv">4</span>)]<span class="op">,</span></span>
+<span id="cb849-7"><a href="ch_arrays.html#cb849-7" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>])<span class="op">;</span></span></code></pre></div>
+<p>This works because <code>.keys()</code> treats <a href="ch_arrays.html#array-holes"><em>holes</em></a> like <code>undefined</code> elements and lists their indices.</p>
+<h4 id="use-a-typed-array-if-the-elements-are-all-integers-or-all-floats">31.6.5 Use a Typed Array if the elements are all integers or all floats</h4>
+<p>If you are dealing with Arrays of integers or floats, consider <a href="ch_typed-arrays.html"><em>Typed Arrays</em></a>, which were created for this purpose.</p>
+<h3 id="multidimensional-arrays">31.7 Multidimensional Arrays</h3>
+<p><a id="index-entry-390" class="index-entry"></a><a id="index-entry-391" class="index-entry"></a></p>
+<p>JavaScript does not have real multidimensional Arrays; you need to resort to Arrays whose elements are Arrays:</p>
+<div class="sourceCode" id="cb850"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb850-1"><a href="ch_arrays.html#cb850-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">initMultiArray</span>(<span class="op">...</span>dimensions) {</span>
+<span id="cb850-2"><a href="ch_arrays.html#cb850-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">initMultiArrayRec</span>(dimIndex) {</span>
+<span id="cb850-3"><a href="ch_arrays.html#cb850-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (dimIndex <span class="op">&gt;=</span> dimensions<span class="op">.</span><span class="at">length</span>) {</span>
+<span id="cb850-4"><a href="ch_arrays.html#cb850-4" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb850-5"><a href="ch_arrays.html#cb850-5" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb850-6"><a href="ch_arrays.html#cb850-6" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> dim <span class="op">=</span> dimensions[dimIndex]<span class="op">;</span></span>
+<span id="cb850-7"><a href="ch_arrays.html#cb850-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> arr <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb850-8"><a href="ch_arrays.html#cb850-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (<span class="kw">let</span> i<span class="op">=</span><span class="dv">0</span><span class="op">;</span> i<span class="op">&lt;</span>dim<span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb850-9"><a href="ch_arrays.html#cb850-9" aria-hidden="true" tabindex="-1"></a>        arr<span class="op">.</span><span class="fu">push</span>(<span class="fu">initMultiArrayRec</span>(dimIndex<span class="op">+</span><span class="dv">1</span>))<span class="op">;</span></span>
+<span id="cb850-10"><a href="ch_arrays.html#cb850-10" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb850-11"><a href="ch_arrays.html#cb850-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> arr<span class="op">;</span></span>
+<span id="cb850-12"><a href="ch_arrays.html#cb850-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb850-13"><a href="ch_arrays.html#cb850-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb850-14"><a href="ch_arrays.html#cb850-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">initMultiArrayRec</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb850-15"><a href="ch_arrays.html#cb850-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb850-16"><a href="ch_arrays.html#cb850-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb850-17"><a href="ch_arrays.html#cb850-17" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> <span class="fu">initMultiArray</span>(<span class="dv">4</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb850-18"><a href="ch_arrays.html#cb850-18" aria-hidden="true" tabindex="-1"></a>arr[<span class="dv">3</span>][<span class="dv">2</span>][<span class="dv">1</span>] <span class="op">=</span> <span class="st">'X'</span><span class="op">;</span> <span class="co">// last in each dimension</span></span>
+<span id="cb850-19"><a href="ch_arrays.html#cb850-19" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr<span class="op">,</span> [</span>
+<span id="cb850-20"><a href="ch_arrays.html#cb850-20" aria-hidden="true" tabindex="-1"></a>  [ [ <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> ]<span class="op">,</span> [ <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> ]<span class="op">,</span> [ <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> ] ]<span class="op">,</span></span>
+<span id="cb850-21"><a href="ch_arrays.html#cb850-21" aria-hidden="true" tabindex="-1"></a>  [ [ <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> ]<span class="op">,</span> [ <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> ]<span class="op">,</span> [ <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> ] ]<span class="op">,</span></span>
+<span id="cb850-22"><a href="ch_arrays.html#cb850-22" aria-hidden="true" tabindex="-1"></a>  [ [ <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> ]<span class="op">,</span> [ <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> ]<span class="op">,</span> [ <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> ] ]<span class="op">,</span></span>
+<span id="cb850-23"><a href="ch_arrays.html#cb850-23" aria-hidden="true" tabindex="-1"></a>  [ [ <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> ]<span class="op">,</span> [ <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span> ]<span class="op">,</span> [ <span class="dv">0</span><span class="op">,</span> <span class="st">'X'</span> ] ]<span class="op">,</span></span>
+<span id="cb850-24"><a href="ch_arrays.html#cb850-24" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span></code></pre></div>
+<h3 id="more-array-features-advanced">31.8 More Array features (advanced)</h3>
+<p>In this section, we look at phenomena you don’t encounter often when working with Arrays.</p>
+<h4 id="array-indices">31.8.1 Array indices are (slightly special) property keys</h4>
+<p>You’d think that Array elements are special because you are accessing them via numbers. But the square brackets operator <code>[]</code> for doing so is the same operator that is used for accessing properties. It coerces any value (that is not a symbol) to a string. Therefore, Array elements are (almost) normal properties (line A) and it doesn’t matter if you use numbers or strings as indices (lines B and C):</p>
+<div class="sourceCode" id="cb851"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb851-1"><a href="ch_arrays.html#cb851-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb851-2"><a href="ch_arrays.html#cb851-2" aria-hidden="true" tabindex="-1"></a>arr<span class="op">.</span><span class="at">prop</span> <span class="op">=</span> <span class="dv">123</span><span class="op">;</span></span>
+<span id="cb851-3"><a href="ch_arrays.html#cb851-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb851-4"><a href="ch_arrays.html#cb851-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(arr)<span class="op">,</span></span>
+<span id="cb851-5"><a href="ch_arrays.html#cb851-5" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'0'</span><span class="op">,</span> <span class="st">'1'</span><span class="op">,</span> <span class="st">'prop'</span>])<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb851-6"><a href="ch_arrays.html#cb851-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb851-7"><a href="ch_arrays.html#cb851-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(arr[<span class="dv">0</span>]<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span>  <span class="co">// (B)</span></span>
+<span id="cb851-8"><a href="ch_arrays.html#cb851-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(arr[<span class="st">'0'</span>]<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span> <span class="co">// (C)</span></span></code></pre></div>
+<p>To make matters even more confusing, this is only how the language specification defines things (the theory of JavaScript, if you will). Most JavaScript engines optimize under the hood and do use actual integers to access Array elements (the practice of JavaScript, if you will).</p>
+<p><a id="index-entry-392" class="index-entry"></a><a id="index-entry-393" class="index-entry"></a></p>
+<p>Property keys (strings!) that are used for Array elements are called <a href="https://tc39.github.io/ecma262/#integer-index"><em>indices</em></a>. A string <code>str</code> is an index if converting it to a 32-bit unsigned integer and back results in the original value. Written as a formula:</p>
+<pre class="text"><code>ToString(ToUint32(str)) === str</code></pre>
+<h5 id="listing-indices">31.8.1.1 Listing indices</h5>
+<p>When listing property keys, <a href="ch_single-objects.html#order-of-properties">indices are treated specially</a> – they always come first and are sorted like numbers (<code>'2'</code> comes before <code>'10'</code>):</p>
+<div class="sourceCode" id="cb853"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb853-1"><a href="ch_arrays.html#cb853-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb853-2"><a href="ch_arrays.html#cb853-2" aria-hidden="true" tabindex="-1"></a>arr<span class="op">.</span><span class="at">prop</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb853-3"><a href="ch_arrays.html#cb853-3" aria-hidden="true" tabindex="-1"></a>arr[<span class="dv">1</span>] <span class="op">=</span> <span class="st">'b'</span><span class="op">;</span></span>
+<span id="cb853-4"><a href="ch_arrays.html#cb853-4" aria-hidden="true" tabindex="-1"></a>arr[<span class="dv">0</span>] <span class="op">=</span> <span class="st">'a'</span><span class="op">;</span></span>
+<span id="cb853-5"><a href="ch_arrays.html#cb853-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb853-6"><a href="ch_arrays.html#cb853-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb853-7"><a href="ch_arrays.html#cb853-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(arr)<span class="op">,</span></span>
+<span id="cb853-8"><a href="ch_arrays.html#cb853-8" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'0'</span><span class="op">,</span> <span class="st">'1'</span><span class="op">,</span> <span class="st">'prop'</span>])<span class="op">;</span></span></code></pre></div>
+<p>Note that <code>.length</code>, <code>.entries()</code> and <code>.keys()</code> treat Array indices as numbers and ignore non-index properties:</p>
+<div class="sourceCode" id="cb854"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb854-1"><a href="ch_arrays.html#cb854-1" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(arr<span class="op">.</span><span class="at">length</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb854-2"><a href="ch_arrays.html#cb854-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb854-3"><a href="ch_arrays.html#cb854-3" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>arr<span class="op">.</span><span class="fu">keys</span>()]<span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>])<span class="op">;</span></span>
+<span id="cb854-4"><a href="ch_arrays.html#cb854-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb854-5"><a href="ch_arrays.html#cb854-5" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>arr<span class="op">.</span><span class="fu">entries</span>()]<span class="op">,</span> [[<span class="dv">0</span><span class="op">,</span> <span class="st">'a'</span>]<span class="op">,</span> [<span class="dv">1</span><span class="op">,</span> <span class="st">'b'</span>]])<span class="op">;</span></span></code></pre></div>
+<p>We used a spread element (<code>...</code>) to convert the iterables returned by <code>.keys()</code> and <code>.entries()</code> to Arrays.</p>
+<h4 id="array-holes">31.8.2 Arrays are dictionaries and can have holes</h4>
+<p><a id="index-entry-394" class="index-entry"></a><a id="index-entry-395" class="index-entry"></a> <a id="index-entry-396" class="index-entry"></a><a id="index-entry-397" class="index-entry"></a> <a id="index-entry-398" class="index-entry"></a><a id="index-entry-399" class="index-entry"></a></p>
+<p>We distinguish two kinds of Arrays in JavaScript:</p>
+<ul>
+<li>An Array <code>arr</code> is <em>dense</em> if all indices <code>i</code>, with 0 ≤ <code>i</code> &lt; <code>arr.length</code>, exist. That is, the indices form a contiguous range.</li>
+<li>An Array is <em>sparse</em> if the range of indices has <em>holes</em> in it. That is, some indices are missing.</li>
+</ul>
+<p>Arrays can be sparse in JavaScript because Arrays are actually dictionaries from indices to values.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/lightbulb-regular.svg" height="24">&nbsp; <strong>Recommendation: avoid holes</strong></p>
+<p>So far, we have only seen dense Arrays and it’s indeed recommended to avoid holes: They make your code more complicated and are not handled consistently by Array methods. Additionally, JavaScript engines optimize dense Arrays, making them faster.</p>
+</div>
+<h5 id="creating-holes">31.8.2.1 Creating holes</h5>
+<p>You can create holes by skipping indices when assigning elements:</p>
+<div class="sourceCode" id="cb855"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb855-1"><a href="ch_arrays.html#cb855-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb855-2"><a href="ch_arrays.html#cb855-2" aria-hidden="true" tabindex="-1"></a>arr[<span class="dv">0</span>] <span class="op">=</span> <span class="st">'a'</span><span class="op">;</span></span>
+<span id="cb855-3"><a href="ch_arrays.html#cb855-3" aria-hidden="true" tabindex="-1"></a>arr[<span class="dv">2</span>] <span class="op">=</span> <span class="st">'c'</span><span class="op">;</span></span>
+<span id="cb855-4"><a href="ch_arrays.html#cb855-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb855-5"><a href="ch_arrays.html#cb855-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(arr)<span class="op">,</span> [<span class="st">'0'</span><span class="op">,</span> <span class="st">'2'</span>])<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb855-6"><a href="ch_arrays.html#cb855-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb855-7"><a href="ch_arrays.html#cb855-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">0</span> <span class="kw">in</span> arr<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span> <span class="co">// element</span></span>
+<span id="cb855-8"><a href="ch_arrays.html#cb855-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="dv">1</span> <span class="kw">in</span> arr<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span> <span class="co">// hole</span></span></code></pre></div>
+<p>In line A, we are using <code>Object.keys()</code> because <code>arr.keys()</code> treats holes as if they were <code>undefined</code> elements and does not reveal them.</p>
+<p>Another way of creating holes is to skip elements in Array literals:</p>
+<div class="sourceCode" id="cb856"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb856-1"><a href="ch_arrays.html#cb856-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb856-2"><a href="ch_arrays.html#cb856-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb856-3"><a href="ch_arrays.html#cb856-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(arr)<span class="op">,</span> [<span class="st">'0'</span><span class="op">,</span> <span class="st">'2'</span>])<span class="op">;</span></span></code></pre></div>
+<p>You can also delete Array elements:</p>
+<div class="sourceCode" id="cb857"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb857-1"><a href="ch_arrays.html#cb857-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb857-2"><a href="ch_arrays.html#cb857-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(arr)<span class="op">,</span> [<span class="st">'0'</span><span class="op">,</span> <span class="st">'1'</span><span class="op">,</span> <span class="st">'2'</span>])<span class="op">;</span></span>
+<span id="cb857-3"><a href="ch_arrays.html#cb857-3" aria-hidden="true" tabindex="-1"></a><span class="kw">delete</span> arr[<span class="dv">1</span>]<span class="op">;</span></span>
+<span id="cb857-4"><a href="ch_arrays.html#cb857-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="bu">Object</span><span class="op">.</span><span class="fu">keys</span>(arr)<span class="op">,</span> [<span class="st">'0'</span><span class="op">,</span> <span class="st">'2'</span>])<span class="op">;</span></span></code></pre></div>
+<h5 id="how-do-array-operations-treat-holes">31.8.2.2 How do Array operations treat holes?</h5>
+<p>Alas, there are many different ways in which Array operations treat holes.</p>
+<p>Some Array operations remove holes:</p>
+<div class="sourceCode" id="cb858"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb858-1"><a href="ch_arrays.html#cb858-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a',,'b'].filter(x =&gt; true)</span>
+<span id="cb858-2"><a href="ch_arrays.html#cb858-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b' ]</span></span></code></pre></div>
+<p>Some Array operations ignore holes:</p>
+<div class="sourceCode" id="cb859"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb859-1"><a href="ch_arrays.html#cb859-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', ,'a'].every(x =&gt; x === 'a')</span>
+<span id="cb859-2"><a href="ch_arrays.html#cb859-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Some Array operations ignore but preserve holes:</p>
+<div class="sourceCode" id="cb860"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb860-1"><a href="ch_arrays.html#cb860-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a',,'b'].map(x =&gt; 'c')</span>
+<span id="cb860-2"><a href="ch_arrays.html#cb860-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'c', , 'c' ]</span></span></code></pre></div>
+<p>Some Array operations treat holes as <code>undefined</code> elements:</p>
+<div class="sourceCode" id="cb861"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb861-1"><a href="ch_arrays.html#cb861-1" aria-hidden="true" tabindex="-1"></a>&gt; Array.from(['a',,'b'], x =&gt; x)</span>
+<span id="cb861-2"><a href="ch_arrays.html#cb861-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', undefined, 'b' ]</span></span>
+<span id="cb861-3"><a href="ch_arrays.html#cb861-3" aria-hidden="true" tabindex="-1"></a>&gt; [...['a',,'b'].entries()]</span>
+<span id="cb861-4"><a href="ch_arrays.html#cb861-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[[0, 'a'], [1, undefined], [2, 'b']]</span></span></code></pre></div>
+<p><code>Object.keys()</code> works differently than <code>.keys()</code> (strings vs.&nbsp;numbers, holes don’t have keys):</p>
+<div class="sourceCode" id="cb862"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb862-1"><a href="ch_arrays.html#cb862-1" aria-hidden="true" tabindex="-1"></a>&gt; [...['a',,'b'].keys()]</span>
+<span id="cb862-2"><a href="ch_arrays.html#cb862-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 0, 1, 2 ]</span></span>
+<span id="cb862-3"><a href="ch_arrays.html#cb862-3" aria-hidden="true" tabindex="-1"></a>&gt; Object.keys(['a',,'b'])</span>
+<span id="cb862-4"><a href="ch_arrays.html#cb862-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ '0', '2' ]</span></span></code></pre></div>
+<p>There is no rule to remember here. If it ever matters how an Array operation treats holes, the best approach is to do a quick test in a console.</p>
+<h3 id="adding-and-removing-elements-destructively-and-non-destructively">31.9 Adding and removing elements (destructively and non-destructively)</h3>
+<p><a id="index-entry-400" class="index-entry"></a></p>
+<p>JavaScript’s <code>Array</code> is quite flexible and more like a combination of array, stack, and queue. This section explores ways of adding and removing Array elements. Most operations can be performed both <em>destructively</em> (modifying the Array) and <em>non-destructively</em> (producing a modified copy).</p>
+<h4 id="prepending-elements-and-arrays">31.9.1 Prepending elements and Arrays</h4>
+<p>In the following code, we destructively prepend single elements to <code>arr1</code> and an Array to <code>arr2</code>:</p>
+<div class="sourceCode" id="cb863"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb863-1"><a href="ch_arrays.html#cb863-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr1 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb863-2"><a href="ch_arrays.html#cb863-2" aria-hidden="true" tabindex="-1"></a>arr1<span class="op">.</span><span class="fu">unshift</span>(<span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span>)<span class="op">;</span> <span class="co">// prepend single elements</span></span>
+<span id="cb863-3"><a href="ch_arrays.html#cb863-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr1<span class="op">,</span> [<span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span><span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span>
+<span id="cb863-4"><a href="ch_arrays.html#cb863-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb863-5"><a href="ch_arrays.html#cb863-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr2 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb863-6"><a href="ch_arrays.html#cb863-6" aria-hidden="true" tabindex="-1"></a>arr2<span class="op">.</span><span class="fu">unshift</span>(<span class="op">...</span>[<span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span>])<span class="op">;</span> <span class="co">// prepend Array</span></span>
+<span id="cb863-7"><a href="ch_arrays.html#cb863-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr2<span class="op">,</span> [<span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span><span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span></code></pre></div>
+<p>Spreading lets us unshift an Array into <code>arr2</code>.</p>
+<p>Non-destructive prepending is done via spread elements:</p>
+<div class="sourceCode" id="cb864"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb864-1"><a href="ch_arrays.html#cb864-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr1 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb864-2"><a href="ch_arrays.html#cb864-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb864-3"><a href="ch_arrays.html#cb864-3" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span><span class="op">,</span> <span class="op">...</span>arr1]<span class="op">,</span> <span class="co">// prepend single elements</span></span>
+<span id="cb864-4"><a href="ch_arrays.html#cb864-4" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span><span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span>
+<span id="cb864-5"><a href="ch_arrays.html#cb864-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr1<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span> <span class="co">// unchanged!</span></span>
+<span id="cb864-6"><a href="ch_arrays.html#cb864-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb864-7"><a href="ch_arrays.html#cb864-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr2 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb864-8"><a href="ch_arrays.html#cb864-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb864-9"><a href="ch_arrays.html#cb864-9" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>[<span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span>]<span class="op">,</span> <span class="op">...</span>arr2]<span class="op">,</span> <span class="co">// prepend Array</span></span>
+<span id="cb864-10"><a href="ch_arrays.html#cb864-10" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span><span class="op">,</span> <span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span>
+<span id="cb864-11"><a href="ch_arrays.html#cb864-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr2<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span> <span class="co">// unchanged!</span></span></code></pre></div>
+<h4 id="appending-elements-and-arrays">31.9.2 Appending elements and Arrays</h4>
+<p>In the following code, we destructively append single elements to <code>arr1</code> and an Array to <code>arr2</code>:</p>
+<div class="sourceCode" id="cb865"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb865-1"><a href="ch_arrays.html#cb865-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr1 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb865-2"><a href="ch_arrays.html#cb865-2" aria-hidden="true" tabindex="-1"></a>arr1<span class="op">.</span><span class="fu">push</span>(<span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span>)<span class="op">;</span> <span class="co">// append single elements</span></span>
+<span id="cb865-3"><a href="ch_arrays.html#cb865-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr1<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span>])<span class="op">;</span></span>
+<span id="cb865-4"><a href="ch_arrays.html#cb865-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb865-5"><a href="ch_arrays.html#cb865-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr2 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb865-6"><a href="ch_arrays.html#cb865-6" aria-hidden="true" tabindex="-1"></a>arr2<span class="op">.</span><span class="fu">push</span>(<span class="op">...</span>[<span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span>])<span class="op">;</span> <span class="co">// append Array</span></span>
+<span id="cb865-7"><a href="ch_arrays.html#cb865-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr2<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span>])<span class="op">;</span></span></code></pre></div>
+<p>Spreading lets us push an Array into <code>arr2</code>.</p>
+<p>Non-destructive appending is done via spread elements:</p>
+<div class="sourceCode" id="cb866"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb866-1"><a href="ch_arrays.html#cb866-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr1 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb866-2"><a href="ch_arrays.html#cb866-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb866-3"><a href="ch_arrays.html#cb866-3" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>arr1<span class="op">,</span> <span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span>]<span class="op">,</span> <span class="co">// append single elements</span></span>
+<span id="cb866-4"><a href="ch_arrays.html#cb866-4" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span>])<span class="op">;</span></span>
+<span id="cb866-5"><a href="ch_arrays.html#cb866-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr1<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span> <span class="co">// unchanged!</span></span>
+<span id="cb866-6"><a href="ch_arrays.html#cb866-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb866-7"><a href="ch_arrays.html#cb866-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr2 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">;</span></span>
+<span id="cb866-8"><a href="ch_arrays.html#cb866-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb866-9"><a href="ch_arrays.html#cb866-9" aria-hidden="true" tabindex="-1"></a>  [<span class="op">...</span>arr2<span class="op">,</span> <span class="op">...</span>[<span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span>]]<span class="op">,</span> <span class="co">// append Array</span></span>
+<span id="cb866-10"><a href="ch_arrays.html#cb866-10" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'x'</span><span class="op">,</span> <span class="st">'y'</span>])<span class="op">;</span></span>
+<span id="cb866-11"><a href="ch_arrays.html#cb866-11" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr2<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span> <span class="co">// unchanged!</span></span></code></pre></div>
+<h4 id="removing-elements">31.9.3 Removing elements</h4>
+<p>These are three destructive ways of removing Array elements:</p>
+<div class="sourceCode" id="cb867"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb867-1"><a href="ch_arrays.html#cb867-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Destructively remove first element:</span></span>
+<span id="cb867-2"><a href="ch_arrays.html#cb867-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr1 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb867-3"><a href="ch_arrays.html#cb867-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(arr1<span class="op">.</span><span class="fu">shift</span>()<span class="op">,</span> <span class="st">'a'</span>)<span class="op">;</span></span>
+<span id="cb867-4"><a href="ch_arrays.html#cb867-4" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr1<span class="op">,</span> [<span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>])<span class="op">;</span></span>
+<span id="cb867-5"><a href="ch_arrays.html#cb867-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb867-6"><a href="ch_arrays.html#cb867-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Destructively remove last element:</span></span>
+<span id="cb867-7"><a href="ch_arrays.html#cb867-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr2 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb867-8"><a href="ch_arrays.html#cb867-8" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(arr2<span class="op">.</span><span class="fu">pop</span>()<span class="op">,</span> <span class="st">'c'</span>)<span class="op">;</span></span>
+<span id="cb867-9"><a href="ch_arrays.html#cb867-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr2<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>])<span class="op">;</span></span>
+<span id="cb867-10"><a href="ch_arrays.html#cb867-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb867-11"><a href="ch_arrays.html#cb867-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Remove one or more elements anywhere:</span></span>
+<span id="cb867-12"><a href="ch_arrays.html#cb867-12" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr3 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span><span class="op">,</span> <span class="st">'d'</span>]<span class="op">;</span></span>
+<span id="cb867-13"><a href="ch_arrays.html#cb867-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr3<span class="op">.</span><span class="fu">splice</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">,</span> [<span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>])<span class="op">;</span></span>
+<span id="cb867-14"><a href="ch_arrays.html#cb867-14" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr3<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'d'</span>])<span class="op">;</span></span></code></pre></div>
+<p><code>.splice()</code> is covered in more detail in <a href="ch_arrays.html#quickref-array-prototype">the quick reference at the end of this chapter</a>.</p>
+<p>Destructuring via a rest element lets you non-destructively remove elements from the beginning of an Array (destructuring is covered <a href="ch_destructuring.html">later</a>).</p>
+<div class="sourceCode" id="cb868"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb868-1"><a href="ch_arrays.html#cb868-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr1 <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb868-2"><a href="ch_arrays.html#cb868-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Ignore first element, extract remaining elements</span></span>
+<span id="cb868-3"><a href="ch_arrays.html#cb868-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> [<span class="op">,</span> <span class="op">...</span>arr2] <span class="op">=</span> arr1<span class="op">;</span></span>
+<span id="cb868-4"><a href="ch_arrays.html#cb868-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb868-5"><a href="ch_arrays.html#cb868-5" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr2<span class="op">,</span> [<span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>])<span class="op">;</span></span>
+<span id="cb868-6"><a href="ch_arrays.html#cb868-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(arr1<span class="op">,</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>])<span class="op">;</span> <span class="co">// unchanged!</span></span></code></pre></div>
+<p>Alas, a rest element must come last in an Array. Therefore, you can only use it to extract suffixes.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Implementing a queue via an Array</strong></p>
+<p><code>exercises/arrays/queue_via_array_test.mjs</code></p>
+</div>
+<h3 id="methods-iteration-and-transformation-.find-.map-.filter-etc.">31.10 Methods: iteration and transformation (<code>.find()</code>, <code>.map()</code>, <code>.filter()</code>, etc.)</h3>
+<p>In this section, we take a look at Array methods for iterating over Arrays and for transforming Arrays.</p>
+<h4 id="callbacks-for-iteration-and-transformation-methods">31.10.1 Callbacks for iteration and transformation methods</h4>
+<p>All iteration and transformation methods use callbacks. The former feed all iterated values to their callbacks; the latter ask their callbacks how to transform Arrays.</p>
+<p>These callbacks have type signatures that look as follows:</p>
+<div class="sourceCode" id="cb869"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb869-1"><a href="ch_arrays.html#cb869-1" aria-hidden="true" tabindex="-1"></a>callback<span class="op">:</span> (value<span class="op">:</span> T<span class="op">,</span> index<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> array<span class="op">:</span> Array<span class="op">&lt;</span>T<span class="op">&gt;</span>) <span class="kw">=&gt;</span> <span class="dt">boolean</span></span></code></pre></div>
+<p>That is, the callback gets three parameters (it is free to ignore any of them):</p>
+<ul>
+<li><code>value</code> is the most important one. This parameter holds the iterated value that is currently being processed.</li>
+<li><code>index</code> can additionally tell the callback what the index of the iterated value is.</li>
+<li><code>array</code> points to the current Array (the receiver of the method call). Some algorithms need to refer to the whole Array – e.g., to search it for answers. This parameter lets you write reusable callbacks for such algorithms.</li>
+</ul>
+<p>What the callback is expected to return depends on the method it is passed to. Possibilities include:</p>
+<ul>
+<li><p><code>.map()</code> fills its result with the values returned by its callback:</p>
+<div class="sourceCode" id="cb870"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb870-1"><a href="ch_arrays.html#cb870-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].map(x =&gt; x + x)</span>
+<span id="cb870-2"><a href="ch_arrays.html#cb870-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'aa', 'bb', 'cc' ]</span></span></code></pre></div></li>
+<li><p><code>.find()</code> returns the first Array element for which its callback returns <code>true</code>:</p>
+<div class="sourceCode" id="cb871"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb871-1"><a href="ch_arrays.html#cb871-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'bb', 'ccc'].find(str =&gt; str.length &gt;= 2)</span>
+<span id="cb871-2"><a href="ch_arrays.html#cb871-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'bb'</span></span></code></pre></div></li>
+</ul>
+<p>Both of these methods are described in more detail later.</p>
+<h4 id="searching-elements-.find-.findindex">31.10.2 Searching elements: <code>.find()</code>, <code>.findIndex()</code></h4>
+<p><code>.find()</code> returns the first element for which its callback returns a truthy value (and <code>undefined</code> if it can’t find anything):</p>
+<div class="sourceCode" id="cb872"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb872-1"><a href="ch_arrays.html#cb872-1" aria-hidden="true" tabindex="-1"></a>&gt; [6, -5, 8].find(x =&gt; x &lt; 0)</span>
+<span id="cb872-2"><a href="ch_arrays.html#cb872-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-5</span></span>
+<span id="cb872-3"><a href="ch_arrays.html#cb872-3" aria-hidden="true" tabindex="-1"></a>&gt; [6, 5, 8].find(x =&gt; x &lt; 0)</span>
+<span id="cb872-4"><a href="ch_arrays.html#cb872-4" aria-hidden="true" tabindex="-1"></a><span class="kw">undefined</span></span></code></pre></div>
+<p><code>.findIndex()</code> returns the index of the first element for which its callback returns a truthy value (and <code>-1</code> if it can’t find anything):</p>
+<div class="sourceCode" id="cb873"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb873-1"><a href="ch_arrays.html#cb873-1" aria-hidden="true" tabindex="-1"></a>&gt; [6, -5, 8].findIndex(x =&gt; x &lt; 0)</span>
+<span id="cb873-2"><a href="ch_arrays.html#cb873-2" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span>
+<span id="cb873-3"><a href="ch_arrays.html#cb873-3" aria-hidden="true" tabindex="-1"></a>&gt; [6, 5, 8].findIndex(x =&gt; x &lt; 0)</span>
+<span id="cb873-4"><a href="ch_arrays.html#cb873-4" aria-hidden="true" tabindex="-1"></a><span class="kw">-1</span></span></code></pre></div>
+<p><code>.findIndex()</code> can be implemented as follows:</p>
+<div class="sourceCode" id="cb874"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb874-1"><a href="ch_arrays.html#cb874-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">findIndex</span>(arr<span class="op">,</span> callback) {</span>
+<span id="cb874-2"><a href="ch_arrays.html#cb874-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> [i<span class="op">,</span> x] <span class="kw">of</span> arr<span class="op">.</span><span class="fu">entries</span>()) {</span>
+<span id="cb874-3"><a href="ch_arrays.html#cb874-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">callback</span>(x<span class="op">,</span> i<span class="op">,</span> arr)) {</span>
+<span id="cb874-4"><a href="ch_arrays.html#cb874-4" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> i<span class="op">;</span></span>
+<span id="cb874-5"><a href="ch_arrays.html#cb874-5" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb874-6"><a href="ch_arrays.html#cb874-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb874-7"><a href="ch_arrays.html#cb874-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb874-8"><a href="ch_arrays.html#cb874-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="map-copy-while-giving-elements-new-values">31.10.3 <code>.map()</code>: copy while giving elements new values</h4>
+<p><code>.map()</code> returns a modified copy of the receiver. The elements of the copy are the results of applying <code>map</code>’s callback to the elements of the receiver.</p>
+<p>All of this is easier to understand via examples:</p>
+<div class="sourceCode" id="cb875"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb875-1"><a href="ch_arrays.html#cb875-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3].map(x =&gt; x * 3)</span>
+<span id="cb875-2"><a href="ch_arrays.html#cb875-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 3, 6, 9 ]</span></span>
+<span id="cb875-3"><a href="ch_arrays.html#cb875-3" aria-hidden="true" tabindex="-1"></a>&gt; ['how', 'are', 'you'].map(str =&gt; str.toUpperCase())</span>
+<span id="cb875-4"><a href="ch_arrays.html#cb875-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'HOW', 'ARE', 'YOU' ]</span></span>
+<span id="cb875-5"><a href="ch_arrays.html#cb875-5" aria-hidden="true" tabindex="-1"></a>&gt; [true, true, true].map((_x, index) =&gt; index)</span>
+<span id="cb875-6"><a href="ch_arrays.html#cb875-6" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 0, 1, 2 ]</span></span></code></pre></div>
+<p><code>.map()</code> can be implemented as follows:</p>
+<div class="sourceCode" id="cb876"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb876-1"><a href="ch_arrays.html#cb876-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">map</span>(arr<span class="op">,</span> mapFunc) {</span>
+<span id="cb876-2"><a href="ch_arrays.html#cb876-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb876-3"><a href="ch_arrays.html#cb876-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> [i<span class="op">,</span> x] <span class="kw">of</span> arr<span class="op">.</span><span class="fu">entries</span>()) {</span>
+<span id="cb876-4"><a href="ch_arrays.html#cb876-4" aria-hidden="true" tabindex="-1"></a>    result<span class="op">.</span><span class="fu">push</span>(<span class="fu">mapFunc</span>(x<span class="op">,</span> i<span class="op">,</span> arr))<span class="op">;</span></span>
+<span id="cb876-5"><a href="ch_arrays.html#cb876-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb876-6"><a href="ch_arrays.html#cb876-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb876-7"><a href="ch_arrays.html#cb876-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Numbering lines via <code>.map()</code></strong></p>
+<p><code>exercises/arrays/number_lines_test.mjs</code></p>
+</div>
+<h4 id="Array.prototype.flatMap">31.10.4 <code>.flatMap()</code>: mapping to zero or more values</h4>
+<p>The type signature of <code>Array&lt;T&gt;.prototype.flatMap()</code> is:</p>
+<div class="sourceCode" id="cb877"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb877-1"><a href="ch_arrays.html#cb877-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">flatMap</span><span class="op">&lt;</span>U<span class="op">&gt;</span>(</span>
+<span id="cb877-2"><a href="ch_arrays.html#cb877-2" aria-hidden="true" tabindex="-1"></a>  callback<span class="op">:</span> (value<span class="op">:</span> T<span class="op">,</span> index<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> array<span class="op">:</span> T[]) <span class="kw">=&gt;</span> U<span class="op">|</span>Array<span class="op">&lt;</span>U<span class="op">&gt;,</span></span>
+<span id="cb877-3"><a href="ch_arrays.html#cb877-3" aria-hidden="true" tabindex="-1"></a>  thisValue<span class="op">?:</span> <span class="dt">any</span></span>
+<span id="cb877-4"><a href="ch_arrays.html#cb877-4" aria-hidden="true" tabindex="-1"></a>)<span class="op">:</span> U[]</span></code></pre></div>
+<p>Both <code>.map()</code> and <code>.flatMap()</code> take a function <code>callback</code> as a parameter that controls how an input Array is translated to an output Array:</p>
+<ul>
+<li>With <code>.map()</code>, each input Array element is translated to exactly one output element. That is, <code>callback</code> returns a single value.</li>
+<li>With <code>.flatMap()</code>, each input Array element is translated to zero or more output elements. That is, <code>callback</code> returns an Array of values (it can also return non-Array values, but that is rare).</li>
+</ul>
+<p>This is <code>.flatMap()</code> in action:</p>
+<div class="sourceCode" id="cb878"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb878-1"><a href="ch_arrays.html#cb878-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].flatMap(x =&gt; [x,x])</span>
+<span id="cb878-2"><a href="ch_arrays.html#cb878-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'a', 'b', 'b', 'c', 'c' ]</span></span>
+<span id="cb878-3"><a href="ch_arrays.html#cb878-3" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].flatMap(x =&gt; [x])</span>
+<span id="cb878-4"><a href="ch_arrays.html#cb878-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b', 'c' ]</span></span>
+<span id="cb878-5"><a href="ch_arrays.html#cb878-5" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].flatMap(x =&gt; [])</span>
+<span id="cb878-6"><a href="ch_arrays.html#cb878-6" aria-hidden="true" tabindex="-1"></a><span class="kw">[]</span></span></code></pre></div>
+<h5 id="a-simple-implementation">31.10.4.1 A simple implementation</h5>
+<p>You could implement <code>.flatMap()</code> as follows. Note: This implementation is simpler than the built-in version, which, for example, performs more checks.</p>
+<div class="sourceCode" id="cb879"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb879-1"><a href="ch_arrays.html#cb879-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">flatMap</span>(arr<span class="op">,</span> mapFunc) {</span>
+<span id="cb879-2"><a href="ch_arrays.html#cb879-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb879-3"><a href="ch_arrays.html#cb879-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> [index<span class="op">,</span> elem] <span class="kw">of</span> arr<span class="op">.</span><span class="fu">entries</span>()) {</span>
+<span id="cb879-4"><a href="ch_arrays.html#cb879-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> x <span class="op">=</span> <span class="fu">mapFunc</span>(elem<span class="op">,</span> index<span class="op">,</span> arr)<span class="op">;</span></span>
+<span id="cb879-5"><a href="ch_arrays.html#cb879-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// We allow mapFunc() to return non-Arrays</span></span>
+<span id="cb879-6"><a href="ch_arrays.html#cb879-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="bu">Array</span><span class="op">.</span><span class="fu">isArray</span>(x)) {</span>
+<span id="cb879-7"><a href="ch_arrays.html#cb879-7" aria-hidden="true" tabindex="-1"></a>      result<span class="op">.</span><span class="fu">push</span>(<span class="op">...</span>x)<span class="op">;</span></span>
+<span id="cb879-8"><a href="ch_arrays.html#cb879-8" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb879-9"><a href="ch_arrays.html#cb879-9" aria-hidden="true" tabindex="-1"></a>      result<span class="op">.</span><span class="fu">push</span>(x)<span class="op">;</span></span>
+<span id="cb879-10"><a href="ch_arrays.html#cb879-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb879-11"><a href="ch_arrays.html#cb879-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb879-12"><a href="ch_arrays.html#cb879-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb879-13"><a href="ch_arrays.html#cb879-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>What is <code>.flatMap()</code> good for? Let’s look at use cases!</p>
+<h5 id="use-case-filtering-and-mapping-at-the-same-time">31.10.4.2 Use case: filtering and mapping at the same time</h5>
+<p>The result of the Array method <code>.map()</code> always has the same length as the Array it is invoked on. That is, its callback can’t skip Array elements it isn’t interested in. The ability of <code>.flatMap()</code> to do so is useful in the next example.</p>
+<p>We will use the following function <code>processArray()</code> to create an Array that we’ll then filter and map via <code>.flatMap()</code>:</p>
+<div class="sourceCode" id="cb880"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb880-1"><a href="ch_arrays.html#cb880-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">processArray</span>(arr<span class="op">,</span> callback) {</span>
+<span id="cb880-2"><a href="ch_arrays.html#cb880-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> arr<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> {</span>
+<span id="cb880-3"><a href="ch_arrays.html#cb880-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span> {</span>
+<span id="cb880-4"><a href="ch_arrays.html#cb880-4" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> { <span class="dt">value</span><span class="op">:</span> <span class="fu">callback</span>(x) }<span class="op">;</span></span>
+<span id="cb880-5"><a href="ch_arrays.html#cb880-5" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">catch</span> (e) {</span>
+<span id="cb880-6"><a href="ch_arrays.html#cb880-6" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> { <span class="dt">error</span><span class="op">:</span> e }<span class="op">;</span></span>
+<span id="cb880-7"><a href="ch_arrays.html#cb880-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb880-8"><a href="ch_arrays.html#cb880-8" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb880-9"><a href="ch_arrays.html#cb880-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Next, we create an Array <code>results</code> via <code>processArray()</code>:</p>
+<div class="sourceCode" id="cb881"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb881-1"><a href="ch_arrays.html#cb881-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> results <span class="op">=</span> <span class="fu">processArray</span>([<span class="dv">1</span><span class="op">,</span> <span class="op">-</span><span class="dv">5</span><span class="op">,</span> <span class="dv">6</span>]<span class="op">,</span> throwIfNegative)<span class="op">;</span></span>
+<span id="cb881-2"><a href="ch_arrays.html#cb881-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(results<span class="op">,</span> [</span>
+<span id="cb881-3"><a href="ch_arrays.html#cb881-3" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">value</span><span class="op">:</span> <span class="dv">1</span> }<span class="op">,</span></span>
+<span id="cb881-4"><a href="ch_arrays.html#cb881-4" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">error</span><span class="op">:</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Illegal value: -5'</span>) }<span class="op">,</span></span>
+<span id="cb881-5"><a href="ch_arrays.html#cb881-5" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">value</span><span class="op">:</span> <span class="dv">6</span> }<span class="op">,</span></span>
+<span id="cb881-6"><a href="ch_arrays.html#cb881-6" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span>
+<span id="cb881-7"><a href="ch_arrays.html#cb881-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb881-8"><a href="ch_arrays.html#cb881-8" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">throwIfNegative</span>(value) {</span>
+<span id="cb881-9"><a href="ch_arrays.html#cb881-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (value <span class="op">&lt;</span> <span class="dv">0</span>) {</span>
+<span id="cb881-10"><a href="ch_arrays.html#cb881-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Illegal value: '</span><span class="op">+</span>value)<span class="op">;</span></span>
+<span id="cb881-11"><a href="ch_arrays.html#cb881-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb881-12"><a href="ch_arrays.html#cb881-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> value<span class="op">;</span></span>
+<span id="cb881-13"><a href="ch_arrays.html#cb881-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>We can now use <code>.flatMap()</code> to extract just the values or just the errors from <code>results</code>:</p>
+<div class="sourceCode" id="cb882"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb882-1"><a href="ch_arrays.html#cb882-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> values <span class="op">=</span> results<span class="op">.</span><span class="fu">flatMap</span>(</span>
+<span id="cb882-2"><a href="ch_arrays.html#cb882-2" aria-hidden="true" tabindex="-1"></a>  result <span class="kw">=&gt;</span> result<span class="op">.</span><span class="at">value</span> <span class="op">?</span> [result<span class="op">.</span><span class="at">value</span>] <span class="op">:</span> [])<span class="op">;</span></span>
+<span id="cb882-3"><a href="ch_arrays.html#cb882-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(values<span class="op">,</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">6</span>])<span class="op">;</span></span>
+<span id="cb882-4"><a href="ch_arrays.html#cb882-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb882-5"><a href="ch_arrays.html#cb882-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> errors <span class="op">=</span> results<span class="op">.</span><span class="fu">flatMap</span>(</span>
+<span id="cb882-6"><a href="ch_arrays.html#cb882-6" aria-hidden="true" tabindex="-1"></a>  result <span class="kw">=&gt;</span> result<span class="op">.</span><span class="at">error</span> <span class="op">?</span> [result<span class="op">.</span><span class="at">error</span>] <span class="op">:</span> [])<span class="op">;</span></span>
+<span id="cb882-7"><a href="ch_arrays.html#cb882-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(errors<span class="op">,</span> [<span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Illegal value: -5'</span>)])<span class="op">;</span></span></code></pre></div>
+<h5 id="use-case-mapping-to-multiple-values">31.10.4.3 Use case: mapping to multiple values</h5>
+<p>The Array method <code>.map()</code> maps each input Array element to one output element. But what if we want to map it to multiple output elements?</p>
+<p>That becomes necessary in the following example:</p>
+<div class="sourceCode" id="cb883"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb883-1"><a href="ch_arrays.html#cb883-1" aria-hidden="true" tabindex="-1"></a>&gt; stringsToCodePoints(['many', 'a', 'moon'])</span>
+<span id="cb883-2"><a href="ch_arrays.html#cb883-2" aria-hidden="true" tabindex="-1"></a><span class="kw">['m', 'a', 'n', 'y', 'a', 'm', 'o', 'o', 'n']</span></span></code></pre></div>
+<p>We want to convert an Array of strings to an Array of Unicode characters (code points). The following function achieves that via <code>.flatMap()</code>:</p>
+<div class="sourceCode" id="cb884"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb884-1"><a href="ch_arrays.html#cb884-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">stringsToCodePoints</span>(strs) {</span>
+<span id="cb884-2"><a href="ch_arrays.html#cb884-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> strs<span class="op">.</span><span class="fu">flatMap</span>(str <span class="kw">=&gt;</span> [<span class="op">...</span>str])<span class="op">;</span></span>
+<span id="cb884-3"><a href="ch_arrays.html#cb884-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercises: <code>.flatMap()</code></strong></p>
+<ul>
+<li><p><code>exercises/arrays/convert_to_numbers_test.mjs</code></p></li>
+<li><p><code>exercises/arrays/replace_objects_test.mjs</code></p></li>
+</ul>
+</div>
+<h4 id="filter-only-keep-some-of-the-elements">31.10.5 <code>.filter()</code>: only keep some of the elements</h4>
+<p>The Array method <code>.filter()</code> returns an Array collecting all elements for which the callback returns a truthy value.</p>
+<p>For example:</p>
+<div class="sourceCode" id="cb885"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb885-1"><a href="ch_arrays.html#cb885-1" aria-hidden="true" tabindex="-1"></a>&gt; [-1, 2, 5, -7, 6].filter(x =&gt; x &gt;= 0)</span>
+<span id="cb885-2"><a href="ch_arrays.html#cb885-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 2, 5, 6 ]</span></span>
+<span id="cb885-3"><a href="ch_arrays.html#cb885-3" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c', 'd'].filter((_x,i) =&gt; (i%2)===0)</span>
+<span id="cb885-4"><a href="ch_arrays.html#cb885-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'c' ]</span></span></code></pre></div>
+<p><code>.filter()</code> can be implemented as follows:</p>
+<div class="sourceCode" id="cb886"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb886-1"><a href="ch_arrays.html#cb886-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">filter</span>(arr<span class="op">,</span> filterFunc) {</span>
+<span id="cb886-2"><a href="ch_arrays.html#cb886-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb886-3"><a href="ch_arrays.html#cb886-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> [i<span class="op">,</span> x] <span class="kw">of</span> arr<span class="op">.</span><span class="fu">entries</span>()) {</span>
+<span id="cb886-4"><a href="ch_arrays.html#cb886-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">filterFunc</span>(x<span class="op">,</span> i<span class="op">,</span> arr)) {</span>
+<span id="cb886-5"><a href="ch_arrays.html#cb886-5" aria-hidden="true" tabindex="-1"></a>      result<span class="op">.</span><span class="fu">push</span>(x)<span class="op">;</span></span>
+<span id="cb886-6"><a href="ch_arrays.html#cb886-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb886-7"><a href="ch_arrays.html#cb886-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb886-8"><a href="ch_arrays.html#cb886-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb886-9"><a href="ch_arrays.html#cb886-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Removing empty lines via <code>.filter()</code></strong></p>
+<p><code>exercises/arrays/remove_empty_lines_filter_test.mjs</code></p>
+</div>
+<h4 id="Array.prototype.reduce">31.10.6 <code>.reduce()</code>: deriving a value from an Array (advanced)</h4>
+<p>Method <code>.reduce()</code> is a powerful tool for computing a “summary” of an Array <code>arr</code>. A summary can be any kind of value:</p>
+<ul>
+<li>A number. For example, the sum of all elements of <code>arr</code>.</li>
+<li>An Array. For example, a copy of <code>arr</code>, where each element is twice the original element.</li>
+<li>Etc.</li>
+</ul>
+<p><code>reduce</code> is also known as <code>foldl</code> (“fold left”) in functional programming and popular there. One caveat is that it can make code difficult to understand.</p>
+<p><code>.reduce()</code> has the following type signature (inside an <code>Array&lt;T&gt;</code>):</p>
+<div class="sourceCode" id="cb887"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb887-1"><a href="ch_arrays.html#cb887-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">reduce</span><span class="op">&lt;</span>U<span class="op">&gt;</span>(</span>
+<span id="cb887-2"><a href="ch_arrays.html#cb887-2" aria-hidden="true" tabindex="-1"></a>  callback<span class="op">:</span> (accumulator<span class="op">:</span> U<span class="op">,</span> element<span class="op">:</span> T<span class="op">,</span> index<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> array<span class="op">:</span> T[]) <span class="kw">=&gt;</span> U<span class="op">,</span></span>
+<span id="cb887-3"><a href="ch_arrays.html#cb887-3" aria-hidden="true" tabindex="-1"></a>  init<span class="op">?:</span> U)</span>
+<span id="cb887-4"><a href="ch_arrays.html#cb887-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span> U</span></code></pre></div>
+<p><code>T</code> is the type of the Array elements, <code>U</code> is the type of the summary. The two may or may not be different. <code>accumulator</code> is just another name for “summary”.</p>
+<p>To compute the summary of an Array <code>arr</code>, <code>.reduce()</code> feeds all Array elements to its callback one at a time:</p>
+<div class="sourceCode" id="cb888"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb888-1"><a href="ch_arrays.html#cb888-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> accumulator_0 <span class="op">=</span> <span class="fu">callback</span>(init<span class="op">,</span> arr[<span class="dv">0</span>])<span class="op">;</span></span>
+<span id="cb888-2"><a href="ch_arrays.html#cb888-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> accumulator_1 <span class="op">=</span> <span class="fu">callback</span>(accumulator_0<span class="op">,</span> arr[<span class="dv">1</span>])<span class="op">;</span></span>
+<span id="cb888-3"><a href="ch_arrays.html#cb888-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> accumulator_2 <span class="op">=</span> <span class="fu">callback</span>(accumulator_1<span class="op">,</span> arr[<span class="dv">2</span>])<span class="op">;</span></span>
+<span id="cb888-4"><a href="ch_arrays.html#cb888-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Etc.</span></span></code></pre></div>
+<p><code>callback</code> combines the previously computed summary (stored in its parameter <code>accumulator</code>) with the current Array element and returns the next <code>accumulator</code>. The result of <code>.reduce()</code> is the final accumulator – the last result of <code>callback</code> after it has visited all elements.</p>
+<p>In other words: <code>callback</code> does most of the work; <code>.reduce()</code> just invokes it in a useful manner.</p>
+<p>You could say that the callback folds Array elements into the accumulator. That’s why this operation is called “fold” in functional programming.</p>
+<h5 id="a-first-example">31.10.6.1 A first example</h5>
+<p>Let’s look at an example of <code>.reduce()</code> in action: function <code>addAll()</code> computes the sum of all numbers in an Array <code>arr</code>.</p>
+<div class="sourceCode" id="cb889"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb889-1"><a href="ch_arrays.html#cb889-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">addAll</span>(arr) {</span>
+<span id="cb889-2"><a href="ch_arrays.html#cb889-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> startSum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb889-3"><a href="ch_arrays.html#cb889-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> callback <span class="op">=</span> (sum<span class="op">,</span> element) <span class="kw">=&gt;</span> sum <span class="op">+</span> element<span class="op">;</span></span>
+<span id="cb889-4"><a href="ch_arrays.html#cb889-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> arr<span class="op">.</span><span class="fu">reduce</span>(callback<span class="op">,</span> startSum)<span class="op">;</span></span>
+<span id="cb889-5"><a href="ch_arrays.html#cb889-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb889-6"><a href="ch_arrays.html#cb889-6" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">addAll</span>([<span class="dv">1</span><span class="op">,</span>  <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>])<span class="op">,</span> <span class="dv">6</span>)<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb889-7"><a href="ch_arrays.html#cb889-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">addAll</span>([<span class="dv">7</span><span class="op">,</span> <span class="op">-</span><span class="dv">4</span><span class="op">,</span> <span class="dv">2</span>])<span class="op">,</span> <span class="dv">5</span>)<span class="op">;</span></span></code></pre></div>
+<p>In this case, the accumulator holds the sum of all Array elements that <code>callback</code> has already visited.</p>
+<p>How was the result <code>6</code> derived from the Array in line A? Via the following invocations of <code>callback</code>:</p>
+<pre class="text"><code>callback(0, 1) --&gt; 1
+callback(1, 2) --&gt; 3
+callback(3, 3) --&gt; 6</code></pre>
+<p>Notes:</p>
+<ul>
+<li>The first parameters are the current accumulators (starting with parameter <code>init</code> of <code>.reduce()</code>).</li>
+<li>The second parameters are the current Array elements.</li>
+<li>The results are the next accumulators.</li>
+<li>The last result of <code>callback</code> is also the result of <code>.reduce()</code>.</li>
+</ul>
+<p>Alternatively, we could have implemented <code>addAll()</code> via a <code>for-of</code> loop:</p>
+<div class="sourceCode" id="cb891"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb891-1"><a href="ch_arrays.html#cb891-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">addAll</span>(arr) {</span>
+<span id="cb891-2"><a href="ch_arrays.html#cb891-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb891-3"><a href="ch_arrays.html#cb891-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> element <span class="kw">of</span> arr) {</span>
+<span id="cb891-4"><a href="ch_arrays.html#cb891-4" aria-hidden="true" tabindex="-1"></a>    sum <span class="op">=</span> sum <span class="op">+</span> element<span class="op">;</span></span>
+<span id="cb891-5"><a href="ch_arrays.html#cb891-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb891-6"><a href="ch_arrays.html#cb891-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> sum<span class="op">;</span></span>
+<span id="cb891-7"><a href="ch_arrays.html#cb891-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>It’s hard to say which of the two implementations is “better”: the one based on <code>.reduce()</code> is a little more concise, while the one based on <code>for-of</code> may be a little easier to understand – especially if you are not familiar with functional programming.</p>
+<h5 id="example-finding-indices-via-.reduce">31.10.6.2 Example: finding indices via <code>.reduce()</code></h5>
+<p>The following function is an implementation of the Array method <code>.indexOf()</code>. It returns the first index at which the given <code>searchValue</code> appears inside the Array <code>arr</code>:</p>
+<div class="sourceCode" id="cb892"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb892-1"><a href="ch_arrays.html#cb892-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> NOT_FOUND <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb892-2"><a href="ch_arrays.html#cb892-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">indexOf</span>(arr<span class="op">,</span> searchValue) {</span>
+<span id="cb892-3"><a href="ch_arrays.html#cb892-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> arr<span class="op">.</span><span class="fu">reduce</span>(</span>
+<span id="cb892-4"><a href="ch_arrays.html#cb892-4" aria-hidden="true" tabindex="-1"></a>    (result<span class="op">,</span> elem<span class="op">,</span> index) <span class="kw">=&gt;</span> {</span>
+<span id="cb892-5"><a href="ch_arrays.html#cb892-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (result <span class="op">!==</span> NOT_FOUND) {</span>
+<span id="cb892-6"><a href="ch_arrays.html#cb892-6" aria-hidden="true" tabindex="-1"></a>        <span class="co">// We have already found something: don’t change anything</span></span>
+<span id="cb892-7"><a href="ch_arrays.html#cb892-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb892-8"><a href="ch_arrays.html#cb892-8" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> <span class="cf">if</span> (elem <span class="op">===</span> searchValue) {</span>
+<span id="cb892-9"><a href="ch_arrays.html#cb892-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> index<span class="op">;</span></span>
+<span id="cb892-10"><a href="ch_arrays.html#cb892-10" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb892-11"><a href="ch_arrays.html#cb892-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> NOT_FOUND<span class="op">;</span></span>
+<span id="cb892-12"><a href="ch_arrays.html#cb892-12" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb892-13"><a href="ch_arrays.html#cb892-13" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb892-14"><a href="ch_arrays.html#cb892-14" aria-hidden="true" tabindex="-1"></a>    NOT_FOUND)<span class="op">;</span></span>
+<span id="cb892-15"><a href="ch_arrays.html#cb892-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb892-16"><a href="ch_arrays.html#cb892-16" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">indexOf</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">,</span> <span class="st">'b'</span>)<span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb892-17"><a href="ch_arrays.html#cb892-17" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">indexOf</span>([<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">,</span> <span class="st">'x'</span>)<span class="op">,</span> <span class="op">-</span><span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
+<p>One limitation of <code>.reduce()</code> is that you can’t finish early (in a <code>for-of</code> loop, you can <code>break</code>). Here, we always immediately return the result once we have found it.</p>
+<h5 id="example-doubling-array-elements">31.10.6.3 Example: doubling Array elements</h5>
+<p>Function <code>double(arr)</code> returns a copy of <code>inArr</code> whose elements are all multiplied by 2:</p>
+<div class="sourceCode" id="cb893"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb893-1"><a href="ch_arrays.html#cb893-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">double</span>(inArr) {</span>
+<span id="cb893-2"><a href="ch_arrays.html#cb893-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> inArr<span class="op">.</span><span class="fu">reduce</span>(</span>
+<span id="cb893-3"><a href="ch_arrays.html#cb893-3" aria-hidden="true" tabindex="-1"></a>    (outArr<span class="op">,</span> element) <span class="kw">=&gt;</span> {</span>
+<span id="cb893-4"><a href="ch_arrays.html#cb893-4" aria-hidden="true" tabindex="-1"></a>      outArr<span class="op">.</span><span class="fu">push</span>(element <span class="op">*</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb893-5"><a href="ch_arrays.html#cb893-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> outArr<span class="op">;</span></span>
+<span id="cb893-6"><a href="ch_arrays.html#cb893-6" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb893-7"><a href="ch_arrays.html#cb893-7" aria-hidden="true" tabindex="-1"></a>    [])<span class="op">;</span></span>
+<span id="cb893-8"><a href="ch_arrays.html#cb893-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb893-9"><a href="ch_arrays.html#cb893-9" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb893-10"><a href="ch_arrays.html#cb893-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">double</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>])<span class="op">,</span></span>
+<span id="cb893-11"><a href="ch_arrays.html#cb893-11" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">2</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">6</span>])<span class="op">;</span></span></code></pre></div>
+<p>We modify the initial value <code>[]</code> by pushing into it. A non-destructive, more functional version of <code>double()</code> looks as follows:</p>
+<div class="sourceCode" id="cb894"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb894-1"><a href="ch_arrays.html#cb894-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">double</span>(inArr) {</span>
+<span id="cb894-2"><a href="ch_arrays.html#cb894-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> inArr<span class="op">.</span><span class="fu">reduce</span>(</span>
+<span id="cb894-3"><a href="ch_arrays.html#cb894-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Don’t change `outArr`, return a fresh Array</span></span>
+<span id="cb894-4"><a href="ch_arrays.html#cb894-4" aria-hidden="true" tabindex="-1"></a>    (outArr<span class="op">,</span> element) <span class="kw">=&gt;</span> [<span class="op">...</span>outArr<span class="op">,</span> element <span class="op">*</span> <span class="dv">2</span>]<span class="op">,</span></span>
+<span id="cb894-5"><a href="ch_arrays.html#cb894-5" aria-hidden="true" tabindex="-1"></a>    [])<span class="op">;</span></span>
+<span id="cb894-6"><a href="ch_arrays.html#cb894-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb894-7"><a href="ch_arrays.html#cb894-7" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb894-8"><a href="ch_arrays.html#cb894-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">double</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>])<span class="op">,</span></span>
+<span id="cb894-9"><a href="ch_arrays.html#cb894-9" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">2</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">6</span>])<span class="op">;</span></span></code></pre></div>
+<p>This version is more elegant but also slower and uses more memory.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercises: <code>.reduce()</code></strong></p>
+<ul>
+<li><code>map()</code> via <code>.reduce()</code>: <code>exercises/arrays/map_via_reduce_test.mjs</code></li>
+<li><code>filter()</code> via <code>.reduce()</code>: <code>exercises/arrays/filter_via_reduce_test.mjs</code></li>
+<li><code>countMatches()</code> via <code>.reduce()</code>: <code>exercises/arrays/count_matches_via_reduce_test.mjs</code></li>
+</ul>
+</div>
+<h3 id="sort-sorting-arrays">31.11 <code>.sort()</code>: sorting Arrays</h3>
+<p><code>.sort()</code> has the following type definition:</p>
+<div class="sourceCode" id="cb895"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb895-1"><a href="ch_arrays.html#cb895-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(compareFunc<span class="op">?:</span> (a<span class="op">:</span> T<span class="op">,</span> b<span class="op">:</span> T) <span class="kw">=&gt;</span> <span class="dt">number</span>)<span class="op">:</span> this</span></code></pre></div>
+<p>By default, <code>.sort()</code> sorts string representations of the elements. These representations are compared via <code>&lt;</code>. This operator compares <em>lexicographically</em> (the first characters are most significant). You can see that when sorting numbers:</p>
+<div class="sourceCode" id="cb896"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb896-1"><a href="ch_arrays.html#cb896-1" aria-hidden="true" tabindex="-1"></a>&gt; [200, 3, 10].sort()</span>
+<span id="cb896-2"><a href="ch_arrays.html#cb896-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 10, 200, 3 ]</span></span></code></pre></div>
+<p>When sorting human-language strings, you need to be aware that they are compared according to their code unit values (char codes):</p>
+<div class="sourceCode" id="cb897"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb897-1"><a href="ch_arrays.html#cb897-1" aria-hidden="true" tabindex="-1"></a>&gt; ['pie', 'cookie', 'éclair', 'Pie', 'Cookie', 'Éclair'].sort()</span>
+<span id="cb897-2"><a href="ch_arrays.html#cb897-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'Cookie', 'Pie', 'cookie', 'pie', 'Éclair', 'éclair' ]</span></span></code></pre></div>
+<p>As you can see, all unaccented uppercase letters come before all unaccented lowercase letters, which come before all accented letters. Use <code>Intl</code>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl">the JavaScript internationalization API</a>, if you want proper sorting for human languages.</p>
+<p>Note that <code>.sort()</code> sorts <em>in place</em>; it changes and returns its receiver:</p>
+<div class="sourceCode" id="cb898"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb898-1"><a href="ch_arrays.html#cb898-1" aria-hidden="true" tabindex="-1"></a>&gt; const arr = ['a', 'c', 'b'];</span>
+<span id="cb898-2"><a href="ch_arrays.html#cb898-2" aria-hidden="true" tabindex="-1"></a>&gt; arr.sort() === arr</span>
+<span id="cb898-3"><a href="ch_arrays.html#cb898-3" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb898-4"><a href="ch_arrays.html#cb898-4" aria-hidden="true" tabindex="-1"></a>&gt; arr</span>
+<span id="cb898-5"><a href="ch_arrays.html#cb898-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b', 'c' ]</span></span></code></pre></div>
+<h4 id="customizing-the-sort-order">31.11.1 Customizing the sort order</h4>
+<p>You can customize the sort order via the parameter <code>compareFunc</code>, which must return a number that is:</p>
+<ul>
+<li>negative if <code>a &lt; b</code></li>
+<li>zero if <code>a === b</code></li>
+<li>positive if <code>a &gt; b</code></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/lightbulb-regular.svg" height="24">&nbsp; <strong>Tip for remembering these rules</strong></p>
+<p>A negative number is <em>less than</em> zero (etc.).</p>
+</div>
+<h4 id="sorting-numbers">31.11.2 Sorting numbers</h4>
+<p>You can use this helper function to sort numbers:</p>
+<div class="sourceCode" id="cb899"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb899-1"><a href="ch_arrays.html#cb899-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">compareNumbers</span>(a<span class="op">,</span> b) {</span>
+<span id="cb899-2"><a href="ch_arrays.html#cb899-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (a <span class="op">&lt;</span> b) {</span>
+<span id="cb899-3"><a href="ch_arrays.html#cb899-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb899-4"><a href="ch_arrays.html#cb899-4" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (a <span class="op">===</span> b) {</span>
+<span id="cb899-5"><a href="ch_arrays.html#cb899-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb899-6"><a href="ch_arrays.html#cb899-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb899-7"><a href="ch_arrays.html#cb899-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb899-8"><a href="ch_arrays.html#cb899-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb899-9"><a href="ch_arrays.html#cb899-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb899-10"><a href="ch_arrays.html#cb899-10" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb899-11"><a href="ch_arrays.html#cb899-11" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">200</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">10</span>]<span class="op">.</span><span class="fu">sort</span>(compareNumbers)<span class="op">,</span></span>
+<span id="cb899-12"><a href="ch_arrays.html#cb899-12" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">3</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">200</span>])<span class="op">;</span></span></code></pre></div>
+<p>The following is a quick and dirty alternative.</p>
+<div class="sourceCode" id="cb900"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb900-1"><a href="ch_arrays.html#cb900-1" aria-hidden="true" tabindex="-1"></a>&gt; [200, 3, 10].sort((a,b) =&gt; a - b)</span>
+<span id="cb900-2"><a href="ch_arrays.html#cb900-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 3, 10, 200 ]</span></span></code></pre></div>
+<p>The downsides of this approach are:</p>
+<ul>
+<li>It is cryptic.</li>
+<li>There is a risk of numeric overflow or underflow, if <code>a-b</code> becomes a large positive or negative number.</li>
+</ul>
+<h4 id="sorting-objects">31.11.3 Sorting objects</h4>
+<p>You also need to use a compare function if you want to sort objects. As an example, the following code shows how to sort objects by age.</p>
+<div class="sourceCode" id="cb901"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb901-1"><a href="ch_arrays.html#cb901-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [ {<span class="dt">age</span><span class="op">:</span> <span class="dv">200</span>}<span class="op">,</span> {<span class="dt">age</span><span class="op">:</span> <span class="dv">3</span>}<span class="op">,</span> {<span class="dt">age</span><span class="op">:</span> <span class="dv">10</span>} ]<span class="op">;</span></span>
+<span id="cb901-2"><a href="ch_arrays.html#cb901-2" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb901-3"><a href="ch_arrays.html#cb901-3" aria-hidden="true" tabindex="-1"></a>  arr<span class="op">.</span><span class="fu">sort</span>((obj1<span class="op">,</span> obj2) <span class="kw">=&gt;</span> obj1<span class="op">.</span><span class="at">age</span> <span class="op">-</span> obj2<span class="op">.</span><span class="at">age</span>)<span class="op">,</span></span>
+<span id="cb901-4"><a href="ch_arrays.html#cb901-4" aria-hidden="true" tabindex="-1"></a>  [{ <span class="dt">age</span><span class="op">:</span> <span class="dv">3</span> }<span class="op">,</span> { <span class="dt">age</span><span class="op">:</span> <span class="dv">10</span> }<span class="op">,</span> { <span class="dt">age</span><span class="op">:</span> <span class="dv">200</span> }] )<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: Sorting objects by name</strong></p>
+<p><code>exercises/arrays/sort_objects_test.mjs</code></p>
+</div>
+<h3 id="quickref-arrays">31.12 Quick reference: <code>Array&lt;T&gt;</code></h3>
+<p>Legend:</p>
+<ul>
+<li><code>R</code>: method does not change the Array (non-destructive).</li>
+<li><code>W</code>: method changes the Array (destructive).</li>
+</ul>
+<h4 id="new-array">31.12.1 <code>new Array()</code></h4>
+<p><code>new Array(n)</code> creates an Array of length <code>n</code> that contains <code>n</code> holes:</p>
+<div class="sourceCode" id="cb902"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb902-1"><a href="ch_arrays.html#cb902-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Trailing commas are always ignored.</span></span>
+<span id="cb902-2"><a href="ch_arrays.html#cb902-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Therefore: number of commas = number of holes</span></span>
+<span id="cb902-3"><a href="ch_arrays.html#cb902-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(<span class="kw">new</span> <span class="bu">Array</span>(<span class="dv">3</span>)<span class="op">,</span> [<span class="op">,,,</span>])<span class="op">;</span></span></code></pre></div>
+<p><code>new Array()</code> creates an empty Array. However, I recommend to always use <code>[]</code> instead.</p>
+<h4 id="static-methods-of-array">31.12.2 Static methods of <code>Array</code></h4>
+<ul>
+<li><p><code>Array.from&lt;T&gt;(iterable: Iterable&lt;T&gt; | ArrayLike&lt;T&gt;): T[]</code> <sup>[ES6]</sup></p></li>
+<li><p><code>Array.from&lt;T,U&gt;(iterable: Iterable&lt;T&gt; | ArrayLike&lt;T&gt;, mapFunc: (v: T, k: number) =&gt; U, thisArg?: any): U[]</code> <sup>[ES6]</sup></p>
+<p>Converts an iterable or <a href="ch_arrays.html#array-like-objects">an Array-like object</a> to an Array. Optionally, the input values can be translated via <code>mapFunc</code> before they are added to the output Array.</p>
+<p>Examples:</p>
+<div class="sourceCode" id="cb903"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb903-1"><a href="ch_arrays.html#cb903-1" aria-hidden="true" tabindex="-1"></a>&gt; Array.from(new Set(['a', 'b'])) // iterable</span>
+<span id="cb903-2"><a href="ch_arrays.html#cb903-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b' ]</span></span>
+<span id="cb903-3"><a href="ch_arrays.html#cb903-3" aria-hidden="true" tabindex="-1"></a>&gt; Array.from({length: 2, 0:'a', 1:'b'}) // Array-like object</span>
+<span id="cb903-4"><a href="ch_arrays.html#cb903-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b' ]</span></span></code></pre></div></li>
+<li><p><code>Array.of&lt;T&gt;(...items: T[]): T[]</code> <sup>[ES6]</sup></p>
+<p>This static method is mainly useful for subclasses of <code>Array</code>, where it serves as a custom Array literal:</p>
+<div class="sourceCode" id="cb904"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb904-1"><a href="ch_arrays.html#cb904-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MyArray <span class="kw">extends</span> <span class="bu">Array</span> {}</span>
+<span id="cb904-2"><a href="ch_arrays.html#cb904-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb904-3"><a href="ch_arrays.html#cb904-3" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(</span>
+<span id="cb904-4"><a href="ch_arrays.html#cb904-4" aria-hidden="true" tabindex="-1"></a>  MyArray<span class="op">.</span><span class="fu">of</span>(<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>) <span class="kw">instanceof</span> MyArray<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h4 id="quickref-array-prototype">31.12.3 Methods of <code>Array&lt;T&gt;.prototype</code></h4>
+<ul>
+<li><p><code>.concat(...items: Array&lt;T[] | T&gt;): T[]</code> <sup>[R, ES3]</sup></p>
+<p>Returns a new Array that is the concatenation of the receiver and all <code>items</code>. Non-Array parameters (such as <code>'b'</code> in the following example) are treated as if they were Arrays with single elements.</p>
+<div class="sourceCode" id="cb905"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb905-1"><a href="ch_arrays.html#cb905-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a'].concat('b', ['c', 'd'])</span>
+<span id="cb905-2"><a href="ch_arrays.html#cb905-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b', 'c', 'd' ]</span></span></code></pre></div></li>
+<li><p><code>.copyWithin(target: number, start: number, end=this.length): this</code> <sup>[W, ES6]</sup></p>
+<p>Copies the elements whose indices range from (including) <code>start</code> to (excluding) <code>end</code> to indices starting with <code>target</code>. Overlapping is handled correctly.</p>
+<div class="sourceCode" id="cb906"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb906-1"><a href="ch_arrays.html#cb906-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c', 'd'].copyWithin(0, 2, 4)</span>
+<span id="cb906-2"><a href="ch_arrays.html#cb906-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'c', 'd', 'c', 'd' ]</span></span></code></pre></div>
+<p>If <code>start</code> or <code>end</code> is negative, then <code>.length</code> is added to it.</p></li>
+<li><p><code>.entries(): Iterable&lt;[number, T]&gt;</code> <sup>[R, ES6]</sup></p>
+<p>Returns an iterable over [index, element] pairs.</p>
+<div class="sourceCode" id="cb907"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb907-1"><a href="ch_arrays.html#cb907-1" aria-hidden="true" tabindex="-1"></a>&gt; Array.from(['a', 'b'].entries())</span>
+<span id="cb907-2"><a href="ch_arrays.html#cb907-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ [ 0, 'a' ], [ 1, 'b' ] ]</span></span></code></pre></div></li>
+<li><p><code>.every(callback: (value: T, index: number, array: Array&lt;T&gt;) =&gt; boolean, thisArg?: any): boolean</code> <sup>[R, ES5]</sup></p>
+<p>Returns <code>true</code> if <code>callback</code> returns a truthy value for every element. Otherwise, it returns <code>false</code>. It stops as soon as it receives a falsy value. This method corresponds to universal quantification (“for all”, <code>∀</code>) in mathematics.</p>
+<div class="sourceCode" id="cb908"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb908-1"><a href="ch_arrays.html#cb908-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3].every(x =&gt; x &gt; 0)</span>
+<span id="cb908-2"><a href="ch_arrays.html#cb908-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb908-3"><a href="ch_arrays.html#cb908-3" aria-hidden="true" tabindex="-1"></a>&gt; [1, -2, 3].every(x =&gt; x &gt; 0)</span>
+<span id="cb908-4"><a href="ch_arrays.html#cb908-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div>
+<p>Related method: <code>.some()</code> (“exists”).</p></li>
+<li><p><code>.fill(value: T, start=0, end=this.length): this</code> <sup>[W, ES6]</sup></p>
+<p>Assigns <code>value</code> to every index between (including) <code>start</code> and (excluding) <code>end</code>.</p>
+<div class="sourceCode" id="cb909"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb909-1"><a href="ch_arrays.html#cb909-1" aria-hidden="true" tabindex="-1"></a>&gt; [0, 1, 2].fill('a')</span>
+<span id="cb909-2"><a href="ch_arrays.html#cb909-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'a', 'a' ]</span></span></code></pre></div>
+<p>Caveat: Don’t use this method to fill an Array with an object <code>obj</code>; then each element will refer to <code>obj</code> (sharing it). In this case, it’s better to <a href="ch_arrays.html#filling-arrays">use <code>Array.from()</code></a>.</p></li>
+<li><p><code>.filter(callback: (value: T, index: number, array: Array&lt;T&gt;) =&gt; any, thisArg?: any): T[]</code> <sup>[R, ES5]</sup></p>
+<p>Returns an Array with only those elements for which <code>callback</code> returns a truthy value.</p>
+<div class="sourceCode" id="cb910"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb910-1"><a href="ch_arrays.html#cb910-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, -2, 3].filter(x =&gt; x &gt; 0)</span>
+<span id="cb910-2"><a href="ch_arrays.html#cb910-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 1, 3 ]</span></span></code></pre></div></li>
+<li><p><code>.find(predicate: (value: T, index: number, obj: T[]) =&gt; boolean, thisArg?: any): T | undefined</code> <sup>[R, ES6]</sup></p>
+<p>The result is the first element for which <code>predicate</code> returns a truthy value. If there is no such element, the result is <code>undefined</code>.</p>
+<div class="sourceCode" id="cb911"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb911-1"><a href="ch_arrays.html#cb911-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, -2, 3].find(x =&gt; x &lt; 0)</span>
+<span id="cb911-2"><a href="ch_arrays.html#cb911-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-2</span></span>
+<span id="cb911-3"><a href="ch_arrays.html#cb911-3" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3].find(x =&gt; x &lt; 0)</span>
+<span id="cb911-4"><a href="ch_arrays.html#cb911-4" aria-hidden="true" tabindex="-1"></a><span class="kw">undefined</span></span></code></pre></div></li>
+<li><p><code>.findIndex(predicate: (value: T, index: number, obj: T[]) =&gt; boolean, thisArg?: any): number</code> <sup>[R, ES6]</sup></p>
+<p>The result is the index of the first element for which <code>predicate</code> returns a truthy value. If there is no such element, the result is <code>-1</code>.</p>
+<div class="sourceCode" id="cb912"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb912-1"><a href="ch_arrays.html#cb912-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, -2, 3].findIndex(x =&gt; x &lt; 0)</span>
+<span id="cb912-2"><a href="ch_arrays.html#cb912-2" aria-hidden="true" tabindex="-1"></a><span class="kw">1</span></span>
+<span id="cb912-3"><a href="ch_arrays.html#cb912-3" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3].findIndex(x =&gt; x &lt; 0)</span>
+<span id="cb912-4"><a href="ch_arrays.html#cb912-4" aria-hidden="true" tabindex="-1"></a><span class="kw">-1</span></span></code></pre></div></li>
+<li><p><span id="Array.prototype.flat" class="texlabel"><code>.flat(depth = 1): any[]</code> <sup>[R, ES2019]</sup></span></p>
+<p>“Flattens” an Array: It descends into the Arrays that are nested inside the input Array and creates a copy where all values it finds at level <code>depth</code> or lower are moved to the top level.</p>
+<div class="sourceCode" id="cb913"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb913-1"><a href="ch_arrays.html#cb913-1" aria-hidden="true" tabindex="-1"></a>&gt; [ 1,2, [3,4], [[5,6]] ].flat(0) // no change</span>
+<span id="cb913-2"><a href="ch_arrays.html#cb913-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 1, 2, [3,4], [[5,6]] ]</span></span>
+<span id="cb913-3"><a href="ch_arrays.html#cb913-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb913-4"><a href="ch_arrays.html#cb913-4" aria-hidden="true" tabindex="-1"></a>&gt; [ 1,2, [3,4], [[5,6]] ].flat(1)</span>
+<span id="cb913-5"><a href="ch_arrays.html#cb913-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[1, 2, 3, 4, [5,6]]</span></span>
+<span id="cb913-6"><a href="ch_arrays.html#cb913-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb913-7"><a href="ch_arrays.html#cb913-7" aria-hidden="true" tabindex="-1"></a>&gt; [ 1,2, [3,4], [[5,6]] ].flat(2)</span>
+<span id="cb913-8"><a href="ch_arrays.html#cb913-8" aria-hidden="true" tabindex="-1"></a><span class="kw">[1, 2, 3, 4, 5, 6]</span></span></code></pre></div></li>
+<li><p><code>.flatMap&lt;U&gt;(callback: (value: T, index: number, array: T[]) =&gt; U|Array&lt;U&gt;, thisValue?: any): U[]</code> <sup>[R, ES2019]</sup></p>
+<p>The result is produced by invoking <code>callback()</code> for each element of the original Array and concatenating the Arrays it returns.</p>
+<div class="sourceCode" id="cb914"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb914-1"><a href="ch_arrays.html#cb914-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].flatMap(x =&gt; [x,x])</span>
+<span id="cb914-2"><a href="ch_arrays.html#cb914-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'a', 'b', 'b', 'c', 'c' ]</span></span>
+<span id="cb914-3"><a href="ch_arrays.html#cb914-3" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].flatMap(x =&gt; [x])</span>
+<span id="cb914-4"><a href="ch_arrays.html#cb914-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b', 'c' ]</span></span>
+<span id="cb914-5"><a href="ch_arrays.html#cb914-5" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].flatMap(x =&gt; [])</span>
+<span id="cb914-6"><a href="ch_arrays.html#cb914-6" aria-hidden="true" tabindex="-1"></a><span class="kw">[]</span></span></code></pre></div></li>
+<li><p><span id="Array.prototype.forEach" class="texlabel"><code>.forEach(callback: (value: T, index: number, array: Array&lt;T&gt;) =&gt; void, thisArg?: any): void</code> <sup>[R, ES5]</sup></span></p>
+<p>Calls <code>callback</code> for each element.</p>
+<div class="sourceCode" id="cb915"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb915-1"><a href="ch_arrays.html#cb915-1" aria-hidden="true" tabindex="-1"></a>[<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span>]<span class="op">.</span><span class="fu">forEach</span>((x<span class="op">,</span> i) <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x<span class="op">,</span> i))</span>
+<span id="cb915-2"><a href="ch_arrays.html#cb915-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb915-3"><a href="ch_arrays.html#cb915-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb915-4"><a href="ch_arrays.html#cb915-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a', 0</span></span>
+<span id="cb915-5"><a href="ch_arrays.html#cb915-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b', 1</span></span></code></pre></div>
+<p>A <code>for-of</code> loop is usually a better choice: it’s faster, supports <code>break</code> and can iterate over arbitrary iterables.</p></li>
+<li><p><span id="Array.prototype.includes" class="texlabel"><code>.includes(searchElement: T, fromIndex=0): boolean</code> <sup>[R, ES2016]</sup></span></p>
+<p>Returns <code>true</code> if the receiver has an element whose value is <code>searchElement</code> and <code>false</code>, otherwise. Searching starts at index <code>fromIndex</code>.</p>
+<div class="sourceCode" id="cb916"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb916-1"><a href="ch_arrays.html#cb916-1" aria-hidden="true" tabindex="-1"></a>&gt; [0, 1, 2].includes(1)</span>
+<span id="cb916-2"><a href="ch_arrays.html#cb916-2" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span>
+<span id="cb916-3"><a href="ch_arrays.html#cb916-3" aria-hidden="true" tabindex="-1"></a>&gt; [0, 1, 2].includes(5)</span>
+<span id="cb916-4"><a href="ch_arrays.html#cb916-4" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span></code></pre></div></li>
+<li><p><code>.indexOf(searchElement: T, fromIndex=0): number</code> <sup>[R, ES5]</sup></p>
+<p>Returns the index of the first element that is strictly equal to <code>searchElement</code>. Returns <code>-1</code> if there is no such element. Starts searching at index <code>fromIndex</code>, visiting higher indices next.</p>
+<div class="sourceCode" id="cb917"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb917-1"><a href="ch_arrays.html#cb917-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'a'].indexOf('a')</span>
+<span id="cb917-2"><a href="ch_arrays.html#cb917-2" aria-hidden="true" tabindex="-1"></a><span class="kw">0</span></span>
+<span id="cb917-3"><a href="ch_arrays.html#cb917-3" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'a'].indexOf('a', 1)</span>
+<span id="cb917-4"><a href="ch_arrays.html#cb917-4" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span>
+<span id="cb917-5"><a href="ch_arrays.html#cb917-5" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'a'].indexOf('c')</span>
+<span id="cb917-6"><a href="ch_arrays.html#cb917-6" aria-hidden="true" tabindex="-1"></a><span class="kw">-1</span></span></code></pre></div></li>
+<li><p><code>.join(separator = ','): string</code> <sup>[R, ES1]</sup></p>
+<p>Creates a string by concatenating string representations of all elements, separating them with <code>separator</code>.</p>
+<div class="sourceCode" id="cb918"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb918-1"><a href="ch_arrays.html#cb918-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].join('##')</span>
+<span id="cb918-2"><a href="ch_arrays.html#cb918-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'a##b##c'</span></span>
+<span id="cb918-3"><a href="ch_arrays.html#cb918-3" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].join()</span>
+<span id="cb918-4"><a href="ch_arrays.html#cb918-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'a,b,c'</span></span></code></pre></div></li>
+<li><p><code>.keys(): Iterable&lt;number&gt;</code> <sup>[R, ES6]</sup></p>
+<p>Returns an iterable over the keys of the receiver.</p>
+<div class="sourceCode" id="cb919"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb919-1"><a href="ch_arrays.html#cb919-1" aria-hidden="true" tabindex="-1"></a>&gt; [...['a', 'b'].keys()]</span>
+<span id="cb919-2"><a href="ch_arrays.html#cb919-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 0, 1 ]</span></span></code></pre></div></li>
+<li><p><code>.lastIndexOf(searchElement: T, fromIndex=this.length-1): number</code> <sup>[R, ES5]</sup></p>
+<p>Returns the index of the last element that is strictly equal to <code>searchElement</code>. Returns <code>-1</code> if there is no such element. Starts searching at index <code>fromIndex</code>, visiting lower indices next.</p>
+<div class="sourceCode" id="cb920"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb920-1"><a href="ch_arrays.html#cb920-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'a'].lastIndexOf('a')</span>
+<span id="cb920-2"><a href="ch_arrays.html#cb920-2" aria-hidden="true" tabindex="-1"></a><span class="kw">2</span></span>
+<span id="cb920-3"><a href="ch_arrays.html#cb920-3" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'a'].lastIndexOf('a', 1)</span>
+<span id="cb920-4"><a href="ch_arrays.html#cb920-4" aria-hidden="true" tabindex="-1"></a><span class="kw">0</span></span>
+<span id="cb920-5"><a href="ch_arrays.html#cb920-5" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'a'].lastIndexOf('c')</span>
+<span id="cb920-6"><a href="ch_arrays.html#cb920-6" aria-hidden="true" tabindex="-1"></a><span class="kw">-1</span></span></code></pre></div></li>
+<li><p><code>.map&lt;U&gt;(mapFunc: (value: T, index: number, array: Array&lt;T&gt;) =&gt; U, thisArg?: any): U[]</code> <sup>[R, ES5]</sup></p>
+<p>Returns a new Array, in which every element is the result of <code>mapFunc</code> being applied to the corresponding element of the receiver.</p>
+<div class="sourceCode" id="cb921"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb921-1"><a href="ch_arrays.html#cb921-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3].map(x =&gt; x * 2)</span>
+<span id="cb921-2"><a href="ch_arrays.html#cb921-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 2, 4, 6 ]</span></span>
+<span id="cb921-3"><a href="ch_arrays.html#cb921-3" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].map((x, i) =&gt; i)</span>
+<span id="cb921-4"><a href="ch_arrays.html#cb921-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 0, 1, 2 ]</span></span></code></pre></div></li>
+<li><p><code>.pop(): T | undefined</code> <sup>[W, ES3]</sup></p>
+<p>Removes and returns the last element of the receiver. That is, it treats the end of the receiver as a stack. The opposite of <code>.push()</code>.</p>
+<div class="sourceCode" id="cb922"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb922-1"><a href="ch_arrays.html#cb922-1" aria-hidden="true" tabindex="-1"></a>&gt; const arr = ['a', 'b', 'c'];</span>
+<span id="cb922-2"><a href="ch_arrays.html#cb922-2" aria-hidden="true" tabindex="-1"></a>&gt; arr.pop()</span>
+<span id="cb922-3"><a href="ch_arrays.html#cb922-3" aria-hidden="true" tabindex="-1"></a><span class="kw">'c'</span></span>
+<span id="cb922-4"><a href="ch_arrays.html#cb922-4" aria-hidden="true" tabindex="-1"></a>&gt; arr</span>
+<span id="cb922-5"><a href="ch_arrays.html#cb922-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b' ]</span></span></code></pre></div></li>
+<li><p><code>.push(...items: T[]): number</code> <sup>[W, ES3]</sup></p>
+<p>Adds zero or more <code>items</code> to the end of the receiver. That is, it treats the end of the receiver as a stack. The return value is the length of the receiver after the change. The opposite of <code>.pop()</code>.</p>
+<div class="sourceCode" id="cb923"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb923-1"><a href="ch_arrays.html#cb923-1" aria-hidden="true" tabindex="-1"></a>&gt; const arr = ['a', 'b'];</span>
+<span id="cb923-2"><a href="ch_arrays.html#cb923-2" aria-hidden="true" tabindex="-1"></a>&gt; arr.push('c', 'd')</span>
+<span id="cb923-3"><a href="ch_arrays.html#cb923-3" aria-hidden="true" tabindex="-1"></a><span class="kw">4</span></span>
+<span id="cb923-4"><a href="ch_arrays.html#cb923-4" aria-hidden="true" tabindex="-1"></a>&gt; arr</span>
+<span id="cb923-5"><a href="ch_arrays.html#cb923-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b', 'c', 'd' ]</span></span></code></pre></div></li>
+<li><p><code>.reduce&lt;U&gt;(callback: (accumulator: U, element: T, index: number, array: T[]) =&gt; U, init?: U): U</code> <sup>[R, ES5]</sup></p>
+<p>This method produces a summary of the receiver: it feeds all Array elements to <code>callback</code>, which combines a current summary (in parameter <code>accumulator</code>) with the current Array element and returns the next <code>accumulator</code>:</p>
+<div class="sourceCode" id="cb924"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb924-1"><a href="ch_arrays.html#cb924-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> accumulator_0 <span class="op">=</span> <span class="fu">callback</span>(init<span class="op">,</span> arr[<span class="dv">0</span>])<span class="op">;</span></span>
+<span id="cb924-2"><a href="ch_arrays.html#cb924-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> accumulator_1 <span class="op">=</span> <span class="fu">callback</span>(accumulator_0<span class="op">,</span> arr[<span class="dv">1</span>])<span class="op">;</span></span>
+<span id="cb924-3"><a href="ch_arrays.html#cb924-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> accumulator_2 <span class="op">=</span> <span class="fu">callback</span>(accumulator_1<span class="op">,</span> arr[<span class="dv">2</span>])<span class="op">;</span></span>
+<span id="cb924-4"><a href="ch_arrays.html#cb924-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Etc.</span></span></code></pre></div>
+<p>The result of <code>.reduce()</code> is the last result of <code>callback</code> after it has visited all Array elements.</p>
+<div class="sourceCode" id="cb925"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb925-1"><a href="ch_arrays.html#cb925-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3].reduce((accu, x) =&gt; accu + x, 0)</span>
+<span id="cb925-2"><a href="ch_arrays.html#cb925-2" aria-hidden="true" tabindex="-1"></a><span class="kw">6</span></span>
+<span id="cb925-3"><a href="ch_arrays.html#cb925-3" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3].reduce((accu, x) =&gt; accu + String(x), '')</span>
+<span id="cb925-4"><a href="ch_arrays.html#cb925-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'123'</span></span></code></pre></div>
+<p>If no <code>init</code> is provided, the Array element at index 0 is used and the element at index 1 is visited first. Therefore, the Array must have at least length 1.</p></li>
+<li><p><code>.reduceRight&lt;U&gt;(callback: (accumulator: U, element: T, index: number, array: T[]) =&gt; U, init?: U): U</code> <sup>[R, ES5]</sup></p>
+<p>Works like <code>.reduce()</code>, but visits the Array elements backward, starting with the last element.</p>
+<div class="sourceCode" id="cb926"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb926-1"><a href="ch_arrays.html#cb926-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3].reduceRight((accu, x) =&gt; accu + String(x), '')</span>
+<span id="cb926-2"><a href="ch_arrays.html#cb926-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'321'</span></span></code></pre></div></li>
+<li><p><code>.reverse(): this</code> <sup>[W, ES1]</sup></p>
+<p>Rearranges the elements of the receiver so that they are in reverse order and then returns the receiver.</p>
+<div class="sourceCode" id="cb927"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb927-1"><a href="ch_arrays.html#cb927-1" aria-hidden="true" tabindex="-1"></a>&gt; const arr = ['a', 'b', 'c'];</span>
+<span id="cb927-2"><a href="ch_arrays.html#cb927-2" aria-hidden="true" tabindex="-1"></a>&gt; arr.reverse()</span>
+<span id="cb927-3"><a href="ch_arrays.html#cb927-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'c', 'b', 'a' ]</span></span>
+<span id="cb927-4"><a href="ch_arrays.html#cb927-4" aria-hidden="true" tabindex="-1"></a>&gt; arr</span>
+<span id="cb927-5"><a href="ch_arrays.html#cb927-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'c', 'b', 'a' ]</span></span></code></pre></div></li>
+<li><p><code>.shift(): T | undefined</code> <sup>[W, ES3]</sup></p>
+<p>Removes and returns the first element of the receiver. The opposite of <code>.unshift()</code>.</p>
+<div class="sourceCode" id="cb928"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb928-1"><a href="ch_arrays.html#cb928-1" aria-hidden="true" tabindex="-1"></a>&gt; const arr = ['a', 'b', 'c'];</span>
+<span id="cb928-2"><a href="ch_arrays.html#cb928-2" aria-hidden="true" tabindex="-1"></a>&gt; arr.shift()</span>
+<span id="cb928-3"><a href="ch_arrays.html#cb928-3" aria-hidden="true" tabindex="-1"></a><span class="kw">'a'</span></span>
+<span id="cb928-4"><a href="ch_arrays.html#cb928-4" aria-hidden="true" tabindex="-1"></a>&gt; arr</span>
+<span id="cb928-5"><a href="ch_arrays.html#cb928-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'b', 'c' ]</span></span></code></pre></div></li>
+<li><p><code>.slice(start=0, end=this.length): T[]</code> <sup>[R, ES3]</sup></p>
+<p>Returns a new Array containing the elements of the receiver whose indices are between (including) <code>start</code> and (excluding) <code>end</code>.</p>
+<div class="sourceCode" id="cb929"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb929-1"><a href="ch_arrays.html#cb929-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c', 'd'].slice(1, 3)</span>
+<span id="cb929-2"><a href="ch_arrays.html#cb929-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'b', 'c' ]</span></span>
+<span id="cb929-3"><a href="ch_arrays.html#cb929-3" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b'].slice() // shallow copy</span>
+<span id="cb929-4"><a href="ch_arrays.html#cb929-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b' ]</span></span></code></pre></div>
+<p>Negative indices are allowed and added to <code>.length</code>:</p>
+<div class="sourceCode" id="cb930"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb930-1"><a href="ch_arrays.html#cb930-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].slice(-2)</span>
+<span id="cb930-2"><a href="ch_arrays.html#cb930-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'b', 'c' ]</span></span></code></pre></div></li>
+<li><p><code>.some(callback: (value: T, index: number, array: Array&lt;T&gt;) =&gt; boolean, thisArg?: any): boolean</code> <sup>[R, ES5]</sup></p>
+<p>Returns <code>true</code> if <code>callback</code> returns a truthy value for at least one element. Otherwise, it returns <code>false</code>. It stops as soon as it receives a truthy value. This method corresponds to existential quantification (“exists”, <code>∃</code>) in mathematics.</p>
+<div class="sourceCode" id="cb931"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb931-1"><a href="ch_arrays.html#cb931-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3].some(x =&gt; x &lt; 0)</span>
+<span id="cb931-2"><a href="ch_arrays.html#cb931-2" aria-hidden="true" tabindex="-1"></a><span class="kw">false</span></span>
+<span id="cb931-3"><a href="ch_arrays.html#cb931-3" aria-hidden="true" tabindex="-1"></a>&gt; [1, -2, 3].some(x =&gt; x &lt; 0)</span>
+<span id="cb931-4"><a href="ch_arrays.html#cb931-4" aria-hidden="true" tabindex="-1"></a><span class="kw">true</span></span></code></pre></div>
+<p>Related method: <code>.every()</code> (“for all”).</p></li>
+<li><p><code>.sort(compareFunc?: (a: T, b: T) =&gt; number): this</code> <sup>[W, ES1]</sup></p>
+<p>Sorts the receiver and returns it. By default, it sorts string representations of the elements. It does so lexicographically and according to the code unit values (char codes) of the characters:</p>
+<div class="sourceCode" id="cb932"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb932-1"><a href="ch_arrays.html#cb932-1" aria-hidden="true" tabindex="-1"></a>&gt; ['pie', 'cookie', 'éclair', 'Pie', 'Cookie', 'Éclair'].sort()</span>
+<span id="cb932-2"><a href="ch_arrays.html#cb932-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'Cookie', 'Pie', 'cookie', 'pie', 'Éclair', 'éclair' ]</span></span>
+<span id="cb932-3"><a href="ch_arrays.html#cb932-3" aria-hidden="true" tabindex="-1"></a>&gt; [200, 3, 10].sort()</span>
+<span id="cb932-4"><a href="ch_arrays.html#cb932-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 10, 200, 3 ]</span></span></code></pre></div>
+<p>You can customize the sort order via <code>compareFunc</code>, which returns a number that is:</p>
+<ul>
+<li>negative if <code>a &lt; b</code></li>
+<li>zero if <code>a === b</code></li>
+<li>positive if <code>a &gt; b</code></li>
+</ul>
+<p>Trick for sorting numbers (with a risk of numeric overflow or underflow):</p>
+<div class="sourceCode" id="cb933"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb933-1"><a href="ch_arrays.html#cb933-1" aria-hidden="true" tabindex="-1"></a>&gt; [200, 3, 10].sort((a, b) =&gt; a - b)</span>
+<span id="cb933-2"><a href="ch_arrays.html#cb933-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 3, 10, 200 ]</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/cogs-regular.svg" height="24">&nbsp; <strong><code>.sort()</code> is stable</strong></p>
+<p>Since ECMAScript 2019, sorting is guaranteed to be stable: if elements are considered equal by sorting, then sorting does not change the order of those elements (relative to each other).</p>
+</div></li>
+<li><p><code>.splice(start: number, deleteCount=this.length-start, ...items: T[]): T[]</code> <sup>[W, ES3]</sup></p>
+<p>At index <code>start</code>, it removes <code>deleteCount</code> elements and inserts the <code>items</code>. It returns the deleted elements.</p>
+<div class="sourceCode" id="cb934"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb934-1"><a href="ch_arrays.html#cb934-1" aria-hidden="true" tabindex="-1"></a>&gt; const arr = ['a', 'b', 'c', 'd'];</span>
+<span id="cb934-2"><a href="ch_arrays.html#cb934-2" aria-hidden="true" tabindex="-1"></a>&gt; arr.splice(1, 2, 'x', 'y')</span>
+<span id="cb934-3"><a href="ch_arrays.html#cb934-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'b', 'c' ]</span></span>
+<span id="cb934-4"><a href="ch_arrays.html#cb934-4" aria-hidden="true" tabindex="-1"></a>&gt; arr</span>
+<span id="cb934-5"><a href="ch_arrays.html#cb934-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'x', 'y', 'd' ]</span></span></code></pre></div>
+<p><code>start</code> can be negative and is added to <code>.length</code> if it is:</p>
+<div class="sourceCode" id="cb935"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb935-1"><a href="ch_arrays.html#cb935-1" aria-hidden="true" tabindex="-1"></a>&gt; ['a', 'b', 'c'].splice(-2, 2)</span>
+<span id="cb935-2"><a href="ch_arrays.html#cb935-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'b', 'c' ]</span></span></code></pre></div></li>
+<li><p><code>.toString(): string</code> <sup>[R, ES1]</sup></p>
+<p>Converts all elements to strings via <code>String()</code>, concatenates them while separating them with commas, and returns the result.</p>
+<div class="sourceCode" id="cb936"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb936-1"><a href="ch_arrays.html#cb936-1" aria-hidden="true" tabindex="-1"></a>&gt; [1, 2, 3].toString()</span>
+<span id="cb936-2"><a href="ch_arrays.html#cb936-2" aria-hidden="true" tabindex="-1"></a><span class="kw">'1,2,3'</span></span>
+<span id="cb936-3"><a href="ch_arrays.html#cb936-3" aria-hidden="true" tabindex="-1"></a>&gt; ['1', '2', '3'].toString()</span>
+<span id="cb936-4"><a href="ch_arrays.html#cb936-4" aria-hidden="true" tabindex="-1"></a><span class="kw">'1,2,3'</span></span>
+<span id="cb936-5"><a href="ch_arrays.html#cb936-5" aria-hidden="true" tabindex="-1"></a>&gt; [].toString()</span>
+<span id="cb936-6"><a href="ch_arrays.html#cb936-6" aria-hidden="true" tabindex="-1"></a><span class="kw">''</span></span></code></pre></div></li>
+<li><p><code>.unshift(...items: T[]): number</code> <sup>[W, ES3]</sup></p>
+<p>Inserts the <code>items</code> at the beginning of the receiver and returns its length after this modification.</p>
+<div class="sourceCode" id="cb937"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb937-1"><a href="ch_arrays.html#cb937-1" aria-hidden="true" tabindex="-1"></a>&gt; const arr = ['c', 'd'];</span>
+<span id="cb937-2"><a href="ch_arrays.html#cb937-2" aria-hidden="true" tabindex="-1"></a>&gt; arr.unshift('e', 'f')</span>
+<span id="cb937-3"><a href="ch_arrays.html#cb937-3" aria-hidden="true" tabindex="-1"></a><span class="kw">4</span></span>
+<span id="cb937-4"><a href="ch_arrays.html#cb937-4" aria-hidden="true" tabindex="-1"></a>&gt; arr</span>
+<span id="cb937-5"><a href="ch_arrays.html#cb937-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'e', 'f', 'c', 'd' ]</span></span></code></pre></div></li>
+<li><p><code>.values(): Iterable&lt;T&gt;</code> <sup>[R, ES6]</sup></p>
+<p>Returns an iterable over the values of the receiver.</p>
+<div class="sourceCode" id="cb938"><pre class="sourceCode repl"><code class="sourceCode nodejsrepl"><span id="cb938-1"><a href="ch_arrays.html#cb938-1" aria-hidden="true" tabindex="-1"></a>&gt; [...['a', 'b'].values()]</span>
+<span id="cb938-2"><a href="ch_arrays.html#cb938-2" aria-hidden="true" tabindex="-1"></a><span class="kw">[ 'a', 'b' ]</span></span></code></pre></div></li>
+</ul>
+<h4 id="sources-3">31.12.4 Sources</h4>
+<ul>
+<li><a href="https://github.com/Microsoft/TypeScript/blob/master/lib/">TypeScript’s built-in typings</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">MDN web docs for JavaScript</a></li>
+<li><a href="https://tc39.github.io/ecma262/">ECMAScript language specification</a></li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/22">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_typed-arrays.html">32 Typed Arrays: handling binary data (advanced)</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    

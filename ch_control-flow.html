@@ -1,0 +1,472 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="book.css" type="text/css">
+    </head>
+    <body>
+    
+
+        <div id="adbox">
+      <div id="adbox-explain">(Ad, please don’t block.)</div>
+              <script async="" type="text/javascript" src="https://cdn.carbonads.com/carbon.js?serve=CKYIEKQL&amp;placement=exploringjscom" id="_carbonads_js"></script>
+          </div>
+    
+    <h2 id="ch_control-flow">23 Control flow statements</h2>
+<hr>
+<div class="chapter-toc">
+<ul>
+<li>23.1 <a href="ch_control-flow.html#controlling-loops-break-and-continue">Controlling loops: <code>break</code> and <code>continue</code></a>
+<ul>
+<li>23.1.1 <a href="ch_control-flow.html#break"><code>break</code></a></li>
+<li>23.1.2 <a href="ch_control-flow.html#labels"><code>break</code> plus label: leaving any labeled statement</a></li>
+<li>23.1.3 <a href="ch_control-flow.html#continue"><code>continue</code></a></li>
+</ul></li>
+<li>23.2 <a href="ch_control-flow.html#conditions-of-control-flow-statements">Conditions of control flow statements</a></li>
+<li>23.3 <a href="ch_control-flow.html#if"><code>if</code> statements [ES1]</a>
+<ul>
+<li>23.3.1 <a href="ch_control-flow.html#the-syntax-of-if-statements">The syntax of <code>if</code> statements</a></li>
+</ul></li>
+<li>23.4 <a href="ch_control-flow.html#switch"><code>switch</code> statements [ES3]</a>
+<ul>
+<li>23.4.1 <a href="ch_control-flow.html#a-first-example-of-a-switch-statement">A first example of a <code>switch</code> statement</a></li>
+<li>23.4.2 <a href="ch_control-flow.html#dont-forget-to-return-or-break">Don’t forget to <code>return</code> or <code>break</code>!</a></li>
+<li>23.4.3 <a href="ch_control-flow.html#empty-case-clauses">Empty case clauses</a></li>
+<li>23.4.4 <a href="ch_control-flow.html#checking-for-illegal-values-via-a-default-clause">Checking for illegal values via a <code>default</code> clause</a></li>
+</ul></li>
+<li>23.5 <a href="ch_control-flow.html#while"><code>while</code> loops [ES1]</a>
+<ul>
+<li>23.5.1 <a href="ch_control-flow.html#examples-of-while-loops">Examples of <code>while</code> loops</a></li>
+</ul></li>
+<li>23.6 <a href="ch_control-flow.html#do-while"><code>do-while</code> loops [ES3]</a></li>
+<li>23.7 <a href="ch_control-flow.html#for"><code>for</code> loops [ES1]</a>
+<ul>
+<li>23.7.1 <a href="ch_control-flow.html#examples-of-for-loops">Examples of <code>for</code> loops</a></li>
+</ul></li>
+<li>23.8 <a href="ch_control-flow.html#for-of"><code>for-of</code> loops [ES6]</a>
+<ul>
+<li>23.8.1 <a href="ch_control-flow.html#const-for-of-vs.-for"><code>const</code>: <code>for-of</code> vs.&nbsp;<code>for</code></a></li>
+<li>23.8.2 <a href="ch_control-flow.html#iterating-over-iterables">Iterating over iterables</a></li>
+<li>23.8.3 <a href="ch_control-flow.html#for-of-iterating-index-element">Iterating over [index, element] pairs of Arrays</a></li>
+</ul></li>
+<li>23.9 <a href="ch_control-flow.html#for-await-of-loops-es2018"><code>for-await-of</code> loops [ES2018]</a></li>
+<li>23.10 <a href="ch_control-flow.html#for-in"><code>for-in</code> loops (avoid) [ES1]</a></li>
+<li>23.11 <a href="ch_control-flow.html#recomendations-for-looping">Recomendations for looping</a></li>
+</ul>
+</div>
+<hr>
+<p>This chapter covers the following control flow statements:</p>
+<ul>
+<li><code>if</code> statement [ES1]</li>
+<li><code>switch</code> statement [ES3]</li>
+<li><code>while</code> loop [ES1]</li>
+<li><code>do-while</code> loop [ES3]</li>
+<li><code>for</code> loop [ES1]</li>
+<li><code>for-of</code> loop [ES6]</li>
+<li><code>for-await-of</code> loop [ES2018]</li>
+<li><code>for-in</code> loop [ES1]</li>
+</ul>
+<h3 id="controlling-loops-break-and-continue">23.1 Controlling loops: <code>break</code> and <code>continue</code></h3>
+<p>The two operators <code>break</code> and <code>continue</code> can be used to control loops and other statements while we are inside them.</p>
+<h4 id="break">23.1.1 <code>break</code></h4>
+<p><a id="index-entry-212" class="index-entry"></a></p>
+<p>There are two versions of <code>break</code>: one with an operand and one without an operand. The latter version works inside the following statements: <code>while</code>, <code>do-while</code>, <code>for</code>, <code>for-of</code>, <code>for-await-of</code>, <code>for-in</code> and <code>switch</code>. It immediately leaves the current statement:</p>
+<div class="sourceCode" id="cb483"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb483-1"><a href="ch_control-flow.html#cb483-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> x <span class="kw">of</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]) {</span>
+<span id="cb483-2"><a href="ch_control-flow.html#cb483-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(x)<span class="op">;</span></span>
+<span id="cb483-3"><a href="ch_control-flow.html#cb483-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (x <span class="op">===</span> <span class="st">'b'</span>) <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb483-4"><a href="ch_control-flow.html#cb483-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'---'</span>)</span>
+<span id="cb483-5"><a href="ch_control-flow.html#cb483-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb483-6"><a href="ch_control-flow.html#cb483-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb483-7"><a href="ch_control-flow.html#cb483-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb483-8"><a href="ch_control-flow.html#cb483-8" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb483-9"><a href="ch_control-flow.html#cb483-9" aria-hidden="true" tabindex="-1"></a><span class="co">// '---'</span></span>
+<span id="cb483-10"><a href="ch_control-flow.html#cb483-10" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span></code></pre></div>
+<h4 id="labels">23.1.2 <code>break</code> plus label: leaving any labeled statement</h4>
+<p><a id="index-entry-213" class="index-entry"></a></p>
+<p><code>break</code> with an operand works everywhere. Its operand is a <em>label</em>. Labels can be put in front of any statement, including blocks. <code>break my_label</code> leaves the statement whose label is <code>my_label</code>:</p>
+<div class="sourceCode" id="cb484"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb484-1"><a href="ch_control-flow.html#cb484-1" aria-hidden="true" tabindex="-1"></a>my_label<span class="op">:</span> { <span class="co">// label</span></span>
+<span id="cb484-2"><a href="ch_control-flow.html#cb484-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (condition) <span class="cf">break</span> my_label<span class="op">;</span> <span class="co">// labeled break</span></span>
+<span id="cb484-3"><a href="ch_control-flow.html#cb484-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb484-4"><a href="ch_control-flow.html#cb484-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>In the following example, the search can either:</p>
+<ul>
+<li>Fail: The loop finishes without finding a <code>result</code>. That is handled directly after the loop (line B).</li>
+<li>Succeed: While looping, we find a <code>result</code>. Then we use <code>break</code> plus label (line A) to skip the code that handles failure.</li>
+</ul>
+<div class="sourceCode" id="cb485"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb485-1"><a href="ch_control-flow.html#cb485-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">findSuffix</span>(stringArray<span class="op">,</span> suffix) {</span>
+<span id="cb485-2"><a href="ch_control-flow.html#cb485-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> result<span class="op">;</span></span>
+<span id="cb485-3"><a href="ch_control-flow.html#cb485-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">search_block</span><span class="op">:</span> {</span>
+<span id="cb485-4"><a href="ch_control-flow.html#cb485-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> str <span class="kw">of</span> stringArray) {</span>
+<span id="cb485-5"><a href="ch_control-flow.html#cb485-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (str<span class="op">.</span><span class="fu">endsWith</span>(suffix)) {</span>
+<span id="cb485-6"><a href="ch_control-flow.html#cb485-6" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Success:</span></span>
+<span id="cb485-7"><a href="ch_control-flow.html#cb485-7" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> str<span class="op">;</span></span>
+<span id="cb485-8"><a href="ch_control-flow.html#cb485-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span> search_block<span class="op">;</span> <span class="co">// (A)</span></span>
+<span id="cb485-9"><a href="ch_control-flow.html#cb485-9" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb485-10"><a href="ch_control-flow.html#cb485-10" aria-hidden="true" tabindex="-1"></a>    } <span class="co">// for</span></span>
+<span id="cb485-11"><a href="ch_control-flow.html#cb485-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Failure:</span></span>
+<span id="cb485-12"><a href="ch_control-flow.html#cb485-12" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> <span class="st">'(Untitled)'</span><span class="op">;</span> <span class="co">// (B)</span></span>
+<span id="cb485-13"><a href="ch_control-flow.html#cb485-13" aria-hidden="true" tabindex="-1"></a>  } <span class="co">// search_block</span></span>
+<span id="cb485-14"><a href="ch_control-flow.html#cb485-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb485-15"><a href="ch_control-flow.html#cb485-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { suffix<span class="op">,</span> result }<span class="op">;</span></span>
+<span id="cb485-16"><a href="ch_control-flow.html#cb485-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Same as: {suffix: suffix, result: result}</span></span>
+<span id="cb485-17"><a href="ch_control-flow.html#cb485-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb485-18"><a href="ch_control-flow.html#cb485-18" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb485-19"><a href="ch_control-flow.html#cb485-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">findSuffix</span>([<span class="st">'notes.txt'</span><span class="op">,</span> <span class="st">'index.html'</span>]<span class="op">,</span> <span class="st">'.html'</span>)<span class="op">,</span></span>
+<span id="cb485-20"><a href="ch_control-flow.html#cb485-20" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">suffix</span><span class="op">:</span> <span class="st">'.html'</span><span class="op">,</span> <span class="dt">result</span><span class="op">:</span> <span class="st">'index.html'</span> }</span>
+<span id="cb485-21"><a href="ch_control-flow.html#cb485-21" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb485-22"><a href="ch_control-flow.html#cb485-22" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">deepEqual</span>(</span>
+<span id="cb485-23"><a href="ch_control-flow.html#cb485-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">findSuffix</span>([<span class="st">'notes.txt'</span><span class="op">,</span> <span class="st">'index.html'</span>]<span class="op">,</span> <span class="st">'.mjs'</span>)<span class="op">,</span></span>
+<span id="cb485-24"><a href="ch_control-flow.html#cb485-24" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">suffix</span><span class="op">:</span> <span class="st">'.mjs'</span><span class="op">,</span> <span class="dt">result</span><span class="op">:</span> <span class="st">'(Untitled)'</span> }</span>
+<span id="cb485-25"><a href="ch_control-flow.html#cb485-25" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<h4 id="continue">23.1.3 <code>continue</code></h4>
+<p><a id="index-entry-214" class="index-entry"></a></p>
+<p><code>continue</code> only works inside <code>while</code>, <code>do-while</code>, <code>for</code>, <code>for-of</code>, <code>for-await-of</code>, and <code>for-in</code>. It immediately leaves the current loop iteration and continues with the next one – for example:</p>
+<div class="sourceCode" id="cb486"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb486-1"><a href="ch_control-flow.html#cb486-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> lines <span class="op">=</span> [</span>
+<span id="cb486-2"><a href="ch_control-flow.html#cb486-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Normal line'</span><span class="op">,</span></span>
+<span id="cb486-3"><a href="ch_control-flow.html#cb486-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'# Comment'</span><span class="op">,</span></span>
+<span id="cb486-4"><a href="ch_control-flow.html#cb486-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Another normal line'</span><span class="op">,</span></span>
+<span id="cb486-5"><a href="ch_control-flow.html#cb486-5" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb486-6"><a href="ch_control-flow.html#cb486-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> line <span class="kw">of</span> lines) {</span>
+<span id="cb486-7"><a href="ch_control-flow.html#cb486-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (line<span class="op">.</span><span class="fu">startsWith</span>(<span class="st">'#'</span>)) <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb486-8"><a href="ch_control-flow.html#cb486-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(line)<span class="op">;</span></span>
+<span id="cb486-9"><a href="ch_control-flow.html#cb486-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb486-10"><a href="ch_control-flow.html#cb486-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb486-11"><a href="ch_control-flow.html#cb486-11" aria-hidden="true" tabindex="-1"></a><span class="co">// 'Normal line'</span></span>
+<span id="cb486-12"><a href="ch_control-flow.html#cb486-12" aria-hidden="true" tabindex="-1"></a><span class="co">// 'Another normal line'</span></span></code></pre></div>
+<h3 id="conditions-of-control-flow-statements">23.2 Conditions of control flow statements</h3>
+<p><code>if</code>, <code>while</code>, and <code>do-while</code> have conditions that are, in principle, boolean. However, a condition only has to be <em>truthy</em> (<code>true</code> if coerced to boolean) in order to be accepted. In other words, the following two control flow statements are equivalent:</p>
+<div class="sourceCode" id="cb487"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb487-1"><a href="ch_control-flow.html#cb487-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (value) {}</span>
+<span id="cb487-2"><a href="ch_control-flow.html#cb487-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="bu">Boolean</span>(value) <span class="op">===</span> <span class="kw">true</span>) {}</span></code></pre></div>
+<p>This is a list of all <em>falsy</em> values:</p>
+<ul>
+<li><code>undefined</code>, <code>null</code></li>
+<li><code>false</code></li>
+<li><code>0</code>, <code>NaN</code></li>
+<li><code>0n</code></li>
+<li><code>''</code></li>
+</ul>
+<p>All other values are truthy. For more information, see <a href="ch_booleans.html#falsiness-truthiness">§15.2 “Falsy and truthy values”</a>.</p>
+<h3 id="if">23.3 <code>if</code> statements [ES1]</h3>
+<p><a id="index-entry-215" class="index-entry"></a></p>
+<p>These are two simple <code>if</code> statements: one with just a “then” branch and one with both a “then” branch and an “else” branch:</p>
+<div class="sourceCode" id="cb488"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb488-1"><a href="ch_control-flow.html#cb488-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (cond) {</span>
+<span id="cb488-2"><a href="ch_control-flow.html#cb488-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// then branch</span></span>
+<span id="cb488-3"><a href="ch_control-flow.html#cb488-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb488-4"><a href="ch_control-flow.html#cb488-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb488-5"><a href="ch_control-flow.html#cb488-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (cond) {</span>
+<span id="cb488-6"><a href="ch_control-flow.html#cb488-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// then branch</span></span>
+<span id="cb488-7"><a href="ch_control-flow.html#cb488-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb488-8"><a href="ch_control-flow.html#cb488-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// else branch</span></span>
+<span id="cb488-9"><a href="ch_control-flow.html#cb488-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Instead of the block, <code>else</code> can also be followed by another <code>if</code> statement:</p>
+<div class="sourceCode" id="cb489"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb489-1"><a href="ch_control-flow.html#cb489-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (cond1) {</span>
+<span id="cb489-2"><a href="ch_control-flow.html#cb489-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb489-3"><a href="ch_control-flow.html#cb489-3" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (cond2) {</span>
+<span id="cb489-4"><a href="ch_control-flow.html#cb489-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb489-5"><a href="ch_control-flow.html#cb489-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb489-6"><a href="ch_control-flow.html#cb489-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb489-7"><a href="ch_control-flow.html#cb489-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (cond1) {</span>
+<span id="cb489-8"><a href="ch_control-flow.html#cb489-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb489-9"><a href="ch_control-flow.html#cb489-9" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (cond2) {</span>
+<span id="cb489-10"><a href="ch_control-flow.html#cb489-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb489-11"><a href="ch_control-flow.html#cb489-11" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb489-12"><a href="ch_control-flow.html#cb489-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb489-13"><a href="ch_control-flow.html#cb489-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>You can continue this chain with more <code>else if</code>s.</p>
+<h4 id="the-syntax-of-if-statements">23.3.1 The syntax of <code>if</code> statements</h4>
+<p>The general syntax of <code>if</code> statements is:</p>
+<div class="sourceCode" id="cb490"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb490-1"><a href="ch_control-flow.html#cb490-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (cond) «then_statement»</span>
+<span id="cb490-2"><a href="ch_control-flow.html#cb490-2" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> «else_statement»</span></code></pre></div>
+<p>So far, the <code>then_statement</code> has always been a block, but we can use any statement. That statement must be terminated with a semicolon:</p>
+<div class="sourceCode" id="cb491"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb491-1"><a href="ch_control-flow.html#cb491-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="kw">true</span>) <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'Yes'</span>)<span class="op">;</span> <span class="cf">else</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'No'</span>)<span class="op">;</span></span></code></pre></div>
+<p>That means that <code>else if</code> is not its own construct; it’s simply an <code>if</code> statement whose <code>else_statement</code> is another <code>if</code> statement.</p>
+<h3 id="switch">23.4 <code>switch</code> statements [ES3]</h3>
+<p><a id="index-entry-216" class="index-entry"></a></p>
+<p>A <code>switch</code> statement looks as follows:</p>
+<pre class="text"><code>switch («switch_expression») {
+  «switch_body»
+}</code></pre>
+<p>The body of <code>switch</code> consists of zero or more case clauses:</p>
+<pre class="text"><code>case «case_expression»:
+  «statements»</code></pre>
+<p>And, optionally, a default clause:</p>
+<pre class="text"><code>default:
+  «statements»</code></pre>
+<p>A <code>switch</code> is executed as follows:</p>
+<ul>
+<li>It evaluates the switch expression.</li>
+<li>It jumps to the first case clause whose expression has the same result as the switch expression.</li>
+<li>Otherwise, if there is no such clause, it jumps to the default clause.</li>
+<li>Otherwise, if there is no default clause, it does nothing.</li>
+</ul>
+<h4 id="a-first-example-of-a-switch-statement">23.4.1 A first example of a <code>switch</code> statement</h4>
+<p>Let’s look at an example: The following function converts a number from 1–7 to the name of a weekday.</p>
+<div class="sourceCode" id="cb495"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb495-1"><a href="ch_control-flow.html#cb495-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">dayOfTheWeek</span>(num) {</span>
+<span id="cb495-2"><a href="ch_control-flow.html#cb495-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> (num) {</span>
+<span id="cb495-3"><a href="ch_control-flow.html#cb495-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">1</span><span class="op">:</span></span>
+<span id="cb495-4"><a href="ch_control-flow.html#cb495-4" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="st">'Monday'</span><span class="op">;</span></span>
+<span id="cb495-5"><a href="ch_control-flow.html#cb495-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">2</span><span class="op">:</span></span>
+<span id="cb495-6"><a href="ch_control-flow.html#cb495-6" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="st">'Tuesday'</span><span class="op">;</span></span>
+<span id="cb495-7"><a href="ch_control-flow.html#cb495-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">3</span><span class="op">:</span></span>
+<span id="cb495-8"><a href="ch_control-flow.html#cb495-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="st">'Wednesday'</span><span class="op">;</span></span>
+<span id="cb495-9"><a href="ch_control-flow.html#cb495-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">4</span><span class="op">:</span></span>
+<span id="cb495-10"><a href="ch_control-flow.html#cb495-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="st">'Thursday'</span><span class="op">;</span></span>
+<span id="cb495-11"><a href="ch_control-flow.html#cb495-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">5</span><span class="op">:</span></span>
+<span id="cb495-12"><a href="ch_control-flow.html#cb495-12" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="st">'Friday'</span><span class="op">;</span></span>
+<span id="cb495-13"><a href="ch_control-flow.html#cb495-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">6</span><span class="op">:</span></span>
+<span id="cb495-14"><a href="ch_control-flow.html#cb495-14" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="st">'Saturday'</span><span class="op">;</span></span>
+<span id="cb495-15"><a href="ch_control-flow.html#cb495-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">7</span><span class="op">:</span></span>
+<span id="cb495-16"><a href="ch_control-flow.html#cb495-16" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="st">'Sunday'</span><span class="op">;</span></span>
+<span id="cb495-17"><a href="ch_control-flow.html#cb495-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb495-18"><a href="ch_control-flow.html#cb495-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb495-19"><a href="ch_control-flow.html#cb495-19" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">dayOfTheWeek</span>(<span class="dv">5</span>)<span class="op">,</span> <span class="st">'Friday'</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="dont-forget-to-return-or-break">23.4.2 Don’t forget to <code>return</code> or <code>break</code>!</h4>
+<p>At the end of a case clause, execution continues with the next case clause, unless we <code>return</code> or <code>break</code> – for example:</p>
+<div class="sourceCode" id="cb496"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb496-1"><a href="ch_control-flow.html#cb496-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">englishToFrench</span>(english) {</span>
+<span id="cb496-2"><a href="ch_control-flow.html#cb496-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> french<span class="op">;</span></span>
+<span id="cb496-3"><a href="ch_control-flow.html#cb496-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> (english) {</span>
+<span id="cb496-4"><a href="ch_control-flow.html#cb496-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'hello'</span><span class="op">:</span></span>
+<span id="cb496-5"><a href="ch_control-flow.html#cb496-5" aria-hidden="true" tabindex="-1"></a>      french <span class="op">=</span> <span class="st">'bonjour'</span><span class="op">;</span></span>
+<span id="cb496-6"><a href="ch_control-flow.html#cb496-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'goodbye'</span><span class="op">:</span></span>
+<span id="cb496-7"><a href="ch_control-flow.html#cb496-7" aria-hidden="true" tabindex="-1"></a>      french <span class="op">=</span> <span class="st">'au revoir'</span><span class="op">;</span></span>
+<span id="cb496-8"><a href="ch_control-flow.html#cb496-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb496-9"><a href="ch_control-flow.html#cb496-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> french<span class="op">;</span></span>
+<span id="cb496-10"><a href="ch_control-flow.html#cb496-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb496-11"><a href="ch_control-flow.html#cb496-11" aria-hidden="true" tabindex="-1"></a><span class="co">// The result should be 'bonjour'!</span></span>
+<span id="cb496-12"><a href="ch_control-flow.html#cb496-12" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">englishToFrench</span>(<span class="st">'hello'</span>)<span class="op">,</span> <span class="st">'au revoir'</span>)<span class="op">;</span></span></code></pre></div>
+<p>That is, our implementation of <code>dayOfTheWeek()</code> only worked because we used <code>return</code>. We can fix <code>englishToFrench()</code> by using <code>break</code>:</p>
+<div class="sourceCode" id="cb497"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb497-1"><a href="ch_control-flow.html#cb497-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">englishToFrench</span>(english) {</span>
+<span id="cb497-2"><a href="ch_control-flow.html#cb497-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> french<span class="op">;</span></span>
+<span id="cb497-3"><a href="ch_control-flow.html#cb497-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> (english) {</span>
+<span id="cb497-4"><a href="ch_control-flow.html#cb497-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'hello'</span><span class="op">:</span></span>
+<span id="cb497-5"><a href="ch_control-flow.html#cb497-5" aria-hidden="true" tabindex="-1"></a>      french <span class="op">=</span> <span class="st">'bonjour'</span><span class="op">;</span></span>
+<span id="cb497-6"><a href="ch_control-flow.html#cb497-6" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb497-7"><a href="ch_control-flow.html#cb497-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'goodbye'</span><span class="op">:</span></span>
+<span id="cb497-8"><a href="ch_control-flow.html#cb497-8" aria-hidden="true" tabindex="-1"></a>      french <span class="op">=</span> <span class="st">'au revoir'</span><span class="op">;</span></span>
+<span id="cb497-9"><a href="ch_control-flow.html#cb497-9" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb497-10"><a href="ch_control-flow.html#cb497-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb497-11"><a href="ch_control-flow.html#cb497-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> french<span class="op">;</span></span>
+<span id="cb497-12"><a href="ch_control-flow.html#cb497-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb497-13"><a href="ch_control-flow.html#cb497-13" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">englishToFrench</span>(<span class="st">'hello'</span>)<span class="op">,</span> <span class="st">'bonjour'</span>)<span class="op">;</span> <span class="co">// ok</span></span></code></pre></div>
+<h4 id="empty-case-clauses">23.4.3 Empty case clauses</h4>
+<p>The statements of a case clause can be omitted, which effectively gives us multiple case expressions per case clause:</p>
+<div class="sourceCode" id="cb498"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb498-1"><a href="ch_control-flow.html#cb498-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">isWeekDay</span>(name) {</span>
+<span id="cb498-2"><a href="ch_control-flow.html#cb498-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> (name) {</span>
+<span id="cb498-3"><a href="ch_control-flow.html#cb498-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Monday'</span><span class="op">:</span></span>
+<span id="cb498-4"><a href="ch_control-flow.html#cb498-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Tuesday'</span><span class="op">:</span></span>
+<span id="cb498-5"><a href="ch_control-flow.html#cb498-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Wednesday'</span><span class="op">:</span></span>
+<span id="cb498-6"><a href="ch_control-flow.html#cb498-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Thursday'</span><span class="op">:</span></span>
+<span id="cb498-7"><a href="ch_control-flow.html#cb498-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Friday'</span><span class="op">:</span></span>
+<span id="cb498-8"><a href="ch_control-flow.html#cb498-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb498-9"><a href="ch_control-flow.html#cb498-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Saturday'</span><span class="op">:</span></span>
+<span id="cb498-10"><a href="ch_control-flow.html#cb498-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Sunday'</span><span class="op">:</span></span>
+<span id="cb498-11"><a href="ch_control-flow.html#cb498-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb498-12"><a href="ch_control-flow.html#cb498-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb498-13"><a href="ch_control-flow.html#cb498-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb498-14"><a href="ch_control-flow.html#cb498-14" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">isWeekDay</span>(<span class="st">'Wednesday'</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb498-15"><a href="ch_control-flow.html#cb498-15" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">equal</span>(<span class="fu">isWeekDay</span>(<span class="st">'Sunday'</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span></code></pre></div>
+<h4 id="checking-for-illegal-values-via-a-default-clause">23.4.4 Checking for illegal values via a <code>default</code> clause</h4>
+<p>A <code>default</code> clause is jumped to if the <code>switch</code> expression has no other match. That makes it useful for error checking:</p>
+<div class="sourceCode" id="cb499"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb499-1"><a href="ch_control-flow.html#cb499-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">isWeekDay</span>(name) {</span>
+<span id="cb499-2"><a href="ch_control-flow.html#cb499-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> (name) {</span>
+<span id="cb499-3"><a href="ch_control-flow.html#cb499-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Monday'</span><span class="op">:</span></span>
+<span id="cb499-4"><a href="ch_control-flow.html#cb499-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Tuesday'</span><span class="op">:</span></span>
+<span id="cb499-5"><a href="ch_control-flow.html#cb499-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Wednesday'</span><span class="op">:</span></span>
+<span id="cb499-6"><a href="ch_control-flow.html#cb499-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Thursday'</span><span class="op">:</span></span>
+<span id="cb499-7"><a href="ch_control-flow.html#cb499-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Friday'</span><span class="op">:</span></span>
+<span id="cb499-8"><a href="ch_control-flow.html#cb499-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb499-9"><a href="ch_control-flow.html#cb499-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Saturday'</span><span class="op">:</span></span>
+<span id="cb499-10"><a href="ch_control-flow.html#cb499-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="st">'Sunday'</span><span class="op">:</span></span>
+<span id="cb499-11"><a href="ch_control-flow.html#cb499-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb499-12"><a href="ch_control-flow.html#cb499-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb499-13"><a href="ch_control-flow.html#cb499-13" aria-hidden="true" tabindex="-1"></a>      <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">'Illegal value: '</span><span class="op">+</span>name)<span class="op">;</span></span>
+<span id="cb499-14"><a href="ch_control-flow.html#cb499-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb499-15"><a href="ch_control-flow.html#cb499-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb499-16"><a href="ch_control-flow.html#cb499-16" aria-hidden="true" tabindex="-1"></a>assert<span class="op">.</span><span class="fu">throws</span>(</span>
+<span id="cb499-17"><a href="ch_control-flow.html#cb499-17" aria-hidden="true" tabindex="-1"></a>  () <span class="kw">=&gt;</span> <span class="fu">isWeekDay</span>(<span class="st">'January'</span>)<span class="op">,</span></span>
+<span id="cb499-18"><a href="ch_control-flow.html#cb499-18" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">message</span><span class="op">:</span> <span class="st">'Illegal value: January'</span>})<span class="op">;</span></span></code></pre></div>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercises: <code>switch</code></strong></p>
+<ul>
+<li><p><code>exercises/control-flow/number_to_month_test.mjs</code></p></li>
+<li>Bonus: <code>exercises/control-flow/is_object_via_switch_test.mjs</code></li>
+</ul>
+</div>
+<h3 id="while">23.5 <code>while</code> loops [ES1]</h3>
+<p><a id="index-entry-217" class="index-entry"></a></p>
+<p>A <code>while</code> loop has the following syntax:</p>
+<pre class="text"><code>while («condition») {
+  «statements»
+}</code></pre>
+<p>Before each loop iteration, <code>while</code> evaluates <code>condition</code>:</p>
+<ul>
+<li>If the result is falsy, the loop is finished.</li>
+<li>If the result is truthy, the <code>while</code> body is executed one more time.</li>
+</ul>
+<h4 id="examples-of-while-loops">23.5.1 Examples of <code>while</code> loops</h4>
+<p>The following code uses a <code>while</code> loop. In each loop iteration, it removes the first element of <code>arr</code> via <code>.shift()</code> and logs it.</p>
+<div class="sourceCode" id="cb501"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb501-1"><a href="ch_control-flow.html#cb501-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb501-2"><a href="ch_control-flow.html#cb501-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (arr<span class="op">.</span><span class="at">length</span> <span class="op">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb501-3"><a href="ch_control-flow.html#cb501-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> elem <span class="op">=</span> arr<span class="op">.</span><span class="fu">shift</span>()<span class="op">;</span> <span class="co">// remove first element</span></span>
+<span id="cb501-4"><a href="ch_control-flow.html#cb501-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(elem)<span class="op">;</span></span>
+<span id="cb501-5"><a href="ch_control-flow.html#cb501-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb501-6"><a href="ch_control-flow.html#cb501-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb501-7"><a href="ch_control-flow.html#cb501-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb501-8"><a href="ch_control-flow.html#cb501-8" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span>
+<span id="cb501-9"><a href="ch_control-flow.html#cb501-9" aria-hidden="true" tabindex="-1"></a><span class="co">// 'c'</span></span></code></pre></div>
+<p>If the condition always evaluates to <code>true</code>, then <code>while</code> is an infinite loop:</p>
+<div class="sourceCode" id="cb502"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb502-1"><a href="ch_control-flow.html#cb502-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="kw">true</span>) {</span>
+<span id="cb502-2"><a href="ch_control-flow.html#cb502-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">===</span> <span class="dv">0</span>) <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb502-3"><a href="ch_control-flow.html#cb502-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="do-while">23.6 <code>do-while</code> loops [ES3]</h3>
+<p><a id="index-entry-218" class="index-entry"></a></p>
+<p>The <code>do-while</code> loop works much like <code>while</code>, but it checks its condition <em>after</em> each loop iteration, not before.</p>
+<div class="sourceCode" id="cb503"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb503-1"><a href="ch_control-flow.html#cb503-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> input<span class="op">;</span></span>
+<span id="cb503-2"><a href="ch_control-flow.html#cb503-2" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span> {</span>
+<span id="cb503-3"><a href="ch_control-flow.html#cb503-3" aria-hidden="true" tabindex="-1"></a>  input <span class="op">=</span> <span class="fu">prompt</span>(<span class="st">'Enter text:'</span>)<span class="op">;</span></span>
+<span id="cb503-4"><a href="ch_control-flow.html#cb503-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(input)<span class="op">;</span></span>
+<span id="cb503-5"><a href="ch_control-flow.html#cb503-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">while</span> (input <span class="op">!==</span> <span class="st">':q'</span>)<span class="op">;</span></span></code></pre></div>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt"><code>prompt()</code></a> is a global function that is available in web browsers. It prompts the user to input text and returns it.</p>
+<h3 id="for">23.7 <code>for</code> loops [ES1]</h3>
+<p><a id="index-entry-219" class="index-entry"></a></p>
+<p>A <code>for</code> loop has the following syntax:</p>
+<pre class="text"><code>for («initialization»; «condition»; «post_iteration») {
+  «statements»
+}</code></pre>
+<p>The first line is the <em>head</em> of the loop and controls how often the <em>body</em> (the remainder of the loop) is executed. It has three parts and each of them is optional:</p>
+<ul>
+<li><code>initialization</code>: sets up variables, etc. for the loop. Variables declared here via <code>let</code> or <code>const</code> only exist inside the loop.</li>
+<li><code>condition</code>: This condition is checked before each loop iteration. If it is falsy, the loop stops.</li>
+<li><code>post_iteration</code>: This code is executed after each loop iteration.</li>
+</ul>
+<p>A <code>for</code> loop is therefore roughly equivalent to the following <code>while</code> loop:</p>
+<pre class="text"><code>«initialization»
+while («condition») {
+  «statements»
+  «post_iteration»
+}</code></pre>
+<h4 id="examples-of-for-loops">23.7.1 Examples of <code>for</code> loops</h4>
+<p>As an example, this is how to count from zero to two via a <code>for</code> loop:</p>
+<div class="sourceCode" id="cb506"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb506-1"><a href="ch_control-flow.html#cb506-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">let</span> i<span class="op">=</span><span class="dv">0</span><span class="op">;</span> i<span class="op">&lt;</span><span class="dv">3</span><span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb506-2"><a href="ch_control-flow.html#cb506-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(i)<span class="op">;</span></span>
+<span id="cb506-3"><a href="ch_control-flow.html#cb506-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb506-4"><a href="ch_control-flow.html#cb506-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb506-5"><a href="ch_control-flow.html#cb506-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb506-6"><a href="ch_control-flow.html#cb506-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 0</span></span>
+<span id="cb506-7"><a href="ch_control-flow.html#cb506-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 1</span></span>
+<span id="cb506-8"><a href="ch_control-flow.html#cb506-8" aria-hidden="true" tabindex="-1"></a><span class="co">// 2</span></span></code></pre></div>
+<p>This is how to log the contents of an Array via a <code>for</code> loop:</p>
+<div class="sourceCode" id="cb507"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb507-1"><a href="ch_control-flow.html#cb507-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb507-2"><a href="ch_control-flow.html#cb507-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">let</span> i<span class="op">=</span><span class="dv">0</span><span class="op">;</span> i<span class="op">&lt;</span>arr<span class="op">.</span><span class="at">length</span><span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb507-3"><a href="ch_control-flow.html#cb507-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(arr[i])<span class="op">;</span></span>
+<span id="cb507-4"><a href="ch_control-flow.html#cb507-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb507-5"><a href="ch_control-flow.html#cb507-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb507-6"><a href="ch_control-flow.html#cb507-6" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb507-7"><a href="ch_control-flow.html#cb507-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'a'</span></span>
+<span id="cb507-8"><a href="ch_control-flow.html#cb507-8" aria-hidden="true" tabindex="-1"></a><span class="co">// 'b'</span></span>
+<span id="cb507-9"><a href="ch_control-flow.html#cb507-9" aria-hidden="true" tabindex="-1"></a><span class="co">// 'c'</span></span></code></pre></div>
+<p>If we omit all three parts of the head, we get an infinite loop:</p>
+<div class="sourceCode" id="cb508"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb508-1"><a href="ch_control-flow.html#cb508-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="op">;;</span>) {</span>
+<span id="cb508-2"><a href="ch_control-flow.html#cb508-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">===</span> <span class="dv">0</span>) <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb508-3"><a href="ch_control-flow.html#cb508-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="for-of">23.8 <code>for-of</code> loops [ES6]</h3>
+<p><a id="index-entry-220" class="index-entry"></a></p>
+<p>A <code>for-of</code> loop iterates over any <em>iterable</em> – a data container that supports <a href="ch_sync-iteration.html">the <em>iteration protocol</em></a>. Each iterated value is stored in a variable, as specified in the head:</p>
+<pre class="text"><code>for («iteration_variable» of «iterable») {
+  «statements»
+}</code></pre>
+<p>The iteration variable is usually created via a variable declaration:</p>
+<div class="sourceCode" id="cb510"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb510-1"><a href="ch_control-flow.html#cb510-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> iterable <span class="op">=</span> [<span class="st">'hello'</span><span class="op">,</span> <span class="st">'world'</span>]<span class="op">;</span></span>
+<span id="cb510-2"><a href="ch_control-flow.html#cb510-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> elem <span class="kw">of</span> iterable) {</span>
+<span id="cb510-3"><a href="ch_control-flow.html#cb510-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(elem)<span class="op">;</span></span>
+<span id="cb510-4"><a href="ch_control-flow.html#cb510-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb510-5"><a href="ch_control-flow.html#cb510-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb510-6"><a href="ch_control-flow.html#cb510-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 'hello'</span></span>
+<span id="cb510-7"><a href="ch_control-flow.html#cb510-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 'world'</span></span></code></pre></div>
+<p>But we can also use a (mutable) variable that already exists:</p>
+<div class="sourceCode" id="cb511"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb511-1"><a href="ch_control-flow.html#cb511-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> iterable <span class="op">=</span> [<span class="st">'hello'</span><span class="op">,</span> <span class="st">'world'</span>]<span class="op">;</span></span>
+<span id="cb511-2"><a href="ch_control-flow.html#cb511-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> elem<span class="op">;</span></span>
+<span id="cb511-3"><a href="ch_control-flow.html#cb511-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (elem <span class="kw">of</span> iterable) {</span>
+<span id="cb511-4"><a href="ch_control-flow.html#cb511-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(elem)<span class="op">;</span></span>
+<span id="cb511-5"><a href="ch_control-flow.html#cb511-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="const-for-of-vs.-for">23.8.1 <code>const</code>: <code>for-of</code> vs.&nbsp;<code>for</code></h4>
+<p>Note that in <code>for-of</code> loops we can use <code>const</code>. The iteration variable can still be different for each iteration (it just can’t change during the iteration). Think of it as a new <code>const</code> declaration being executed each time in a fresh scope.</p>
+<p>In contrast, in <code>for</code> loops we must declare variables via <code>let</code> or <code>var</code> if their values change.</p>
+<h4 id="iterating-over-iterables">23.8.2 Iterating over iterables</h4>
+<p>As mentioned before, <code>for-of</code> works with any iterable object, not just with Arrays – for example, with Sets:</p>
+<div class="sourceCode" id="cb512"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb512-1"><a href="ch_control-flow.html#cb512-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> set <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([<span class="st">'hello'</span><span class="op">,</span> <span class="st">'world'</span>])<span class="op">;</span></span>
+<span id="cb512-2"><a href="ch_control-flow.html#cb512-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> elem <span class="kw">of</span> set) {</span>
+<span id="cb512-3"><a href="ch_control-flow.html#cb512-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(elem)<span class="op">;</span></span>
+<span id="cb512-4"><a href="ch_control-flow.html#cb512-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="for-of-iterating-index-element">23.8.3 Iterating over [index, element] pairs of Arrays</h4>
+<p>Lastly, we can also use <code>for-of</code> to iterate over the [index, element] entries of Arrays:</p>
+<div class="sourceCode" id="cb513"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb513-1"><a href="ch_control-flow.html#cb513-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb513-2"><a href="ch_control-flow.html#cb513-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> [index<span class="op">,</span> elem] <span class="kw">of</span> arr<span class="op">.</span><span class="fu">entries</span>()) {</span>
+<span id="cb513-3"><a href="ch_control-flow.html#cb513-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`</span><span class="sc">${</span>index<span class="sc">}</span><span class="vs"> -&gt; </span><span class="sc">${</span>elem<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb513-4"><a href="ch_control-flow.html#cb513-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb513-5"><a href="ch_control-flow.html#cb513-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb513-6"><a href="ch_control-flow.html#cb513-6" aria-hidden="true" tabindex="-1"></a><span class="co">// '0 -&gt; a'</span></span>
+<span id="cb513-7"><a href="ch_control-flow.html#cb513-7" aria-hidden="true" tabindex="-1"></a><span class="co">// '1 -&gt; b'</span></span>
+<span id="cb513-8"><a href="ch_control-flow.html#cb513-8" aria-hidden="true" tabindex="-1"></a><span class="co">// '2 -&gt; c'</span></span></code></pre></div>
+<p>With <code>[index, element]</code>, we are using <a href="ch_destructuring.html"><em>destructuring</em></a> to access Array elements.</p>
+<div class="notebox">
+<p><img src="img-book/img/icons/puzzle-piece-regular.svg" height="24">&nbsp; <strong>Exercise: <code>for-of</code></strong></p>
+<p><code>exercises/control-flow/array_to_string_test.mjs</code></p>
+</div>
+<h3 id="for-await-of-loops-es2018">23.9 <code>for-await-of</code> loops [ES2018]</h3>
+<p><code>for-await-of</code> is like <code>for-of</code>, but it works with asynchronous iterables instead of synchronous ones. And it can only be used inside async functions and async generators.</p>
+<div class="sourceCode" id="cb514"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb514-1"><a href="ch_control-flow.html#cb514-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="cf">await</span> (<span class="kw">const</span> item <span class="kw">of</span> asyncIterable) {</span>
+<span id="cb514-2"><a href="ch_control-flow.html#cb514-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ···</span></span>
+<span id="cb514-3"><a href="ch_control-flow.html#cb514-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>for-await-of</code> is described in detail <a href="ch_async-iteration.html#for-await-of">in the chapter on asynchronous iteration</a>.</p>
+<h3 id="for-in">23.10 <code>for-in</code> loops (avoid) [ES1]</h3>
+<p><a id="index-entry-221" class="index-entry"></a></p>
+<p>The <code>for-in</code> loop visits all (own and inherited) enumerable property keys of an object. When looping over an Array, it is rarely a good choice:</p>
+<ul>
+<li>It visits property keys, not values.</li>
+<li>As property keys, the indices of Array elements are strings, not numbers (<a href="ch_arrays.html#array-indices">more information on how Array elements work</a>).</li>
+<li>It visits all enumerable property keys (both own and inherited ones), not just those of Array elements.</li>
+</ul>
+<p>The following code demonstrates these points:</p>
+<div class="sourceCode" id="cb515"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb515-1"><a href="ch_control-flow.html#cb515-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> arr <span class="op">=</span> [<span class="st">'a'</span><span class="op">,</span> <span class="st">'b'</span><span class="op">,</span> <span class="st">'c'</span>]<span class="op">;</span></span>
+<span id="cb515-2"><a href="ch_control-flow.html#cb515-2" aria-hidden="true" tabindex="-1"></a>arr<span class="op">.</span><span class="at">propKey</span> <span class="op">=</span> <span class="st">'property value'</span><span class="op">;</span></span>
+<span id="cb515-3"><a href="ch_control-flow.html#cb515-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb515-4"><a href="ch_control-flow.html#cb515-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">const</span> key <span class="kw">in</span> arr) {</span>
+<span id="cb515-5"><a href="ch_control-flow.html#cb515-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(key)<span class="op">;</span></span>
+<span id="cb515-6"><a href="ch_control-flow.html#cb515-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb515-7"><a href="ch_control-flow.html#cb515-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb515-8"><a href="ch_control-flow.html#cb515-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb515-9"><a href="ch_control-flow.html#cb515-9" aria-hidden="true" tabindex="-1"></a><span class="co">// '0'</span></span>
+<span id="cb515-10"><a href="ch_control-flow.html#cb515-10" aria-hidden="true" tabindex="-1"></a><span class="co">// '1'</span></span>
+<span id="cb515-11"><a href="ch_control-flow.html#cb515-11" aria-hidden="true" tabindex="-1"></a><span class="co">// '2'</span></span>
+<span id="cb515-12"><a href="ch_control-flow.html#cb515-12" aria-hidden="true" tabindex="-1"></a><span class="co">// 'propKey'</span></span></code></pre></div>
+<h3 id="recomendations-for-looping">23.11 Recomendations for looping</h3>
+<ul>
+<li>If you want to loop over an <a href="ch_async-iteration.html">asynchronous iterable</a> (in ES2018+), you must use <code>for-await-of</code>.</li>
+<li>For looping over a synchronous iterable (in ES6+), you must use <code>for-of</code>. Note that Arrays are iterables.</li>
+<li>For looping over an Array in ES5+, you can use <a href="ch_arrays.html#Array.prototype.forEach">the Array method <code>.forEach()</code></a>.</li>
+<li>Before ES5, you can use a plain <code>for</code> loop to loop over an Array.</li>
+<li>Don’t use <code>for-in</code> to loop over an Array.</li>
+</ul>
+<div class="notebox">
+<p><img src="img-book/img/icons/list-regular.svg" height="24">&nbsp; <strong>Quiz</strong></p>
+<p>See <a href="ch_quizzes-exercises.html#quizzes">quiz app</a>.</p>
+</div>
+
+    <div class="footer">
+      <div>
+                <a id="commentLink" href="https://github.com/rauschma/impatient-js/issues/16">Comments</a>
+        <script defer="" src="count-comments.js"></script>
+              </div>
+            <div>
+        Next: <a href="ch_exception-handling.html">24 Exception handling</a>
+      </div>
+          </div>
+  
+    </body>
+    </html>
+    
